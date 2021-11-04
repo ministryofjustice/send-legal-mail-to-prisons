@@ -177,7 +177,7 @@ workflows:
 #          env: "preprod"
 #          context:
 #            - hmpps-common-vars
-#            - hmpps-template-typescript-preprod
+#            - send-legal-mail-to-prisons-preprod
 #          requires:
 #            - request-preprod-approval
 #      - request-prod-approval:
@@ -191,14 +191,14 @@ workflows:
 #          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
 #          context:
 #            - hmpps-common-vars
-#            - hmpps-template-typescript-prod
+#            - send-legal-mail-to-prisons-prod
 #          requires:
 #            - request-prod-approval
 
   security:
     triggers:
       - schedule:
-          cron: "30 5 * * 1-5"
+          cron: "30 6 * * 1-5"
           filters:
             branches:
               only:
@@ -223,7 +223,7 @@ workflows:
   security-weekly:
     triggers:
       - schedule:
-          cron: "0 5 * * 1"
+          cron: "20 6 * * 1"
           filters:
             branches:
               only:
