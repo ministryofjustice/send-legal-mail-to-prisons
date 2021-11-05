@@ -26,7 +26,6 @@ The application version currently running can be found on the `/health` endpoint
 * <em>Requires access to Cloud Platform Kubernetes `live` cluster</em>
 * <em>Requires membership of Github team `farsight-devs`</em>
 
-
 For example in the dev environment:
 1. Set the Kube context with command `kubectl config use-context live.cloud-platform.service.justice.gov.uk`
 2. Set the Kube namespace with command `kubectl config set-context --current --namespace send-legal-mail-to-prisons-dev`
@@ -54,6 +53,18 @@ To start the main services excluding the example typescript template app:
 `docker-compose up --scale=app=0`
 
 Install dependencies using `npm install`, ensuring you are using >= `Node v14.x`
+
+Create a `.env` which should override environment variables required to run locally:
+```properties
+HMPPS_AUTH_URL=http://localhost:9090/auth
+TOKEN_VERIFICATION_API_URL=https://token-verification-api-dev.prison.service.justice.gov.uk
+TOKEN_VERIFICATION_ENABLED=false
+NODE_ENV=development
+API_CLIENT_ID=send-legal-mail-to-prisons
+API_CLIENT_SECRET=clientsecret
+SESSION_SECRET=anything
+PORT=3000
+```
 
 And then, to build the assets and start the app with nodemon:
 
@@ -85,8 +96,17 @@ Or run tests with the cypress UI:
 
 `npm run int-test-ui`
 
-
 ### Dependency Checks
 
 The template project has implemented some scheduled checks to ensure that key dependencies are kept up to date.
 If these are not desired in the cloned project, remove references to `check_outdated` job from `.circleci/config.yml`
+
+### Vulnerable dependencies
+To find any dependencies with vulnerabilities run command:
+
+`npm audit`
+
+### Update dependencies
+To update all dependencies to their latest stable versions run command:
+
+`npm update`
