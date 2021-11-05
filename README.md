@@ -13,13 +13,19 @@ The application has a health endpoint found at `/health` which indicates if the 
 The application has a ping endpoint found at `/ping` which indicates that the app is responding to requests.
 
 ### Build
+<em>Requires membership of Github team `farsight-devs`</em>
+
 The application is built on [CircleCI](https://app.circleci.com/pipelines/github/ministryofjustice/send-legal-mail-to-prisons).
 
 ### Versions
 The application version currently running can be found on the `/health` endpoint at node `build.buildNumber`. The format of the version number is `YYY-MM-DD.ccc.gggggg` where `ccc` is the Circle job number and `gggggg` is the git commit reference. 
 
 ### Rolling back the application
-<em>Requires CLI tools `kubectl` and `helm`. Requires access to Cloud Platform Kubernetes `live` cluster.</em>
+
+* <em>Requires CLI tools `kubectl` and `helm`</em>
+* <em>Requires access to Cloud Platform Kubernetes `live` cluster</em>
+* <em>Requires membership of Github team `farsight-devs`</em>
+
 
 For example in the dev environment:
 1. Set the Kube context with command `kubectl config use-context live.cloud-platform.service.justice.gov.uk`
