@@ -1,50 +1,33 @@
-# hmpps-template-typescript
-Template github repo used for new Typescript based projects.
+# send-legal-mail-to-prisons
 
-# Instructions
+## About
+A Typescript application to allow creating and scanning barcodes for legal mail (aka rule39 mail).
 
-If this is a HMPPS project then the project will be created as part of bootstrapping - 
-see https://github.com/ministryofjustice/dps-project-bootstrap.
+### Team
+This application is in development by the Farsight Consulting team `Send legal mail to prisons`. They can be contacted on MOJ Slack channel `#prisoner_transactions_team`.
 
-This bootstrap is community managed by the mojdt `#typescript` slack channel. 
-Please raise any questions or queries there. Contributions welcome!
+### Health
+The application has a health endpoint found at `/health` which indicates if the app is running and is healthy.
 
-Our security policy is located [here](https://github.com/ministryofjustice/hmpps-template-typescript/security/policy). 
+### Ping
+The application has a ping endpoint found at `/ping` which indicates that the app is responding to requests.
 
-More information about the template project including features can be found [here](https://dsdmoj.atlassian.net/wiki/spaces/NDSS/pages/3488677932/Typescript+template+project).
+### Build
+The application is built on [CircleCI](https://app.circleci.com/pipelines/github/ministryofjustice/send-legal-mail-to-prisons).
 
-## Creating a CloudPlatform namespace
+### Versions
+The application version currently running can be found on the `/health` endpoint at node `build.buildNumber`. The format of the version number is `YYY-MM-DD.ccc.gggggg` where `ccc` is the Circle job number and `gggggg` is the git commit reference. 
 
-When deploying to a new namespace, you may wish to use this template typescript project namespace as the basis for your new namespace:
+### Rolling back the application
+<em>Requires CLI tools `kubectl` and `helm`. Requires access to Cloud Platform Kubernetes `live` cluster.</em>
 
-<https://github.com/ministryofjustice/cloud-platform-environments/tree/main/namespaces/live-1.cloud-platform.service.justice.gov.uk/hmpps-template-typescript>
-
-This template namespace includes an AWS elasticache setup - which is required by this template project.
-
-Copy this folder, update all the existing namespace references, and submit a PR to the CloudPlatform team. Further instructions from the CloudPlatform team can be found here: <https://user-guide.cloud-platform.service.justice.gov.uk/#cloud-platform-user-guide>
-
-## Renaming from HMPPS Template Typescript - github Actions
-
-Once the new repository is deployed. Navigate to the repository in github, and select the `Actions` tab.
-Click the link to `Enable Actions on this repository`.
-
-Find the Action workflow named: `rename-project-create-pr` and click `Run workflow`.  This workflow will
-execute the `rename-project.bash` and create Pull Request for you to review.  Review the PR and merge.
-
-Note: ideally this workflow would run automatically however due to a recent change github Actions are not
-enabled by default on newly created repos. There is no way to enable Actions other then to click the button in the UI.
-If this situation changes we will update this project so that the workflow is triggered during the bootstrap project.
-Further reading: <https://github.community/t/workflow-isnt-enabled-in-repos-generated-from-template/136421>
-
-## Manually branding from template app
-Run the `rename-project.bash` and create a PR.
-
-The rename-project.bash script takes a single argument - the name of the project and calculates from it the project description
-It then performs a search and replace and directory renames so the project is ready to be used.
-
-## Ensuring slack notifications are raised correctly
-
-To ensure notifications are routed to the correct slack channels, update the `alerts-slack-channel` and `releases-slack-channel` parameters in `.circle/config.yml` to an appropriate channel.
+For example in the dev environment:
+1. Set the Kube context with command `kubectl config use-context live.cloud-platform.service.justice.gov.uk`
+2. Set the Kube namespace with command `kubectl config set-context --current --namespace send-legal-mail-to-prisons-dev`
+3. List the charts deployed by helm with command `helm list`
+4. List the deployments for this application with command `helm history send-legal-mail-to-prisons`
+5. Given the application version you wish to rollback to, find the related revision number
+6. Rollback to that version with command `helm rollback <revision-number>` replacing `<revision-number>` as appropriate
 
 ## Running the app
 The easiest way to run the app is to use docker compose to create the service and all dependencies. 
