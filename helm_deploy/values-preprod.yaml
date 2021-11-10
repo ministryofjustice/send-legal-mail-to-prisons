@@ -1,0 +1,17 @@
+---
+# Per environment values which override defaults in send-legal-mail-to-prisons/values.yaml
+
+generic-service:
+  replicaCount: 2
+
+  ingress:
+    host: send-legal-mail-preprod.prison.service.justice.gov.uk
+
+  env:
+    INGRESS_URL: "https://send-legal-mail-to-prisons-preprod.hmpps.service.justice.gov.uk"
+    HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
+    TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
+
+generic-prometheus-alerts:
+  alertSeverity: digital-prison-service-dev
+
