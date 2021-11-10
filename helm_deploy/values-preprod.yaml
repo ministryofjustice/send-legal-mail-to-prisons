@@ -6,6 +6,7 @@ generic-service:
 
   ingress:
     host: send-legal-mail-preprod.prison.service.justice.gov.uk
+    contextColour: green
 
   env:
     INGRESS_URL: "https://send-legal-mail-to-prisons-preprod.hmpps.service.justice.gov.uk"
