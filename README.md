@@ -96,6 +96,25 @@ Or run tests with the cypress UI:
 
 `npm run int-test-ui`
 
+### Writing integration tests
+
+Integration tests use the [cypress test runner](https://www.cypress.io/).
+
+#### Accessibility
+
+To test a page rendering for accessibility issues, write a test that uses [cypress-axe](https://github.com/component-driven/cypress-axe).
+For example:
+```
+  it('The page is accessible', () => {
+    cy.visit('/the-page-url')
+
+    cy.injectAxe()
+    cy.checkA11y(null, {
+      includedImpacts: ['critical', 'serious'],
+    })
+  })
+```
+
 ### Dependency Checks
 
 The template project has implemented some scheduled checks to ensure that key dependencies are kept up to date.
