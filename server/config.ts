@@ -67,4 +67,5 @@ export default {
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
+  gtm_containerId: get('GOOGLE_TAG_MANAGER_CONTAINER_ID', null, requiredInProduction),
 }
