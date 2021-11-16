@@ -3,7 +3,7 @@
 
 {% block head %}
 
-  {% if gtm_containerId != null %}
+  {% if gtmContainerId != null %}
   {# Google Tag Manager #}
   <script nonce="{{ cspNonce }}" data-qa="gtm">
     ;
@@ -22,7 +22,7 @@
       f
         .parentNode
         .insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', '{{ gtm_containerId }}');
+    })(window, document, 'script', 'dataLayer', '{{ gtmContainerId }}');
   </script>
   {# End Google Tag Manager #}
   {% endif %}
