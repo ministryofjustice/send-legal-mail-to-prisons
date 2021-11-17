@@ -134,6 +134,7 @@
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "axe-core": "^4.3.3",
+    "cheerio": "^1.0.0-rc.10",
     "concurrently": "^6.3.0",
     "cypress": "^8.6.0",
     "cypress-axe": "^0.13.0",
