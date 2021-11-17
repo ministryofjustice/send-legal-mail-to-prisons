@@ -1,3 +1,5 @@
+import { RequestLinkForm } from '../forms'
+
 export default {}
 
 declare module 'express-session' {
@@ -5,6 +7,7 @@ declare module 'express-session' {
   interface SessionData {
     returnTo: string
     nowInMinutes: number
+    requestLinkForm: RequestLinkForm
   }
 }
 
@@ -18,6 +21,8 @@ export declare global {
 
     interface Request {
       verified?: boolean
+
+      flash(message: 'errors'): Array<Record<string, string>>
     }
   }
 }

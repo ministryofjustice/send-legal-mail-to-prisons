@@ -1,0 +1,57 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set pageTitle = applicationName + " - Request a link" %}
+{% set pageId = 'request-link' %}
+
+{% block content %}
+
+  <main class="app-container govuk-body">
+    {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: 'There is a problem',
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl">Request a link to log in</h1>
+        <p>Enter your Criminal Justice Secure Mail (CJSM) email address. Your organisational email address may be approved for use with CJSM.</p>
+        <p>You'll receive an email containing a link to the sercice in your inbox. Follow the link to log in.</p>
+        <p>The link will expire 10 minutes after you request it.</p>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <form id="email-form" action="request-link" method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          {% call govukFieldset({ }) %}
+            {{ govukInput({
+              label: {
+                html: 'Enter your CJSM email'
+              },
+              id: "email",
+              name: "email",
+              value: form.email,
+              type: 'email',
+              errorMessage: errors | findError('email')
+            }) }}
+            <div class="govuk-button-group">
+              {{ govukButton({
+                text: "Submit",
+                attributes: { 'data-qa': 'request-link-button' }
+              }) }}
+            </div>
+          {% endcall %}
+        </form>
+      </div>
+    </div>
+  </main>
+
+{% endblock %}

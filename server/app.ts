@@ -1,6 +1,5 @@
 import express from 'express'
 
-import path from 'path'
 import createError from 'http-errors'
 
 import indexRoutes from './routes'
@@ -16,6 +15,7 @@ import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
+import setUpRequestLink from './middleware/setupRequestLink'
 
 export default function createApp(userService: UserService): express.Application {
   const app = express()
@@ -29,10 +29,12 @@ export default function createApp(userService: UserService): express.Application
   app.use(setUpWebSession())
   app.use(setUpWebRequestParsing())
   app.use(setUpStaticResources())
-  nunjucksSetup(app, path)
-  app.use(setUpAuthentication())
-  app.use(authorisationMiddleware())
+  nunjucksSetup(app)
 
+  app.use('/link', setUpRequestLink())
+
+  app.use('/', setUpAuthentication())
+  app.use('/', authorisationMiddleware())
   app.use('/', indexRoutes(standardRouter(userService)))
 
   app.use((req, res, next) => next(createError(404, 'Not found')))
