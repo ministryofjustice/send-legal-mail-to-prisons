@@ -1,21 +1,42 @@
 import Page, { PageElement } from '../page'
+// eslint-disable-next-line import/no-cycle
+import EmailSentPage from './emailSent'
 
 export default class RequestLinkPage extends Page {
   constructor() {
     super('Request a link to log in')
   }
 
-  enterEmailAddress = (email: string): RequestLinkPage => {
+  submitFormWithValidEmailAddress = (email: string): EmailSentPage => {
+    this.emailField().type(email)
+
+    this.submitButton().click()
+    return Page.verifyOnPage(EmailSentPage)
+  }
+
+  submitFormWithInvalidEmailAddress = (email: string): RequestLinkPage => {
     if (!!email && email.length > 0) {
       this.emailField().type(email)
     } else {
       this.emailField().clear()
     }
-    return this
+
+    this.submitButton().click()
+    return Page.verifyOnPage(RequestLinkPage)
   }
 
-  submitForm = (): void => {
+  submitFormThatFailsHtml5EmailFieldValidation = (email: string): RequestLinkPage => {
+    this.emailField().type(email)
+
     this.submitButton().click()
+    return Page.verifyOnPage(RequestLinkPage)
+  }
+
+  emailFieldHasHtml5ValidationMessage = (message: string): RequestLinkPage => {
+    this.emailField().then($input => {
+      expect(($input[0] as HTMLInputElement).validationMessage).to.eq(message)
+    })
+    return Page.verifyOnPage(RequestLinkPage)
   }
 
   emailField = (): PageElement => cy.get('#email')

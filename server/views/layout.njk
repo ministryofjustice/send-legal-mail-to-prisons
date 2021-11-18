@@ -53,10 +53,25 @@
 {% block bodyStart %}
 {% endblock %}
 
+{% block beforeContent %}
+    {{ govukPhaseBanner({
+      attributes: {
+        role: "complementary"
+      },
+      tag: {
+        text: "beta"
+      },
+      html: 'This is a new service – your <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="'+ phaseBannerLink +'">feedback</a> will help us to improve it.'
+    }) }}
+  <span class="govuk-visually-hidden" id="{{ pageId }}"></span>
+{% endblock %}
+
 {% block bodyEnd %}
   {# Run JavaScript at end of the
   <body>, to avoid blocking the initial render. #}
   <script src="/assets/govuk/all.js"></script>
-  <script src="/assets/govukFrontendInit.js"></script>
   <script src="/assets/moj/all.js"></script>
+  <script src="/assets/govukFrontendInit.js"></script>
+  <script src="/assets/mojFrontendInit.js"></script>
+  {% block pageScripts %}{% endblock %}
 {% endblock %}
