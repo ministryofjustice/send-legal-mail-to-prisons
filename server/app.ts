@@ -15,7 +15,7 @@ import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
-import setUpRequestLink from './middleware/setupRequestLink'
+import setUpRequestLink from './middleware/link/setupRequestLink'
 
 export default function createApp(userService: UserService): express.Application {
   const app = express()

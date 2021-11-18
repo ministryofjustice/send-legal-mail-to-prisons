@@ -31,10 +31,11 @@
       <div class="govuk-grid-column-two-thirds">
         <form id="email-form" action="request-link" method="post">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
           {% call govukFieldset({ }) %}
             {{ govukInput({
               label: {
-                html: 'Enter your CJSM email'
+                text: 'Enter your CJSM email'
               },
               id: "email",
               name: "email",
@@ -49,6 +50,7 @@
               }) }}
             </div>
           {% endcall %}
+
         </form>
       </div>
     </div>

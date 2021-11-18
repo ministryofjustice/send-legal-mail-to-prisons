@@ -21,7 +21,7 @@ export declare global {
 
     interface Request {
       verified?: boolean
-
+      flash(type: string, message: Array<Record<string, string>>): number
       flash(message: 'errors'): Array<Record<string, string>>
     }
   }

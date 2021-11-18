@@ -1,0 +1,78 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% set pageTitle = applicationName + " - Request a link" %}
+{% set pageId = 'email-sent' %}
+
+{% block content %}
+
+  <main class="app-container govuk-body">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl">Now check your emails</h1>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+
+        {% set html %}
+          <p class="govuk-notification-banner__heading">We've sent a link to your email - {{ emailSentTo }}</p>
+        {% endset %}
+
+        {{ govukNotificationBanner({
+          type: 'success',
+          disableAutoFocus: true,
+          html: html
+        }) }}
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h3>What to do if you don't get the link</h3>
+        <p>Check that the:
+          <ul>
+            <li>email address you've entered is correct - it needs to be valid for the Criminal Justice Secure Mail (CJSM) service</li>
+            <li>link hasn't gone to your 'spam' or 'junk' folder
+          </ul>
+        </p>
+      </div>
+    </div>
+
+	<div class="govuk-grid-row">
+	  <div class="govuk-grid-column-two-thirds">
+		<form id="email-form" action="request-link" method="post">
+		  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+		  {% call govukFieldset({ }) %}
+			{{ govukInput({
+			  label: {
+				text: 'Resubmit your CJSM or other approved email address'
+			  },
+			  hint: {
+				text: 'Enter your CJSM email'
+			  },
+			  id: "email",
+			  name: "email",
+			  value: form.email,
+			  type: 'email',
+			  errorMessage: errors | findError('email')
+			}) }}
+			<div class="govuk-button-group">
+			  {{ govukButton({
+				text: "Submit",
+				attributes: { 'data-qa': 'request-link-button' }
+			  }) }}
+			</div>
+		  {% endcall %}
+
+		</form>
+	  </div>
+	</div>
+  </main>
+
+{% endblock %}
