@@ -1,8 +1,8 @@
 import express, { Router } from 'express'
 import session from 'express-session'
 import flash from 'connect-flash'
-import RequestLinkController from '../routes/link/RequestLinkController'
-import config from '../config'
+import RequestLinkController from '../../routes/link/RequestLinkController'
+import config from '../../config'
 
 export default function setUpRequestLink(): Router {
   const router = express.Router()
@@ -23,6 +23,7 @@ export default function setUpRequestLink(): Router {
   router.use(express.urlencoded({ extended: true }))
 
   router.get('/request-link', (req, res) => requestLinksController.getRequestLinkView(req, res))
+  router.post('/request-link', (req, res) => requestLinksController.submitLinkRequest(req, res))
 
   return router
 }

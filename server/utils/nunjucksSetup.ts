@@ -57,12 +57,7 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addFilter('findError', (array: Error[], formFieldId: string) => {
     const item = array?.find(error => error.href === `#${formFieldId}`)
-    if (item) {
-      return {
-        text: item.text,
-      }
-    }
-    return null
+    return item ? { text: item.text } : null
   })
 
   return njkEnv
