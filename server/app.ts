@@ -16,8 +16,9 @@ import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
 import setUpRequestLink from './middleware/link/setupRequestLink'
+import MagicLinkService from './services/link/MagicLinkService'
 
-export default function createApp(userService: UserService): express.Application {
+export default function createApp(userService: UserService, magicLinkService: MagicLinkService): express.Application {
   const app = express()
 
   app.set('json spaces', 2)
@@ -31,7 +32,7 @@ export default function createApp(userService: UserService): express.Application
   app.use(setUpStaticResources())
   nunjucksSetup(app)
 
-  app.use('/link', setUpRequestLink())
+  app.use('/link', setUpRequestLink(magicLinkService))
 
   app.use('/', setUpAuthentication())
   app.use('/', authorisationMiddleware())

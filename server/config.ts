@@ -55,6 +55,8 @@ export default {
       agent: new AgentConfig(),
       apiClientId: get('API_CLIENT_ID', 'clientid', requiredInProduction),
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction),
+      systemClientId: get('SYSTEM_CLIENT_ID', 'send-legal-mail-admin', requiredInProduction),
+      systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'client_secret', requiredInProduction),
     },
     tokenVerification: {
       url: get('TOKEN_VERIFICATION_API_URL', 'http://localhost:8100', requiredInProduction),
@@ -64,6 +66,14 @@ export default {
       },
       agent: new AgentConfig(),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
+    },
+    sendLegalMail: {
+      url: get('SEND_LEGAL_MAIL_API_URL', 'http://localhost:8101', requiredInProduction) as string,
+      timeout: {
+        response: Number(get('SEND_LEGAL_MAIL_API_TIMEOUT_RESPONSE', 30000)),
+        deadline: Number(get('SEND_LEGAL_MAIL_API_TIMEOUT_DEADLINE', 30000)),
+      },
+      agent: new AgentConfig(),
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),

@@ -1,9 +1,12 @@
 import Page from '../../pages/page'
 import RequestLinkPage from '../../pages/link/requestLink'
+import EmailSentPage from '../../pages/link/emailSent'
 
 context('Link Email Sent Page', () => {
   beforeEach(() => {
     cy.task('reset')
+    cy.task('stubAuthToken')
+    cy.task('stubRequestLink')
   })
 
   it('should render email sent page without a sign out link', () => {
@@ -17,7 +20,7 @@ context('Link Email Sent Page', () => {
   it('should submit form given valid email address', () => {
     cy.visit('/link/request-link')
     const requestLinkPage = Page.verifyOnPage(RequestLinkPage)
-    const emailSentPage = requestLinkPage.submitFormWithValidEmailAddress('valid@email.address')
+    const emailSentPage = requestLinkPage.submitFormWithValidEmailAddress('valid@email.address') as EmailSentPage
 
     emailSentPage.submitFormWithValidEmailAddress('another.valid@email.address')
 

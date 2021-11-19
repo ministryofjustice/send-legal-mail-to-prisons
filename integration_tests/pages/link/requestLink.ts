@@ -7,11 +7,11 @@ export default class RequestLinkPage extends Page {
     super('Request a link to log in')
   }
 
-  submitFormWithValidEmailAddress = (email: string): EmailSentPage => {
+  submitFormWithValidEmailAddress = (email: string, expectNextPage = true): EmailSentPage | RequestLinkPage => {
     this.emailField().type(email)
 
     this.submitButton().click()
-    return Page.verifyOnPage(EmailSentPage)
+    return expectNextPage ? Page.verifyOnPage(EmailSentPage) : Page.verifyOnPage(RequestLinkPage)
   }
 
   submitFormWithInvalidEmailAddress = (email: string): RequestLinkPage => {
