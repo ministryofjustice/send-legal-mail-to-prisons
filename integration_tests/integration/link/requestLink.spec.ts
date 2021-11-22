@@ -1,9 +1,12 @@
 import Page from '../../pages/page'
 import RequestLinkPage from '../../pages/link/requestLink'
+import EmailSentPage from '../../pages/link/emailSent'
 
 context('Request Link Page', () => {
   beforeEach(() => {
     cy.task('reset')
+    cy.task('stubAuthToken')
+    cy.task('stubRequestLink')
   })
 
   it('should render request link page to unauthenticated user and reset cookie', () => {
@@ -25,7 +28,7 @@ context('Request Link Page', () => {
     cy.visit('/link/request-link')
     const requestLinkPage = Page.verifyOnPage(RequestLinkPage)
 
-    const emailSentPage = requestLinkPage.submitFormWithValidEmailAddress('valid@email.address')
+    const emailSentPage = requestLinkPage.submitFormWithValidEmailAddress('valid@email.address') as EmailSentPage
 
     emailSentPage.successBanner().should('exist').contains(`We've sent a link to your email - valid@email.address`)
   })
@@ -58,5 +61,15 @@ context('Request Link Page', () => {
     requestLinkPage.submitFormWithInvalidEmailAddress('not.a.valid@email')
 
     requestLinkPage.errorsList().should('exist').contains('Enter a valid email address')
+  })
+
+  it('should redisplay form with errors given send email link service fails', () => {
+    cy.task('stubRequestLinkFailure')
+    cy.visit('/link/request-link')
+    const requestLinkPage = Page.verifyOnPage(RequestLinkPage)
+
+    requestLinkPage.submitFormWithValidEmailAddress('valid@email.address', false)
+
+    requestLinkPage.errorsList().should('exist').contains('There was an error generating your sign in link')
   })
 })

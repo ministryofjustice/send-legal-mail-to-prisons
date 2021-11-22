@@ -3,10 +3,11 @@ import session from 'express-session'
 import flash from 'connect-flash'
 import RequestLinkController from '../../routes/link/RequestLinkController'
 import config from '../../config'
+import MagicLinkService from '../../services/link/MagicLinkService'
 
-export default function setUpRequestLink(): Router {
+export default function setUpRequestLink(magicLinkService: MagicLinkService): Router {
   const router = express.Router()
-  const requestLinksController = new RequestLinkController()
+  const requestLinksController = new RequestLinkController(magicLinkService)
 
   // TODO This uses the same max session age and secret as for a logged in user. Consider separating these into different env vars.
   router.use(
