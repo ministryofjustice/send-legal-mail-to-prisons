@@ -6,7 +6,7 @@ const stubRequestLink = (): SuperAgentRequest =>
     request: {
       method: 'POST',
       urlPattern: '/send-legal-mail/link/email',
-      bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i && @.sessionID =~ /.*/i)]' }],
+      bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }],
     },
     response: {
       status: 200,
@@ -21,7 +21,7 @@ const stubRequestLinkFailure = (): SuperAgentRequest =>
     request: {
       method: 'POST',
       urlPattern: '/send-legal-mail/link/email',
-      bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i && @.sessionID =~ /.*/i)]' }],
+      bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }],
     },
     response: {
       status: 500,

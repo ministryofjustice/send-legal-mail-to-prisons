@@ -9,11 +9,11 @@ export default class MagicLinkService {
     return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, token)
   }
 
-  async requestLink(email: string, sessionID: string): Promise<unknown> {
+  async requestLink(email: string): Promise<unknown> {
     return this.hmppsAuthClient.getSystemClientToken().then(token =>
       MagicLinkService.restClient(token).post({
         path: `/link/email`,
-        data: { email, sessionID },
+        data: { email },
       })
     )
   }

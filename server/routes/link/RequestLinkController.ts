@@ -20,7 +20,7 @@ export default class RequestLinkController {
     }
 
     return this.magicLinkService
-      .requestLink(req.session.requestLinkForm.email, req.sessionID)
+      .requestLink(req.session.requestLinkForm.email)
       .then(() => {
         const emailSentTo = req.session.requestLinkForm.email
         delete req.session.requestLinkForm

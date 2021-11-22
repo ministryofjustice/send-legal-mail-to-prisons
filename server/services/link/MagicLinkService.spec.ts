@@ -28,10 +28,10 @@ describe('Magic Link Service', () => {
     })
 
     it('should request a link', done => {
-      mockedSendLegalMailApi.post('/link/email', { email: 'a.b@c.com', sessionID: 'some-session' }).reply(201)
+      mockedSendLegalMailApi.post('/link/email', { email: 'a.b@c.com' }).reply(201)
 
       magicLinkService
-        .requestLink('a.b@c.com', 'some-session')
+        .requestLink('a.b@c.com')
         .then(() => expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled())
         .finally(() => done())
     })
@@ -40,7 +40,7 @@ describe('Magic Link Service', () => {
       hmppsAuthClient.getSystemClientToken.mockRejectedValue('an error getting system client token')
 
       magicLinkService
-        .requestLink('a.b@c.com', 'some-session')
+        .requestLink('a.b@c.com')
         .catch(error => expect(error).toBe('an error getting system client token'))
         .finally(() => done())
     })
