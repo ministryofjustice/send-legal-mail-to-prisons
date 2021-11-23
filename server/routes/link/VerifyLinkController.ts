@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import MagicLinkService from '../../services/link/MagicLinkService'
+import logger from '../../../logger'
 
 export default class VerifyLinkController {
   constructor(private readonly magicLinkService: MagicLinkService) {}
@@ -7,7 +8,7 @@ export default class VerifyLinkController {
   async verifyLink(req: Request, res: Response): Promise<void> {
     const secret = req.query.secret as string
     if (!secret) {
-      console.warn('User attempted to verify a link without a secret on the query string')
+      logger.warn('User attempted to verify a link without a secret on the query string')
       return res.redirect('request-link')
     }
 
