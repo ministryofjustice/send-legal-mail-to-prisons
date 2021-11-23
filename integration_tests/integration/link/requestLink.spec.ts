@@ -9,14 +9,6 @@ context('Request Link Page', () => {
     cy.task('stubRequestLink')
   })
 
-  it('should render request link page to unauthenticated user and reset cookie', () => {
-    cy.setCookie('create_barcode_token', '... a barcode ...')
-    cy.visit('/link/request-link')
-    Page.verifyOnPage(RequestLinkPage)
-
-    cy.getCookie('create_barcode_token').should('not.exist')
-  })
-
   it('should render request link page without a sign out link', () => {
     cy.visit('/link/request-link')
     const requestLinkPage = Page.verifyOnPage(RequestLinkPage)
