@@ -17,4 +17,22 @@ export default class MagicLinkService {
       })
     )
   }
+
+  async verifyLink(secret: string): Promise<string> {
+    return this.hmppsAuthClient.getSystemClientToken().then(token =>
+      MagicLinkService.restClient(token)
+        .post({
+          path: `/link/verify`,
+          data: { secret },
+        })
+        .then(apiResponse => {
+          const verifyLinkResponse = apiResponse as VerifyLinkResponse
+          return verifyLinkResponse.token
+        })
+    )
+  }
+}
+
+interface VerifyLinkResponse {
+  token: string
 }
