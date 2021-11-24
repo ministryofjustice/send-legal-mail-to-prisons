@@ -1,12 +1,17 @@
 import Page from '../../pages/page'
 import RequestLinkPage from '../../pages/link/requestLink'
 import EmailSentPage from '../../pages/link/emailSent'
+import assertPageMeetsAccessibilityStandards from '../../support/accessibilityHelper'
 
 context('Request Link Page', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubAuthToken')
     cy.task('stubRequestLink')
+  })
+
+  afterEach('Rendered page should meet accessibility standards', () => {
+    assertPageMeetsAccessibilityStandards()
   })
 
   it('should render request link page without a sign out link', () => {

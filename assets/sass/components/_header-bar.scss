@@ -89,6 +89,7 @@
       @include govuk-font(19);
       margin-bottom: govuk-spacing(1);
       text-align: right;
+      color: govuk-colour('white');
 
       @include govuk-media-query($from: tablet) {
         @include govuk-responsive-margin(4, 'right');

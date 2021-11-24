@@ -16,7 +16,11 @@ import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
 import setUpRequestLink from './middleware/link/setupRequestLink'
+import setUpVerifyLink from './middleware/link/setupVerifyLink'
 import MagicLinkService from './services/link/MagicLinkService'
+import barcodeAuthorisationMiddleware from './middleware/barcode/barcodeAuthorisationMiddleware'
+import setUpCreateBarcode from './middleware/barcode/setupBarcode'
+import populateBarcodeUser from './middleware/barcode/populateBarcodeUser'
 
 export default function createApp(userService: UserService, magicLinkService: MagicLinkService): express.Application {
   const app = express()
@@ -32,7 +36,12 @@ export default function createApp(userService: UserService, magicLinkService: Ma
   app.use(setUpStaticResources())
   nunjucksSetup(app)
 
+  app.use('/barcode', barcodeAuthorisationMiddleware())
+  app.use('/barcode', populateBarcodeUser())
+  app.use('/barcode', setUpCreateBarcode())
+
   app.use('/link', setUpRequestLink(magicLinkService))
+  app.use('/link', setUpVerifyLink(magicLinkService))
 
   app.use('/', setUpAuthentication())
   app.use('/', authorisationMiddleware())

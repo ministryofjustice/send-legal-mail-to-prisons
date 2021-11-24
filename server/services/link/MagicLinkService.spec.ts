@@ -14,6 +14,10 @@ describe('Magic Link Service', () => {
 
   beforeEach(() => {
     mockedSendLegalMailApi = nock(config.apis.sendLegalMail.url)
+
+    hmppsAuthClient = new HmppsAuthClient({} as TokenStore) as jest.Mocked<HmppsAuthClient>
+    hmppsAuthClient.getSystemClientToken.mockResolvedValue('a-system-client-token')
+    magicLinkService = new MagicLinkService(hmppsAuthClient)
   })
 
   afterEach(() => {
@@ -21,12 +25,6 @@ describe('Magic Link Service', () => {
   })
 
   describe('requestLink', () => {
-    beforeEach(() => {
-      hmppsAuthClient = new HmppsAuthClient({} as TokenStore) as jest.Mocked<HmppsAuthClient>
-      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a-system-client-token')
-      magicLinkService = new MagicLinkService(hmppsAuthClient)
-    })
-
     it('should request a link', done => {
       mockedSendLegalMailApi.post('/link/email', { email: 'a.b@c.com' }).reply(201)
 
@@ -41,6 +39,29 @@ describe('Magic Link Service', () => {
 
       magicLinkService
         .requestLink('a.b@c.com')
+        .catch(error => expect(error).toBe('an error getting system client token'))
+        .finally(() => done())
+    })
+  })
+
+  describe('verifyLink', () => {
+    it('should verify a link', done => {
+      mockedSendLegalMailApi.post('/link/verify', { secret: 'a-secret' }).reply(200, { token: 'a-token' })
+
+      magicLinkService
+        .verifyLink('a-secret')
+        .then(token => {
+          expect(token).toBe('a-token')
+          expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+        })
+        .finally(() => done())
+    })
+
+    it('should fail to verify a link given getSystemClientToken fails', done => {
+      hmppsAuthClient.getSystemClientToken.mockRejectedValue('an error getting system client token')
+
+      magicLinkService
+        .verifyLink('a-secret')
         .catch(error => expect(error).toBe('an error getting system client token'))
         .finally(() => done())
     })
