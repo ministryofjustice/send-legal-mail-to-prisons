@@ -26,7 +26,9 @@ describe('RequestLinkValidator', () => {
       const valid = validate(form, req)
 
       expect(valid).toBe(false)
-      expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#email', text: 'Enter a valid email address' }])
+      expect(req.flash).toHaveBeenCalledWith('errors', [
+        { href: '#email', text: 'Enter an email address in the correct format' },
+      ])
     })
 
     it('should not validate given empty form', async () => {
@@ -34,7 +36,9 @@ describe('RequestLinkValidator', () => {
       const valid = validate(form, req)
 
       expect(valid).toBe(false)
-      expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#email', text: 'Enter an email address' }])
+      expect(req.flash).toHaveBeenCalledWith('errors', [
+        { href: '#email', text: 'Enter an email address in the correct format' },
+      ])
     })
   })
 })

@@ -28,8 +28,12 @@ export default class RequestLinkController {
         const view = new RequestLinkView({}, [])
         return res.render('pages/link/emailSent', { ...view.renderArgs, emailSentTo })
       })
-      .catch(() => {
-        req.flash('errors', [{ text: 'There was an error generating your sign in link' }])
+      .catch(error => {
+        const errorMessage =
+          error.status === 400 && error.data.errorCode === 'INVALID_CJSM_EMAIL'
+            ? 'Enter an email address in the correct format'
+            : 'There was an error generating your sign in link. Try again to request a new one to log in.'
+        req.flash('errors', [{ text: errorMessage }])
         return res.redirect('request-link')
       })
   }

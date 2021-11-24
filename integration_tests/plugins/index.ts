@@ -19,6 +19,7 @@ export default (on: (string, Record) => void): void => {
 
     stubRequestLink: sendLegalMail.stubRequestLink,
     stubRequestLinkFailure: sendLegalMail.stubRequestLinkFailure,
+    stubRequestLinkNonCjsmEmailFailure: sendLegalMail.stubRequestLinkNonCjsmEmailFailure,
     stubVerifyLink: sendLegalMail.stubVerifyLink,
     stubVerifyLinkNotFoundFailure: sendLegalMail.stubVerifyLinkNotFoundFailure,
     stubVerifyLinkInvalidSignatureFailure: sendLegalMail.stubVerifyLinkInvalidSignatureFailure,
