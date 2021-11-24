@@ -33,19 +33,13 @@ context('Verify Link', () => {
     cy.task('stubVerifyLinkNotFoundFailure')
     cy.visit('/link/verify-link?secret=a-bogus-secret')
 
-    Page.verifyOnPage(RequestLinkPage)
-      .errorsList()
-      .should('exist')
-      .contains('There was an error verifying your email - please try again')
+    Page.verifyOnPage(RequestLinkPage).errorsList().should('contain', 'Request a new one')
   })
 
   it('should redirect to Request List page if visiting with a `secret` that returns a token with an invalid signature', () => {
     cy.task('stubVerifyLinkInvalidSignatureFailure')
     cy.visit('/link/verify-link?secret=a-valid-secret-whose-token-has-an-invalid-signature')
 
-    Page.verifyOnPage(RequestLinkPage)
-      .errorsList()
-      .should('exist')
-      .contains('There was an error verifying your email - please try again')
+    Page.verifyOnPage(RequestLinkPage).errorsList().should('contain', 'Request a new one')
   })
 })

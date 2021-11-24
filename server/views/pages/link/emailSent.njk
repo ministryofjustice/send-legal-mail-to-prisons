@@ -4,7 +4,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 
-{% set pageTitle = applicationName + " - Request a link" %}
+{% set pageTitle = applicationName + " - Sign in link email sent" %}
 {% set pageId = 'email-sent' %}
 
 {% block content %}
@@ -35,44 +35,17 @@
       <div class="govuk-grid-column-full">
         <h3>What to do if you don't get the link</h3>
         <p>Check that the:
-          <ul class="govuk-list">
+          <ul class="govuk-list govuk-list--bullet">
             <li>email address you've entered is correct - it needs to be valid for the Criminal Justice Secure Mail (CJSM) service</li>
             <li>link hasn't gone to your 'spam' or 'junk' folder
           </ul>
         </p>
+
+        <p>
+            <a href="request-link" class="govuk-link" data-qa="request-sign-in-link">Enter your email again</a>
+        </p>
       </div>
     </div>
-
-	<div class="govuk-grid-row">
-	  <div class="govuk-grid-column-two-thirds">
-		<form id="email-form" action="request-link" method="post">
-		  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-
-		  {% call govukFieldset({ }) %}
-			{{ govukInput({
-			  label: {
-				text: 'Resubmit your CJSM or other approved email address'
-			  },
-			  hint: {
-				text: 'Enter your CJSM email'
-			  },
-			  id: "email",
-			  name: "email",
-			  value: form.email,
-			  type: 'email',
-			  errorMessage: errors | findError('email')
-			}) }}
-			<div class="govuk-button-group">
-			  {{ govukButton({
-				text: "Submit",
-				attributes: { 'data-qa': 'request-link-button' }
-			  }) }}
-			</div>
-		  {% endcall %}
-
-		</form>
-	  </div>
-	</div>
   </main>
 
 {% endblock %}

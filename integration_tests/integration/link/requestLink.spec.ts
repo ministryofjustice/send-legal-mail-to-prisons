@@ -25,9 +25,11 @@ context('Request Link Page', () => {
     cy.visit('/link/request-link')
     const requestLinkPage = Page.verifyOnPage(RequestLinkPage)
 
-    const emailSentPage = requestLinkPage.submitFormWithValidEmailAddress('valid@email.address') as EmailSentPage
+    const emailSentPage = requestLinkPage.submitFormWithValidEmailAddress(
+      'valid@email.address.cjsm.net'
+    ) as EmailSentPage
 
-    emailSentPage.successBanner().should('exist').contains(`We've sent a link to your email - valid@email.address`)
+    emailSentPage.successBanner().should('contain', `We've sent a link`)
   })
 
   it('html field validation should prevent form submission given invalid email address', () => {
@@ -48,7 +50,7 @@ context('Request Link Page', () => {
 
     requestLinkPage.submitFormWithInvalidEmailAddress('')
 
-    requestLinkPage.errorsList().should('exist').contains('Enter an email address')
+    requestLinkPage.errorsList().should('contain', 'email address')
   })
 
   it('should redisplay form with errors given form submitted with invalid email address', () => {
@@ -57,7 +59,17 @@ context('Request Link Page', () => {
 
     requestLinkPage.submitFormWithInvalidEmailAddress('not.a.valid@email')
 
-    requestLinkPage.errorsList().should('exist').contains('Enter a valid email address')
+    requestLinkPage.errorsList().should('contain', 'format')
+  })
+
+  it('should redisplay form with errors given form submitted with non cjsm email address', () => {
+    cy.task('stubRequestLinkNonCjsmEmailFailure')
+    cy.visit('/link/request-link')
+    const requestLinkPage = Page.verifyOnPage(RequestLinkPage)
+
+    requestLinkPage.submitFormWithInvalidEmailAddress('valid@email.address')
+
+    requestLinkPage.errorsList().should('contain', 'format')
   })
 
   it('should redisplay form with errors given send email link service fails', () => {
@@ -67,6 +79,6 @@ context('Request Link Page', () => {
 
     requestLinkPage.submitFormWithValidEmailAddress('valid@email.address', false)
 
-    requestLinkPage.errorsList().should('exist').contains('There was an error generating your sign in link')
+    requestLinkPage.errorsList().should('contain', 'request a new')
   })
 })

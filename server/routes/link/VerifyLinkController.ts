@@ -17,7 +17,7 @@ export default class VerifyLinkController {
         return res.redirect('/barcode/find-recipient')
       })
       .catch(() => {
-        req.flash('errors', [{ text: 'There was an error verifying your email - please try again' }])
+        req.flash('errors', [{ text: 'The link you used is no longer valid. Request a new one to log in.' }])
         return res.redirect('request-link')
       })
   }

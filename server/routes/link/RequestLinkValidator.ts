@@ -5,9 +5,9 @@ export default function validate(form: RequestLinkForm, req: Request): boolean {
   const errors: Array<Record<string, string>> = []
 
   if (!form.email) {
-    errors.push({ href: '#email', text: 'Enter an email address' })
+    errors.push({ href: '#email', text: 'Enter your CJSM email address' })
   } else if (!validateEmail(form.email)) {
-    errors.push({ href: '#email', text: 'Enter a valid email address' })
+    errors.push({ href: '#email', text: 'Enter an email address in the correct format' })
   }
 
   if (errors.length > 0) {

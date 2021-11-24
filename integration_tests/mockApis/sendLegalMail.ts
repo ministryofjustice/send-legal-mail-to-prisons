@@ -31,6 +31,26 @@ const stubRequestLinkFailure = (): SuperAgentRequest =>
     },
   })
 
+const stubRequestLinkNonCjsmEmailFailure = (): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: '/send-legal-mail/link/email',
+      bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }],
+    },
+    response: {
+      status: 400,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: {
+        status: 400,
+        errorCode: 'INVALID_CJSM_EMAIL',
+        userMessage: `Enter an email address which ends with 'cjsm.net'`,
+      },
+    },
+  })
+
 const stubVerifyLink = (): SuperAgentRequest =>
   stubFor({
     request: {
@@ -87,6 +107,7 @@ const stubVerifyLinkNotFoundFailure = (): SuperAgentRequest =>
 export default {
   stubRequestLink,
   stubRequestLinkFailure,
+  stubRequestLinkNonCjsmEmailFailure,
   stubVerifyLink,
   stubVerifyLinkNotFoundFailure,
   stubVerifyLinkInvalidSignatureFailure,
