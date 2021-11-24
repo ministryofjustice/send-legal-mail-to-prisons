@@ -41,6 +41,7 @@ generic-service:
       SYSTEM_CLIENT_ID: "SYSTEM_CLIENT_ID"
       SYSTEM_CLIENT_SECRET: "SYSTEM_CLIENT_SECRET"
       SESSION_SECRET: "SESSION_SECRET"
+    send-legal-mail-to-prisons-api:
       BARCODE_TOKEN_PUBLIC_KEY: "JWT_PUBLIC_KEY"
     slmtp-ui-elasticache-redis:
       REDIS_HOST: "primary_endpoint_address"
