@@ -59,7 +59,7 @@ const stubVerifyLink = (): SuperAgentRequest =>
       bodyPatterns: [{ matchesJsonPath: '$[?(@.secret =~ /.*/i)]' }],
     },
     response: {
-      status: 200,
+      status: 201,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
@@ -78,7 +78,7 @@ const stubVerifyLinkInvalidSignatureFailure = (): SuperAgentRequest =>
       bodyPatterns: [{ matchesJsonPath: '$[?(@.secret =~ /.*/i)]' }],
     },
     response: {
-      status: 200,
+      status: 201,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
