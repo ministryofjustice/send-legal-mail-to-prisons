@@ -26,7 +26,7 @@ export default class RequestLinkController {
         delete req.session.requestLinkForm
 
         const view = new RequestLinkView({}, [])
-        return res.render('pages/link/emailSent', { ...view.renderArgs, emailSentTo })
+        res.render('pages/link/emailSent', { ...view.renderArgs, emailSentTo })
       })
       .catch(error => {
         const errorMessage =
@@ -34,7 +34,7 @@ export default class RequestLinkController {
             ? 'Enter an email address in the correct format'
             : 'There was an error generating your sign in link. Try again to request a new one to log in.'
         req.flash('errors', [{ text: errorMessage }])
-        return res.redirect('request-link')
+        res.redirect('request-link')
       })
   }
 }
