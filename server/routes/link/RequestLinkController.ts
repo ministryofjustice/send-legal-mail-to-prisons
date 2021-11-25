@@ -32,7 +32,7 @@ export default class RequestLinkController {
         const errorMessage =
           error.status === 400 && error.data.errorCode === 'INVALID_CJSM_EMAIL'
             ? 'Enter an email address in the correct format'
-            : 'There was an error generating your sign in link. Try again to request a new one to log in.'
+            : 'There was an error generating your sign in link. Try again to request a new one to sign in.'
         req.flash('errors', [{ text: errorMessage }])
         res.redirect('request-link')
       })
