@@ -1,4 +1,4 @@
-import { FindRecipientForm, RequestLinkForm } from '../forms'
+import { FindRecipientForm, RequestLinkForm, ScanBarcodeForm } from '../forms'
 
 export default {}
 
@@ -11,6 +11,7 @@ declare module 'express-session' {
     createBarcodeAuthToken: string
     barcodeUserEmail: string
     findRecipientForm: FindRecipientForm
+    scanBarcodeForm: ScanBarcodeForm
   }
 }
 
