@@ -25,20 +25,6 @@ export default class RequestLinkPage extends Page {
     return Page.verifyOnPage(RequestLinkPage)
   }
 
-  submitFormThatFailsHtml5EmailFieldValidation = (email: string): RequestLinkPage => {
-    this.emailField().type(email)
-
-    this.submitButton().click()
-    return Page.verifyOnPage(RequestLinkPage)
-  }
-
-  emailFieldHasHtml5ValidationMessage = (message: string): RequestLinkPage => {
-    this.emailField().then($input => {
-      expect(($input[0] as HTMLInputElement).validationMessage).to.eq(message)
-    })
-    return Page.verifyOnPage(RequestLinkPage)
-  }
-
   emailField = (): PageElement => cy.get('#email')
 
   submitButton = (): PageElement => cy.get('button[data-qa="request-link-button"]')
