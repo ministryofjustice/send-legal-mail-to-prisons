@@ -56,6 +56,26 @@ const stubRequestLinkNonCjsmEmailFailure = (): SuperAgentRequest =>
     },
   })
 
+const stubRequestLinkEmailTooLong = (): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: '/send-legal-mail/link/email',
+      bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }],
+    },
+    response: {
+      status: 400,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: {
+        status: 400,
+        errorCode: 'EMAIL_TOO_LONG',
+        userMessage: `The email address can have a maximum length of 254`,
+      },
+    },
+  })
+
 const stubVerifyLink = (): SuperAgentRequest =>
   stubFor({
     request: {
@@ -137,6 +157,7 @@ export default {
   stubRequestLink,
   stubRequestLinkFailure,
   stubRequestLinkNonCjsmEmailFailure,
+  stubRequestLinkEmailTooLong,
   stubVerifyLink,
   stubVerifyLinkThatWillExpireIn1SecondFromNow,
   stubVerifyLinkNotFoundFailure,

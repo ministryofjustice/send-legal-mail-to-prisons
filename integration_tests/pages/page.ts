@@ -17,7 +17,10 @@ export default abstract class Page {
 
   manageDetails = (): PageElement => cy.get('[data-qa=manageDetails]')
 
-  errorsList = (): PageElement => cy.get('.govuk-error-summary__list')
+  hasErrorContaining = (partialMessage: string): void => {
+    cy.get('.govuk-error-summary__list').should('contain', partialMessage)
+    cy.get('#email-error').should('contain', partialMessage)
+  }
 
   userName = (): PageElement => cy.get('[data-qa=header-user-name]')
 }

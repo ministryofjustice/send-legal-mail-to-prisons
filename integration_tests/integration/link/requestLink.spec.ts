@@ -38,7 +38,7 @@ context('Request Link Page', () => {
 
     requestLinkPage.submitFormWithInvalidEmailAddress('')
 
-    requestLinkPage.errorsList().should('contain', 'email address')
+    requestLinkPage.hasErrorContaining('email address')
   })
 
   it('should redisplay form with errors given form submitted with invalid email address', () => {
@@ -47,7 +47,7 @@ context('Request Link Page', () => {
 
     requestLinkPage.submitFormWithInvalidEmailAddress('not.a.valid@email')
 
-    requestLinkPage.errorsList().should('contain', 'format')
+    requestLinkPage.hasErrorContaining('format')
   })
 
   it('should redisplay form with errors given form submitted with non cjsm email address', () => {
@@ -57,7 +57,17 @@ context('Request Link Page', () => {
 
     requestLinkPage.submitFormWithInvalidEmailAddress('valid@email.address')
 
-    requestLinkPage.errorsList().should('contain', 'format')
+    requestLinkPage.hasErrorContaining('format')
+  })
+
+  it('should redisplay form with errors given form submitted with an email that is too long', () => {
+    cy.task('stubRequestLinkEmailTooLong')
+    cy.visit('/link/request-link')
+    const requestLinkPage = Page.verifyOnPage(RequestLinkPage)
+
+    requestLinkPage.submitFormWithInvalidEmailAddress('valid@email.address')
+
+    requestLinkPage.hasErrorContaining('format')
   })
 
   it('should redisplay form with errors given send email link service fails', () => {
@@ -67,6 +77,6 @@ context('Request Link Page', () => {
 
     requestLinkPage.submitFormWithValidEmailAddress('valid@email.address', false)
 
-    requestLinkPage.errorsList().should('contain', 'request a new')
+    requestLinkPage.hasErrorContaining('request a new')
   })
 })
