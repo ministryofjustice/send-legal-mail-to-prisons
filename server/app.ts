@@ -21,6 +21,7 @@ import MagicLinkService from './services/link/MagicLinkService'
 import barcodeAuthorisationMiddleware from './middleware/barcode/barcodeAuthorisationMiddleware'
 import setUpCreateBarcode from './middleware/barcode/setupBarcode'
 import populateBarcodeUser from './middleware/barcode/populateBarcodeUser'
+import setupScanBarcode from './middleware/scan/setupScanBarcode'
 
 export default function createApp(userService: UserService, magicLinkService: MagicLinkService): express.Application {
   const app = express()
@@ -44,8 +45,10 @@ export default function createApp(userService: UserService, magicLinkService: Ma
   app.use('/link', setUpVerifyLink(magicLinkService))
 
   app.use('/', setUpAuthentication())
-  app.use('/', authorisationMiddleware())
   app.use('/', indexRoutes(standardRouter(userService)))
+  app.use('/', authorisationMiddleware(['SLM_SCAN_BARCODE', 'SLM_SECURITY_ANALYST']))
+
+  app.use('/', setupScanBarcode())
 
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler(process.env.NODE_ENV === 'production'))

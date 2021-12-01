@@ -1,12 +1,35 @@
 {% extends "../layout.njk" %}
+{% from "../components/card/card.njk" import card %}
 
 {% set pageTitle = applicationName + " - Home" %}
+{% set pageId = 'index-page' %}
 
 {% block content %}
 
   <main class="app-container govuk-body">
-    <h1>This site is under construction...</h1>
-    <p>Please check back later when there is content to view.</p>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl">Send Legal Mail</h1>
+      </div>
+    </div>
+
+    <div class="homepage-content">
+      <div class="govuk-width-container">
+        <ul class="govuk-grid-row card-group">
+          {% for tile in tiles %}
+            <li class="govuk-grid-column-one-third card-group__item">
+              {{ card({
+                "href": tile.href,
+                "clickable": "true",
+                "heading": tile.heading,
+                "description": tile.description,
+                "id": tile.id
+              }) }}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
   </main>
 
 {% endblock %}

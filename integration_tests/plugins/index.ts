@@ -9,7 +9,9 @@ export default (on: (string, Record) => void): void => {
     reset: resetStubs,
 
     getSignInUrl: auth.getSignInUrl,
-    stubSignIn: auth.stubSignIn,
+    stubSignIn: () => auth.stubSignIn([]),
+    stubSignInWithRole_SLM_SCAN_BARCODE: () => auth.stubSignIn(['SLM_SCAN_BARCODE']),
+    stubSignInWithRole_SLM_SECURITY_ANALYST: () => auth.stubSignIn(['SLM_SECURITY_ANALYST']),
 
     stubAuthUser: auth.stubUser,
     stubAuthPing: auth.stubPing,

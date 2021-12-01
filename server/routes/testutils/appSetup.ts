@@ -1,6 +1,7 @@
 import express, { Express, Router } from 'express'
 import cookieSession from 'cookie-session'
 import createError from 'http-errors'
+import jwt from 'jsonwebtoken'
 
 import allRoutes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
@@ -54,6 +55,24 @@ function appSetup(route: Router, production: boolean): Express {
 }
 
 export default function appWithAllRoutes({ production = false }: { production?: boolean }): Express {
-  auth.default.authenticationMiddleware = () => (req, res, next) => next()
+  auth.default.authenticationMiddleware = () => (req, res, next) => {
+    res.locals.user = {
+      token: createToken(),
+    }
+    next()
+  }
   return appSetup(allRoutes(standardRouter(new MockUserService())), production)
+}
+
+const createToken = () => {
+  const payload = {
+    user_name: 'user1',
+    scope: ['read'],
+    auth_source: 'nomis',
+    authorities: ['SLM_SCAN_BARCODE'],
+    jti: '83b50a10-cca6-41db-985f-e87efb303ddb',
+    client_id: 'clientid',
+  }
+
+  return jwt.sign(payload, 'secret', { expiresIn: '1h' })
 }
