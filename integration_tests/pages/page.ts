@@ -17,7 +17,9 @@ export default abstract class Page {
 
   manageDetails = (): PageElement => cy.get('[data-qa=manageDetails]')
 
-  errorsList = (): PageElement => cy.get('.govuk-error-summary__list')
-
   userName = (): PageElement => cy.get('[data-qa=header-user-name]')
+
+  hasNoErrors = (): void => {
+    cy.get('.govuk-error-summary__list').should('not.exist')
+  }
 }

@@ -30,10 +30,10 @@ export default class RequestLinkController {
       })
       .catch(error => {
         const errorMessage =
-          error.status === 400 && error.data.errorCode === 'INVALID_CJSM_EMAIL'
+          error.status === 400 && Array.of('INVALID_CJSM_EMAIL', 'EMAIL_TOO_LONG').includes(error.data.errorCode)
             ? 'Enter an email address in the correct format'
             : 'There was an error generating your sign in link. Try again to request a new one to sign in.'
-        req.flash('errors', [{ text: errorMessage }])
+        req.flash('errors', [{ href: '#email', text: errorMessage }])
         res.redirect('request-link')
       })
   }
