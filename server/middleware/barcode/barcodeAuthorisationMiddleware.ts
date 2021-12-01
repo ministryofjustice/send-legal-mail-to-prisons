@@ -18,7 +18,9 @@ export default function barcodeAuthorisationMiddleware(): RequestHandler {
       { algorithms: ['RS256'] },
       (err: VerifyErrors, payload: JwtPayload) => {
         if (err) {
-          req.flash('errors', [{ text: 'The link you used is no longer valid. Request a new one to sign in.' }])
+          req.flash('errors', [
+            { href: '#email', text: 'The link you used is no longer valid. Request a new one to sign in.' },
+          ])
           return res.redirect('/link/request-link')
         }
         req.session.barcodeUserEmail = payload.sub

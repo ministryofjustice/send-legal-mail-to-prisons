@@ -28,4 +28,9 @@ export default class RequestLinkPage extends Page {
   emailField = (): PageElement => cy.get('#email')
 
   submitButton = (): PageElement => cy.get('button[data-qa="request-link-button"]')
+
+  hasErrorContaining = (partialMessage: string): void => {
+    cy.get('.govuk-error-summary__list').should('contain', partialMessage)
+    cy.get('#email-error').should('contain', partialMessage)
+  }
 }
