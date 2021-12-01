@@ -62,6 +62,8 @@ TOKEN_VERIFICATION_ENABLED=false
 NODE_ENV=development
 API_CLIENT_ID=send-legal-mail-to-prisons
 API_CLIENT_SECRET=clientsecret
+SYSTEM_CLIENT_ID=send-legal-mail-to-prisons-client
+SYSTEM_CLIENT_SECRET=clientsecret
 SESSION_SECRET=anything
 PORT=3000
 ```
