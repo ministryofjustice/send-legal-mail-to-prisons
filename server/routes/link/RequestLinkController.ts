@@ -22,11 +22,7 @@ export default class RequestLinkController {
     return this.magicLinkService
       .requestLink(req.session.requestLinkForm.email)
       .then(() => {
-        const emailSentTo = req.session.requestLinkForm.email
-        delete req.session.requestLinkForm
-
-        const view = new RequestLinkView({}, [])
-        res.render('pages/link/emailSent', { ...view.renderArgs, emailSentTo })
+        res.redirect('email-sent')
       })
       .catch(error => {
         const errorMessage =

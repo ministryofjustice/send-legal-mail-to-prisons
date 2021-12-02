@@ -29,4 +29,10 @@ context('Link Email Sent Page', () => {
 
     emailSentPage.clickRequestSignInLink()
   })
+
+  it('should redirect to request a link if user navigates to email sent without having requested a link first', () => {
+    cy.visit('/link/email-sent')
+
+    Page.verifyOnPage(RequestLinkPage)
+  })
 })
