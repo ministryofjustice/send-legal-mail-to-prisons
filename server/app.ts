@@ -23,6 +23,7 @@ import setUpCreateBarcode from './middleware/barcode/setupBarcode'
 import populateBarcodeUser from './middleware/barcode/populateBarcodeUser'
 import setupScanBarcode from './middleware/scan/setupScanBarcode'
 import setupLinkEmailSent from './middleware/link/setupLinkEmailSent'
+import requestLinkAuthorised from './middleware/link/requestLinkAuthorised'
 
 export default function createApp(userService: UserService, magicLinkService: MagicLinkService): express.Application {
   const app = express()
@@ -38,14 +39,18 @@ export default function createApp(userService: UserService, magicLinkService: Ma
   app.use(setUpStaticResources())
   nunjucksSetup(app)
 
-  app.use('/barcode', barcodeAuthorisationMiddleware())
-  app.use('/barcode', populateBarcodeUser())
-  app.use('/barcode', setUpCreateBarcode())
-
+  // no authentication
+  app.use('/link', requestLinkAuthorised())
   app.use('/link', setUpRequestLink(magicLinkService))
   app.use('/link', setupLinkEmailSent())
   app.use('/link', setUpVerifyLink(magicLinkService))
 
+  // authenticated with createBarcodeToken
+  app.use('/barcode', barcodeAuthorisationMiddleware())
+  app.use('/barcode', populateBarcodeUser())
+  app.use('/barcode', setUpCreateBarcode())
+
+  // authenticated by passport / HMPPS Auth
   app.use('/', setUpAuthentication())
   app.use('/', indexRoutes(standardRouter(userService)))
   app.use('/', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_SECURITY_ANALYST']))

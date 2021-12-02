@@ -2,6 +2,7 @@ import Page from '../../pages/page'
 import RequestLinkPage from '../../pages/link/requestLink'
 import EmailSentPage from '../../pages/link/emailSent'
 import assertPageMeetsAccessibilityStandards from '../../support/accessibilityHelper'
+import FindRecipientPage from '../../pages/barcode/findRecipient'
 
 context('Request Link Page', () => {
   beforeEach(() => {
@@ -78,5 +79,14 @@ context('Request Link Page', () => {
     requestLinkPage.submitFormWithValidEmailAddress('valid@email.address', false)
 
     requestLinkPage.hasErrorContaining('request a new')
+  })
+
+  it('should redirect to Find Recipient page if already signed in', () => {
+    cy.task('stubVerifyLink')
+    cy.visit('/link/verify-link?secret=a-valid-secret')
+    Page.verifyOnPage(FindRecipientPage)
+
+    cy.visit('/link/request-link')
+    Page.verifyOnPage(FindRecipientPage)
   })
 })
