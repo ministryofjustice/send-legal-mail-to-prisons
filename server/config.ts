@@ -85,5 +85,5 @@ export default {
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   gtmContainerId: get('GOOGLE_TAG_MANAGER_CONTAINER_ID', null),
-  magicLinkValidityDuration: Number(get('MAGIC_LINK_VALIDITY_DURATION_IN_MINUTES', 10)),
+  magicLinkValidityDuration: Number(get('MAGIC_LINK_VALIDITY_DURATION_IN_MINUTES', 60)),
 }
