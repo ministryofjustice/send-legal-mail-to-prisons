@@ -1,5 +1,5 @@
 import Page, { PageElement } from './page'
-import ScanBarcodePage from './scan/scanBarcode'
+import ManualBarcodeEntryPage from './scan/manualBarcodeEntry'
 
 export default class IndexPage extends Page {
   constructor() {
@@ -16,9 +16,9 @@ export default class IndexPage extends Page {
     return Page.verifyOnPage(IndexPage)
   }
 
-  clickScanBarcodeTile(): ScanBarcodePage {
+  clickScanBarcodeTile(): ManualBarcodeEntryPage {
     this.tilesContainer().find('div.card[data-test=scan-barcode] a').click()
-    return Page.verifyOnPage(ScanBarcodePage)
+    return Page.verifyOnPage(ManualBarcodeEntryPage)
   }
 
   tilesContainer = (): PageElement => cy.get('ul.card-group')

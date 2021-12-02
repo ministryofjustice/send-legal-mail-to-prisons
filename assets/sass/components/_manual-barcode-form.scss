@@ -1,0 +1,34 @@
+#manual-barcode-form {
+
+  .barcode-fields {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+
+    .govuk-form-group {
+      padding-right: 2rem;
+    }
+    .govuk-input {
+      text-align: center;
+    }
+  }
+
+  .example-barcode {
+    @media (min-width: 40.0625em) {
+      h3 {
+        border-top: 3px solid $govuk-brand-colour;
+        padding-top: 1rem;
+      }
+    }
+    .img-container {
+      border: 1px solid $govuk-border-colour;
+      padding: 1rem;
+
+      img {
+        display: block;
+        margin: 0 auto;
+      }
+    }
+  }
+}

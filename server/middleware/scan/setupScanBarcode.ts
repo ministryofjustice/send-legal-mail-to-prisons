@@ -7,7 +7,9 @@ export default function setupScanBarcode(): Router {
   const scanBarcodeController = new ScanBarcodeController()
 
   router.use('/scan-barcode', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE']))
+  router.use('/manually-enter-barcode', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE']))
   router.get('/scan-barcode', (req, res) => scanBarcodeController.getScanBarcodeView(req, res))
+  router.get('/manually-enter-barcode', (req, res) => scanBarcodeController.getManualBarcodeEntryView(req, res))
 
   return router
 }

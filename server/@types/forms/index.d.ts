@@ -10,4 +10,9 @@ declare module 'forms' {
   export interface ScanBarcodeForm {
     barcode?: string
   }
+  export interface ManualEntryBarcodeForm {
+    barcodeElement1?: string
+    barcodeElement2?: string
+    barcodeElement3?: string
+  }
 }
