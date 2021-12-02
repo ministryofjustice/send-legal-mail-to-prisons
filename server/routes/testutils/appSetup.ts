@@ -69,7 +69,7 @@ const createToken = () => {
     user_name: 'user1',
     scope: ['read'],
     auth_source: 'nomis',
-    authorities: ['SLM_SCAN_BARCODE'],
+    authorities: ['ROLE_SLM_SCAN_BARCODE'],
     jti: '83b50a10-cca6-41db-985f-e87efb303ddb',
     client_id: 'clientid',
   }

@@ -10,8 +10,8 @@ export default (on: (string, Record) => void): void => {
 
     getSignInUrl: auth.getSignInUrl,
     stubSignIn: () => auth.stubSignIn([]),
-    stubSignInWithRole_SLM_SCAN_BARCODE: () => auth.stubSignIn(['SLM_SCAN_BARCODE']),
-    stubSignInWithRole_SLM_SECURITY_ANALYST: () => auth.stubSignIn(['SLM_SECURITY_ANALYST']),
+    stubSignInWithRole_SLM_SCAN_BARCODE: () => auth.stubSignIn(['ROLE_SLM_SCAN_BARCODE']),
+    stubSignInWithRole_SLM_SECURITY_ANALYST: () => auth.stubSignIn(['ROLE_SLM_SECURITY_ANALYST']),
 
     stubAuthUser: auth.stubUser,
     stubAuthPing: auth.stubPing,
