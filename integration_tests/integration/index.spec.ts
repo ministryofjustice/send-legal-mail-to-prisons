@@ -1,7 +1,7 @@
 import IndexPage from '../pages/index'
 import Page from '../pages/page'
-import ScanBarcodePage from '../pages/scan/scanBarcode'
 import assertPageMeetsAccessibilityStandards from '../support/accessibilityHelper'
+import ManualBarcodeEntryPage from '../pages/scan/manualBarcodeEntry'
 
 context('Index Page', () => {
   beforeEach(() => {
@@ -33,6 +33,6 @@ context('Index Page', () => {
 
     Page.verifyOnPage(IndexPage).clickScanBarcodeTile()
 
-    Page.verifyOnPage(ScanBarcodePage)
+    Page.verifyOnPage(ManualBarcodeEntryPage)
   })
 })

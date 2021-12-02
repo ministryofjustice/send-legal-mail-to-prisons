@@ -1,0 +1,107 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set pageTitle = applicationName + " - Manually enter a barcode" %}
+{% set pageId = 'manually-enter-barcode' %}
+
+{% block content %}
+
+  <main class="app-container govuk-body">
+    {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: 'There is a problem',
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row" id="manual-barcode-form" >
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Enter the barcode number manually</h1>
+
+        <form action="" method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          <p class="govuk-label">
+            Find the barcode number and enter it manually if scanning didn't work.
+          </p>
+          <div id="barcode-hint" class="govuk-hint">
+            The barcode number is the 12-digit number printed along the bottom of the barcode.
+          </div>
+          {% call govukFieldset({ classes: 'barcode-fields govuk-!-width-three-quarters' }) %}
+
+            {{ govukInput({
+              label: {
+                text: 'Digits 1 to 4 of the barcode',
+                classes: 'govuk-visually-hidden'
+              },
+              attributes: {
+                maxlength: 4
+              },
+              inputmode: 'numeric',
+              id: "barcodeElement1",
+              name: "barcodeElement1",
+              value: form.barcodeElement1,
+              errorMessage: errors | findError('barcodeElement1')
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: 'Digits 5 to 8 of the barcode',
+                classes: 'govuk-visually-hidden'
+              },
+              attributes: {
+                maxlength: 4
+              },
+              inputmode: 'numeric',
+              id: "barcodeElement2",
+              name: "barcodeElement2",
+              value: form.barcodeElement2,
+              errorMessage: errors | findError('barcodeElement2')
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: 'Digits 9 to 12 of the barcode',
+                classes: 'govuk-visually-hidden'
+              },
+              attributes: {
+                maxlength: 4
+              },
+              inputmode: 'numeric',
+              id: "barcodeElement3",
+              name: "barcodeElement3",
+              value: form.barcodeElement3,
+              errorMessage: errors | findError('barcodeElement3')
+            }) }}
+          {% endcall %}
+
+          <div class="govuk-button-group">
+            {{ govukButton({
+              text: "Submit barcode number",
+              attributes: { 'data-qa': 'submit-barcode-button' }
+            }) }}
+          </div>
+        </form>
+
+        <h3 class="govuk-heading-m">What to do if you cannot enter the barcode number</h3>
+        <p>If you haven't been able to enter the barcode number, including if it's damaged or hasn't printed properly,
+        follow the link.</p>
+        <a href="" class="govuk-link">I cannot enter the barcode number</a>
+      </div>
+
+      <div class="govuk-grid-column-one-third example-barcode">
+        <h3 class="govuk-heading-m" style="border-top: 10px solid #1d70b8;">Where to find the barcode number</h3>
+        <div class="img-container">
+          <img src="/assets/images/example-barcode.png" title="An example barcode showing where the barcode number can be read from" />
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+{% endblock %}
