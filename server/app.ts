@@ -22,6 +22,7 @@ import barcodeAuthorisationMiddleware from './middleware/barcode/barcodeAuthoris
 import setUpCreateBarcode from './middleware/barcode/setupBarcode'
 import populateBarcodeUser from './middleware/barcode/populateBarcodeUser'
 import setupScanBarcode from './middleware/scan/setupScanBarcode'
+import setupLinkEmailSent from './middleware/link/setupLinkEmailSent'
 
 export default function createApp(userService: UserService, magicLinkService: MagicLinkService): express.Application {
   const app = express()
@@ -42,6 +43,7 @@ export default function createApp(userService: UserService, magicLinkService: Ma
   app.use('/barcode', setUpCreateBarcode())
 
   app.use('/link', setUpRequestLink(magicLinkService))
+  app.use('/link', setupLinkEmailSent())
   app.use('/link', setUpVerifyLink(magicLinkService))
 
   app.use('/', setUpAuthentication())
