@@ -3,7 +3,7 @@ const landingPageTiles = Array.of({
   heading: 'Check Rule 39 mail',
   description: 'Scan barcodes on mail from law firms and other approved senders.',
   href: '/scan-barcode',
-  roles: ['SLM_SCAN_BARCODE'],
+  roles: ['ROLE_SLM_SCAN_BARCODE'],
   enabled: true,
 })
 

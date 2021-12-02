@@ -46,7 +46,7 @@ export default function createApp(userService: UserService, magicLinkService: Ma
 
   app.use('/', setUpAuthentication())
   app.use('/', indexRoutes(standardRouter(userService)))
-  app.use('/', authorisationMiddleware(['SLM_SCAN_BARCODE', 'SLM_SECURITY_ANALYST']))
+  app.use('/', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_SECURITY_ANALYST']))
 
   app.use('/', setupScanBarcode())
 
