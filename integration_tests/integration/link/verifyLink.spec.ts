@@ -63,4 +63,12 @@ context('Verify Link', () => {
 
     Page.verifyOnPage(RequestLinkPage).hasErrorContaining('Request a new one')
   })
+
+  it('should redirect to Request Link page after signing out', () => {
+    cy.visit('/link/verify-link?secret=a-valid-secret')
+
+    const findRecipientPage = Page.verifyOnPage(FindRecipientPage)
+    findRecipientPage.signOut().should('exist').click()
+    Page.verifyOnPage(RequestLinkPage).hasNoErrors()
+  })
 })
