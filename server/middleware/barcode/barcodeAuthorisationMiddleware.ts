@@ -12,6 +12,7 @@ export default function barcodeAuthorisationMiddleware(): RequestHandler {
     }
 
     const token = req.session.createBarcodeAuthToken
+    req.session.validCreateBarcodeAuthToken = false
     return verify(
       token,
       config.barcodeTokenPublicKey,
@@ -23,6 +24,7 @@ export default function barcodeAuthorisationMiddleware(): RequestHandler {
           ])
           return res.redirect('/link/request-link')
         }
+        req.session.validCreateBarcodeAuthToken = true
         req.session.barcodeUserEmail = payload.sub
         // make the session expiry the same as the JWT - otherwise we lose the JWT when the session expires
         req.session.cookie.expires = new Date(payload.exp * 1000)

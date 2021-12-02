@@ -9,7 +9,6 @@ export default class RequestLinkController {
   async getRequestLinkView(req: Request, res: Response): Promise<void> {
     const view = new RequestLinkView(req.session?.requestLinkForm || {}, req.flash('errors'))
 
-    delete req.session.createBarcodeAuthToken
     return res.render('pages/link/requestLink', { ...view.renderArgs })
   }
 

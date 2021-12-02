@@ -9,6 +9,7 @@ declare module 'express-session' {
     nowInMinutes: number
     requestLinkForm: RequestLinkForm
     createBarcodeAuthToken: string
+    validCreateBarcodeAuthToken: boolean
     barcodeUserEmail: string
     findRecipientForm: FindRecipientForm
     scanBarcodeForm: ScanBarcodeForm

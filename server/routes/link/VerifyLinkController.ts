@@ -10,6 +10,9 @@ export default class VerifyLinkController {
       return res.redirect('request-link')
     }
 
+    req.session.validCreateBarcodeAuthToken = false
+    req.session.createBarcodeAuthToken = undefined
+
     return this.magicLinkService
       .verifyLink(secret)
       .then(token => {
