@@ -50,7 +50,7 @@ The app requires:
 
 To start the main services excluding the example typescript template app: 
 
-`docker-compose up --scale=app=0`
+`docker-compose up --scale app=0`
 
 Install dependencies using `npm install`, ensuring you are using >= `Node v14.x`
 
@@ -60,10 +60,6 @@ HMPPS_AUTH_URL=http://localhost:9090/auth
 TOKEN_VERIFICATION_API_URL=https://token-verification-api-dev.prison.service.justice.gov.uk
 TOKEN_VERIFICATION_ENABLED=false
 NODE_ENV=development
-API_CLIENT_ID=send-legal-mail-to-prisons
-API_CLIENT_SECRET=clientsecret
-SYSTEM_CLIENT_ID=send-legal-mail-to-prisons-client
-SYSTEM_CLIENT_SECRET=clientsecret
 SESSION_SECRET=anything
 PORT=3000
 ```
@@ -71,6 +67,12 @@ PORT=3000
 And then, to build the assets and start the app with nodemon:
 
 `npm run start:dev`
+
+#### Also running the API for development
+
+This app needs the `send-legal-mail-to-prisons-api` project too which provides the back end for the front end.
+
+See the [API Readme](https://github.com/ministryofjustice/send-legal-mail-to-prisons-api#running-the-app-for-development---gradle) for instructions to run the API for development too.
 
 ### Run linter
 
