@@ -9,7 +9,7 @@
 
 {% block content %}
 
-  <main class="app-container govuk-body">
+  <main class="app-container govuk-body" id="manual-barcode-form">
     {% if errors.length > 0 %}
       {{ govukErrorSummary({
         titleText: 'There is a problem',
@@ -18,11 +18,11 @@
       }) }}
     {% endif %}
 
-    <div class="govuk-grid-row" id="manual-barcode-form" >
+    <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Enter the barcode number manually</h1>
 
-        <form action="" method="post" novalidate>
+        <form action="manually-enter-barcode" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
           <p class="govuk-label">

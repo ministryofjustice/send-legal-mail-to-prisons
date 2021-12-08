@@ -40,4 +40,34 @@ context('Manual Barcode Entry Page', () => {
     // (also note our current /autherror handler returns a 401 - this perhaps should be a 403 ?
     cy.request({ url: '/manually-enter-barcode', failOnStatusCode: false }).its('status').should('equal', 404)
   })
+
+  it('should redisplay form without errors given form submitted with valid barcode', () => {
+    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+    cy.signIn()
+    cy.visit('/manually-enter-barcode')
+    const manualBarcodeEntryPage = Page.verifyOnPage(ManualBarcodeEntryPage)
+
+    manualBarcodeEntryPage
+      .setBarcodeElement1('1234')
+      .setBarcodeElement2('5678')
+      .setBarcodeElement3('9012')
+      .submitFormWithValidValues() // TODO successful submission will redirect to a different page when we reach that story
+
+    manualBarcodeEntryPage.hasNoErrors()
+  })
+
+  it('should redisplay form with errors given form submitted with invalid barcode', () => {
+    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+    cy.signIn()
+    cy.visit('/manually-enter-barcode')
+    const manualBarcodeEntryPage = Page.verifyOnPage(ManualBarcodeEntryPage)
+
+    manualBarcodeEntryPage
+      .setBarcodeElement1('1234')
+      .setBarcodeElement2('5678')
+      .setBarcodeElement3('ABC')
+      .submitFormWithInvalidValues()
+
+    manualBarcodeEntryPage.hasErrorContaining('correct format')
+  })
 })

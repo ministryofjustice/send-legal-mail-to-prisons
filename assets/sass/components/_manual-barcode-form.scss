@@ -1,5 +1,14 @@
 #manual-barcode-form {
 
+  .govuk-error-summary__list {
+    li {
+      display: none;
+    }
+    li:first-of-type {
+      display: inherit;
+    }
+  }
+
   .barcode-fields {
     display: flex;
     flex-direction: row;
@@ -8,9 +17,29 @@
 
     .govuk-form-group {
       padding-right: 2rem;
+      position: relative;
     }
     .govuk-input {
       text-align: center;
+    }
+
+    .govuk-form-group--error {
+      &:nth-of-type(2), &:nth-of-type(3) {
+        border: none;
+        padding-left: 0;
+      }
+
+      .govuk-input--error {
+        margin-top: 2rem;
+      }
+      .govuk-error-message {
+        position: absolute;
+        top: 0;
+        width: 300%;
+      }
+      #barcodeElement2-error, #barcodeElement3-error {
+        display: none;
+      }
     }
   }
 
