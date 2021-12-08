@@ -34,6 +34,17 @@ For example in the dev environment:
 5. Given the application version you wish to rollback to, find the related revision number
 6. Rollback to that version with command `helm rollback <revision-number>` replacing `<revision-number>` as appropriate
 
+## Imported Types
+Some types are imported from the Open API docs for send-legal-mail-to-prisons-api.
+
+To update the types from the Open API docs run the following command:
+
+`npx openapi-typescript https://send-legal-mail-api-dev.prison.service.justice.gov.uk/v3/api-docs -output send-legal-mail-api.ts > server/@types/sendLegalMailApi/index.d.ts`
+
+Note that you will need to run prettier over the file and possibly handle other errors before compiling.
+
+The types are inherited for use in `server/@types/sendLegalMailApiClientTypes.ts` which may also need tweaking for use.
+
 ## Running the app
 The easiest way to run the app is to use docker compose to create the service and all dependencies. 
 

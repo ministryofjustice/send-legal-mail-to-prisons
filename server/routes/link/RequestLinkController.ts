@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import RequestLinkView from './RequestLinkView'
 import validate from './RequestLinkValidator'
 import MagicLinkService from '../../services/link/MagicLinkService'
+import { ErrorResponse } from '../../@types/sendLegalMailApiClientTypes'
 
 export default class RequestLinkController {
   constructor(private readonly magicLinkService: MagicLinkService) {}
@@ -24,8 +25,10 @@ export default class RequestLinkController {
         res.redirect('email-sent')
       })
       .catch(error => {
+        const errorResponse: ErrorResponse = error.data
         const errorMessage =
-          error.status === 400 && Array.of('INVALID_CJSM_EMAIL', 'EMAIL_TOO_LONG').includes(error.data.errorCode)
+          error.status === 400 &&
+          Array.of('INVALID_CJSM_EMAIL', 'EMAIL_TOO_LONG').includes(errorResponse.errorCode.code)
             ? 'Enter an email address in the correct format'
             : 'There was an error generating your sign in link. Try again to request a new one to sign in.'
         req.flash('errors', [{ href: '#email', text: errorMessage }])

@@ -1,6 +1,7 @@
 import HmppsAuthClient from '../../data/hmppsAuthClient'
 import RestClient from '../../data/restClient'
 import config from '../../config'
+import { VerifyLinkResponse } from '../../@types/sendLegalMailApiClientTypes'
 
 export default class MagicLinkService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -31,8 +32,4 @@ export default class MagicLinkService {
         })
     )
   }
-}
-
-interface VerifyLinkResponse {
-  token: string
 }
