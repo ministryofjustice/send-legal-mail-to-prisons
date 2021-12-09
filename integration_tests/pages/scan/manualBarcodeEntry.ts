@@ -5,29 +5,11 @@ export default class ManualBarcodeEntryPage extends Page {
     super('Enter the barcode number manually')
   }
 
-  setBarcodeElement1 = (value: string): ManualBarcodeEntryPage => {
+  setBarcode = (value: string): ManualBarcodeEntryPage => {
     if (value && value.length > 0) {
-      this.barcodeElement1Field().type(value)
+      this.barcode().type(value)
     } else {
-      this.barcodeElement1Field().clear()
-    }
-    return Page.verifyOnPage(ManualBarcodeEntryPage)
-  }
-
-  setBarcodeElement2 = (value: string): ManualBarcodeEntryPage => {
-    if (value && value.length > 0) {
-      this.barcodeElement2Field().type(value)
-    } else {
-      this.barcodeElement2Field().clear()
-    }
-    return Page.verifyOnPage(ManualBarcodeEntryPage)
-  }
-
-  setBarcodeElement3 = (value: string): ManualBarcodeEntryPage => {
-    if (value && value.length > 0) {
-      this.barcodeElement3Field().type(value)
-    } else {
-      this.barcodeElement3Field().clear()
+      this.barcode().clear()
     }
     return Page.verifyOnPage(ManualBarcodeEntryPage)
   }
@@ -44,21 +26,11 @@ export default class ManualBarcodeEntryPage extends Page {
 
   hasErrorContaining = (partialMessage: string): void => {
     cy.get('.govuk-error-summary__list').should('contain', partialMessage)
-    // Only barcode element 1 should have an error message
-    cy.get('#barcodeElement1-error').should('contain', partialMessage)
-    cy.get('#barcodeElement2-error').should('not.contain.text')
-    cy.get('#barcodeElement3-error').should('not.contain.text')
-    // But all individual barcode element fields should be highlighted as in error
-    this.barcodeElement1Field().should('have.class', 'govuk-input--error')
-    this.barcodeElement2Field().should('have.class', 'govuk-input--error')
-    this.barcodeElement3Field().should('have.class', 'govuk-input--error')
+    cy.get('#barcode-error').should('contain', partialMessage)
+    this.barcode().should('have.class', 'govuk-input--error')
   }
 
-  barcodeElement1Field = (): PageElement => cy.get('#barcodeElement1')
-
-  barcodeElement2Field = (): PageElement => cy.get('#barcodeElement2')
-
-  barcodeElement3Field = (): PageElement => cy.get('#barcodeElement3')
+  barcode = (): PageElement => cy.get('#barcode')
 
   submitButton = (): PageElement => cy.get('button[data-qa="submit-barcode-button"]')
 }

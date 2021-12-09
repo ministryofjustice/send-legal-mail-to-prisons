@@ -1,17 +1,17 @@
 import { Request, Response } from 'express'
-import ManualEntryBarcodeView from './ManualEntryBarcodeView'
-import validate from './ManualEntryBarcodeFormValidator'
+import BarcodeEntryView from './BarcodeEntryView'
+import validate from './BarcodeEntryFormValidator'
 
 export default class ManualEntryBarcodeController {
   async getManualBarcodeEntryView(req: Request, res: Response): Promise<void> {
-    const view = new ManualEntryBarcodeView(req.session?.manualEntryBarcodeForm || {}, req.flash('errors'))
+    const view = new BarcodeEntryView(req.session?.barcodeEntryForm || {}, req.flash('errors'))
 
     return res.render('pages/scan/manual-barcode-entry', { ...view.renderArgs })
   }
 
   async submitManualBarcode(req: Request, res: Response): Promise<void> {
-    req.session.manualEntryBarcodeForm = { ...req.body }
-    if (!validate(req.session.manualEntryBarcodeForm, req)) {
+    req.session.barcodeEntryForm = { ...req.body }
+    if (!validate(req.session.barcodeEntryForm, req)) {
       return res.redirect('manually-enter-barcode')
     }
 

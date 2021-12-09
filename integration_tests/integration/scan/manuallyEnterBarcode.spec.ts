@@ -47,11 +47,7 @@ context('Manual Barcode Entry Page', () => {
     cy.visit('/manually-enter-barcode')
     const manualBarcodeEntryPage = Page.verifyOnPage(ManualBarcodeEntryPage)
 
-    manualBarcodeEntryPage
-      .setBarcodeElement1('1234')
-      .setBarcodeElement2('5678')
-      .setBarcodeElement3('9012')
-      .submitFormWithValidValues() // TODO successful submission will redirect to a different page when we reach that story
+    manualBarcodeEntryPage.setBarcode('123456789012').submitFormWithValidValues() // TODO successful submission will redirect to a different page when we reach that story
 
     manualBarcodeEntryPage.hasNoErrors()
   })
@@ -62,11 +58,7 @@ context('Manual Barcode Entry Page', () => {
     cy.visit('/manually-enter-barcode')
     const manualBarcodeEntryPage = Page.verifyOnPage(ManualBarcodeEntryPage)
 
-    manualBarcodeEntryPage
-      .setBarcodeElement1('1234')
-      .setBarcodeElement2('5678')
-      .setBarcodeElement3('ABC')
-      .submitFormWithInvalidValues()
+    manualBarcodeEntryPage.setBarcode('12345678').submitFormWithInvalidValues()
 
     manualBarcodeEntryPage.hasErrorContaining('correct format')
   })

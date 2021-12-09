@@ -21,7 +21,9 @@ export default function setUpStaticResources(): Router {
     '/node_modules/govuk-frontend',
     '/node_modules/@ministryofjustice/frontend/moj/assets',
     '/node_modules/@ministryofjustice/frontend',
-    '/node_modules/jquery/dist'
+    '/node_modules/jquery/dist',
+    '/node_modules/inputmask/dist/bindings',
+    '/node_modules/inputmask/dist'
   ).forEach(dir => {
     router.use('/assets', express.static(path.join(process.cwd(), dir), cacheControl))
   })
@@ -32,6 +34,13 @@ export default function setUpStaticResources(): Router {
 
   Array.of('/node_modules/jquery/dist/jquery.min.js').forEach(dir => {
     router.use('/assets/js/jquery.min.js', express.static(path.join(process.cwd(), dir), cacheControl))
+  })
+
+  Array.of('/node_modules/inputmask/dist/jquery.inputmask.js').forEach(dir => {
+    router.use('/assets/js/jquery.inputmask.js', express.static(path.join(process.cwd(), dir), cacheControl))
+  })
+  Array.of('/node_modules/inputmask/dist/bindings/inputmask.binding.js').forEach(dir => {
+    router.use('/assets/js/inputmask.binding.js', express.static(path.join(process.cwd(), dir), cacheControl))
   })
 
   // Don't cache dynamic resources
