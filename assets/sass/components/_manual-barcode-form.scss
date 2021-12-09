@@ -1,17 +1,7 @@
 #manual-barcode-form {
 
-  .barcode-fields {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-
-    .govuk-form-group {
-      padding-right: 2rem;
-    }
-    .govuk-input {
-      text-align: center;
-    }
+  .govuk-input {
+    font-family: monospace;
   }
 
   .example-barcode {

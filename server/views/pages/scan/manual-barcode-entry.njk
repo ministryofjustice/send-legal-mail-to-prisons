@@ -9,7 +9,7 @@
 
 {% block content %}
 
-  <main class="app-container govuk-body">
+  <section class="app-container govuk-body">
     {% if errors.length > 0 %}
       {{ govukErrorSummary({
         titleText: 'There is a problem',
@@ -18,64 +18,32 @@
       }) }}
     {% endif %}
 
-    <div class="govuk-grid-row" id="manual-barcode-form" >
-      <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds" id="manual-barcode-form">
         <h1 class="govuk-heading-xl">Enter the barcode number manually</h1>
 
-        <form action="" method="post" novalidate>
+        <form action="manually-enter-barcode" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
-          <p class="govuk-label">
-            Find the barcode number and enter it manually if scanning didn't work.
-          </p>
-          <div id="barcode-hint" class="govuk-hint">
-            The barcode number is the 12-digit number printed along the bottom of the barcode.
-          </div>
-          {% call govukFieldset({ classes: 'barcode-fields govuk-!-width-three-quarters' }) %}
+          {% call govukFieldset() %}
 
             {{ govukInput({
               label: {
-                text: 'Digits 1 to 4 of the barcode',
-                classes: 'govuk-visually-hidden'
+                text: 'Find the barcode number and enter it manually if scanning didn\'t work.'
               },
+              hint: {
+                text: 'The barcode number is the 12-digit number printed along the bottom of the barcode.'
+              },
+              classes: 'govuk-!-width-one-half',
               attributes: {
-                maxlength: 4
+                autocomplete: 'off',
+                'data-inputmask': '"mask": "9999-9999-9999", "placeholder": " ", "autoUnmask": true, "removeMaskOnSubmit": true'
               },
               inputmode: 'numeric',
-              id: "barcodeElement1",
-              name: "barcodeElement1",
-              value: form.barcodeElement1,
-              errorMessage: errors | findError('barcodeElement1')
-            }) }}
-
-            {{ govukInput({
-              label: {
-                text: 'Digits 5 to 8 of the barcode',
-                classes: 'govuk-visually-hidden'
-              },
-              attributes: {
-                maxlength: 4
-              },
-              inputmode: 'numeric',
-              id: "barcodeElement2",
-              name: "barcodeElement2",
-              value: form.barcodeElement2,
-              errorMessage: errors | findError('barcodeElement2')
-            }) }}
-
-            {{ govukInput({
-              label: {
-                text: 'Digits 9 to 12 of the barcode',
-                classes: 'govuk-visually-hidden'
-              },
-              attributes: {
-                maxlength: 4
-              },
-              inputmode: 'numeric',
-              id: "barcodeElement3",
-              name: "barcodeElement3",
-              value: form.barcodeElement3,
-              errorMessage: errors | findError('barcodeElement3')
+              id: 'barcode',
+              name: 'barcode',
+              value: form.barcode,
+              errorMessage: errors | findError('barcode')
             }) }}
           {% endcall %}
 
@@ -102,6 +70,6 @@
 
     </div>
 
-  </main>
+  </section>
 
 {% endblock %}

@@ -7,12 +7,7 @@ declare module 'forms' {
     prisonerNameOrNumber?: string
   }
 
-  export interface ScanBarcodeForm {
+  export interface BarcodeEntryForm {
     barcode?: string
-  }
-  export interface ManualEntryBarcodeForm {
-    barcodeElement1?: string
-    barcodeElement2?: string
-    barcodeElement3?: string
   }
 }
