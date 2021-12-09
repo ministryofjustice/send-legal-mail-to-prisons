@@ -1,4 +1,5 @@
 import Page, { PageElement } from '../page'
+import ReportManualBarcodeEntryProblem from './reportManualBarcodeEntryProblem'
 
 export default class ManualBarcodeEntryPage extends Page {
   constructor() {
@@ -30,7 +31,14 @@ export default class ManualBarcodeEntryPage extends Page {
     this.barcode().should('have.class', 'govuk-input--error')
   }
 
+  reportProblemEnteringBarcode = (): ReportManualBarcodeEntryProblem => {
+    this.reportProblemLink().click()
+    return Page.verifyOnPage(ReportManualBarcodeEntryProblem)
+  }
+
   barcode = (): PageElement => cy.get('#barcode')
 
   submitButton = (): PageElement => cy.get('button[data-qa="submit-barcode-button"]')
+
+  reportProblemLink = (): PageElement => cy.get('#report-problem')
 }

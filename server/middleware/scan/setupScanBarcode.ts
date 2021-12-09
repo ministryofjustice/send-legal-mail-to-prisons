@@ -1,7 +1,7 @@
 import express, { Router } from 'express'
-import ScanBarcodeController from '../../routes/scan/ScanBarcodeController'
 import authorisationMiddleware from '../authorisationMiddleware'
 import ManualEntryBarcodeController from '../../routes/scan/ManualEntryBarcodeController'
+import ScanBarcodeController from '../../routes/scan/ScanBarcodeController'
 
 export default function setupScanBarcode(): Router {
   const router = express.Router()
@@ -14,6 +14,9 @@ export default function setupScanBarcode(): Router {
   router.use('/manually-enter-barcode', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE']))
   router.get('/manually-enter-barcode', (req, res) => manualEntryBarcodeController.getManualBarcodeEntryView(req, res))
   router.post('/manually-enter-barcode', (req, res) => manualEntryBarcodeController.submitManualBarcode(req, res))
+  router.get('/manually-enter-barcode/report-problem', (req, res) =>
+    manualEntryBarcodeController.getReportManualBarcodeEntryProblemView(req, res)
+  )
 
   return router
 }

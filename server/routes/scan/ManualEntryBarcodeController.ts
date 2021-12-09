@@ -17,4 +17,8 @@ export default class ManualEntryBarcodeController {
 
     return res.redirect('manually-enter-barcode')
   }
+
+  async getReportManualBarcodeEntryProblemView(req: Request, res: Response): Promise<void> {
+    return res.render('pages/scan/report-manual-barcode-entry-problem', {})
+  }
 }

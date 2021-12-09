@@ -2,6 +2,7 @@ import Page from '../../pages/page'
 import assertPageMeetsAccessibilityStandards from '../../support/accessibilityHelper'
 import AuthorisationErrorPage from '../../pages/authorisationError'
 import ManualBarcodeEntryPage from '../../pages/scan/manualBarcodeEntry'
+import ReportManualBarcodeEntryProblem from '../../pages/scan/reportManualBarcodeEntryProblem'
 
 context('Manual Barcode Entry Page', () => {
   beforeEach(() => {
@@ -61,5 +62,16 @@ context('Manual Barcode Entry Page', () => {
     manualBarcodeEntryPage.setBarcode('12345678').submitFormWithInvalidValues()
 
     manualBarcodeEntryPage.hasErrorContaining('correct format')
+  })
+
+  it('should allow user to report problem when trying to manually enter a barcode', () => {
+    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+    cy.signIn()
+    cy.visit('/manually-enter-barcode')
+    const manualBarcodeEntryPage = Page.verifyOnPage(ManualBarcodeEntryPage)
+
+    manualBarcodeEntryPage.reportProblemEnteringBarcode()
+
+    Page.verifyOnPage(ReportManualBarcodeEntryProblem)
   })
 })
