@@ -50,8 +50,10 @@ const stubRequestLinkNonCjsmEmailFailure = (): SuperAgentRequest =>
       },
       jsonBody: {
         status: 400,
-        errorCode: 'INVALID_CJSM_EMAIL',
-        userMessage: `Enter an email address which ends with 'cjsm.net'`,
+        errorCode: {
+          code: 'INVALID_CJSM_EMAIL',
+          userMessage: `Enter an email address which ends with 'cjsm.net'`,
+        },
       },
     },
   })
@@ -70,8 +72,10 @@ const stubRequestLinkEmailTooLong = (): SuperAgentRequest =>
       },
       jsonBody: {
         status: 400,
-        errorCode: 'EMAIL_TOO_LONG',
-        userMessage: `The email address can have a maximum length of 254`,
+        errorCode: {
+          code: 'EMAIL_TOO_LONG',
+          userMessage: `The email address can have a maximum length of 254`,
+        },
       },
     },
   })
