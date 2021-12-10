@@ -1,5 +1,4 @@
 import Page from '../../pages/page'
-import assertPageMeetsAccessibilityStandards from '../../support/accessibilityHelper'
 import AuthorisationErrorPage from '../../pages/authorisationError'
 import ManualBarcodeEntryPage from '../../pages/scan/manualBarcodeEntry'
 import ReportManualBarcodeEntryProblem from '../../pages/scan/reportManualBarcodeEntryProblem'
@@ -8,10 +7,6 @@ context('Manual Barcode Entry Page', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubAuthUser')
-  })
-
-  afterEach('Rendered page should meet accessibility standards', () => {
-    assertPageMeetsAccessibilityStandards()
   })
 
   it('Logged in user with SLM_SCAN_BARCODE role can navigate to manual barcode entry page', () => {
