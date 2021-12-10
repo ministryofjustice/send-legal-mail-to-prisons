@@ -2,8 +2,9 @@ import express, { Router } from 'express'
 import authorisationMiddleware from '../authorisationMiddleware'
 import ManualEntryBarcodeController from '../../routes/scan/ManualEntryBarcodeController'
 import ScanBarcodeController from '../../routes/scan/ScanBarcodeController'
+import ScanBarcodeService from '../../services/scan/ScanBarcodeService'
 
-export default function setupScanBarcode(): Router {
+export default function setupScanBarcode(_scanBarcodeService: ScanBarcodeService): Router {
   const router = express.Router()
   const scanBarcodeController = new ScanBarcodeController()
   const manualEntryBarcodeController = new ManualEntryBarcodeController()

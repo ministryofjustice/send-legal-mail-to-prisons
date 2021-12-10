@@ -28,19 +28,19 @@ describe('Magic Link Service', () => {
     it('should request a link', done => {
       mockedSendLegalMailApi.post('/link/email', { email: 'a.b@c.com' }).reply(201)
 
-      magicLinkService
-        .requestLink('a.b@c.com')
-        .then(() => expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled())
-        .finally(() => done())
+      magicLinkService.requestLink('a.b@c.com').then(() => {
+        expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+        done()
+      })
     })
 
     it('should fail to request a link given getSystemClientToken fails', done => {
       hmppsAuthClient.getSystemClientToken.mockRejectedValue('an error getting system client token')
 
-      magicLinkService
-        .requestLink('a.b@c.com')
-        .catch(error => expect(error).toBe('an error getting system client token'))
-        .finally(() => done())
+      magicLinkService.requestLink('a.b@c.com').catch(error => {
+        expect(error).toBe('an error getting system client token')
+        done()
+      })
     })
   })
 
@@ -48,22 +48,20 @@ describe('Magic Link Service', () => {
     it('should verify a link', done => {
       mockedSendLegalMailApi.post('/link/verify', { secret: 'a-secret' }).reply(200, { token: 'a-token' })
 
-      magicLinkService
-        .verifyLink('a-secret')
-        .then(token => {
-          expect(token).toBe('a-token')
-          expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
-        })
-        .finally(() => done())
+      magicLinkService.verifyLink('a-secret').then(token => {
+        expect(token).toBe('a-token')
+        expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+        done()
+      })
     })
 
     it('should fail to verify a link given getSystemClientToken fails', done => {
       hmppsAuthClient.getSystemClientToken.mockRejectedValue('an error getting system client token')
 
-      magicLinkService
-        .verifyLink('a-secret')
-        .catch(error => expect(error).toBe('an error getting system client token'))
-        .finally(() => done())
+      magicLinkService.verifyLink('a-secret').catch(error => {
+        expect(error).toBe('an error getting system client token')
+        done()
+      })
     })
   })
 })
