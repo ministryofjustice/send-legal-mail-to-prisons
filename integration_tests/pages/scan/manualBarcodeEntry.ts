@@ -3,7 +3,7 @@ import ReportManualBarcodeEntryProblem from './reportManualBarcodeEntryProblem'
 
 export default class ManualBarcodeEntryPage extends Page {
   constructor() {
-    super('Enter the barcode number manually')
+    super('manually-enter-barcode')
   }
 
   setBarcode = (value: string): ManualBarcodeEntryPage => {

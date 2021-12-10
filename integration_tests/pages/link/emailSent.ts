@@ -4,7 +4,7 @@ import RequestLinkPage from './requestLink'
 
 export default class EmailSentPage extends Page {
   constructor() {
-    super('Now check your emails')
+    super('email-sent')
   }
 
   clickRequestSignInLink = (): RequestLinkPage => {

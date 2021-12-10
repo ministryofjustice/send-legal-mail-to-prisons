@@ -1,16 +1,11 @@
 import Page from '../../pages/page'
 import ScanBarcodePage from '../../pages/scan/scanBarcode'
-import assertPageMeetsAccessibilityStandards from '../../support/accessibilityHelper'
 import AuthorisationErrorPage from '../../pages/authorisationError'
 
 context('Scan Barcode Page', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubAuthUser')
-  })
-
-  afterEach('Rendered page should meet accessibility standards', () => {
-    assertPageMeetsAccessibilityStandards()
   })
 
   it('Logged in user with SLM_SCAN_BARCODE role can navigate to scan barcode page', () => {

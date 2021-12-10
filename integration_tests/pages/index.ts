@@ -3,7 +3,7 @@ import ManualBarcodeEntryPage from './scan/manualBarcodeEntry'
 
 export default class IndexPage extends Page {
   constructor() {
-    super('Send Legal Mail')
+    super('index-page')
   }
 
   containsTile(tileTitle: string): IndexPage {

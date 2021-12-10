@@ -4,7 +4,7 @@ import EmailSentPage from './emailSent'
 
 export default class RequestLinkPage extends Page {
   constructor() {
-    super('Request a link to sign in')
+    super('request-link')
   }
 
   submitFormWithValidEmailAddress = (email: string, expectNextPage = true): EmailSentPage | RequestLinkPage => {

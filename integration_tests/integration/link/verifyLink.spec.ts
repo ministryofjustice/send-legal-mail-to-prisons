@@ -1,17 +1,12 @@
 import Page from '../../pages/page'
 import RequestLinkPage from '../../pages/link/requestLink'
 import FindRecipientPage from '../../pages/barcode/findRecipient'
-import assertPageMeetsAccessibilityStandards from '../../support/accessibilityHelper'
 
 context('Verify Link', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubAuthToken')
     cy.task('stubVerifyLink')
-  })
-
-  afterEach('Rendered page should meet accessibility standards', () => {
-    assertPageMeetsAccessibilityStandards()
   })
 
   it('should redirect to Find Recipient page if using a valid magic link', () => {
