@@ -27,5 +27,8 @@ export default (on: (string, Record) => void): void => {
     stubVerifyLinkThatWillExpireIn1SecondFromNow: sendLegalMail.stubVerifyLinkThatWillExpireIn1SecondFromNow,
     stubVerifyLinkNotFoundFailure: sendLegalMail.stubVerifyLinkNotFoundFailure,
     stubVerifyLinkInvalidSignatureFailure: sendLegalMail.stubVerifyLinkInvalidSignatureFailure,
+
+    stubVerifyValidBarcode: sendLegalMail.stubVerifyValidBarcode,
+    stubVerifyDuplicateBarcode: sendLegalMail.stubVerifyDuplicateBarcode,
   })
 }

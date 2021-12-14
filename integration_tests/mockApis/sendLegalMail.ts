@@ -157,6 +157,49 @@ const stubVerifyLinkNotFoundFailure = (): SuperAgentRequest =>
     },
   })
 
+const stubVerifyValidBarcode = (): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: '/send-legal-mail/barcode/check',
+      bodyPatterns: [{ matchesJsonPath: '$[?(@.barcode == "123456789012")]' }],
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: {
+        createdBy: 'Aardvark Lawyers',
+      },
+    },
+  })
+
+const stubVerifyDuplicateBarcode = (): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: '/send-legal-mail/barcode/check',
+      bodyPatterns: [{ matchesJsonPath: '$[?(@.barcode == "999956789012")]' }],
+    },
+    response: {
+      status: 400,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: {
+        status: 400,
+        errorCode: {
+          code: 'DUPLICATE',
+          userMessage: 'Someone scanned this barcode at 9:11 am on 8 December 2021 at LEI. It may be an illegal copy.',
+          scannedDate: '2021-12-08T09:11:23Z',
+          scannedLocation: 'LEI',
+          createdBy: 'Aardvark Lawyers',
+        },
+      },
+    },
+  })
+
 export default {
   stubRequestLink,
   stubRequestLinkFailure,
@@ -166,4 +209,6 @@ export default {
   stubVerifyLinkThatWillExpireIn1SecondFromNow,
   stubVerifyLinkNotFoundFailure,
   stubVerifyLinkInvalidSignatureFailure,
+  stubVerifyValidBarcode,
+  stubVerifyDuplicateBarcode,
 }

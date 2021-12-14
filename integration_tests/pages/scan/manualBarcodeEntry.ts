@@ -1,5 +1,6 @@
 import Page, { PageElement } from '../page'
 import ReportManualBarcodeEntryProblem from './reportManualBarcodeEntryProblem'
+import ScanBarcodeResultPage from './scanBarcodeResult'
 
 export default class ManualBarcodeEntryPage extends Page {
   constructor() {
@@ -15,14 +16,22 @@ export default class ManualBarcodeEntryPage extends Page {
     return Page.verifyOnPage(ManualBarcodeEntryPage)
   }
 
-  submitFormWithInvalidValues = (): ManualBarcodeEntryPage => {
+  submitFormWithBarcodeThatFailsValidation = (): ManualBarcodeEntryPage => {
+    this.setBarcode('12345678')
     this.submitButton().click()
     return Page.verifyOnPage(ManualBarcodeEntryPage)
   }
 
-  submitFormWithValidValues = (): ManualBarcodeEntryPage => {
+  submitFormWithValidBarcode = (): ScanBarcodeResultPage => {
+    this.setBarcode('123456789012')
     this.submitButton().click()
-    return Page.verifyOnPage(ManualBarcodeEntryPage) // TODO successful submission will redirect to a different page when we reach that story
+    return Page.verifyOnPage(ScanBarcodeResultPage)
+  }
+
+  submitFormWithBarcodeThatHasBeenScannedPreviously = (): ScanBarcodeResultPage => {
+    this.setBarcode('999956789012')
+    this.submitButton().click()
+    return Page.verifyOnPage(ScanBarcodeResultPage)
   }
 
   hasErrorContaining = (partialMessage: string): void => {

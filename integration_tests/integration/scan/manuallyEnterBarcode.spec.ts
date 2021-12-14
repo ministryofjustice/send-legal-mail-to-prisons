@@ -2,6 +2,7 @@ import Page from '../../pages/page'
 import AuthorisationErrorPage from '../../pages/authorisationError'
 import ManualBarcodeEntryPage from '../../pages/scan/manualBarcodeEntry'
 import ReportManualBarcodeEntryProblem from '../../pages/scan/reportManualBarcodeEntryProblem'
+import ScanBarcodeResultPage from '../../pages/scan/scanBarcodeResult'
 
 context('Manual Barcode Entry Page', () => {
   beforeEach(() => {
@@ -37,15 +38,29 @@ context('Manual Barcode Entry Page', () => {
     cy.request({ url: '/manually-enter-barcode', failOnStatusCode: false }).its('status').should('equal', 404)
   })
 
-  it('should redisplay form without errors given form submitted with valid barcode', () => {
+  it('should render barcode results page given form submitted with barcode that verifies as OK', () => {
+    cy.task('stubVerifyValidBarcode')
     cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
     cy.signIn()
     cy.visit('/manually-enter-barcode')
     const manualBarcodeEntryPage = Page.verifyOnPage(ManualBarcodeEntryPage)
 
-    manualBarcodeEntryPage.setBarcode('123456789012').submitFormWithValidValues() // TODO successful submission will redirect to a different page when we reach that story
+    const scanBarcodeResultPage: ScanBarcodeResultPage = manualBarcodeEntryPage.submitFormWithValidBarcode()
 
-    manualBarcodeEntryPage.hasNoErrors()
+    scanBarcodeResultPage.hasMainHeading('Ready for final delivery')
+  })
+
+  it('should render barcode results page given form submitted with barcode that has been scanned before', () => {
+    cy.task('stubVerifyDuplicateBarcode')
+    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+    cy.signIn()
+    cy.visit('/manually-enter-barcode')
+    const manualBarcodeEntryPage = Page.verifyOnPage(ManualBarcodeEntryPage)
+
+    const scanBarcodeResultPage: ScanBarcodeResultPage =
+      manualBarcodeEntryPage.submitFormWithBarcodeThatHasBeenScannedPreviously()
+
+    scanBarcodeResultPage.hasMainHeading('Carry out further checks')
   })
 
   it('should redisplay form with errors given form submitted with invalid barcode', () => {
@@ -54,7 +69,7 @@ context('Manual Barcode Entry Page', () => {
     cy.visit('/manually-enter-barcode')
     const manualBarcodeEntryPage = Page.verifyOnPage(ManualBarcodeEntryPage)
 
-    manualBarcodeEntryPage.setBarcode('12345678').submitFormWithInvalidValues()
+    manualBarcodeEntryPage.submitFormWithBarcodeThatFailsValidation()
 
     manualBarcodeEntryPage.hasErrorContaining('correct format')
   })
