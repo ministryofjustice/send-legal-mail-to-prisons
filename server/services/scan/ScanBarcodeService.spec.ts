@@ -51,6 +51,7 @@ describe('Scan Barcode Service', () => {
           userMessage: 'Someone scanned this barcode at 9:11 am on 8 December 2021 at LEI. It may be an illegal copy.',
           scannedDate: '2021-12-08T09:11:23Z',
           scannedLocation: 'LEI',
+          createdBy: 'Aardvark Lawyers',
         },
       }
       mockedSendLegalMailApi.post('/barcode/check', { barcode: '123456789012' }).reply(400, errorResponse)

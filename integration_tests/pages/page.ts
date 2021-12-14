@@ -32,4 +32,8 @@ export default abstract class Page {
   hasNoErrors = (): void => {
     cy.get('.govuk-error-summary__list').should('not.exist')
   }
+
+  hasMainHeading = (expectedHeading: string): void => {
+    cy.get('h1').should('contain.text', expectedHeading)
+  }
 }
