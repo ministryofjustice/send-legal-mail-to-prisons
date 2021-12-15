@@ -223,6 +223,31 @@ const stubVerifyRandomCheckBarcode = (): SuperAgentRequest =>
     },
   })
 
+const stubVerifyExpiredBarcode = (): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: '/send-legal-mail/barcode/check',
+      bodyPatterns: [{ matchesJsonPath: '$[?(@.barcode == "777756789012")]' }],
+    },
+    response: {
+      status: 400,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: {
+        status: 400,
+        errorCode: {
+          code: 'EXPIRED',
+          userMessage: 'This barcode was created 120 days ago, on 8 December 2021',
+          barcodeExpiryDays: 120,
+          createdDate: '2021-12-08T09:11:23Z',
+          createdBy: 'Aardvark Lawyers',
+        },
+      },
+    },
+  })
+
 export default {
   stubRequestLink,
   stubRequestLinkFailure,
@@ -235,4 +260,5 @@ export default {
   stubVerifyValidBarcode,
   stubVerifyDuplicateBarcode,
   stubVerifyRandomCheckBarcode,
+  stubVerifyExpiredBarcode,
 }

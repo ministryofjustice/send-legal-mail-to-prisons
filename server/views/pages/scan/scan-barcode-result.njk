@@ -27,6 +27,9 @@
     {% if form.errorCode.code == 'RANDOM_CHECK' %}
       {% include "partials/scan/scan-barcode-result-random-check.njk" %}
     {% endif %}
+    {% if form.errorCode.code == 'EXPIRED' %}
+      {% include "partials/scan/scan-barcode-result-expired.njk" %}
+    {% endif %}
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds" id="scan-barcode-form">
@@ -71,7 +74,7 @@
       <div class="govuk-grid-column-full">
         <h3 class="govuk-heading-m">What to do if the scan doesn't work</h3>
         <p>If the barcode won't scan, enter the barcode number manually instead.</p>
-        <a href="manually-enter-barcode" class="govuk-link" id="manual-scan">I can't scan the barcode</a>
+        <a href="/manually-enter-barcode" class="govuk-link" id="manual-scan">I can't scan the barcode</a>
       </div>
     </div>
 

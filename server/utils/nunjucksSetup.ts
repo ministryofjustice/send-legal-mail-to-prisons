@@ -66,5 +66,10 @@ export function registerNunjucks(app?: express.Express): Environment {
     return dateTime ? dateTime.format('h:mm a [on] D MMMM YYYY') : null
   })
 
+  njkEnv.addFilter('formatDateForResultsPage', (value: string) => {
+    const dateTime = moment(value)
+    return dateTime ? dateTime.format('D MMMM YYYY') : null
+  })
+
   return njkEnv
 }
