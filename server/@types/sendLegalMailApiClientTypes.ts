@@ -4,6 +4,7 @@ export type ErrorResponse = components['schemas']['ErrorResponse']
 export type ErrorCode = components['schemas']['ErrorCode']
 export type CheckBarcodeErrorCodes = components['schemas']['CheckBarcodeErrorCodes']
 export type DuplicateErrorCode = components['schemas']['Duplicate']
+export type RandomCheckErrorCode = components['schemas']['RandomCheck']
 
 export type VerifyLinkRequest = components['schemas']['VerifyLinkRequest']
 export type VerifyLinkResponse = components['schemas']['VerifyLinkResponse']

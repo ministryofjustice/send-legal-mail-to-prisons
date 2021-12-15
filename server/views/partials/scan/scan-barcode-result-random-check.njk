@@ -1,0 +1,43 @@
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">Item selected for a random check</h1>
+
+    {{ govukNotificationBanner({
+      text: 'Carry out further checks appropriate to Rule 39 mail.',
+      disableAutoFocus: true
+    }) }}
+
+    <h2 class="govuk-heading-l">Why you need to carry out further checks</h2>
+    <p>
+      This item of mail was sent by an approved sender, <strong>{{ form.errorCode.createdBy }}</strong>,
+      but for additional security it has been selected for a random check.
+    </p>
+    <p>Carrying out random checks helps prevent Rule 39 mail being used for illegal purposes.</p>
+
+    <h3 class="govuk-heading-m">How to deal with the item</h3>
+    <p>Check the item for drugs or any other contraband using your usual procedures. For example, use any of the following:</p>
+    <ul>
+        <li>trace detection equipment</li>
+        <li>a dog unit</li>
+        <li>an xray machine</li>
+    </ul>
+
+    <p>If you have concerns about the item, report them to a security manager.</p>
+    {% set html %}
+      <p>Do not open any item of Rule 39 mail without both:</p>
+      <ul>
+        <li>permission from a governor</li>
+        <li>the recipient being present</li>
+      </ul>
+    {% endset %}
+
+    {{ govukInsetText({
+      html: html
+    }) }}
+
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+  </div>
+</div>
