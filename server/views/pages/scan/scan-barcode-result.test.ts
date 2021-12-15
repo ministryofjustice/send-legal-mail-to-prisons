@@ -49,4 +49,24 @@ describe('Scan Barcode Result View', () => {
     expect($('li strong').text()).toContain('Aardvark Lawyers')
     expect($('p strong').text()).toContain('9:11 am on 8 December 2021 at LEI')
   })
+
+  it('should render view for Random Check scan', () => {
+    viewContext = {
+      errors: [],
+      form: {
+        barcode: undefined,
+        createdBy: undefined,
+        errorCode: {
+          code: 'RANDOM_CHECK',
+          userMessage: 'For additional security this barcode has been selected for a random check',
+          createdBy: 'Aardvark Lawyers',
+        },
+      },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('h1').text()).toEqual('Item selected for a random check')
+    expect($('p strong').text()).toContain('Aardvark Lawyers')
+  })
 })

@@ -200,6 +200,29 @@ const stubVerifyDuplicateBarcode = (): SuperAgentRequest =>
     },
   })
 
+const stubVerifyRandomCheckBarcode = (): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: '/send-legal-mail/barcode/check',
+      bodyPatterns: [{ matchesJsonPath: '$[?(@.barcode == "888856789012")]' }],
+    },
+    response: {
+      status: 400,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: {
+        status: 400,
+        errorCode: {
+          code: 'RANDOM_CHECK',
+          userMessage: 'For additional security this barcode has been selected for a random check',
+          createdBy: 'Aardvark Lawyers',
+        },
+      },
+    },
+  })
+
 export default {
   stubRequestLink,
   stubRequestLinkFailure,
@@ -211,4 +234,5 @@ export default {
   stubVerifyLinkInvalidSignatureFailure,
   stubVerifyValidBarcode,
   stubVerifyDuplicateBarcode,
+  stubVerifyRandomCheckBarcode,
 }

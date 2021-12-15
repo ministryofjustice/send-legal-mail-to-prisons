@@ -24,6 +24,9 @@
     {% if form.errorCode.code == 'DUPLICATE' %}
       {% include "partials/scan/scan-barcode-result-duplicate.njk" %}
     {% endif %}
+    {% if form.errorCode.code == 'RANDOM_CHECK' %}
+      {% include "partials/scan/scan-barcode-result-random-check.njk" %}
+    {% endif %}
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds" id="scan-barcode-form">
