@@ -40,6 +40,12 @@ export default class ManualBarcodeEntryPage extends Page {
     return Page.verifyOnPage(ScanBarcodeResultPage)
   }
 
+  submitFormWithBarcodeThatHasExpired = (): ScanBarcodeResultPage => {
+    this.setBarcode('777756789012')
+    this.submitButton().click()
+    return Page.verifyOnPage(ScanBarcodeResultPage)
+  }
+
   hasErrorContaining = (partialMessage: string): void => {
     cy.get('.govuk-error-summary__list').should('contain', partialMessage)
     cy.get('#barcode-error').should('contain', partialMessage)

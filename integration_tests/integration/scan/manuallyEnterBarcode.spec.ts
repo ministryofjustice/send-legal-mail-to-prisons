@@ -76,6 +76,18 @@ context('Manual Barcode Entry Page', () => {
     scanBarcodeResultPage.hasMainHeading('Item selected for a random check')
   })
 
+  it('should render barcode results page given form submitted with barcode that has expired', () => {
+    cy.task('stubVerifyExpiredBarcode')
+    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+    cy.signIn()
+    cy.visit('/manually-enter-barcode')
+    const manualBarcodeEntryPage = Page.verifyOnPage(ManualBarcodeEntryPage)
+
+    const scanBarcodeResultPage: ScanBarcodeResultPage = manualBarcodeEntryPage.submitFormWithBarcodeThatHasExpired()
+
+    scanBarcodeResultPage.hasMainHeading('Carry out further checks')
+  })
+
   it('should redisplay form with errors given form submitted with invalid barcode', () => {
     cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
     cy.signIn()
