@@ -1,0 +1,52 @@
+import fs from 'fs'
+import cheerio from 'cheerio'
+import nunjucks, { Template } from 'nunjucks'
+import { registerNunjucks } from '../../../utils/nunjucksSetup'
+
+const snippet = fs.readFileSync('server/views/pages/scan/scan-barcode-result.njk')
+
+describe('Scan Barcode Result View', () => {
+  let compiledTemplate: Template
+  let viewContext: Record<string, unknown>
+
+  const njkEnv = registerNunjucks()
+
+  beforeEach(() => {
+    compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
+  })
+
+  it('should render view for successful scan', () => {
+    viewContext = {
+      errors: [],
+      form: { barcode: undefined, errorCode: undefined, createdBy: 'Aardvark Lawyers' },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('h1').text()).toEqual('Ready for final delivery')
+    expect($('p').text()).toContain('Aardvark Lawyers')
+  })
+
+  it('should render view for Duplicate scan', () => {
+    viewContext = {
+      errors: [],
+      form: {
+        barcode: undefined,
+        createdBy: undefined,
+        errorCode: {
+          code: 'DUPLICATE',
+          userMessage: 'Someone scanned this barcode at 9:11 am on 8 December 2021 at LEI. It may be an illegal copy.',
+          scannedDate: '2021-12-08T09:11:23Z',
+          scannedLocation: 'LEI',
+          createdBy: 'Aardvark Lawyers',
+        },
+      },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('h1').text()).toEqual('Carry out further checks')
+    expect($('li strong').text()).toContain('Aardvark Lawyers')
+    expect($('p strong').text()).toContain('9:11 am on 8 December 2021 at LEI')
+  })
+})

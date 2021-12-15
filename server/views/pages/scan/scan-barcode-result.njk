@@ -18,16 +18,57 @@
       }) }}
     {% endif %}
 
+    {% if form.errorCode == null %}
+      {% include "partials/scan/scan-barcode-result-ok.njk" %}
+    {% endif %}
+    {% if form.errorCode.code == 'DUPLICATE' %}
+      {% include "partials/scan/scan-barcode-result-duplicate.njk" %}
+    {% endif %}
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds" id="scan-barcode-form">
+        <h2 class="govuk-heading-l">Scan another barcode</h2>
+        <img src="/assets/images/barcode-scanner.png" title="A barcode scanner being used to scan a barcode from an item of mail" />
+
+        <form action="scan-barcode" method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {% call govukFieldset() %}
+
+            {{ govukInput({
+              classes: 'govuk-!-width-one-half',
+              label: {
+                text: 'Point the scanner at the barcode',
+                classes: 'govuk-visually-hidden'
+              },
+              attributes: {
+                autocomplete: 'off',
+                'data-inputmask': '"mask": "9999-9999-9999", "placeholder": " ", "autoUnmask": true, "removeMaskOnSubmit": true',
+                placeholder: 'Ready for scan'
+              },
+              inputmode: 'numeric',
+              id: 'barcode',
+              name: 'barcode',
+              value: form.barcode,
+              errorMessage: errors | findError('barcode')
+            }) }}
+
+            <div class="govuk-button-group">
+              {{ govukButton({
+                text: 'Submit barcode number',
+                classes: 'govuk-visually-hidden'
+              }) }}
+            </div>
+          {% endcall %}
+        </form>
+      </div>
+    </div>
+
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <h1 class="govuk-heading-xl">
-          {% switch form.status %}
-            {% case 'DUPLICATE' %}
-              Carry out further checks
-            {% default %}
-              Ready for final delivery
-          {% endswitch %}
-        </h1>
+        <h3 class="govuk-heading-m">What to do if the scan doesn't work</h3>
+        <p>If the barcode won't scan, enter the barcode number manually instead.</p>
+        <a href="manually-enter-barcode" class="govuk-link" id="manual-scan">I can't scan the barcode</a>
       </div>
     </div>
 

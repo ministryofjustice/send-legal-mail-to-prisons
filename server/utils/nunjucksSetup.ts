@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import nunjucks, { Environment } from 'nunjucks'
 import express from 'express'
+import moment from 'moment'
 import path from 'path'
 
 type Error = {
@@ -58,6 +59,11 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('findError', (array: Error[], formFieldId: string) => {
     const item = array?.find(error => error.href === `#${formFieldId}`)
     return item ? { text: item.text } : null
+  })
+
+  njkEnv.addFilter('formatDateTimeForResultsPage', (value: string) => {
+    const dateTime = moment(value)
+    return dateTime ? dateTime.format('h:mm a [on] D MMMM YYYY') : null
   })
 
   return njkEnv

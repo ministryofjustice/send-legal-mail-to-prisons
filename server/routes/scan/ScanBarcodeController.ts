@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import BarcodeEntryView from './BarcodeEntryView'
 import validate from './BarcodeEntryFormValidator'
 import ScanBarcodeService from '../../services/scan/ScanBarcodeService'
+import { CheckBarcodeResponse } from '../../@types/sendLegalMailApiClientTypes'
 
 /**
  * Controller class responsible for scanning and verifying barcodes.
@@ -59,16 +60,17 @@ export default class ScanBarcodeController {
   }
 
   private async verifyBarcode(barcode: string, user: string, req: Request): Promise<void> {
+    req.session.barcodeEntryForm = {}
     return this.scanBarcodeService
       .verifyBarcode(barcode, user)
-      .then(() => {
-        req.session.barcodeEntryForm.status = 'CHECKED'
+      .then(apiResponse => {
+        const checkBarcodeResponse = apiResponse as CheckBarcodeResponse
+        req.session.barcodeEntryForm.createdBy = checkBarcodeResponse.createdBy
       })
       .catch(errorResponse => {
         switch (errorResponse.errorCode.code) {
           case 'DUPLICATE': {
-            // const duplicateErrorCode: DuplicateErrorCode = errorResponse.errorCode
-            req.session.barcodeEntryForm.status = 'DUPLICATE'
+            req.session.barcodeEntryForm.errorCode = errorResponse.errorCode
             break
           }
           default: {

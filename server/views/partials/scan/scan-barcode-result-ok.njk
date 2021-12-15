@@ -1,0 +1,23 @@
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">Ready for final delivery</h1>
+
+    {% set html %}
+      <p class="govuk-notification-banner__heading">This item of mail was sent by an approved sender: {{ form.createdBy }}</p>
+    {% endset %}
+
+    {{ govukNotificationBanner({
+      type: 'success',
+      html: html,
+      disableAutoFocus: true
+    }) }}
+
+    <h2 class="govuk-heading-l">If you still have concerns about the item</h2>
+    <p>Even though this item was sent by an approved sender, you think it needs further investigation.</p>
+    <a href="" class="govuk-link">Further checks are needed</a>
+
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+  </div>
+</div>

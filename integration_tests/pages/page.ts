@@ -18,9 +18,7 @@ export default abstract class Page {
 
   runAxe = (): void => {
     cy.injectAxe()
-    cy.checkA11y(null, {
-      includedImpacts: ['critical', 'serious'],
-    })
+    cy.checkA11y()
   }
 
   signOut = (): PageElement => cy.get('[data-qa=signOut]')
