@@ -1,0 +1,42 @@
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">Carry out further checks</h1>
+
+    {{ govukNotificationBanner({
+      text: 'Follow your usual procedure for checking Rule 39 mail.',
+      disableAutoFocus: true
+    }) }}
+
+    <h2 class="govuk-heading-l">How to investigate</h2>
+    <p>Follow your usual procedures to make sure:</p>
+    <ul>
+        <li>that the sender, <strong>{{ form.errorCode.createdBy }}</strong>, has a record of sending this item</li>
+        <li>the item hasn't been tampered with</li>
+        <li>there are no drugs or other contraband concealed in the item</li>
+    </ul>
+
+    <p>If you still have concerns report them to a security manager.</p>
+    {% set html %}
+      <p>Do not open any item of Rule 39 mail without both:</p>
+      <ul>
+        <li>Permission from the governor</li>
+        <li>The recipient being present</li>
+      </ul>
+    {% endset %}
+
+    {{ govukInsetText({
+      html: html
+    }) }}
+
+    <h3 class="govuk-heading-m">Why you need to carry out checks</h3>
+    <p>
+      Someone scanned this barcode at <strong>{{ form.errorCode.scannedDate | formatDateTimeForResultsPage }} at {{ form.errorCode.scannedLocation }}</strong>.
+      It may be an illegal copy.
+    </p>
+
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+  </div>
+</div>

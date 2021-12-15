@@ -1,4 +1,6 @@
 declare module 'forms' {
+  import type { CheckBarcodeErrorCodes } from '../sendLegalMailApiClientTypes'
+
   export interface RequestLinkForm {
     email?: string
   }
@@ -9,14 +11,7 @@ declare module 'forms' {
 
   export interface BarcodeEntryForm {
     barcode?: string
-    status?: BarcodeStatus
-  }
-
-  export enum BarcodeStatus {
-    CREATED,
-    CHECKED,
-    DUPLICATE,
-    EXPIRED,
-    RANDOM_CHECK,
+    createdBy?: string
+    errorCode?: CheckBarcodeErrorCodes
   }
 }
