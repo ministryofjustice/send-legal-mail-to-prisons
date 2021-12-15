@@ -26,17 +26,119 @@ export interface components {
       /** The secret to verify */
       secret: string
     }
-    VerifyLinkResponse: {
-      /** The JWT */
-      token: string
-    }
-    ErrorCode: {
+    AuthenticationError: {
       code: string
       userMessage: string
     }
+    CheckBarcodeErrorCodes: components['schemas']['ErrorCode'] & {
+      code?: 'DUPLICATE' | 'EXPIRED' | 'RANDOM_CHECK'
+      userMessage?: string
+    } & (
+        | components['schemas']['Duplicate']
+        | components['schemas']['Expired']
+        | components['schemas']['RandomCheck']
+      ) & {
+        code: unknown
+        userMessage: unknown
+      }
+    DownstreamError: {
+      code: string
+      userMessage: string
+    }
+    Duplicate: {
+      /** The time that the original barcode was scanned */
+      scannedDate: string
+      /** The prison where the original barcode was scanned */
+      scannedLocation: string
+      /** The organisation that created the barcode in the first place */
+      createdBy: string
+      code: string
+      userMessage: string
+    }
+    EmailInvalid: {
+      code: string
+      userMessage: string
+    }
+    EmailInvalidCjsm: {
+      code: string
+      userMessage: string
+    }
+    EmailMandatory: {
+      code: string
+      userMessage: string
+    }
+    EmailTooLong: {
+      code: string
+      userMessage: string
+    }
+    /** The error code describing the error */
+    ErrorCode: {
+      /** The error code */
+      code: string
+      /** A human readable description of the error */
+      userMessage: string
+    }
     ErrorResponse: {
+      /** The HTTP status code */
       status: number
       errorCode: components['schemas']['ErrorCode']
+    }
+    Expired: {
+      /** The time the barcode was created */
+      createdDate: string
+      /** The number of days before a barcode expires */
+      barcodeExpiryDays: number
+      /** The organisation that created the barcode in the first place */
+      createdBy: string
+      code: string
+      userMessage: string
+    }
+    InternalError: {
+      code: string
+      userMessage: string
+    }
+    MagicLinkRequestErrorCodes: components['schemas']['ErrorCode'] & {
+      code?: 'EMAIL_MANDATORY' | 'EMAIL_TOO_LONG' | 'INVALID_EMAIL' | 'INVALID_CJSM_EMAIL'
+      userMessage?: string
+    } & (
+        | components['schemas']['EmailMandatory']
+        | components['schemas']['EmailTooLong']
+        | components['schemas']['EmailInvalid']
+        | components['schemas']['EmailInvalidCjsm']
+      ) & {
+        code: unknown
+        userMessage: unknown
+      }
+    MalformedRequest: {
+      code: string
+      userMessage: string
+    }
+    NotFound: {
+      code: string
+      userMessage: string
+    }
+    RandomCheck: {
+      /** The organisation that created the barcode in the first place */
+      createdBy: string
+      code: string
+      userMessage: string
+    }
+    StandardErrorCodes: components['schemas']['ErrorCode'] & {
+      code?: 'AUTH' | 'DOWNSTREAM' | 'INTERNAL_ERROR' | 'MALFORMED_REQUEST' | 'NOT_FOUND'
+      userMessage?: string
+    } & (
+        | components['schemas']['AuthenticationError']
+        | components['schemas']['DownstreamError']
+        | components['schemas']['InternalError']
+        | components['schemas']['MalformedRequest']
+        | components['schemas']['NotFound']
+      ) & {
+        code: unknown
+        userMessage: unknown
+      }
+    VerifyLinkResponse: {
+      /** The JWT */
+      token: string
     }
     MagicLinkRequest: {
       /** The email address to send the magic link to */
@@ -46,6 +148,21 @@ export interface components {
       /** The barcode being checked */
       barcode: string
     }
+    CheckBarcodeResponse: {
+      /** The organisation that created the barcode */
+      createdBy: string
+    }
+    Link: {
+      href?: string
+      hreflang?: string
+      title?: string
+      type?: string
+      deprecation?: string
+      profile?: string
+      name?: string
+      templated?: boolean
+    }
+    Links: { [key: string]: components['schemas']['Link'] }
   }
 }
 
@@ -85,6 +202,12 @@ export interface operations {
       201: {
         content: {
           'application/json': unknown
+        }
+      }
+      /** Bad request. For specific errors see the Schema for MagicLinkRequestErrorCodes */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** Unauthorised, requires a valid Oauth2 token */
@@ -127,10 +250,10 @@ export interface operations {
       /** Barcode is OK and no further checks are required */
       200: {
         content: {
-          'application/json': unknown
+          'application/json': components['schemas']['CheckBarcodeResponse']
         }
       }
-      /** Bad request */
+      /** Bad request. For specific errors see the Schema for CheckBarcodeErrorCodes */
       400: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
