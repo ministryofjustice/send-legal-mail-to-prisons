@@ -4,6 +4,7 @@ import HmppsAuthClient from '../../data/hmppsAuthClient'
 import TokenStore from '../../data/tokenStore'
 import ScanBarcodeService from './ScanBarcodeService'
 import config from '../../config'
+import { CheckBarcodeResponse } from '../../@types/sendLegalMailApiClientTypes'
 
 jest.mock('../../data/hmppsAuthClient')
 
@@ -25,11 +26,13 @@ describe('Scan Barcode Service', () => {
   })
 
   describe('verifyBarcode', () => {
-    it('should verify a barcode', done => {
-      mockedSendLegalMailApi.post('/barcode/check', { barcode: '123456789012' }).reply(200)
+    it('should verify a barcode given API returns a CheckBarcodeResponse', done => {
+      const checkBarcodeResponse: CheckBarcodeResponse = { createdBy: 'Aarvark Lawyers' }
+      mockedSendLegalMailApi.post('/barcode/check', { barcode: '123456789012' }).reply(200, checkBarcodeResponse)
 
-      scanBarcodeService.verifyBarcode('123456789012', 'a-user-id').then(() => {
+      scanBarcodeService.verifyBarcode('123456789012', 'a-user-id').then(response => {
         expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalledWith('a-user-id')
+        expect(response).toStrictEqual(checkBarcodeResponse)
         done()
       })
     })
@@ -43,7 +46,7 @@ describe('Scan Barcode Service', () => {
       })
     })
 
-    it('should fail to verify a barcode given API returns duplicate barcode error', done => {
+    it('should fail to verify a barcode given API returns an ErrorResponse', done => {
       const errorResponse = {
         status: 400,
         errorCode: {
@@ -57,7 +60,16 @@ describe('Scan Barcode Service', () => {
       mockedSendLegalMailApi.post('/barcode/check', { barcode: '123456789012' }).reply(400, errorResponse)
 
       scanBarcodeService.verifyBarcode('123456789012', 'a-user-id').catch(error => {
-        expect(error).toStrictEqual(errorResponse)
+        expect(JSON.parse(error.text)).toStrictEqual(errorResponse)
+        done()
+      })
+    })
+
+    it('should fail to verify a barcode given API returns an error without an ErrorResponse body', done => {
+      mockedSendLegalMailApi.post('/barcode/check', { barcode: '123456789012' }).reply(404)
+
+      scanBarcodeService.verifyBarcode('123456789012', 'a-user-id').catch(error => {
+        expect(error.status).toBe(404)
         done()
       })
     })

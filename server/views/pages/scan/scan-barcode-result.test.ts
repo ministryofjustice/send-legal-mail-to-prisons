@@ -92,4 +92,22 @@ describe('Scan Barcode Result View', () => {
     expect($('li strong').text()).toContain('Aardvark Lawyers')
     expect($('p strong').text()).toContain('120 days ago, on 8 December 2021')
   })
+
+  it('should render view for invalid/not found barcode', () => {
+    viewContext = {
+      errors: [],
+      form: {
+        barcode: undefined,
+        createdBy: undefined,
+        errorCode: {
+          code: 'NOT_FOUND',
+        },
+      },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('h1').text()).toEqual('Carry out further checks')
+    expect($('p').text()).toContain('The barcode was not recognised')
+  })
 })
