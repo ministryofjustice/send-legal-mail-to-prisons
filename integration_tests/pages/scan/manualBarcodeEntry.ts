@@ -46,6 +46,12 @@ export default class ManualBarcodeEntryPage extends Page {
     return Page.verifyOnPage(ScanBarcodeResultPage)
   }
 
+  submitFormWithBarcodeThatDoesNotExist = (): ScanBarcodeResultPage => {
+    this.setBarcode('666656789012')
+    this.submitButton().click()
+    return Page.verifyOnPage(ScanBarcodeResultPage)
+  }
+
   hasErrorContaining = (partialMessage: string): void => {
     cy.get('.govuk-error-summary__list').should('contain', partialMessage)
     cy.get('#barcode-error').should('contain', partialMessage)

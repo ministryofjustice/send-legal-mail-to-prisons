@@ -30,6 +30,9 @@
     {% if form.errorCode.code == 'EXPIRED' %}
       {% include "partials/scan/scan-barcode-result-expired.njk" %}
     {% endif %}
+    {% if form.errorCode.code == 'NOT_FOUND' %}
+      {% include "partials/scan/scan-barcode-result-not-found.njk" %}
+    {% endif %}
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds" id="scan-barcode-form">

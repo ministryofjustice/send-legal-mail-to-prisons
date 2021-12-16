@@ -68,9 +68,11 @@ export default class ScanBarcodeController {
         req.session.barcodeEntryForm.createdBy = checkBarcodeResponse.createdBy
       })
       .catch(errorResponse => {
-        const errorType = errorResponse.errorCode.code
+        const errorType = errorResponse.data?.errorCode?.code
         if (errorType === 'DUPLICATE' || errorType === 'RANDOM_CHECK' || errorType === 'EXPIRED') {
-          req.session.barcodeEntryForm.errorCode = errorResponse.errorCode
+          req.session.barcodeEntryForm.errorCode = errorResponse.data.errorCode
+        } else if (errorResponse.status === 404) {
+          req.session.barcodeEntryForm.errorCode = { code: 'NOT_FOUND' }
         } else {
           throw new Error(`Unsupported error code ${errorType}`)
         }

@@ -13,12 +13,10 @@ export default class ScanBarcodeService {
   async verifyBarcode(barcode: string, user: string): Promise<unknown> {
     const checkBarcodeRequest: CheckBarcodeRequest = { barcode }
     return this.hmppsAuthClient.getSystemClientToken(user).then(token =>
-      ScanBarcodeService.restClient(token)
-        .post({
-          path: '/barcode/check',
-          data: checkBarcodeRequest,
-        })
-        .catch(error => Promise.reject(error.data))
+      ScanBarcodeService.restClient(token).post({
+        path: '/barcode/check',
+        data: checkBarcodeRequest,
+      })
     )
   }
 }

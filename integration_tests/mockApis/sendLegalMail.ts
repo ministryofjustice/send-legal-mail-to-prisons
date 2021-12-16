@@ -248,6 +248,21 @@ const stubVerifyExpiredBarcode = (): SuperAgentRequest =>
     },
   })
 
+const stubVerifyNotFoundBarcode = (): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: '/send-legal-mail/barcode/check',
+      bodyPatterns: [{ matchesJsonPath: '$[?(@.barcode == "666656789012")]' }],
+    },
+    response: {
+      status: 404,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    },
+  })
+
 export default {
   stubRequestLink,
   stubRequestLinkFailure,
@@ -261,4 +276,5 @@ export default {
   stubVerifyDuplicateBarcode,
   stubVerifyRandomCheckBarcode,
   stubVerifyExpiredBarcode,
+  stubVerifyNotFoundBarcode,
 }
