@@ -24,6 +24,27 @@
       </div>
     </div>
 
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+
+        {% if barcode %}
+          <p>Barcode number: {{ barcode }}</p>
+        {% else %}
+          <p>Press the button to generate a barcode</p>
+        {% endif %}
+
+        <form action="/barcode" method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          <div class="govuk-button-group">
+            {{ govukButton({
+              text: "Create Barcode"
+            }) }}
+          </div>
+
+        </form>
+      </div>
+    </div>
   </section>
 
 {% endblock %}

@@ -25,11 +25,13 @@ import setupScanBarcode from './middleware/scan/setupScanBarcode'
 import setupLinkEmailSent from './middleware/link/setupLinkEmailSent'
 import requestLinkAuthorised from './middleware/link/requestLinkAuthorised'
 import ScanBarcodeService from './services/scan/ScanBarcodeService'
+import CreateBarcodeService from './services/barcode/CreateBarcodeService'
 
 export default function createApp(
   userService: UserService,
   magicLinkService: MagicLinkService,
-  scanBarcodeService: ScanBarcodeService
+  scanBarcodeService: ScanBarcodeService,
+  createBarcodeService: CreateBarcodeService
 ): express.Application {
   const app = express()
 
@@ -53,7 +55,7 @@ export default function createApp(
   // authenticated with createBarcodeToken
   app.use('/barcode', barcodeAuthorisationMiddleware())
   app.use('/barcode', populateBarcodeUser())
-  app.use('/barcode', setUpCreateBarcode())
+  app.use('/barcode', setUpCreateBarcode(createBarcodeService))
 
   // authenticated by passport / HMPPS Auth
   app.use('/', setUpAuthentication())
