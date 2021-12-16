@@ -13,6 +13,7 @@ declare module 'express-session' {
     barcodeUserEmail: string
     findRecipientForm: FindRecipientForm
     barcodeEntryForm: BarcodeEntryForm
+    barcode: string
   }
 }
 
