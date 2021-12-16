@@ -5,7 +5,7 @@ export default class CreateBarcodeController {
   constructor(private readonly createBarcodeService: CreateBarcodeService) {}
 
   async submitCreateBarcode(req: Request, res: Response): Promise<void> {
-    return this.createBarcodeService.createBarcode().then(barcode => {
+    return this.createBarcodeService.createBarcode(req.session.createBarcodeAuthToken).then(barcode => {
       req.session.barcode = barcode
       return res.redirect('/barcode/find-recipient')
     })

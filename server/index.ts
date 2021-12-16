@@ -10,7 +10,7 @@ const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
 const userService = new UserService(hmppsAuthClient)
 const magicLinkService = new MagicLinkService(hmppsAuthClient)
 const scanBarcodeService = new ScanBarcodeService(hmppsAuthClient)
-const createBarcodeService = new CreateBarcodeService(hmppsAuthClient)
+const createBarcodeService = new CreateBarcodeService()
 
 const app = createApp(userService, magicLinkService, scanBarcodeService, createBarcodeService)
 
