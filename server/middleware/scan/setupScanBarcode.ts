@@ -10,6 +10,7 @@ export default function setupScanBarcode(scanBarcodeService: ScanBarcodeService)
 
   router.use('/scan-barcode', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE']))
   router.get('/scan-barcode', (req, res) => scanBarcodeController.getScanBarcodeView(req, res))
+  router.post('/scan-barcode', (req, res) => scanBarcodeController.submitScannedBarcode(req, res))
   router.get('/scan-barcode/result', (req, res) => scanBarcodeController.getScanBarcodeResultView(req, res))
 
   router.use('/manually-enter-barcode', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE']))

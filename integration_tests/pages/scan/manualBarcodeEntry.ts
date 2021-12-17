@@ -1,6 +1,7 @@
 import Page, { PageElement } from '../page'
 import ReportManualBarcodeEntryProblem from './reportManualBarcodeEntryProblem'
 import ScanBarcodeResultPage from './scanBarcodeResult'
+import barcodes from '../../mockApis/barcodes'
 
 export default class ManualBarcodeEntryPage extends Page {
   constructor() {
@@ -17,37 +18,37 @@ export default class ManualBarcodeEntryPage extends Page {
   }
 
   submitFormWithBarcodeThatFailsValidation = (): ManualBarcodeEntryPage => {
-    this.setBarcode('12345678')
+    this.setBarcode(barcodes.INVALID_FORMAT_BARCODE)
     this.submitButton().click()
     return Page.verifyOnPage(ManualBarcodeEntryPage)
   }
 
   submitFormWithValidBarcode = (): ScanBarcodeResultPage => {
-    this.setBarcode('123456789012')
+    this.setBarcode(barcodes.VALID_BARCODE)
     this.submitButton().click()
     return Page.verifyOnPage(ScanBarcodeResultPage)
   }
 
   submitFormWithBarcodeThatHasBeenScannedPreviously = (): ScanBarcodeResultPage => {
-    this.setBarcode('999956789012')
+    this.setBarcode(barcodes.PREVIOUSLY_SCANNED_BARCODE)
     this.submitButton().click()
     return Page.verifyOnPage(ScanBarcodeResultPage)
   }
 
   submitFormWithBarcodeThatWillBeSelectedForARandomCheck = (): ScanBarcodeResultPage => {
-    this.setBarcode('888856789012')
+    this.setBarcode(barcodes.BARCODE_SELECTED_FOR_RANDOM_CHECK)
     this.submitButton().click()
     return Page.verifyOnPage(ScanBarcodeResultPage)
   }
 
   submitFormWithBarcodeThatHasExpired = (): ScanBarcodeResultPage => {
-    this.setBarcode('777756789012')
+    this.setBarcode(barcodes.EXPIRED_BARCODE)
     this.submitButton().click()
     return Page.verifyOnPage(ScanBarcodeResultPage)
   }
 
   submitFormWithBarcodeThatDoesNotExist = (): ScanBarcodeResultPage => {
-    this.setBarcode('666656789012')
+    this.setBarcode(barcodes.UNRECOGNISED_BARCODE)
     this.submitButton().click()
     return Page.verifyOnPage(ScanBarcodeResultPage)
   }

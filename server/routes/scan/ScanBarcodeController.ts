@@ -23,6 +23,17 @@ export default class ScanBarcodeController {
     return res.render('pages/scan/scan-barcode', { ...view.renderArgs })
   }
 
+  async submitScannedBarcode(req: Request, res: Response): Promise<void> {
+    req.session.barcodeEntryForm = { ...req.body }
+    if (!validate(req.session.barcodeEntryForm, req)) {
+      return res.redirect('/scan-barcode')
+    }
+
+    return this.verifyBarcode(req.session.barcodeEntryForm.barcode, req.user.username, req).then(() =>
+      res.redirect('/scan-barcode/result')
+    )
+  }
+
   /* Methods relating to manually entering and verifying a barcode via a keyboard */
   /* **************************************************************************** */
 
@@ -35,7 +46,7 @@ export default class ScanBarcodeController {
   async submitManualBarcode(req: Request, res: Response): Promise<void> {
     req.session.barcodeEntryForm = { ...req.body }
     if (!validate(req.session.barcodeEntryForm, req)) {
-      return res.redirect('manually-enter-barcode')
+      return res.redirect('/manually-enter-barcode')
     }
 
     return this.verifyBarcode(req.session.barcodeEntryForm.barcode, req.user.username, req).then(() =>
