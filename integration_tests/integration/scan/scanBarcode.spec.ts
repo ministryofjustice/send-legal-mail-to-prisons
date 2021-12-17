@@ -1,6 +1,7 @@
 import Page from '../../pages/page'
 import ScanBarcodePage from '../../pages/scan/scanBarcode'
 import AuthorisationErrorPage from '../../pages/authorisationError'
+import ScanBarcodeResultPage from '../../pages/scan/scanBarcodeResult'
 
 context('Scan Barcode Page', () => {
   beforeEach(() => {
@@ -34,5 +35,78 @@ context('Scan Barcode Page', () => {
     // and make this test better!
     // (also note our current /autherror handler returns a 401 - this perhaps should be a 403 ?
     cy.request({ url: '/scan-barcode', failOnStatusCode: false }).its('status').should('equal', 404)
+  })
+
+  it('should render barcode results page given form submitted with barcode that verifies as OK', () => {
+    cy.task('stubVerifyValidBarcode')
+    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+    cy.signIn()
+    cy.visit('/scan-barcode')
+    const scanBarcodePage = Page.verifyOnPage(ScanBarcodePage)
+
+    const scanBarcodeResultPage: ScanBarcodeResultPage = scanBarcodePage.submitFormWithValidBarcode()
+
+    scanBarcodeResultPage.hasMainHeading('Ready for final delivery')
+  })
+
+  it('should render barcode results page given form submitted with barcode that has been scanned before', () => {
+    cy.task('stubVerifyDuplicateBarcode')
+    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+    cy.signIn()
+    cy.visit('/scan-barcode')
+    const scanBarcodePage = Page.verifyOnPage(ScanBarcodePage)
+
+    const scanBarcodeResultPage: ScanBarcodeResultPage =
+      scanBarcodePage.submitFormWithBarcodeThatHasBeenScannedPreviously()
+
+    scanBarcodeResultPage.hasMainHeading('Carry out further checks')
+  })
+
+  it('should render barcode results page given form submitted with barcode that has been selected for a random check', () => {
+    cy.task('stubVerifyRandomCheckBarcode')
+    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+    cy.signIn()
+    cy.visit('/scan-barcode')
+    const scanBarcodePage = Page.verifyOnPage(ScanBarcodePage)
+
+    const scanBarcodeResultPage: ScanBarcodeResultPage =
+      scanBarcodePage.submitFormWithBarcodeThatWillBeSelectedForARandomCheck()
+
+    scanBarcodeResultPage.hasMainHeading('Item selected for a random check')
+  })
+
+  it('should render barcode results page given form submitted with barcode that has expired', () => {
+    cy.task('stubVerifyExpiredBarcode')
+    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+    cy.signIn()
+    cy.visit('/scan-barcode')
+    const scanBarcodePage = Page.verifyOnPage(ScanBarcodePage)
+
+    const scanBarcodeResultPage: ScanBarcodeResultPage = scanBarcodePage.submitFormWithBarcodeThatHasExpired()
+
+    scanBarcodeResultPage.hasMainHeading('Carry out further checks')
+  })
+
+  it('should render barcode results page given form submitted with barcode that cannot be found', () => {
+    cy.task('stubVerifyNotFoundBarcode')
+    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+    cy.signIn()
+    cy.visit('/scan-barcode')
+    const scanBarcodePage = Page.verifyOnPage(ScanBarcodePage)
+
+    const scanBarcodeResultPage: ScanBarcodeResultPage = scanBarcodePage.submitFormWithBarcodeThatDoesNotExist()
+
+    scanBarcodeResultPage.hasMainHeading('Carry out further checks')
+  })
+
+  it('should redisplay form with errors given form submitted with invalid barcode', () => {
+    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+    cy.signIn()
+    cy.visit('/scan-barcode')
+    const scanBarcodePage = Page.verifyOnPage(ScanBarcodePage)
+
+    scanBarcodePage.submitFormWithBarcodeThatFailsValidation()
+
+    scanBarcodePage.hasErrorContaining('correct format')
   })
 })
