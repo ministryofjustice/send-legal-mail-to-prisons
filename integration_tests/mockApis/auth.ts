@@ -128,10 +128,14 @@ const stubUser = () =>
         'Content-Type': 'application/json;charset=UTF-8',
       },
       jsonBody: {
+        activeCaseLoadId: 'MDI',
+        authSource: 'nomis',
         staffId: 231232,
+        userId: 231232,
         username: 'USER1',
         active: true,
         name: 'john smith',
+        uuid: '5105a589-75b3-4ca0-9433-b96228c1c8f3',
       },
     },
   })
