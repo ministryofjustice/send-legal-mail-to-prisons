@@ -26,12 +26,14 @@ import setupLinkEmailSent from './middleware/link/setupLinkEmailSent'
 import requestLinkAuthorised from './middleware/link/requestLinkAuthorised'
 import ScanBarcodeService from './services/scan/ScanBarcodeService'
 import CreateBarcodeService from './services/barcode/CreateBarcodeService'
+import AppInsightsService from './services/AppInsightsService'
 
 export default function createApp(
   userService: UserService,
   magicLinkService: MagicLinkService,
   scanBarcodeService: ScanBarcodeService,
-  createBarcodeService: CreateBarcodeService
+  createBarcodeService: CreateBarcodeService,
+  appInsightsClient: AppInsightsService
 ): express.Application {
   const app = express()
 
@@ -62,7 +64,7 @@ export default function createApp(
   app.use('/', indexRoutes(standardRouter(userService)))
   app.use('/', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_SECURITY_ANALYST']))
 
-  app.use('/', setupScanBarcode(scanBarcodeService))
+  app.use('/', setupScanBarcode(scanBarcodeService, appInsightsClient))
 
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler(process.env.NODE_ENV === 'production'))

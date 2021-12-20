@@ -3,14 +3,16 @@
  * Do appinsights first as it does some magic instrumentation work, i.e. it affects other 'require's
  * In particular, applicationinsights automatically collects bunyan logs
  */
+import { TelemetryClient } from 'applicationinsights'
 import { initialiseAppInsights, buildAppInsightsClient } from './server/utils/azureAppInsights'
 
 initialiseAppInsights()
-buildAppInsightsClient()
+const appInsightsTelemetryClient: TelemetryClient = buildAppInsightsClient()
 
 import app from './server/index'
 import logger from './logger'
 
-app.listen(app.get('port'), () => {
-  logger.info(`Server listening on port ${app.get('port')}`)
+const application = app(appInsightsTelemetryClient)
+application.listen(application.get('port'), () => {
+  logger.info(`Server listening on port ${application.get('port')}`)
 })
