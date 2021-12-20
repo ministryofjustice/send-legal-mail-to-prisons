@@ -1,7 +1,6 @@
 import Page from '../../pages/page'
 import AuthorisationErrorPage from '../../pages/authorisationError'
 import ManualBarcodeEntryPage from '../../pages/scan/manualBarcodeEntry'
-import ReportManualBarcodeEntryProblem from '../../pages/scan/reportManualBarcodeEntryProblem'
 import ScanBarcodeResultPage from '../../pages/scan/scanBarcodeResult'
 
 context('Manual Barcode Entry Page', () => {
@@ -100,6 +99,17 @@ context('Manual Barcode Entry Page', () => {
     scanBarcodeResultPage.hasMainHeading('Carry out further checks')
   })
 
+  it('should render barcode results given user indicates they cannot enter the barcode', () => {
+    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+    cy.signIn()
+    cy.visit('/manually-enter-barcode')
+    const manualBarcodeEntryPage = Page.verifyOnPage(ManualBarcodeEntryPage)
+
+    manualBarcodeEntryPage.problemEnteringBarcode()
+
+    Page.verifyOnPage(ScanBarcodeResultPage)
+  })
+
   it('should redisplay form with errors given form submitted with invalid barcode', () => {
     cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
     cy.signIn()
@@ -109,16 +119,5 @@ context('Manual Barcode Entry Page', () => {
     manualBarcodeEntryPage.submitFormWithBarcodeThatFailsValidation()
 
     manualBarcodeEntryPage.hasErrorContaining('correct format')
-  })
-
-  it('should allow user to report problem when trying to manually enter a barcode', () => {
-    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
-    cy.signIn()
-    cy.visit('/manually-enter-barcode')
-    const manualBarcodeEntryPage = Page.verifyOnPage(ManualBarcodeEntryPage)
-
-    manualBarcodeEntryPage.reportProblemEnteringBarcode()
-
-    Page.verifyOnPage(ReportManualBarcodeEntryProblem)
   })
 })

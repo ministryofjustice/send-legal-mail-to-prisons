@@ -1,5 +1,4 @@
 import Page, { PageElement } from '../page'
-import ReportManualBarcodeEntryProblem from './reportManualBarcodeEntryProblem'
 import ScanBarcodeResultPage from './scanBarcodeResult'
 import barcodes from '../../mockApis/barcodes'
 
@@ -59,14 +58,14 @@ export default class ManualBarcodeEntryPage extends Page {
     this.barcode().should('have.class', 'govuk-input--error')
   }
 
-  reportProblemEnteringBarcode = (): ReportManualBarcodeEntryProblem => {
-    this.reportProblemLink().click()
-    return Page.verifyOnPage(ReportManualBarcodeEntryProblem)
+  problemEnteringBarcode = (): ScanBarcodeResultPage => {
+    this.barcodeProblemLink().click()
+    return Page.verifyOnPage(ScanBarcodeResultPage)
   }
 
   barcode = (): PageElement => cy.get('#barcode')
 
   submitButton = (): PageElement => cy.get('button[data-qa="submit-barcode-button"]')
 
-  reportProblemLink = (): PageElement => cy.get('#report-problem')
+  barcodeProblemLink = (): PageElement => cy.get('#barcode-problem')
 }

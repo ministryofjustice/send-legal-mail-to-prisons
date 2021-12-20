@@ -110,4 +110,22 @@ describe('Scan Barcode Result View', () => {
     expect($('h1').text()).toEqual('Carry out further checks')
     expect($('p').text()).toContain('The barcode was not recognised')
   })
+
+  it('should render view for user indicating a problem entering barcode', () => {
+    viewContext = {
+      errors: [],
+      form: {
+        barcode: undefined,
+        createdBy: undefined,
+        errorCode: {
+          code: 'CANNOT_ENTER_BARCODE',
+        },
+      },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('h1').text()).toEqual('Carry out further checks')
+    expect($('p').text()).toContain(`barcode can't be linked to an approved sender`)
+  })
 })
