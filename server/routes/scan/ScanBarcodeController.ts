@@ -54,12 +54,14 @@ export default class ScanBarcodeController {
     )
   }
 
-  async getReportManualBarcodeEntryProblemView(req: Request, res: Response): Promise<void> {
-    return res.render('pages/scan/report-manual-barcode-entry-problem', {})
-  }
-
   /* Methods common to both scanning and manually entering barcodes */
   /* ************************************************************** */
+
+  async getBarcodeScanProblemView(req: Request, res: Response): Promise<void> {
+    req.session.barcodeEntryForm = { ...req.body }
+    req.session.barcodeEntryForm.errorCode = { code: 'CANNOT_ENTER_BARCODE' }
+    return res.redirect('/scan-barcode/result')
+  }
 
   async getScanBarcodeResultView(req: Request, res: Response): Promise<void> {
     if (!req.session?.barcodeEntryForm) {
