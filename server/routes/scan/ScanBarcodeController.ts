@@ -1,8 +1,10 @@
 import { Request, Response } from 'express'
+import { performance } from 'perf_hooks'
 import BarcodeEntryView from './BarcodeEntryView'
 import validate from './BarcodeEntryFormValidator'
 import ScanBarcodeService from '../../services/scan/ScanBarcodeService'
 import { CheckBarcodeResponse } from '../../@types/sendLegalMailApiClientTypes'
+import { buildAppInsightsClient } from '../../utils/azureAppInsights'
 
 /**
  * Controller class responsible for scanning and verifying barcodes.
@@ -58,6 +60,7 @@ export default class ScanBarcodeController {
   /* ************************************************************** */
 
   async getBarcodeScanProblemView(req: Request, res: Response): Promise<void> {
+    ScanBarcodeController.trackProblemWithBarcodeAppInsightMetric()
     req.session.barcodeEntryForm = { ...req.body }
     req.session.barcodeEntryForm.errorCode = { code: 'CANNOT_ENTER_BARCODE' }
     return res.redirect('/scan-barcode/result')
@@ -90,5 +93,9 @@ export default class ScanBarcodeController {
           throw new Error(`Unsupported error code ${errorType}`)
         }
       })
+  }
+
+  private static trackProblemWithBarcodeAppInsightMetric(): void {
+    buildAppInsightsClient()?.trackMetric({ name: 'cannotEnterBarcode', value: performance.now() })
   }
 }
