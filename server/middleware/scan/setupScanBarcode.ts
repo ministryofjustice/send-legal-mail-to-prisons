@@ -2,11 +2,15 @@ import express, { Router } from 'express'
 import authorisationMiddleware from '../authorisationMiddleware'
 import ScanBarcodeController from '../../routes/scan/ScanBarcodeController'
 import ScanBarcodeService from '../../services/scan/ScanBarcodeService'
+import AppInsightsService from '../../services/AppInsightsService'
 
-export default function setupScanBarcode(scanBarcodeService: ScanBarcodeService): Router {
+export default function setupScanBarcode(
+  scanBarcodeService: ScanBarcodeService,
+  appInsightsClient: AppInsightsService
+): Router {
   const router = express.Router()
 
-  const scanBarcodeController = new ScanBarcodeController(scanBarcodeService)
+  const scanBarcodeController = new ScanBarcodeController(scanBarcodeService, appInsightsClient)
 
   router.use('/scan-barcode', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE']))
   router.get('/scan-barcode', (req, res) => scanBarcodeController.getScanBarcodeView(req, res))

@@ -3,6 +3,7 @@ import BarcodeEntryView from './BarcodeEntryView'
 import validate from './BarcodeEntryFormValidator'
 import ScanBarcodeService from '../../services/scan/ScanBarcodeService'
 import { CheckBarcodeResponse } from '../../@types/sendLegalMailApiClientTypes'
+import AppInsightsService from '../../services/AppInsightsService'
 
 /**
  * Controller class responsible for scanning and verifying barcodes.
@@ -12,7 +13,10 @@ import { CheckBarcodeResponse } from '../../@types/sendLegalMailApiClientTypes'
  * barcodes.
  */
 export default class ScanBarcodeController {
-  constructor(private readonly scanBarcodeService: ScanBarcodeService) {}
+  constructor(
+    private readonly scanBarcodeService: ScanBarcodeService,
+    private readonly appInsightsClient: AppInsightsService
+  ) {}
 
   /* Methods relating to the use of a handheld scanner device */
   /* ******************************************************** */
@@ -58,6 +62,8 @@ export default class ScanBarcodeController {
   /* ************************************************************** */
 
   async getBarcodeScanProblemView(req: Request, res: Response): Promise<void> {
+    this.appInsightsClient.trackEvent('cannotEnterBarcode')
+
     req.session.barcodeEntryForm = { ...req.body }
     req.session.barcodeEntryForm.errorCode = { code: 'CANNOT_ENTER_BARCODE' }
     return res.redirect('/scan-barcode/result')
