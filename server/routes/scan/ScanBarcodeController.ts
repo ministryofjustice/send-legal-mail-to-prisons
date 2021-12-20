@@ -62,7 +62,8 @@ export default class ScanBarcodeController {
   /* ************************************************************** */
 
   async getBarcodeScanProblemView(req: Request, res: Response): Promise<void> {
-    this.appInsightsClient.trackEvent('cannotEnterBarcode')
+    const properties = { username: res.locals.user.username, prison: res.locals.user.activeCaseLoadId }
+    this.appInsightsClient.trackEvent('cannotEnterBarcode', properties)
 
     req.session.barcodeEntryForm = { ...req.body }
     req.session.barcodeEntryForm.errorCode = { code: 'CANNOT_ENTER_BARCODE' }

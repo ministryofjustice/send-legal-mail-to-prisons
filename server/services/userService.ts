@@ -4,6 +4,8 @@ import type HmppsAuthClient from '../data/hmppsAuthClient'
 interface UserDetails {
   name: string
   displayName: string
+  username: string
+  activeCaseLoadId: string
 }
 
 export default class UserService {
