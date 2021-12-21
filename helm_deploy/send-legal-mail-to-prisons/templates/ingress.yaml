@@ -10,7 +10,7 @@ metadata:
 spec:
   tls:
   - hosts:
-      - {{ .Values.ingress.internal-host }}
+    - {{ .Values.ingress.internal-host }}
     secretName: {{ .Values.ingress.internal-cert-secret }}
   rules:
   - host: {{ .Values.ingress.internal-host }}
