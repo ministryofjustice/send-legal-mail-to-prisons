@@ -71,5 +71,11 @@ export function registerNunjucks(app?: express.Express): Environment {
     return dateTime ? dateTime.format('D MMMM YYYY') : null
   })
 
+  njkEnv.addFilter('calculateDaysSinceCreation', (value: string) => {
+    const dateTime = moment(value)
+    const now = moment()
+    return dateTime ? now.diff(dateTime, 'days') : null
+  })
+
   return njkEnv
 }

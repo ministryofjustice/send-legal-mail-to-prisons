@@ -33,7 +33,7 @@
 
     <h3 class="govuk-heading-m">Why you need to carry out checks</h3>
     <p>
-      This barcode was created <strong>{{ form.errorCode.barcodeExpiryDays }} days ago, on {{ form.errorCode.createdDate | formatDateForResultsPage }}</strong>.
+      This barcode was created <strong>{{ form.errorCode.createdDate | calculateDaysSinceCreation }} days ago, on {{ form.errorCode.createdDate | formatDateForResultsPage }}</strong>.
     </p>
     <p>
       Because this item of mail took longer than 28 days to arrive you need to investigate further.

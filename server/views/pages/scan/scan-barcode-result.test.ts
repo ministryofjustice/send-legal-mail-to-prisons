@@ -1,5 +1,6 @@
 import fs from 'fs'
 import cheerio from 'cheerio'
+import moment from 'moment'
 import nunjucks, { Template } from 'nunjucks'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
@@ -71,6 +72,9 @@ describe('Scan Barcode Result View', () => {
   })
 
   it('should render view for Expired scan', () => {
+    const now = moment()
+    const daysAgoCreated = 42
+    const createdDate = now.subtract(daysAgoCreated, 'days')
     viewContext = {
       errors: [],
       form: {
@@ -78,9 +82,9 @@ describe('Scan Barcode Result View', () => {
         createdBy: undefined,
         errorCode: {
           code: 'EXPIRED',
-          userMessage: 'This barcode was created 120 days ago, on 8 December 2021',
-          barcodeExpiryDays: 120,
-          createdDate: '2021-12-08T09:11:23Z',
+          userMessage: `This barcode was created 42 days ago, on ${createdDate.format('D MMMM YYYY')}`,
+          barcodeExpiryDays: 28, // expiry days is not the same as the number of days ago that the barcode was created
+          createdDate: createdDate.toISOString(),
           createdBy: 'Aardvark Lawyers',
         },
       },
@@ -90,7 +94,7 @@ describe('Scan Barcode Result View', () => {
 
     expect($('h1').text()).toEqual('Carry out further checks')
     expect($('li strong').text()).toContain('Aardvark Lawyers')
-    expect($('p strong').text()).toContain('120 days ago, on 8 December 2021')
+    expect($('p strong').text()).toContain(`42 days ago, on ${createdDate.format('D MMMM YYYY')}`)
   })
 
   it('should render view for invalid/not found barcode', () => {
