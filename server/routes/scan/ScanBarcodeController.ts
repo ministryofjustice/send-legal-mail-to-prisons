@@ -62,11 +62,17 @@ export default class ScanBarcodeController {
   /* ************************************************************** */
 
   async getBarcodeScanProblemView(req: Request, res: Response): Promise<void> {
-    const properties = { username: res.locals.user.username, prison: res.locals.user.activeCaseLoadId }
-    this.appInsightsClient.trackEvent('cannotEnterBarcode', properties)
+    this.trackEvent('cannotEnterBarcode', res)
 
     req.session.barcodeEntryForm = { ...req.body }
     req.session.barcodeEntryForm.errorCode = { code: 'CANNOT_ENTER_BARCODE' }
+    return res.redirect('/scan-barcode/result')
+  }
+
+  async getFurtherChecksNeededView(req: Request, res: Response): Promise<void> {
+    this.trackEvent('furtherChecksNeeded', res)
+
+    req.session.barcodeEntryForm.errorCode = { code: 'FURTHER_CHECKS_NEEDED' }
     return res.redirect('/scan-barcode/result')
   }
 
@@ -97,5 +103,10 @@ export default class ScanBarcodeController {
           throw new Error(`Unsupported error code ${errorType}`)
         }
       })
+  }
+
+  private trackEvent(eventName: string, res: Response): void {
+    const properties = { username: res.locals.user.username, prison: res.locals.user.activeCaseLoadId }
+    this.appInsightsClient.trackEvent(eventName, properties)
   }
 }

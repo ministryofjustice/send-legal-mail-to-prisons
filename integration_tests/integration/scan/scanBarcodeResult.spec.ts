@@ -1,6 +1,7 @@
 import Page from '../../pages/page'
 import ScanBarcodePage from '../../pages/scan/scanBarcode'
 import AuthorisationErrorPage from '../../pages/authorisationError'
+import ScanBarcodeResultPage from '../../pages/scan/scanBarcodeResult'
 
 context('Scan Barcode Result Page', () => {
   beforeEach(() => {
@@ -24,6 +25,19 @@ context('Scan Barcode Result Page', () => {
     cy.visit('/scan-barcode/result', { failOnStatusCode: false })
 
     Page.verifyOnPage(AuthorisationErrorPage)
+  })
+
+  it('should navigate to further checks result screen from OK result screen', () => {
+    cy.task('stubVerifyValidBarcode')
+    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+    cy.signIn()
+    cy.visit('/scan-barcode')
+    const resultPage: ScanBarcodeResultPage = Page.verifyOnPage(ScanBarcodePage).submitFormWithValidBarcode()
+    resultPage.hasMainHeading('Ready for final delivery')
+
+    resultPage.clickFurtherChecksNecessary()
+
+    Page.verifyOnPage(ScanBarcodeResultPage).hasMainHeading('Carry out further checks')
   })
 
   it('Unauthenticated user can not navigate to scan barcode result page', () => {
