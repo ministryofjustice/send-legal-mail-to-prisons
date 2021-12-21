@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: send-legal-mail-to-prisons
+  name: check-rule39-mail
   labels:
     {{- include "app.labels" . | nindent 4 }}
   annotations:
@@ -24,7 +24,7 @@ spec:
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: check-rule39-mail
+  name: send-legal-mail-to-prisons
   labels:
     {{- include "app.labels" . | nindent 4 }}
   annotations:
