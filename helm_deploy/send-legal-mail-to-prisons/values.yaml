@@ -49,5 +49,5 @@ generic-prometheus-alerts:
   targetApplication: send-legal-mail-to-prisons
 
 ingress:
-  internal-cert-secret: check-rule39-mail-cert
-  external-cert-secret: send-legal-mail-cert
+  internalCertSecret: check-rule39-mail-cert
+  externalCertSecret: send-legal-mail-cert

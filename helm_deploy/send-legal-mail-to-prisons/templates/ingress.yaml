@@ -10,10 +10,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - {{ .Values.ingress.internal-host }}
-    secretName: {{ .Values.ingress.internal-cert-secret }}
+    - {{ .Values.ingress.internalHost }}
+    secretName: {{ .Values.ingress.internalCertSecret }}
   rules:
-  - host: {{ .Values.ingress.internal-host }}
+  - host: {{ .Values.ingress.internalHost }}
     http:
       paths:
         - path: /
@@ -37,10 +37,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - {{ .Values.ingress.external-host }}
-      secretName: {{ .Values.ingress.external-cert-secret }}
+      - {{ .Values.ingress.externalHost }}
+      secretName: {{ .Values.ingress.externalCertSecret }}
   rules:
-    - host: {{ .Values.ingress.external-host }}
+    - host: {{ .Values.ingress.externalHost }}
       http:
         paths:
             - path: /
