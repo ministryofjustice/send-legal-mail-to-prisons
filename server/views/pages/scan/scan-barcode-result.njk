@@ -45,7 +45,7 @@
         <h2 class="govuk-heading-l">Scan another barcode</h2>
         <img src="/assets/images/barcode-scanner.png" title="A barcode scanner being used to scan a barcode from an item of mail" />
 
-        <form action="scan-barcode" method="post" novalidate>
+        <form action="/scan-barcode" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
           {% call govukFieldset() %}
@@ -83,7 +83,7 @@
       <div class="govuk-grid-column-full">
         <h3 class="govuk-heading-m">What to do if the scan doesn't work</h3>
         <p>If the barcode won't scan, enter the barcode number manually instead.</p>
-        <a href="/manually-enter-barcode" class="govuk-link" id="manual-scan">I can't scan the barcode</a>
+        <a href="/manually-enter-barcode" class="govuk-link" id="manual-barcode-entry">I can't scan the barcode</a>
       </div>
     </div>
 
