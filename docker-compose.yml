@@ -31,7 +31,6 @@ services:
     networks:
       - hmpps
     container_name: nomis-user-roles-api
-    depends_on:[hmpps-auth]
     ports:
       - "8102:8080"
     healthcheck:

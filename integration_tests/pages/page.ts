@@ -34,4 +34,8 @@ export default abstract class Page {
   hasMainHeading = (expectedHeading: string): void => {
     cy.get('h1').should('contain.text', expectedHeading)
   }
+
+  hasHeaderTitle = (expectedTitle: string): void => {
+    cy.get('a[data-qa="header-text').should('contain.text', expectedTitle)
+  }
 }

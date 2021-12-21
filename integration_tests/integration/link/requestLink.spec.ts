@@ -10,6 +10,11 @@ context('Request Link Page', () => {
     cy.task('stubRequestLink')
   })
 
+  it('should render the correct title in the header', () => {
+    cy.visit('/link/request-link')
+    Page.verifyOnPage(RequestLinkPage).hasHeaderTitle('Send Legal Mail To Prisons')
+  })
+
   it('should render request link page without a sign out link', () => {
     cy.visit('/link/request-link')
     const requestLinkPage = Page.verifyOnPage(RequestLinkPage)
