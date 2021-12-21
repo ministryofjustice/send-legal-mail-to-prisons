@@ -15,7 +15,11 @@ export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
 
   app.locals.asset_path = '/assets/'
-  app.locals.applicationName = 'Send Legal Mail To Prisons'
+  app.use((req, res, next) => {
+    const externalUser = () => req.url.startsWith('/link') || req.url.startsWith('/barcode')
+    app.locals.applicationName = externalUser() ? 'Send Legal Mail To Prisons' : 'Check Rule 39 Mail'
+    next()
+  })
 
   // Cachebusting version string
   if (production) {
