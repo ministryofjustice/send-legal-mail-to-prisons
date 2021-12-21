@@ -128,4 +128,16 @@ describe('Scan Barcode Result View', () => {
     expect($('h1').text()).toEqual('Carry out further checks')
     expect($('p').text()).toContain(`barcode can't be linked to an approved sender`)
   })
+
+  it('should render view for user indicating further checks are necessary', () => {
+    viewContext = {
+      errors: [],
+      form: { barcode: undefined, errorCode: { code: 'FURTHER_CHECKS_NEEDED' }, createdBy: 'Aardvark Lawyers' },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('h1').text()).toEqual('Carry out further checks')
+    expect($('p strong').text()).toContain('Aardvark Lawyers')
+  })
 })
