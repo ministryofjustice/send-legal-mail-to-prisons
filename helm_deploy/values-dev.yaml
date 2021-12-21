@@ -17,3 +17,6 @@ generic-service:
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
 
+ingress:
+  internal-host: check-rule-39-mail-dev.prison.service.justice.gov.uk
+  external-host: send-legal-mail-dev.prison.service.justice.gov.uk

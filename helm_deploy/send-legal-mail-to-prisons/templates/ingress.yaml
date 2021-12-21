@@ -1,0 +1,61 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: send-legal-mail-to-prisons
+  labels:
+    helm.sh/chart: {{ include "app.chart" . }}
+    {{ if .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    {{ end }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "app.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/custom-http-errors: "418"
+spec:
+  tls:
+  - hosts:
+      - {{ Values.ingress.internal-host }}
+    secretName: {{ Values.ingress.internal-cert-secret }}
+  rules:
+  - host: {{ Values.ingress.internal-host }}
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: send-legal-mail-to-prisons
+            servicePort: http
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: check-rule39-mail
+  labels:
+    helm.sh/chart: {{ include "app.chart" . }}
+    {{ if .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    {{ end }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "app.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/custom-http-errors: "418"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      location = / {
+        return 301 $scheme://$host/barcode/find-recipient;
+      }
+spec:
+  tls:
+    - hosts:
+      - {{ Values.ingress.external-host }}
+      secretName: {{ Values.ingress.external-cert-secret }}
+  rules:
+    - host: {{ Values.ingress.external-host }}
+      http:
+        paths:
+            - path: /
+              backend:
+                serviceName: send-legal-mail-to-prisons
+                servicePort: http
