@@ -3,13 +3,7 @@ kind: Ingress
 metadata:
   name: send-legal-mail-to-prisons
   labels:
-    helm.sh/chart: {{ include "app.chart" . }}
-    {{ if .Chart.AppVersion }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-    {{ end }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/name: {{ include "app.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "app.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/custom-http-errors: "418"
@@ -32,13 +26,7 @@ kind: Ingress
 metadata:
   name: check-rule39-mail
   labels:
-    helm.sh/chart: {{ include "app.chart" . }}
-    {{ if .Chart.AppVersion }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-    {{ end }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/name: {{ include "app.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "app.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/custom-http-errors: "418"
