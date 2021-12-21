@@ -83,7 +83,7 @@ describe('Scan Barcode Result View', () => {
         errorCode: {
           code: 'EXPIRED',
           userMessage: `This barcode was created 42 days ago, on ${createdDate.format('D MMMM YYYY')}`,
-          barcodeExpiryDays: 28, // expiry days is not the same as the number of days ago that the barcode was created
+          barcodeExpiryDays: 14, // expiry days is not the same as the number of days ago that the barcode was created
           createdDate: createdDate.toISOString(),
           createdBy: 'Aardvark Lawyers',
         },
@@ -95,6 +95,7 @@ describe('Scan Barcode Result View', () => {
     expect($('h1').text()).toEqual('Carry out further checks')
     expect($('li strong').text()).toContain('Aardvark Lawyers')
     expect($('p strong').text()).toContain(`42 days ago, on ${createdDate.format('D MMMM YYYY')}`)
+    expect($('p').text()).toContain(`longer than 14 days to arrive`)
   })
 
   it('should render view for invalid/not found barcode', () => {
