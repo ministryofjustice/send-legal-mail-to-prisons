@@ -7,6 +7,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/custom-http-errors: "418"
+    external-dns.alpha.kubernetes.io/aws-weight: "100"
+    external-dns.alpha.kubernetes.io/set-identifier: check-rule39-mail-send-legal-mail-to-prisons-dev-green
 spec:
   tls:
   - hosts:
@@ -30,6 +32,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/custom-http-errors: "418"
+    external-dns.alpha.kubernetes.io/aws-weight: "100"
+    external-dns.alpha.kubernetes.io/set-identifier: send-legal-mail-to-prisons-send-legal-mail-to-prisons-dev-green
     nginx.ingress.kubernetes.io/configuration-snippet: |
       location = / {
         return 301 $scheme://$host/barcode/find-recipient;
