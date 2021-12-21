@@ -36,7 +36,7 @@
       This barcode was created <strong>{{ form.errorCode.createdDate | calculateDaysSinceCreation }} days ago, on {{ form.errorCode.createdDate | formatDateForResultsPage }}</strong>.
     </p>
     <p>
-      Because this item of mail took longer than 28 days to arrive you need to investigate further.
+      Because this item of mail took longer than {{ form.errorCode.barcodeExpiryDays }} days to arrive you need to investigate further.
     </p>
 
     <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">

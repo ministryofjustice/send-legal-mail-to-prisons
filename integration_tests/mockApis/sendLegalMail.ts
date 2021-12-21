@@ -240,8 +240,8 @@ const stubVerifyExpiredBarcode = (): SuperAgentRequest =>
         status: 400,
         errorCode: {
           code: 'EXPIRED',
-          userMessage: 'This barcode was created 120 days ago, on 8 December 2021',
-          barcodeExpiryDays: 120,
+          userMessage: 'This barcode was created 42 days ago, on 8 December 2021',
+          barcodeExpiryDays: 28,
           createdDate: '2021-12-08T09:11:23Z',
           createdBy: 'Aardvark Lawyers',
         },
