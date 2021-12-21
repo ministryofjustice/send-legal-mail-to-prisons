@@ -22,7 +22,7 @@
       <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Enter the barcode number manually</h1>
 
-        <form action="manually-enter-barcode" method="post" novalidate>
+        <form action="/manually-enter-barcode" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
           {% call govukFieldset() %}

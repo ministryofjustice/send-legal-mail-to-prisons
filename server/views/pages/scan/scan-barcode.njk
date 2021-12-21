@@ -50,7 +50,7 @@
         <h2 class="govuk-heading-l">Scan the barcode on the mail</h2>
         <img src="/assets/images/barcode-scanner.png" title="A barcode scanner being used to scan a barcode from an item of mail" />
 
-        <form action="scan-barcode" method="post" novalidate>
+        <form action="/scan-barcode" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
           {% call govukFieldset() %}

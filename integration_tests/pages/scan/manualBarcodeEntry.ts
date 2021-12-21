@@ -1,4 +1,5 @@
 import Page, { PageElement } from '../page'
+// eslint-disable-next-line import/no-cycle
 import ScanBarcodeResultPage from './scanBarcodeResult'
 import barcodes from '../../mockApis/barcodes'
 
