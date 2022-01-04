@@ -10,9 +10,7 @@ generic-service:
     port: 3000
 
   ingress:
-    enabled: true
-    host: app-hostname.local    # override per environment
-    tlsSecretName: send-legal-mail-cert
+    enabled: false
 
   livenessProbe:
     httpGet:
@@ -49,3 +47,7 @@ generic-service:
 
 generic-prometheus-alerts:
   targetApplication: send-legal-mail-to-prisons
+
+ingress:
+  internalCertSecret: check-rule39-mail-cert
+  externalCertSecret: send-legal-mail-cert
