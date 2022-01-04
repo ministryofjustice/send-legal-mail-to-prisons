@@ -4,10 +4,6 @@
 generic-service:
   replicaCount: 2
 
-  ingress:
-    host: send-legal-mail-preprod.prison.service.justice.gov.uk
-    contextColour: green
-
   env:
     INGRESS_URL: "https://send-legal-mail-preprod.prison.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
