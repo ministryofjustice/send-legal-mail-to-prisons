@@ -3,6 +3,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 
 {% set pageTitle = applicationName + " - Find recipient" %}
 {% set pageId = 'find-recipient' %}
@@ -43,6 +44,17 @@
           </div>
 
         </form>
+
+        <hr />
+        {{ govukSelect({
+          id: 'prison',
+          name: 'prison',
+          label: {
+            text: 'Prison'
+          },
+          items: prisonRegister
+        }) }}
+
       </div>
     </div>
   </section>

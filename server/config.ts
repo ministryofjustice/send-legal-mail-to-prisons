@@ -82,6 +82,14 @@ export default {
       },
       agent: new AgentConfig(),
     },
+    prisonRegister: {
+      url: get('PRISON_REGISTER_API_URL', 'http://localhost:8101', requiredInProduction) as string,
+      timeout: {
+        response: Number(get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 30000)),
+        deadline: Number(get('PRISON_REGISTER_API_TIMEOUT_DEADLINE', 30000)),
+      },
+      agent: new AgentConfig(),
+    },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   gtmContainerId: get('GOOGLE_TAG_MANAGER_CONTAINER_ID', null),

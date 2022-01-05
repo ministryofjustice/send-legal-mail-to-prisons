@@ -3,6 +3,7 @@ import { resetStubs } from '../mockApis/wiremock'
 import auth from '../mockApis/auth'
 import tokenVerification from '../mockApis/tokenVerification'
 import sendLegalMail from '../mockApis/sendLegalMail'
+import prisonRegister from '../mockApis/prisonRegister'
 
 export default (on: (string, Record) => void): void => {
   on('task', {
@@ -35,5 +36,7 @@ export default (on: (string, Record) => void): void => {
     stubVerifyNotFoundBarcode: sendLegalMail.stubVerifyNotFoundBarcode,
 
     stubCreateBarcode: sendLegalMail.stubCreateBarcode,
+
+    stubGetPrisonRegister: prisonRegister.stubGetPrisonRegister,
   })
 }
