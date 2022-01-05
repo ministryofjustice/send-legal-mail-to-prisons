@@ -33,9 +33,11 @@
   },
   "jest": {
     "preset": "ts-jest",
+    "collectCoverage": true,
     "collectCoverageFrom": [
       "server/**/*.{ts,js,jsx,mjs}"
     ],
+    "coverageDirectory": "test_results/jest/coverage",
     "testMatch": [
       "<rootDir>/(server|job)/**/?(*.)(spec|test).{ts,js,jsx,mjs}"
     ],

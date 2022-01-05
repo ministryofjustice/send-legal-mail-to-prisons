@@ -145,3 +145,13 @@ To find any dependencies with vulnerabilities run command:
 To update all dependencies to their latest stable versions run command:
 
 `npm update`
+
+## Test Coverage Reports
+We use jest code coverage to report on test coverage and produce reports for the unit tests.
+
+Code coverage verification is not included in any GitHub or CircleCI checks. The reports are there for developers to monitor and look for gaps in test coverage or areas where we could improve tests. It will not be used as a stick to beat developers with due to the many failings of this approach.
+
+### Where are the code coverage reports?
+In the [CircleCI builds](https://app.circleci.com/pipelines/github/ministryofjustice/send-legal-mail-to-prisons?filter=all) find a `unit_test` job and click on the `ARTIFACTS` tab.
+
+The unit test coverage report can be found at `test_results/jest/coverage/lcov-report/index.html`.
