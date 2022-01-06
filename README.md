@@ -64,7 +64,7 @@ The app requires:
 
 To start the main services excluding the example typescript template app: 
 
-`docker-compose up --scale app=0`
+`docker-compose up redis hmpps-auth nomins-user-roles-api`
 
 Install dependencies using `npm install`, ensuring you are using >= `Node v14.x`
 
@@ -76,7 +76,10 @@ TOKEN_VERIFICATION_ENABLED=false
 NODE_ENV=development
 SESSION_SECRET=anything
 PORT=3000
+SEND_LEGAL_MAIL_API_URL=http://localhost:8080
+PRISON_REGISTER_API_URL=https://prison-register-dev.hmpps.service.justice.gov.uk
 ```
+TODO - when we start using the prison register in Docker compose `PRISON_REGISTER_API_URL` should point to localhost on the correct port.
 
 And then, to build the assets and start the app with nodemon:
 
@@ -87,6 +90,16 @@ And then, to build the assets and start the app with nodemon:
 This app needs the `send-legal-mail-to-prisons-api` project too which provides the back end for the front end.
 
 See the [API Readme](https://github.com/ministryofjustice/send-legal-mail-to-prisons-api#running-the-app-for-development---gradle) for instructions to run the API for development too.
+
+#### How do I sign is as a legal mail sender?
+
+Visit URL `http://localhost:3000/barcode/find-recipient` which should redirect to the `Request a link to sign in` page. Enter any email address that ends with `cjsm.net`.
+
+Open mailcatcher at `http://localhost:1080`. Open the first email which should contain a link - click on the link and you will be signed in.
+
+#### How do I sign in as a mailroom staff user?
+
+Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth sign in page. Enter credentials `SLM_MAILROOM_USER_LOCAL` / `password1234556`.
 
 ### Run linter
 
