@@ -14,6 +14,7 @@ declare module 'express-session' {
     findRecipientForm: FindRecipientForm
     barcodeEntryForm: BarcodeEntryForm
     barcode: string
+    barcodeImageUrl: string
   }
 }
 
