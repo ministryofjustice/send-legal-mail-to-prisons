@@ -11,6 +11,7 @@ export default class FindRecipientController {
         req.session?.findRecipientForm || {},
         req.flash('errors'),
         req.session.barcode,
+        req.session.barcodeImageUrl,
         activePrisons
       )
       return res.render('pages/barcode/find-recipient', { ...view.renderArgs })

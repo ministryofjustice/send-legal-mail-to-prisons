@@ -6,6 +6,7 @@ export default class FindRecipientView {
     private readonly findRecipientForm: FindRecipientForm,
     private readonly errors?: Array<Record<string, string>>,
     private readonly barcode?: string,
+    private readonly barcodeImageUrl?: string,
     private readonly prisonRegister?: Array<Prison>
   ) {}
 
@@ -13,12 +14,14 @@ export default class FindRecipientView {
     form: FindRecipientForm
     errors: Array<Record<string, string>>
     barcode: string
+    barcodeImageUrl: string
     prisonRegister: Array<Record<string, string>>
   } {
     return {
       form: this.findRecipientForm,
       errors: this.errors || [],
       barcode: this.barcode,
+      barcodeImageUrl: this.barcodeImageUrl,
       prisonRegister: this.prisonRegister.map(prison => {
         return {
           value: prison.id,
