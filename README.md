@@ -64,7 +64,7 @@ The app requires:
 
 To start the main services excluding the example typescript template app: 
 
-`docker-compose up redis hmpps-auth nomins-user-roles-api`
+`docker-compose up redis hmpps-auth nomins-user-roles-api prison-register`
 
 Install dependencies using `npm install`, ensuring you are using >= `Node v14.x`
 
@@ -77,9 +77,8 @@ NODE_ENV=development
 SESSION_SECRET=anything
 PORT=3000
 SEND_LEGAL_MAIL_API_URL=http://localhost:8080
-PRISON_REGISTER_API_URL=https://prison-register-dev.hmpps.service.justice.gov.uk
+PRISON_REGISTER_API_URL=http://localhost:9091
 ```
-TODO - when we start using the prison register in Docker compose `PRISON_REGISTER_API_URL` should point to localhost on the correct port.
 
 And then, to build the assets and start the app with nodemon:
 
