@@ -6,9 +6,6 @@ const stubGetPrisonRegister = (): SuperAgentRequest =>
     request: {
       method: 'GET',
       urlPattern: '/prison-register/prisons',
-      headers: {
-        Authorization: { doesNotMatch: '.*' },
-      },
     },
     response: {
       status: 200,
