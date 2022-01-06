@@ -17,6 +17,16 @@ describe('Magic Link Service', () => {
   })
 
   describe('getActivePrisons', () => {
+    it('should make the request to the prison register without an authorization header', done => {
+      nock(config.apis.prisonRegister.url, {
+        badheaders: ['authorization'],
+      })
+        .get('/prisons')
+        .reply(200, [])
+
+      prisonRegisterService.getActivePrisons().then(() => done())
+    })
+
     it('should get all active prisons from the prison register', done => {
       mockedPrisonRegisterApi.get('/prisons').reply(200, [
         { prisonId: 'ALI', prisonName: 'Albany (HMP)', active: false },

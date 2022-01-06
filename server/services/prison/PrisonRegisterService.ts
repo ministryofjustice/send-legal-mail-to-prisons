@@ -14,7 +14,7 @@ export default class PrisonRegisterService {
 
   async getActivePrisons(): Promise<Array<Prison>> {
     return PrisonRegisterService.restClient()
-      .anonymousGet({ path: '/prisons' })
+      .get({ path: '/prisons' })
       .then(data =>
         (data as Array<PrisonDto>)
           .filter(prison => prison.active === true)
