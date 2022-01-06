@@ -40,6 +40,19 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
       - API_BASE_URL_OAUTH=http://hmpps-auth:8080/auth
 
+  prison-register:
+    image: quay.io/hmpps/prison-register:latest
+    networks:
+      - hmpps
+    container_name: prison-register
+    ports:
+      - "9091:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_PROFILES_ACTIVE=dev
+
   app:
     build: .
     networks:

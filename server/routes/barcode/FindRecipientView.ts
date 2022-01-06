@@ -22,12 +22,17 @@ export default class FindRecipientView {
       errors: this.errors || [],
       barcode: this.barcode,
       barcodeImageUrl: this.barcodeImageUrl,
-      prisonRegister: this.prisonRegister.map(prison => {
-        return {
-          value: prison.id,
-          text: prison.name,
-        }
-      }),
+      prisonRegister: [
+        { value: '', text: '' },
+        ...this.prisonRegister
+          .map(prison => {
+            return {
+              value: prison.id,
+              text: prison.name,
+            }
+          })
+          .sort((a, b) => a.text.localeCompare(b.text)),
+      ],
     }
   }
 }
