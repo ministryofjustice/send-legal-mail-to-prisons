@@ -49,56 +49,35 @@ export default class RestClient {
   }
 
   async get({ path = null, query = '', headers = {}, responseType = '', raw = false }: GetRequest): Promise<unknown> {
-    logger.info(`Get using user credentials: calling ${this.name}: ${path} ${query}`)
-    try {
-      const result = await superagent
-        .get(`${this.apiUrl()}${path}`)
-        .agent(this.agent)
-        .retry(2, (err, res) => {
-          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
-          return undefined // retry handler only for logging retries, not to influence retry logic
-        })
-        .query(query)
-        .auth(this.token, { type: 'bearer' })
-        .set(headers)
-        .responseType(responseType)
-        .timeout(this.timeoutConfig())
-
-      return raw ? result : result.body
-    } catch (error) {
-      const sanitisedError = sanitiseError(error)
-      logger.warn({ ...sanitisedError, query }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
-      throw sanitisedError
+    if (this.token) {
+      logger.info(`GET request using authentication token: calling ${this.name}: ${path} ${query}`)
+    } else {
+      logger.info(`Anonymous GET request: calling calling ${this.name}: ${path} ${query}`)
     }
-  }
 
-  async anonymousGet({
-    path = null,
-    query = '',
-    headers = {},
-    responseType = '',
-    raw = false,
-  }: GetRequest): Promise<unknown> {
-    logger.info(`Anonymous GET request: calling ${this.name}: ${path} ${query}`)
-    try {
-      const result = await superagent
-        .get(`${this.apiUrl()}${path}`)
-        .agent(this.agent)
-        .retry(2, (err, res) => {
-          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
-          return undefined // retry handler only for logging retries, not to influence retry logic
-        })
-        .query(query)
-        .set(headers)
-        .responseType(responseType)
-        .timeout(this.timeoutConfig())
+    const request = superagent.get(`${this.apiUrl()}${path}`)
+    request
+      .agent(this.agent)
+      .retry(2, (err, res) => {
+        if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+        return undefined // retry handler only for logging retries, not to influence retry logic
+      })
+      .query(query)
+      .set(headers)
+      .responseType(responseType)
+      .timeout(this.timeoutConfig())
 
-      return raw ? result : result.body
-    } catch (error) {
-      const sanitisedError = sanitiseError(error)
-      logger.warn({ ...sanitisedError, query }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
-      throw sanitisedError
+    if (this.token) {
+      request.auth(this.token, { type: 'bearer' })
     }
+
+    return request
+      .then(result => (raw ? result : result.body))
+      .catch(error => {
+        const sanitisedError = sanitiseError(error)
+        logger.warn({ ...sanitisedError, query }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
+        throw sanitisedError
+      })
   }
 
   async post({
