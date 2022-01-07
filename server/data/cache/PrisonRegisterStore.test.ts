@@ -1,5 +1,6 @@
 import { RedisClient } from 'redis'
 import PrisonRegisterStore from './PrisonRegisterStore'
+import { Prison } from '../../services/prison/PrisonTypes'
 
 const redisClient = {
   on: jest.fn(),
@@ -12,8 +13,6 @@ describe('PrisonRegisterStore', () => {
 
   beforeEach(() => {
     prisonRegisterStore = new PrisonRegisterStore(redisClient as unknown as RedisClient)
-    redisClient.get.mockImplementation((key, callback) => callback(null, '[]'))
-    redisClient.set.mockImplementation((key, value, mode, durationSeconds, callback) => callback())
   })
 
   afterEach(() => {
@@ -21,6 +20,7 @@ describe('PrisonRegisterStore', () => {
   })
 
   it('Can set active prisons', async () => {
+    redisClient.set.mockImplementation((key, value, mode, durationSeconds, callback) => callback())
     const activePrisons = [
       { id: 'KTI', name: 'Kennet (HMP)' },
       { id: 'ASI', name: 'Ashfield (HMP)' },
@@ -49,6 +49,18 @@ describe('PrisonRegisterStore', () => {
       { id: 'ASI', name: 'Ashfield (HMP)' },
       { id: 'ACI', name: 'Altcourse (HMP)' },
     ]
+
+    const activePrisons = await prisonRegisterStore.getActivePrisons()
+
+    expect(activePrisons).toStrictEqual(expectedActivePrisons)
+    expect(redisClient.get).toHaveBeenCalledWith('activePrisons', expect.any(Function))
+  })
+
+  it('Returns a resolved promise of null given there are no ective prisons in redis', async () => {
+    const serializedActivePrisons: string = null
+    redisClient.get.mockImplementation((key, callback) => callback(null, serializedActivePrisons))
+
+    const expectedActivePrisons: Array<Prison> = null
 
     const activePrisons = await prisonRegisterStore.getActivePrisons()
 
