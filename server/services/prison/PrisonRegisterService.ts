@@ -1,29 +1,37 @@
-import RestClient from '../../data/restClient'
 import config from '../../config'
+import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
+import RestClient from '../../data/restClient'
 import { PrisonDto } from '../../@types/prisonRegisterApiClientTypes'
-
-export interface Prison {
-  id: string
-  name: string
-}
+import { Prison } from '../../@types/prisonTypes'
 
 export default class PrisonRegisterService {
+  constructor(private readonly prisonRegisterStore: PrisonRegisterStore) {}
+
   private static restClient(): RestClient {
     return new RestClient('Prison Register API Client', config.apis.prisonRegister)
   }
 
   async getActivePrisons(): Promise<Array<Prison>> {
-    return PrisonRegisterService.restClient()
-      .get({ path: '/prisons' })
-      .then(data =>
-        (data as Array<PrisonDto>)
-          .filter(prison => prison.active === true)
-          .map(prisonDto => {
-            return {
-              id: prisonDto.prisonId,
-              name: prisonDto.prisonName,
-            }
-          })
-      )
+    try {
+      const activePrisons = await this.prisonRegisterStore.getActivePrisons()
+      return activePrisons || this.retrieveAndCacheActivePrisons()
+    } catch (error) {
+      return this.retrieveAndCacheActivePrisons()
+    }
+  }
+
+  private async retrieveAndCacheActivePrisons(): Promise<Array<Prison>> {
+    // Active Prisons were not returned from the redis store. Retrieve them from the service and put them in the redis store.
+    const prisonDtos = (await PrisonRegisterService.restClient().get({ path: '/prisons' })) as Array<PrisonDto>
+    const activePrisons = prisonDtos
+      .filter(prison => prison.active === true)
+      .map(prisonDto => {
+        return {
+          id: prisonDto.prisonId,
+          name: prisonDto.prisonName,
+        }
+      })
+    this.prisonRegisterStore.setActivePrisons(activePrisons)
+    return activePrisons
   }
 }
