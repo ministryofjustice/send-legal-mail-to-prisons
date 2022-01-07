@@ -2,7 +2,7 @@ import config from '../../config'
 import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
 import RestClient from '../../data/restClient'
 import { PrisonDto } from '../../@types/prisonRegisterApiClientTypes'
-import { Prison } from './PrisonTypes'
+import { Prison } from '../../@types/prisonTypes'
 
 export default class PrisonRegisterService {
   constructor(private readonly prisonRegisterStore: PrisonRegisterStore) {}

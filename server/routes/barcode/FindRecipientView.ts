@@ -1,5 +1,5 @@
 import type { FindRecipientForm } from 'forms'
-import { Prison } from '../../services/prison/PrisonTypes'
+import { Prison } from '../../@types/prisonTypes'
 
 export default class FindRecipientView {
   constructor(

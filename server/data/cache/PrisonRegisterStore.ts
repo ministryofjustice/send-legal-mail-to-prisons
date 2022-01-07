@@ -1,7 +1,7 @@
 import redis from 'redis'
 import createRedisClient from './createRedisClient'
 import RedisStore from './RedisStore'
-import { Prison } from '../../services/prison/PrisonTypes'
+import { Prison } from '../../@types/prisonTypes'
 
 const ACTIVE_PRISONS = 'activePrisons'
 
