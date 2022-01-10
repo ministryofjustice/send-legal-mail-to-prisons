@@ -3,6 +3,7 @@ import type { FindRecipientForm } from 'forms'
 import { SessionData } from 'express-session'
 import FindRecipientController from './FindRecipientController'
 import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
+import config from '../../config'
 
 const req = {
   session: {} as SessionData,
@@ -21,6 +22,7 @@ describe('FindRecipientController', () => {
 
   beforeEach(() => {
     findRecipientController = new FindRecipientController(prisonRegisterService as unknown as PrisonRegisterService)
+    jest.mock('../../config')
   })
 
   afterEach(() => {
@@ -30,7 +32,8 @@ describe('FindRecipientController', () => {
   })
 
   describe('getFindRecipientView', () => {
-    it('should create and return view', async () => {
+    it('should create and return view given no active prison filtering', async () => {
+      config.supportedPrisons = ''
       prisonRegisterService.getActivePrisons.mockResolvedValue([
         { id: 'KTI', name: 'Kennet (HMP)' },
         { id: 'ASI', name: 'Ashfield (HMP)' },
@@ -49,6 +52,32 @@ describe('FindRecipientController', () => {
           { value: 'ACI', text: 'Altcourse (HMP)' },
           { value: 'ASI', text: 'Ashfield (HMP)' },
           { value: 'KTI', text: 'Kennet (HMP)' },
+        ] as Array<Record<string, string>>,
+      }
+      await findRecipientController.getFindRecipientView(req as unknown as Request, response as unknown as Response)
+
+      expect(response.render).toHaveBeenCalledWith('pages/barcode/find-recipient', expectedRenderArgs)
+      expect(req.flash).toHaveBeenCalledWith('errors')
+    })
+
+    it('should create and return view given active prison filtering', async () => {
+      config.supportedPrisons = 'ASI'
+      prisonRegisterService.getActivePrisons.mockResolvedValue([
+        { id: 'KTI', name: 'Kennet (HMP)' },
+        { id: 'ASI', name: 'Ashfield (HMP)' },
+        { id: 'ACI', name: 'Altcourse (HMP)' },
+      ])
+      req.session.barcode = '123456789012'
+      req.session.barcodeImageUrl = 'http://url/image.png'
+
+      const expectedRenderArgs = {
+        barcode: '123456789012',
+        barcodeImageUrl: 'http://url/image.png',
+        errors: [] as Array<Record<string, string>>,
+        form: {} as FindRecipientForm,
+        prisonRegister: [
+          { value: '', text: '' },
+          { value: 'ASI', text: 'Ashfield (HMP)' },
         ] as Array<Record<string, string>>,
       }
       await findRecipientController.getFindRecipientView(req as unknown as Request, response as unknown as Response)
