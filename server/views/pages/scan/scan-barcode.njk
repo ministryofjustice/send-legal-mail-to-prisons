@@ -19,36 +19,18 @@
       }) }}
     {% endif %}
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
-        <h1 class="govuk-heading-xl">Check Rule 39 mail</h1>
+    <div class="govuk-grid-row" id="scan-barcode-form">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Scan Rule 39 mail</h1>
 
-        <p>
-          People and organisations who are allowed to send Rule 39 mail or confidential access mail,
-          for example law firms or the Prisons and Probation Ombudsman, can attach a barcode to their Rule 39 mail.
-        </p>
         <p>You need to check mail with a Rule 39 barcode is genuine.</p>
 
-        <ol>
-          <li>Scan the barcode on the mail marked ‘Rule 39’.</li>
-          <li>Follow the instructions on your screen.</li>
-          <li>If the mail passes the barcode check, prepare it for final delivery.</li>
-        </ol>
-
-        {% set html %}
-          <p>Carry out your usual checks on all Rule 39 mail which does not display a Rule 39 barcode.</p>
-          <p>You must not open any item of Rule 39 mail without permission from the governor.</p>
-        {% endset %}
         {{ govukInsetText({
-          html: html
+          text: 'You must not open any item of Rule 39 mail without permission from the governor.'
         }) }}
-      </div>
-    </div>
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds" id="scan-barcode-form">
-        <h2 class="govuk-heading-l">Scan the barcode on the mail</h2>
-        <img src="/assets/images/barcode-scanner.png" title="A barcode scanner being used to scan a barcode from an item of mail" />
+        <h2 class="govuk-heading-l">Scan the barcode</h2>
+        <p>You'll see a number in the box below and hear a beep if the scan has worked. After a few seconds you'll get further instructions.</p>
 
         <form action="/scan-barcode" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
@@ -80,17 +62,21 @@
             </div>
           {% endcall %}
         </form>
-      </div>
-    </div>
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
-        <h3 class="govuk-heading-m">What to do if the scan doesn't work</h3>
-        <p>If the barcode won't scan, enter the barcode number manually instead.</p>
-        <a href="/manually-enter-barcode" class="govuk-link" id="manual-scan">I can't scan the barcode</a>
-      </div>
-    </div>
+        <h3 class="govuk-heading-m">What to do if the scan does not work</h3>
+        <p>If the barcode will not scan, enter the barcode number manually instead.</p>
+        <a href="/manually-enter-barcode" class="govuk-link" id="manual-scan">I cannot scan the barcode</a>
 
+      </div>
+
+      <div class="govuk-grid-column-one-third example-scanner">
+        <h2 class="govuk-heading-m">Aim the beam at the barcode</h2>
+        <div class="img-container">
+          <img src="/assets/images/barcode-scanner.png" title="A barcode scanner being used to scan a barcode from an item of mail" />
+        </div>
+      </div>
+
+    </div>
   </section>
 
 {% endblock %}

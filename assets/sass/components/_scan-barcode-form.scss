@@ -1,7 +1,16 @@
 #scan-barcode-form {
 
-  img {
-    width: 50%;
-    margin-bottom: 16px;
+  .example-scanner {
+    @media (min-width: 40.0625em) {
+      h2 {
+        border-top: 3px solid $govuk-brand-colour;
+        padding-top: 1rem;
+      }
+    }
+    .img-container {
+      img {
+        width: 100%;
+      }
+    }
   }
 }
