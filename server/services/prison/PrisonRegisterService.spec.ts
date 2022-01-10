@@ -93,5 +93,17 @@ describe('Prison Register Service', () => {
       expect(activePrisons).toStrictEqual(expectedActivePrisons)
       expect(prisonRegisterStore.setActivePrisons).not.toHaveBeenCalled()
     })
+
+    it('should fail to get active prisons given nothing in redis store and calling prison register API fails', async () => {
+      prisonRegisterStore.getActivePrisons.mockResolvedValue(null)
+      mockedPrisonRegisterApi.get('/prisons').reply(404, 'Error calling the Prison Register API')
+
+      try {
+        await prisonRegisterService.getActivePrisons()
+      } catch (error) {
+        expect(error).toBe('Error calling the Prison Register API')
+        expect(prisonRegisterStore.setActivePrisons).not.toHaveBeenCalled()
+      }
+    })
   })
 })

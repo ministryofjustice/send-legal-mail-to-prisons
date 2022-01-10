@@ -21,17 +21,22 @@ export default class PrisonRegisterService {
   }
 
   private async retrieveAndCacheActivePrisons(): Promise<Array<Prison>> {
-    // Active Prisons were not returned from the redis store. Retrieve them from the service and put them in the redis store.
-    const prisonDtos = (await PrisonRegisterService.restClient().get({ path: '/prisons' })) as Array<PrisonDto>
-    const activePrisons = prisonDtos
-      .filter(prison => prison.active === true)
-      .map(prisonDto => {
-        return {
-          id: prisonDto.prisonId,
-          name: prisonDto.prisonName,
-        }
-      })
-    this.prisonRegisterStore.setActivePrisons(activePrisons)
-    return activePrisons
+    try {
+      // Active Prisons were not returned from the redis store. Retrieve them from the service and put them in the redis store.
+      const prisonDtos = (await PrisonRegisterService.restClient().get({ path: '/prisons' })) as Array<PrisonDto>
+      const activePrisons = prisonDtos
+        .filter(prison => prison.active === true)
+        .map(prisonDto => {
+          return {
+            id: prisonDto.prisonId,
+            name: prisonDto.prisonName,
+          }
+        })
+      this.prisonRegisterStore.setActivePrisons(activePrisons)
+      return activePrisons
+    } catch (error) {
+      // There was an error calling the Prison Register API - return the error so it will be handled as part of the promise chain
+      return error
+    }
   }
 }
