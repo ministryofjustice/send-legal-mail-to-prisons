@@ -59,6 +59,7 @@ The app requires:
 * hmpps-auth - for authentication
 * nomis-user-roles-api - for authentication
 * redis - session store and token caching
+* prison-register - for returning details of prisons
 
 ### Running the app for development
 
