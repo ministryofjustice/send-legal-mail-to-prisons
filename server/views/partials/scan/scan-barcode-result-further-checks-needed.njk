@@ -5,10 +5,14 @@
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-xl">Item of concern: carry out further checks</h1>
 
+    {% set html %}
+      <p>You have concerns about this item of mail.</p>
+    {% endset %}
+
     {{ govukNotificationBanner({
-      titleText: null,
-      text: 'You have concerns about this item of mail.',
-      disableAutoFocus: true
+      html: html,
+      disableAutoFocus: true,
+      classes: 'notification barcode-further-checks'
     }) }}
 
     <h2 class="govuk-heading-l">How to investigate</h2>

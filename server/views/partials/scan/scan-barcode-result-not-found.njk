@@ -5,10 +5,14 @@
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-xl">Barcode not recognised: carry out further checks</h1>
 
+    {% set html %}
+      <p>The barcode number was not recognised. It may be a forgery.</p>
+    {% endset %}
+
     {{ govukNotificationBanner({
-      titleText: null,
-      text: 'The barcode number was not recognised. It may be a forgery.',
-      disableAutoFocus: true
+      html: html,
+      disableAutoFocus: true,
+      classes: 'notification barcode-not-found'
     }) }}
 
     <h2 class="govuk-heading-l">How to investigate</h2>

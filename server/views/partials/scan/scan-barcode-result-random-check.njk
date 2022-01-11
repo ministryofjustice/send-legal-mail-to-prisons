@@ -13,9 +13,9 @@
     {% endset %}
 
     {{ govukNotificationBanner({
-      titleText: null,
       html: html,
-      disableAutoFocus: true
+      disableAutoFocus: true,
+      classes: 'notification barcode-random-check'
     }) }}
 
     <h3 class="govuk-heading-m">How to deal with the item</h3>
