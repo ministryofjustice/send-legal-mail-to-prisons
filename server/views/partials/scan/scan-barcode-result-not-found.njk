@@ -3,11 +3,16 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-xl">Carry out further checks</h1>
+    <h1 class="govuk-heading-xl">Barcode not recognised: carry out further checks</h1>
+
+    {% set html %}
+      <p>The barcode number was not recognised. It may be a forgery.</p>
+    {% endset %}
 
     {{ govukNotificationBanner({
-      text: 'Follow your usual procedure for checking Rule 39 mail.',
-      disableAutoFocus: true
+      html: html,
+      disableAutoFocus: true,
+      classes: 'notification barcode-not-found'
     }) }}
 
     <h2 class="govuk-heading-l">How to investigate</h2>
@@ -30,11 +35,5 @@
       html: html
     }) }}
 
-    <h3 class="govuk-heading-m">Why you need to carry out checks</h3>
-    <p>
-      The barcode was not recognised. It may be a forgery.
-    </p>
-
-    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
   </div>
 </div>

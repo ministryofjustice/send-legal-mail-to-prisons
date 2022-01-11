@@ -59,7 +59,7 @@ context('Manual Barcode Entry Page', () => {
     const scanBarcodeResultPage: ScanBarcodeResultPage =
       manualBarcodeEntryPage.submitFormWithBarcodeThatHasBeenScannedPreviously()
 
-    scanBarcodeResultPage.hasMainHeading('Carry out further checks')
+    scanBarcodeResultPage.hasMainHeading('Barcode already scanned: carry out further checks')
   })
 
   it('should render barcode results page given form submitted with barcode that has been selected for a random check', () => {
@@ -84,7 +84,7 @@ context('Manual Barcode Entry Page', () => {
 
     const scanBarcodeResultPage: ScanBarcodeResultPage = manualBarcodeEntryPage.submitFormWithBarcodeThatHasExpired()
 
-    scanBarcodeResultPage.hasMainHeading('Carry out further checks')
+    scanBarcodeResultPage.hasMainHeading('Barcode expired: carry out further checks')
   })
 
   it('should render barcode results page given form submitted with barcode that cannot be found', () => {
@@ -96,7 +96,7 @@ context('Manual Barcode Entry Page', () => {
 
     const scanBarcodeResultPage: ScanBarcodeResultPage = manualBarcodeEntryPage.submitFormWithBarcodeThatDoesNotExist()
 
-    scanBarcodeResultPage.hasMainHeading('Carry out further checks')
+    scanBarcodeResultPage.hasMainHeading('Barcode not recognised: carry out further checks')
   })
 
   it('should render barcode results given user indicates they cannot enter the barcode', () => {

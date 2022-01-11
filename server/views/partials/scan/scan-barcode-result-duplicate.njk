@@ -3,17 +3,26 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-xl">Carry out further checks</h1>
+    <h1 class="govuk-heading-xl">Barcode already scanned: carry out further checks</h1>
+
+    {% set html %}
+      <p>
+        Someone scanned this barcode at <strong>{{ form.errorCode.scannedDate | formatDateTimeForResultsPage }} at {{ form.errorCode.scannedLocation }}</strong>.
+        It may be an illegal copy.
+      </p>
+    {% endset %}
 
     {{ govukNotificationBanner({
-      text: 'Follow your usual procedure for checking Rule 39 mail.',
-      disableAutoFocus: true
+      html: html,
+      disableAutoFocus: true,
+      classes: 'notification barcode-duplicate'
     }) }}
 
     <h2 class="govuk-heading-l">How to investigate</h2>
     <p>Follow your usual procedures to make sure:</p>
     <ul>
-        <li>that the sender, <strong>{{ form.errorCode.createdBy }}</strong>, has a record of sending this item</li>
+        <li>the mail is addressed to <strong>prisoner name TBC, prison number TBC</strong></li>
+        <li>the sender, <strong>{{ form.errorCode.createdBy }}</strong>, has a record of sending this item</li>
         <li>the item hasn't been tampered with</li>
         <li>there are no drugs or other contraband concealed in the item</li>
     </ul>
@@ -31,12 +40,5 @@
       html: html
     }) }}
 
-    <h3 class="govuk-heading-m">Why you need to carry out checks</h3>
-    <p>
-      Someone scanned this barcode at <strong>{{ form.errorCode.scannedDate | formatDateTimeForResultsPage }} at {{ form.errorCode.scannedLocation }}</strong>.
-      It may be an illegal copy.
-    </p>
-
-    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
   </div>
 </div>

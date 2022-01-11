@@ -5,19 +5,18 @@
     <h1 class="govuk-heading-xl">Ready for final delivery</h1>
 
     {% set html %}
-      <p class="govuk-notification-banner__heading">This item of mail was sent by an approved sender: {{ form.createdBy }}</p>
+      <p>This item of mail was sent by an approved sender: <strong>{{ form.createdBy }}</strong>.</p>
     {% endset %}
 
     {{ govukNotificationBanner({
       type: 'success',
       html: html,
-      disableAutoFocus: true
+      disableAutoFocus: true,
+      classes: 'success'
     }) }}
 
     <h2 class="govuk-heading-l">If you still have concerns about the item</h2>
-    <p>Even though this item was sent by an approved sender, you think it needs further investigation.</p>
-    <a href="/scan-barcode/further-checks-needed" class="govuk-link" id="further-checks">Further checks are needed</a>
-
-    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+    <p>Even though this item was sent by an approved sender, you think it needs to be checked.</p>
+    <a href="/scan-barcode/further-checks-needed" class="govuk-link" id="further-checks">I want to investigate further</a>
   </div>
 </div>

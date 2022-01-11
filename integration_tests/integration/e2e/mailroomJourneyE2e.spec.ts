@@ -28,7 +28,7 @@ context('Mailroom Journey E2E', () => {
 
     // Click the Further Checks link and arrive on the results page with appropriate content
     resultPage.clickFurtherChecksNecessary()
-    resultPage.hasMainHeading('Carry out further checks')
+    resultPage.hasMainHeading('Item of concern: carry out further checks')
 
     // From the result page, scan another valid barcode
     resultPage.submitFormWithValidBarcode()
@@ -36,17 +36,17 @@ context('Mailroom Journey E2E', () => {
 
     // Scan a barcode that is not recognised
     resultPage.submitFormWithBarcodeThatDoesNotExist()
-    resultPage.hasMainHeading('Carry out further checks')
+    resultPage.hasMainHeading('Barcode not recognised: carry out further checks')
 
     // Go to the manual barcode entry page to try entering if from there
     let manualBarcodeEntryPage = resultPage.clickToGoToManualBarcodeEntryPage()
     resultPage = manualBarcodeEntryPage.submitFormWithBarcodeThatDoesNotExist()
-    resultPage.hasMainHeading('Carry out further checks')
+    resultPage.hasMainHeading('Barcode not recognised: carry out further checks')
 
     // Go back to the manual barcode entry page and click the link that says we have a problem entering a barcode
     manualBarcodeEntryPage = resultPage.clickToGoToManualBarcodeEntryPage()
     resultPage = manualBarcodeEntryPage.problemEnteringBarcode()
-    resultPage.hasMainHeading('Carry out further checks')
+    resultPage.hasMainHeading(`Barcode doesn't scan: carry out further checks`)
 
     // From the result page, scan another valid barcode
     resultPage.submitFormWithValidBarcode()

@@ -3,12 +3,22 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-xl">Carry out further checks</h1>
+      <h1 class="govuk-heading-xl">Barcode expired: carry out further checks</h1>
 
-    {{ govukNotificationBanner({
-      text: 'Follow your usual procedure for checking Rule 39 mail.',
-      disableAutoFocus: true
-    }) }}
+      {% set html %}
+        <p>
+          This barcode was created <strong>{{ form.errorCode.createdDate | calculateDaysSinceCreation }} days ago, on {{ form.errorCode.createdDate | formatDateForResultsPage }}</strong>.
+        </p>
+        <p>
+          Because this item of mail took longer than {{ form.errorCode.barcodeExpiryDays }} days to arrive you need to investigate further.
+        </p>
+      {% endset %}
+
+      {{ govukNotificationBanner({
+        html: html,
+        disableAutoFocus: true,
+        classes: 'notification barcode-expired'
+      }) }}
 
     <h2 class="govuk-heading-l">How to investigate</h2>
     <p>Follow your usual procedures to make sure:</p>
@@ -31,14 +41,5 @@
       html: html
     }) }}
 
-    <h3 class="govuk-heading-m">Why you need to carry out checks</h3>
-    <p>
-      This barcode was created <strong>{{ form.errorCode.createdDate | calculateDaysSinceCreation }} days ago, on {{ form.errorCode.createdDate | formatDateForResultsPage }}</strong>.
-    </p>
-    <p>
-      Because this item of mail took longer than {{ form.errorCode.barcodeExpiryDays }} days to arrive you need to investigate further.
-    </p>
-
-    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
   </div>
 </div>

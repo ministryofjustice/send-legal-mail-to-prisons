@@ -37,7 +37,7 @@ context('Scan Barcode Result Page', () => {
 
     resultPage.clickFurtherChecksNecessary()
 
-    Page.verifyOnPage(ScanBarcodeResultPage).hasMainHeading('Carry out further checks')
+    Page.verifyOnPage(ScanBarcodeResultPage).hasMainHeading('Item of concern: carry out further checks')
   })
 
   it('Unauthenticated user can not navigate to scan barcode result page', () => {

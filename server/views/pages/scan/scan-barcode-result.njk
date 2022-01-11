@@ -18,27 +18,29 @@
       }) }}
     {% endif %}
 
-    {% if form.errorCode == null %}
-      {% include "partials/scan/scan-barcode-result-ok.njk" %}
-    {% endif %}
-    {% if form.errorCode.code == 'DUPLICATE' %}
-      {% include "partials/scan/scan-barcode-result-duplicate.njk" %}
-    {% endif %}
-    {% if form.errorCode.code == 'RANDOM_CHECK' %}
-      {% include "partials/scan/scan-barcode-result-random-check.njk" %}
-    {% endif %}
-    {% if form.errorCode.code == 'EXPIRED' %}
-      {% include "partials/scan/scan-barcode-result-expired.njk" %}
-    {% endif %}
-    {% if form.errorCode.code == 'NOT_FOUND' %}
-      {% include "partials/scan/scan-barcode-result-not-found.njk" %}
-    {% endif %}
-    {% if form.errorCode.code == 'CANNOT_ENTER_BARCODE' %}
-      {% include "partials/scan/scan-barcode-result-cannot-enter-barcode.njk" %}
-    {% endif %}
-    {% if form.errorCode.code == 'FURTHER_CHECKS_NEEDED' %}
-      {% include "partials/scan/scan-barcode-result-further-checks-needed.njk" %}
-    {% endif %}
+    <section id="scan-barcode-result-notification">
+      {% if form.errorCode == null %}
+        {% include "partials/scan/scan-barcode-result-ok.njk" %}
+      {% endif %}
+      {% if form.errorCode.code == 'DUPLICATE' %}
+        {% include "partials/scan/scan-barcode-result-duplicate.njk" %}
+      {% endif %}
+      {% if form.errorCode.code == 'RANDOM_CHECK' %}
+        {% include "partials/scan/scan-barcode-result-random-check.njk" %}
+      {% endif %}
+      {% if form.errorCode.code == 'EXPIRED' %}
+        {% include "partials/scan/scan-barcode-result-expired.njk" %}
+      {% endif %}
+      {% if form.errorCode.code == 'NOT_FOUND' %}
+        {% include "partials/scan/scan-barcode-result-not-found.njk" %}
+      {% endif %}
+      {% if form.errorCode.code == 'CANNOT_ENTER_BARCODE' %}
+        {% include "partials/scan/scan-barcode-result-cannot-enter-barcode.njk" %}
+      {% endif %}
+      {% if form.errorCode.code == 'FURTHER_CHECKS_NEEDED' %}
+        {% include "partials/scan/scan-barcode-result-further-checks-needed.njk" %}
+      {% endif %}
+    </section>
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds" id="scan-barcode-form">
