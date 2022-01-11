@@ -1,6 +1,7 @@
 import Page from '../../pages/page'
 import ScanBarcodePage from '../../pages/scan/scanBarcode'
 import ScanBarcodeResultPage from '../../pages/scan/scanBarcodeResult'
+import ScanAnotherBarcodePage from '../../pages/scan/scanAnotherBarcode'
 
 context('Mailroom Journey E2E', () => {
   beforeEach(() => {
@@ -22,38 +23,45 @@ context('Mailroom Journey E2E', () => {
     let resultPage: ScanBarcodeResultPage = scanBarcodePage.submitFormWithValidBarcode()
     resultPage.hasMainHeading('Ready for final delivery')
 
-    // From the result page, scan another valid barcode
-    resultPage.submitFormWithValidBarcode()
+    // From the result page, click to scan another barcode, then scan another valid barcode
+    let scanAnotherBarcodePage: ScanAnotherBarcodePage = resultPage.iWantToScanAnotherBarcode()
+    resultPage = scanAnotherBarcodePage.submitFormWithValidBarcode()
     resultPage.hasMainHeading('Ready for final delivery')
 
     // Click the Further Checks link and arrive on the results page with appropriate content
     resultPage.clickFurtherChecksNecessary()
     resultPage.hasMainHeading('Item of concern: carry out further checks')
 
-    // From the result page, scan another valid barcode
-    resultPage.submitFormWithValidBarcode()
+    // From the result page, click to scan another barcode, then scan another valid barcode
+    scanAnotherBarcodePage = resultPage.iWantToScanAnotherBarcode()
+    resultPage = scanAnotherBarcodePage.submitFormWithValidBarcode()
     resultPage.hasMainHeading('Ready for final delivery')
 
-    // Scan a barcode that is not recognised
-    resultPage.submitFormWithBarcodeThatDoesNotExist()
+    // From the result page, click to scan another barcode, then scan a barcode that is not recognised
+    scanAnotherBarcodePage = resultPage.iWantToScanAnotherBarcode()
+    resultPage = scanAnotherBarcodePage.submitFormWithBarcodeThatDoesNotExist()
     resultPage.hasMainHeading('Barcode not recognised: carry out further checks')
 
-    // Go to the manual barcode entry page to try entering if from there
-    let manualBarcodeEntryPage = resultPage.clickToGoToManualBarcodeEntryPage()
+    // Click to scan another barcode then click to go to the manual barcode entry page to try entering if from there
+    scanAnotherBarcodePage = resultPage.iWantToScanAnotherBarcode()
+    let manualBarcodeEntryPage = scanAnotherBarcodePage.clickToGoToManualBarcodeEntryPage()
     resultPage = manualBarcodeEntryPage.submitFormWithBarcodeThatDoesNotExist()
     resultPage.hasMainHeading('Barcode not recognised: carry out further checks')
 
-    // Go back to the manual barcode entry page and click the link that says we have a problem entering a barcode
-    manualBarcodeEntryPage = resultPage.clickToGoToManualBarcodeEntryPage()
+    // Click to scan another barcode then click to go to the manual barcode entry page and click the link that says we have a problem entering a barcode
+    scanAnotherBarcodePage = resultPage.iWantToScanAnotherBarcode()
+    manualBarcodeEntryPage = scanAnotherBarcodePage.clickToGoToManualBarcodeEntryPage()
     resultPage = manualBarcodeEntryPage.problemEnteringBarcode()
     resultPage.hasMainHeading(`Barcode doesn't scan: carry out further checks`)
 
-    // From the result page, scan another valid barcode
-    resultPage.submitFormWithValidBarcode()
+    // From the result page, click to scan another barcode, then scan another valid barcode
+    scanAnotherBarcodePage = resultPage.iWantToScanAnotherBarcode()
+    resultPage = scanAnotherBarcodePage.submitFormWithValidBarcode()
     resultPage.hasMainHeading('Ready for final delivery')
 
-    // Scan a barcode that will result in a random check
-    resultPage.submitFormWithBarcodeThatWillBeSelectedForARandomCheck()
+    // From the result page, click to scan another barcode, then scan a barcode that will result in a random check
+    scanAnotherBarcodePage = resultPage.iWantToScanAnotherBarcode()
+    resultPage = scanAnotherBarcodePage.submitFormWithBarcodeThatWillBeSelectedForARandomCheck()
     resultPage.hasMainHeading('Item selected for a random check')
 
     // Sign Out having done a good day's work
