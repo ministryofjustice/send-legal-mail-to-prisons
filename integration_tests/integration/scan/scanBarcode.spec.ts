@@ -66,7 +66,7 @@ context('Scan Barcode Page', () => {
     const scanBarcodeResultPage: ScanBarcodeResultPage =
       scanBarcodePage.submitFormWithBarcodeThatHasBeenScannedPreviously()
 
-    scanBarcodeResultPage.hasMainHeading('Carry out further checks')
+    scanBarcodeResultPage.hasMainHeading('Barcode already scanned: carry out further checks')
   })
 
   it('should render barcode results page given form submitted with barcode that has been selected for a random check', () => {
@@ -91,7 +91,7 @@ context('Scan Barcode Page', () => {
 
     const scanBarcodeResultPage: ScanBarcodeResultPage = scanBarcodePage.submitFormWithBarcodeThatHasExpired()
 
-    scanBarcodeResultPage.hasMainHeading('Carry out further checks')
+    scanBarcodeResultPage.hasMainHeading('Barcode expired: carry out further checks')
   })
 
   it('should render barcode results page given form submitted with barcode that cannot be found', () => {
@@ -103,7 +103,7 @@ context('Scan Barcode Page', () => {
 
     const scanBarcodeResultPage: ScanBarcodeResultPage = scanBarcodePage.submitFormWithBarcodeThatDoesNotExist()
 
-    scanBarcodeResultPage.hasMainHeading('Carry out further checks')
+    scanBarcodeResultPage.hasMainHeading('Barcode not recognised: carry out further checks')
   })
 
   it('should redisplay form with errors given form submitted with invalid barcode', () => {

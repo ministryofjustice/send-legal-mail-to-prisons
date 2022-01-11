@@ -46,9 +46,9 @@ describe('Scan Barcode Result View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('h1').text()).toEqual('Carry out further checks')
+    expect($('h1').text()).toEqual('Barcode already scanned: carry out further checks')
+    expect($('.govuk-notification-banner__content p strong').text()).toContain('9:11 am on 8 December 2021 at LEI')
     expect($('li strong').text()).toContain('Aardvark Lawyers')
-    expect($('p strong').text()).toContain('9:11 am on 8 December 2021 at LEI')
   })
 
   it('should render view for Random Check scan', () => {
@@ -68,7 +68,7 @@ describe('Scan Barcode Result View', () => {
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('h1').text()).toEqual('Item selected for a random check')
-    expect($('p strong').text()).toContain('Aardvark Lawyers')
+    expect($('.govuk-notification-banner__content p').text()).toContain('Aardvark Lawyers')
   })
 
   it('should render view for Expired scan', () => {
@@ -92,7 +92,7 @@ describe('Scan Barcode Result View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('h1').text()).toEqual('Carry out further checks')
+    expect($('h1').text()).toEqual('Barcode expired: carry out further checks')
     expect($('li strong').text()).toContain('Aardvark Lawyers')
     expect($('p strong').text()).toContain(`42 days ago, on ${createdDate.format('D MMMM YYYY')}`)
     expect($('p').text()).toContain(`longer than 14 days to arrive`)
@@ -112,8 +112,7 @@ describe('Scan Barcode Result View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('h1').text()).toEqual('Carry out further checks')
-    expect($('p').text()).toContain('The barcode was not recognised')
+    expect($('h1').text()).toEqual('Barcode not recognised: carry out further checks')
   })
 
   it('should render view for user indicating a problem entering barcode', () => {
@@ -130,7 +129,7 @@ describe('Scan Barcode Result View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('h1').text()).toEqual('Carry out further checks')
+    expect($('h1').text()).toEqual(`Barcode doesn't scan: carry out further checks`)
     expect($('p').text()).toContain(`barcode can't be linked to an approved sender`)
   })
 
@@ -142,7 +141,7 @@ describe('Scan Barcode Result View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('h1').text()).toEqual('Carry out further checks')
-    expect($('p strong').text()).toContain('Aardvark Lawyers')
+    expect($('h1').text()).toEqual('Item of concern: carry out further checks')
+    expect($('li strong').text()).toContain('Aardvark Lawyers')
   })
 })
