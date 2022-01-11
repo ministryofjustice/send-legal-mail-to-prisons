@@ -15,6 +15,7 @@ declare module 'express-session' {
     barcodeEntryForm: BarcodeEntryForm
     barcode: string
     barcodeImageUrl: string
+    scannedAtLeastOneBarcode: boolean
   }
 }
 

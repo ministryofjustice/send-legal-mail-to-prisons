@@ -24,7 +24,11 @@ export default class ScanBarcodeController {
   async getScanBarcodeView(req: Request, res: Response): Promise<void> {
     const view = new BarcodeEntryView(req.session?.barcodeEntryForm || {}, req.flash('errors'))
 
-    return res.render('pages/scan/scan-barcode', { ...view.renderArgs })
+    // Render a subtly different view based on whether the user has scanned their first barcode or not.
+    // They are different views, but functionally they are the same.
+    const templateToRender =
+      req.session.scannedAtLeastOneBarcode !== true ? 'pages/scan/scan-barcode' : 'pages/scan/scan-another-barcode'
+    return res.render(templateToRender, { ...view.renderArgs })
   }
 
   async submitScannedBarcode(req: Request, res: Response): Promise<void> {
@@ -33,6 +37,7 @@ export default class ScanBarcodeController {
       return res.redirect('/scan-barcode')
     }
 
+    req.session.scannedAtLeastOneBarcode = true
     return this.verifyBarcode(req.session.barcodeEntryForm.barcode, req.user.username, req).then(() =>
       res.redirect('/scan-barcode/result')
     )

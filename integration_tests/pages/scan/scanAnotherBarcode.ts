@@ -1,11 +1,13 @@
 import Page, { PageElement } from '../page'
+// eslint-disable-next-line import/no-cycle
 import ScanBarcodeResultPage from './scanBarcodeResult'
 import barcodes from '../../mockApis/barcodes'
+// eslint-disable-next-line import/no-cycle
 import ManualBarcodeEntryPage from './manualBarcodeEntry'
 
-export default class ScanBarcodePage extends Page {
+export default class ScanAnotherBarcodePage extends Page {
   constructor() {
-    super('scan-barcode')
+    super('scan-another-barcode')
     this.barcodeFieldIsFocussed()
   }
 
@@ -13,23 +15,23 @@ export default class ScanBarcodePage extends Page {
     this.barcode().should('be.focused')
   }
 
-  setBarcode = (value: string): ScanBarcodePage => {
+  setBarcode = (value: string): ScanAnotherBarcodePage => {
     if (value && value.length > 0) {
       this.barcode().type(value)
     } else {
       this.barcode().clear()
     }
-    return Page.verifyOnPage(ScanBarcodePage)
+    return Page.verifyOnPage(ScanAnotherBarcodePage)
   }
 
   pressEnterInBarcodeField = () => {
     this.barcode().type('\n')
   }
 
-  submitFormWithBarcodeThatFailsValidation = (): ScanBarcodePage => {
+  submitFormWithBarcodeThatFailsValidation = (): ScanAnotherBarcodePage => {
     this.setBarcode(barcodes.INVALID_FORMAT_BARCODE)
     this.pressEnterInBarcodeField()
-    return Page.verifyOnPage(ScanBarcodePage)
+    return Page.verifyOnPage(ScanAnotherBarcodePage)
   }
 
   submitFormWithValidBarcode = (): ScanBarcodeResultPage => {
