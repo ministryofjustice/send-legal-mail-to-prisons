@@ -53,9 +53,9 @@ describe('CreateContactController', () => {
         form: req.session.findRecipientForm,
         prisonRegister: [
           { value: '', text: '' },
-          { value: 'ACI', text: 'Altcourse (HMP)' },
-          { value: 'ASI', text: 'Ashfield (HMP)' },
-          { value: 'KTI', text: 'Kennet (HMP)' },
+          { value: 'ACI', text: 'Altcourse (HMP)', selected: false },
+          { value: 'ASI', text: 'Ashfield (HMP)', selected: false },
+          { value: 'KTI', text: 'Kennet (HMP)', selected: false },
         ] as Array<Record<string, string>>,
       }
 
@@ -82,7 +82,7 @@ describe('CreateContactController', () => {
         form: req.session.findRecipientForm,
         prisonRegister: [
           { value: '', text: '' },
-          { value: 'ASI', text: 'Ashfield (HMP)' },
+          { value: 'ASI', text: 'Ashfield (HMP)', selected: false },
         ] as Array<Record<string, string>>,
       }
 

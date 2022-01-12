@@ -17,9 +17,30 @@ describe('CreateContactView', () => {
 
     expect(renderedArgs.prisonRegister).toStrictEqual([
       { text: '', value: '' },
-      { text: 'Altcourse (HMP)', value: 'ACI' },
-      { text: 'Ashfield (HMP)', value: 'ASI' },
-      { text: 'Kennet (HMP)', value: 'KTI' },
+      { text: 'Altcourse (HMP)', value: 'ACI', selected: false },
+      { text: 'Ashfield (HMP)', value: 'ASI', selected: false },
+      { text: 'Kennet (HMP)', value: 'KTI', selected: false },
+    ])
+  })
+
+  it('should render args with prison register with selected prison id', () => {
+    const createNewContactForm = { prisonId: 'ASI' } as CreateNewContactForm
+    const errors: Record<string, string>[] = []
+    const activePrisons = [
+      { id: 'KTI', name: 'Kennet (HMP)' },
+      { id: 'ASI', name: 'Ashfield (HMP)' },
+      { id: 'ACI', name: 'Altcourse (HMP)' },
+    ]
+
+    const view = new CreateContactView(createNewContactForm, activePrisons, errors)
+
+    const renderedArgs = view.renderArgs
+
+    expect(renderedArgs.prisonRegister).toStrictEqual([
+      { text: '', value: '' },
+      { text: 'Altcourse (HMP)', value: 'ACI', selected: false },
+      { text: 'Ashfield (HMP)', value: 'ASI', selected: true },
+      { text: 'Kennet (HMP)', value: 'KTI', selected: false },
     ])
   })
 })

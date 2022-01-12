@@ -27,36 +27,37 @@
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
           {% call govukFieldset({ }) %}
-			<div class="moj-search">
-				{{ govukInput({
-				  label: {
-					text: "Enter the recipient's prison number",
-					classes: "govuk-visually-hidden",
-					isPageHeading: false
-				  },
-				  hint: {
-					text: "Example prison number: A1234BC"
-				  },
-				  attributes: {
-                    autofocus: '',
-                    autocomplete: 'off'
-                  },
-				  id: "prisonNumber",
-				  name: "prisonNumber",
-				  value: form.prisonNumber,
-				  errorMessage: errors | findError('prisonNumber')
-				}) }}
+            <div class="moj-search">
+              {{ govukInput({
+                label: {
+                  text: "Enter the recipient's prison number",
+                  classes: "govuk-visually-hidden",
+                  isPageHeading: false
+                },
+                hint: {
+                  text: "Example prison number: A1234BC"
+                },
+                attributes: {
+                  autofocus: '',
+                  autocomplete: 'off'
+                },
+                id: "prisonNumber",
+                name: "prisonNumber",
+                value: form.prisonNumber,
+                errorMessage: errors | findError('prisonNumber')
+              }) }}
 
-                {{ govukButton({
-                  text: "Enter",
-                  preventDoubleClick: true,
-                  classes: 'moj-search__button'
-                }) }}
-              </div>
+              {{ govukButton({
+                text: "Enter",
+                preventDoubleClick: true,
+                classes: 'moj-search__button'
+              }) }}
+            </div>
           {% endcall %}
         </form>
 
         <p class="govuk-!-margin-top-6">
+          {# TODO - Implementing SLM-81 will provide the href for this link #}
           <a href="" class="govuk-link">I don't have their prison number</a>
         </p>
 

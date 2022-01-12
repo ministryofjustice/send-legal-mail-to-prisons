@@ -11,7 +11,7 @@ export default class CreateContactView {
   get renderArgs(): {
     form: CreateNewContactForm
     errors: Array<Record<string, string>>
-    prisonRegister: Array<Record<string, string>>
+    prisonRegister: Array<Record<string, string | boolean>>
   } {
     return {
       form: this.createNewContactForm,
@@ -23,6 +23,7 @@ export default class CreateContactView {
             return {
               value: prison.id,
               text: prison.name,
+              selected: prison.id === this.createNewContactForm.prisonId,
             }
           })
           .sort((a, b) => a.text.localeCompare(b.text)),

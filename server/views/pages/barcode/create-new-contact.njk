@@ -29,28 +29,23 @@
 
           {% call govukFieldset({ }) %}
 
-		    {{ govukInput({
-			  label: {
-			    text: "Full name",
-				isPageHeading: false
-			  },
-			  hint: {
-			    text: "Use their first and last name."
-			  },
-			  id: "prisonerName",
-			  name: "prisonerName",
-			  value: form.prisonerName,
-			  attributes: {
+            {{ govukInput({
+              label: {
+                text: "Full name",
+                isPageHeading: false
+              },
+              hint: {
+                text: "Use their first and last name."
+              },
+              id: "prisonerName",
+              name: "prisonerName",
+              value: form.prisonerName,
+              attributes: {
                 autofocus: '',
                 autocomplete: 'off'
               },
-			  errorMessage: errors | findError('prisonerName')
-			}) }}
-
-			{% set prisons = [] %}
-			{% for prison in prisonRegister %}
-			  {% set prisons = (prisons.push({value: prison.value, text: prison.text, selected: prison.value == form.prisonId }), prisons) %}
-			{% endfor %}
+              errorMessage: errors | findError('prisonerName')
+            }) }}
 
             {{ govukSelect({
               id: 'prisonId',
@@ -58,7 +53,7 @@
               label: {
                 text: 'Select name of prison'
               },
-              items: prisons
+              items: prisonRegister
             }) }}
 
             {{ govukButton({
@@ -72,7 +67,7 @@
 
       <div class="govuk-grid-column-one-third right-column">
         <h2 class="govuk-heading-m">Get help locating this person</h2>
-        <a href="" target="_blank" class="govuk-link">Find them using the Prisoner Location Service (opens in a new tab)</a>
+        <a href="https://www.gov.uk/find-prisoner" target="_blank" class="govuk-link">Find them using the Prisoner Location Service (opens in a new tab)</a>
       </div>
     </div>
   </section>
