@@ -10,6 +10,7 @@ context('Create New Contact Page', () => {
     cy.task('stubRequestLink')
     cy.task('stubVerifyLink')
     cy.visit('/link/verify-link?secret=a-valid-secret')
+    cy.task('stubGetPrisonRegister')
   })
 
   it('should redirect to find-recipient given user navigates to Create New Contact without going via find-recipients first', () => {

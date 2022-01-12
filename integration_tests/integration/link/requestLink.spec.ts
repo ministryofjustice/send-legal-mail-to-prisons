@@ -8,7 +8,6 @@ context('Request Link Page', () => {
     cy.task('reset')
     cy.task('stubAuthToken')
     cy.task('stubRequestLink')
-    cy.task('stubGetPrisonRegister')
   })
 
   it('should render the correct title in the header', () => {

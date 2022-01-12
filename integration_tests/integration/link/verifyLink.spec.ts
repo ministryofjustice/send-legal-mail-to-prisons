@@ -7,7 +7,6 @@ context('Verify Link', () => {
     cy.task('reset')
     cy.task('stubAuthToken')
     cy.task('stubVerifyLink')
-    cy.task('stubGetPrisonRegister')
   })
 
   it('should redirect to Find Recipient page if using a valid magic link', () => {

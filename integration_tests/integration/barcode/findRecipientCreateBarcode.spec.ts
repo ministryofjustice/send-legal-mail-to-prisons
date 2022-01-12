@@ -9,7 +9,6 @@ context('Create Barcode on Find Recipient Page', () => {
     cy.task('stubAuthToken')
     cy.task('stubVerifyLink')
     cy.task('stubCreateBarcode')
-    cy.task('stubGetPrisonRegister')
   })
 
   it('should create barcode', () => {

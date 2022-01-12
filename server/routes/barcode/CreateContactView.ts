@@ -1,6 +1,12 @@
 import type { CreateNewContactForm } from 'forms'
 import { Prison } from '../../@types/prisonTypes'
 
+type DropDownOption = {
+  value: string
+  text: string
+  selected?: boolean
+}
+
 export default class CreateContactView {
   constructor(
     private readonly createNewContactForm: CreateNewContactForm,
@@ -11,14 +17,14 @@ export default class CreateContactView {
   get renderArgs(): {
     form: CreateNewContactForm
     errors: Array<Record<string, string>>
-    prisonRegister: Array<Record<string, string | boolean>>
+    prisonRegister: Array<DropDownOption>
   } {
     return {
       form: this.createNewContactForm,
       errors: this.errors || [],
       prisonRegister: [
         { value: '', text: '' },
-        ...(this.prisonRegister || [])
+        ...this.prisonRegister
           .map(prison => {
             return {
               value: prison.id,

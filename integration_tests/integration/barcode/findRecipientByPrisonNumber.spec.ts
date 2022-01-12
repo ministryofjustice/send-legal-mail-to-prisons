@@ -8,6 +8,7 @@ context('Find Recipient By Prison Number Page', () => {
     cy.task('reset')
     cy.task('stubAuthToken')
     cy.task('stubRequestLink')
+    cy.task('stubGetPrisonRegister')
   })
 
   it('should redirect to Request List page if visiting without an auth token in the session', () => {
