@@ -1,19 +1,17 @@
-import type { FindRecipientForm } from 'forms'
-import FindRecipientView from './FindRecipientView'
+import type { CreateNewContactForm } from 'forms'
+import CreateContactView from './CreateContactView'
 
-describe('FindRecipientView', () => {
+describe('CreateContactView', () => {
   it('should render args with prison register in alphabetical order', () => {
-    const findRecipientForm = {} as FindRecipientForm
+    const createNewContactForm = {} as CreateNewContactForm
     const errors: Record<string, string>[] = []
-    const barcode = '123456789012'
-    const barcodeImageUrl = 'http://url/image.gif'
     const activePrisons = [
       { id: 'KTI', name: 'Kennet (HMP)' },
       { id: 'ASI', name: 'Ashfield (HMP)' },
       { id: 'ACI', name: 'Altcourse (HMP)' },
     ]
 
-    const view = new FindRecipientView(findRecipientForm, errors, barcode, barcodeImageUrl, activePrisons)
+    const view = new CreateContactView(createNewContactForm, activePrisons, errors)
 
     const renderedArgs = view.renderArgs
 

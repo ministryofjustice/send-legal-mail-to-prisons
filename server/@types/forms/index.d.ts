@@ -6,7 +6,13 @@ declare module 'forms' {
   }
 
   export interface FindRecipientForm {
-    prisonerNameOrNumber?: string
+    prisonNumber?: string
+  }
+
+  export interface CreateNewContactForm {
+    prisonNumber: string
+    prisonerName?: string
+    prisonId?: string
   }
 
   export interface BarcodeEntryForm {

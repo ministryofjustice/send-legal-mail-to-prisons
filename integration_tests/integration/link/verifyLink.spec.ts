@@ -1,6 +1,6 @@
 import Page from '../../pages/page'
 import RequestLinkPage from '../../pages/link/requestLink'
-import FindRecipientPage from '../../pages/barcode/findRecipient'
+import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientByPrisonNumber'
 
 context('Verify Link', () => {
   beforeEach(() => {
@@ -13,7 +13,7 @@ context('Verify Link', () => {
   it('should redirect to Find Recipient page if using a valid magic link', () => {
     cy.visit('/link/verify-link?secret=a-valid-secret')
 
-    const findRecipientPage = Page.verifyOnPage(FindRecipientPage)
+    const findRecipientPage = Page.verifyOnPage(FindRecipientByPrisonNumberPage)
     findRecipientPage.hasNoErrors()
     findRecipientPage.signOut().should('exist')
     findRecipientPage.userName().should('contain', 'mike.halma@digital.justice.gov.uk')
@@ -41,7 +41,7 @@ context('Verify Link', () => {
 
   it('should redirect to Request Link page if using a magic link for the second time', () => {
     cy.visit('/link/verify-link?secret=a-valid-secret')
-    Page.verifyOnPage(FindRecipientPage)
+    Page.verifyOnPage(FindRecipientByPrisonNumberPage)
     cy.task('stubVerifyLinkNotFoundFailure')
 
     cy.visit('/link/verify-link?secret=a-valid-secret')
@@ -63,7 +63,7 @@ context('Verify Link', () => {
   it('should redirect to Request Link page after signing out', () => {
     cy.visit('/link/verify-link?secret=a-valid-secret')
 
-    const findRecipientPage = Page.verifyOnPage(FindRecipientPage)
+    const findRecipientPage = Page.verifyOnPage(FindRecipientByPrisonNumberPage)
     findRecipientPage.signOut().should('exist').click()
     Page.verifyOnPage(RequestLinkPage).hasNoErrors()
   })

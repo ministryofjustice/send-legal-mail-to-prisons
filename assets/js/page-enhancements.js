@@ -13,9 +13,19 @@
     $('#scan-barcode-form #barcode').focus()
   })
 })($, document)
+;(autoFocusPrisonNumberField = ($, document) => {
+  $(document).ready(() => {
+    $('#find-recipient-by-prison-number-form #prisonNumber').focus()
+  })
+})($, document)
+;(autoFocusPrisonNameField = ($, document) => {
+  $(document).ready(() => {
+    $('#create-new-contact-form #prisonerName').focus()
+  })
+})($, document)
 ;(convertPrisonDropdownToAutoComplete = ($, document) => {
   $(document).ready(() => {
-    $('select#prison').each((idx, element) => {
+    $('#create-new-contact-form select#prisonId').each((idx, element) => {
       accessibleAutocomplete.enhanceSelectElement({
         selectElement: element,
       })

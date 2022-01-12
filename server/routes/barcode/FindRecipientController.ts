@@ -1,39 +1,25 @@
 import { Request, Response } from 'express'
 import FindRecipientView from './FindRecipientView'
-import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
-import config from '../../config'
-import { Prison } from '../../@types/prisonTypes'
+import validatePrisonNumber from './prisonNumberValidator'
 
 export default class FindRecipientController {
-  constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
-
-  async getFindRecipientView(req: Request, res: Response): Promise<void> {
-    let activePrisons: Array<Prison>
-    try {
-      activePrisons = await this.prisonRegisterService.getActivePrisons()
-    } catch (error) {
-      req.flash('errors', [{ text: 'There was an error retrieving the list of prisons' }])
-      activePrisons = []
-    }
-
+  async getFindRecipientByPrisonNumberView(req: Request, res: Response): Promise<void> {
     const view = new FindRecipientView(
       req.session?.findRecipientForm || {},
       req.flash('errors'),
-      req.session.barcode,
-      req.session.barcodeImageUrl,
-      this.filterSupportedPrisons(activePrisons)
+      req.session.barcode, // TODO - remove when temp create barcode button is not on Find Recipient screen
+      req.session.barcodeImageUrl // TODO - remove when temp create barcode button is not on Find Recipient screen
     )
-    return res.render('pages/barcode/find-recipient', { ...view.renderArgs })
+    return res.render('pages/barcode/find-recipient-by-prison-number', { ...view.renderArgs })
   }
 
-  private filterSupportedPrisons(activePrisons: Array<Prison>): Array<Prison> {
-    if (!config.supportedPrisons || config.supportedPrisons === '') {
-      return activePrisons
+  async submitFindByPrisonNumber(req: Request, res: Response): Promise<void> {
+    req.session.findRecipientForm = { ...req.body }
+    if (!validatePrisonNumber(req)) {
+      return res.redirect('/barcode/find-recipient')
     }
 
-    const supportedPrisons: Array<string> = config.supportedPrisons
-      .split(',')
-      .map(prisonId => prisonId.trim().toUpperCase())
-    return activePrisons.filter(prison => supportedPrisons.includes(prison.id.toUpperCase()))
+    // TODO - lookup contact by prison number and redirect to appropriate endpoint
+    return res.redirect('/barcode/find-recipient/create-new-contact')
   }
 }

@@ -46,7 +46,7 @@ services:
       - hmpps
     container_name: prison-register
     ports:
-      - "9091:8080"
+      - "8103:8080"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
     environment:

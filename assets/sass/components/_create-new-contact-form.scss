@@ -1,0 +1,11 @@
+#create-new-contact-form {
+
+  .right-column {
+    @media (min-width: 40.0625em) {
+      h2 {
+        border-top: 3px solid $govuk-brand-colour;
+        padding-top: 1rem;
+      }
+    }
+  }
+}
