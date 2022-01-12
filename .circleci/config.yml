@@ -54,6 +54,7 @@ jobs:
             - build-info.json
             - build
             - dist
+            - assets
             - .cache/Cypress
 
   check_outdated:
