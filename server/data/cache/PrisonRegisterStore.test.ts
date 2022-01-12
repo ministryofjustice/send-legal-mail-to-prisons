@@ -72,7 +72,7 @@ describe('PrisonRegisterStore', () => {
     redisClient.get.mockImplementation((key, callback) => callback('some error', null))
 
     try {
-      prisonRegisterStore.getActivePrisons()
+      await prisonRegisterStore.getActivePrisons()
     } catch (error) {
       expect(error).toBe('some error')
       expect(redisClient.get).toHaveBeenCalledWith('activePrisons', expect.any(Function))

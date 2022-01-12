@@ -30,7 +30,7 @@ describe('TokenStore', () => {
     redisClient.get.mockImplementation((key, callback) => callback('some error', null))
 
     try {
-      tokenStore.getToken('user-1')
+      await tokenStore.getToken('user-1')
     } catch (error) {
       expect(error).toBe('some error')
       expect(redisClient.get).toHaveBeenCalledWith('user-1', expect.any(Function))
