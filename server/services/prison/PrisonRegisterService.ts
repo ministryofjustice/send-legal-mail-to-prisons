@@ -21,11 +21,11 @@ export default class PrisonRegisterService {
     }
   }
 
-  async getPrisonAddress(prison: Prison): Promise<PrisonAddress> {
-    const prisonAddress = prisonAddressData.find(row => row.agencyCode === prison.id)
+  async getPrisonAddress(prisonId: string): Promise<PrisonAddress> {
+    const prisonAddress = prisonAddressData.find(row => row.agencyCode === prisonId)
     return prisonAddress
       ? Promise.resolve(this.strictCastToPrisonAddress(prisonAddress))
-      : Promise.reject(new Error(`PrisonAddress for prison ${prison.id} not found`))
+      : Promise.reject(new Error(`PrisonAddress for prison ${prisonId} not found`))
   }
 
   private async retrieveAndCacheActivePrisons(): Promise<Array<Prison>> {

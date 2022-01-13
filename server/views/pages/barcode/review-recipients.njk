@@ -22,6 +22,14 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
         <h1 class="govuk-heading-xl">Review recipients placeholder page</h1>
+
+        <h2 class="govuk-heading-m">Temporary display of recipients for dev purposes</h2>
+        <ul>
+          {% for recipient in recipients %}
+            <li>{{ recipient.prisonerName }}, {{ recipient.prisonNumber }}, {{ recipient.prisonAddress.premise }}, {{ recipient.prisonAddress.postalCode }}</li>
+          {% endfor %}
+        </ul>
+
       </div>
     </div>
 

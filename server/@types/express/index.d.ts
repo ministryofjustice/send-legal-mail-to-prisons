@@ -1,4 +1,5 @@
 import { BarcodeEntryForm, CreateNewContactForm, FindRecipientForm, RequestLinkForm } from '../forms'
+import { Recipient } from '../prisonTypes'
 
 export default {}
 
@@ -15,6 +16,7 @@ declare module 'express-session' {
     createNewContactForm: CreateNewContactForm
     barcodeEntryForm: BarcodeEntryForm
     scannedAtLeastOneBarcode: boolean
+    recipients: Array<Recipient>
   }
 }
 

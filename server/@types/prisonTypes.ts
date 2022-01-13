@@ -12,3 +12,9 @@ export type PrisonAddress = {
   area?: string
   postalCode?: string
 }
+
+export type Recipient = {
+  prisonNumber: string
+  prisonerName: string
+  prisonAddress: PrisonAddress
+}

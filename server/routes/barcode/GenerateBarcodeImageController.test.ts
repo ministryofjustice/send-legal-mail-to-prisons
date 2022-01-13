@@ -10,6 +10,7 @@ const req = {
 
 const res = {
   render: jest.fn(),
+  redirect: jest.fn(),
 }
 
 const createBarcodeService = {
@@ -29,6 +30,7 @@ describe('getGenerateImageView', () => {
 
   afterEach(() => {
     res.render.mockReset()
+    res.redirect.mockReset()
     req.session = {} as SessionData
     createBarcodeService.createBarcode.mockReset()
     createBarcodeService.generateBarcodeImage.mockReset()
@@ -36,6 +38,7 @@ describe('getGenerateImageView', () => {
   })
 
   it('should create the image and call the view', async () => {
+    req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
     createBarcodeService.createBarcode.mockResolvedValue('123456789012')
     createBarcodeService.generateBarcodeImage.mockResolvedValue(Buffer.from('barcode-image'))
     createBarcodeService.generateAddressAndBarcodeImage.mockReturnValue('barcode-address-image-url')
@@ -52,23 +55,35 @@ describe('getGenerateImageView', () => {
   })
 
   it('should throw an error if barcode creation service fails', async () => {
+    req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
     createBarcodeService.createBarcode.mockRejectedValue('Any error returned from barcode creation service')
 
     await generateBarcodeImageController.getGenerateImageView(req as unknown as Request, res as unknown as Response)
 
-    expect(res.render).toHaveBeenCalledWith('pages/barcode/review-recipients', {
-      errors: [{ text: 'There was an error generating the barcode, please try again' }],
-    })
+    expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
+    expect(req.flash).toHaveBeenCalledWith('errors', [
+      { text: 'There was an error generating the barcode, please try again' },
+    ])
   })
 
   it('should throw an error if barcode image generation fails', async () => {
+    req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
     createBarcodeService.createBarcode.mockResolvedValue('123456789012')
     createBarcodeService.generateBarcodeImage.mockRejectedValue('Any error returned from barcode image generation')
 
     await generateBarcodeImageController.getGenerateImageView(req as unknown as Request, res as unknown as Response)
 
-    expect(res.render).toHaveBeenCalledWith('pages/barcode/review-recipients', {
-      errors: [{ text: 'There was an error generating the barcode, please try again' }],
-    })
+    expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
+    expect(req.flash).toHaveBeenCalledWith('errors', [
+      { text: 'There was an error generating the barcode, please try again' },
+    ])
+  })
+
+  it('should redirect to find-recipient given no recipients in the session', async () => {
+    req.session.recipients = undefined
+
+    await generateBarcodeImageController.getGenerateImageView(req as unknown as Request, res as unknown as Response)
+
+    expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
   })
 })
