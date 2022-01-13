@@ -1,0 +1,144 @@
+version: '3.1'
+services:
+
+  redis:
+    image: 'bitnami/redis:5.0'
+    networks:
+      - hmpps
+    container_name: redis 
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '6379:6379'
+
+  hmpps-auth:
+    image: quay.io/hmpps/hmpps-auth:latest
+    networks:
+      - hmpps
+    container_name: hmpps-auth
+    depends_on: [nomis-user-roles-api]
+    ports:
+      - "9090:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/auth/health"]
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev,nomis
+      - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0
+      - NOMIS_ENDPOINT_URL=http://nomis-user-roles-api:8080
+
+  nomis-user-roles-api:
+    image: quay.io/hmpps/nomis-user-roles-api:latest
+    networks:
+      - hmpps
+    container_name: nomis-user-roles-api
+    ports:
+      - "8102:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_PROFILES_ACTIVE=dev
+      - API_BASE_URL_OAUTH=http://hmpps-auth:8080/auth
+
+  prison-register:
+    image: quay.io/hmpps/prison-register:latest
+    networks:
+      - hmpps
+    container_name: prison-register
+    ports:
+      - "8103:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_PROFILES_ACTIVE=dev
+
+  app:
+    image: quay.io/hmpps/send-legal-mail-to-prisons
+    networks:
+      - hmpps
+    depends_on: [redis]
+    ports:
+      - "3000:3000"
+    environment:
+      - REDIS_HOST=redis
+      - HMPPS_AUTH_EXTERNAL_URL=http://hmpps-auth:9090/auth
+      - HMPPS_AUTH_URL=http://hmpps-auth:9090/auth
+      # These will need to match new creds in the seed auth service auth
+      - API_CLIENT_ID=client-id
+      - API_CLIENT_SECRET=client-secret
+      - PRISON_REGISTER_API_URL=http://prison-register:8103
+      - BARCODE_TOKEN_PUBLIC_KEY=MIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAnKf2/0ffidVro/KXXXobH98tm3qRAOLmk/jBB/CUw/13ITvd/l0ECiT8Dq+aUAUrHK+rRDk8iCuZMD3JYQRW1NUEw9zXG408DNHZo1alDo9EoP4KIL6gV8h2AdyV0Fra3guCGuuMzF+aRbIEHNDx/NWEjOXXibTrIxXPxbEiI4yfcjLyUiusE9T7ZHlaTEDNA4zaDcY98LJs5B17l/h3Q8RYwLGlZe1HJkhi/IxeYzX6+OQZdozFWRSmJDMwJ4oAdXOnE5jLl3q6IzKYWJxkt8z8ITcXzSWLMKEqkYxBS4eO5dsWMRK8x9njtOrj8I0jppNJIDt0dwjfldXhUmLIVQABW7TdAhJsAq/RY2K1NjoQvsQpzThjrkHGRkKIAClK0N4XccwKNiTmI/wMQ5ec/6sNJYEZko4wIUAGb4u1kNJtqupwErau6jL8ffkkSBQNzoQyI5WrTaRnwOrqkgHO/W0GisMNc+RC1z/KFtO9ybRFRB21/4cHCeH7NugdEHI7AgMBAAE=
+      - SESSION_SECRET=anything
+      - SYSTEM_CLIENT_ID=send-legal-mail-to-prisons-client
+      - SYSTEM_CLIENT_SECRET=clientsecret
+      - SEND_LEGAL_MAIL_API_URL=http://localhost:8080
+      - TOKEN_VERIFICATION_API_URL=https://token-verification-api-dev.prison.service.justice.gov.uk
+      - TOKEN_VERIFICATION_ENABLED=false
+      - INGRESS_URL=http://localhost:3000
+  send-legal-mail-to-prisons-api:
+    image: quay.io/hmpps/send-legal-mail-to-prisons-api
+    networks:
+      - hmpps
+    container_name: send-legal-mail-to-prisons-api
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_PROFILES_ACTIVE=dev,stdout,postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://send-legal-mail-api-db:5432/send_legal_mail_api_db
+      - HMPPS_AUTH_URL=http://hmpps-auth:9090/auth
+      - SPRING_MAIL_HOST=send-legal-mail-to-prisons-api_mailcatcher_1
+      - APP_S3_LOCALSTACKURL=localstack
+      - SPRING_REDIS_HOST=send-legal-mail-api-cache
+
+  send-legal-mail-api-db:
+    image: postgres:13.3
+    networks:
+      - hmpps
+    container_name: send-legal-mail-api-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=admin_password
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=send_legal_mail_api_db
+
+  send-legal-mail-api-cache:
+    image: redis
+    networks:
+      - hmpps
+    container_name: send-legal-mail-api-cache
+    ports:
+      - '6378:6378'
+    command: --port 6378
+
+  mailcatcher:
+    image: schickling/mailcatcher
+    networks:
+      - hmpps
+    ports:
+      - '1080:1080'
+      - '1025:1025'
+
+  localstack:
+    image: localstack/localstack:0.13.1
+    networks:
+      - hmpps
+    container_name: localstack
+    ports:
+      - "4566-4597:4566-4597"
+    environment:
+      - SERVICES=s3
+      - DEBUG=${DEBUG- }
+      - DATA_DIR=/tmp/localstack/data
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - DEFAULT_REGION=eu-west-2
+    volumes:
+      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+networks:
+  hmpps:
