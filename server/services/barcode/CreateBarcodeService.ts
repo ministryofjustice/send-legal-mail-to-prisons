@@ -71,7 +71,7 @@ export default class CreateBarcodeService {
     ctx.font = `bold ${this.scale(this.opts.fontPoints)}pt Arial`
     ctx.fillText(`Prison Rule 39`, this.scale(this.opts.headerTextX), this.scale(this.opts.headerTextY))
     ctx.font = `${this.scale(this.opts.fontPoints)}pt Arial`
-    // TODO SLM-61 When we capture the prisoner name and number we should use it below
+    // TODO SLM-67 When we capture the prisoner name and number we should use it below
     // TODO SLM-75 When we populate the prison address from the prison we should use it below
     ctx.fillText(
       `John Smith

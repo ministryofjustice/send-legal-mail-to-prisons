@@ -5,8 +5,8 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 
-{% set pageTitle = applicationName + " - Find recipient" %}
-{% set pageId = 'find-recipient' %}
+{% set pageTitle = applicationName + " - Generate Barcode Image" %}
+{% set pageId = 'generate-barcode-image' %}
 
 {% block content %}
 
@@ -37,7 +37,6 @@
       <div class="govuk-grid-column-full">
 
         <div class="govuk-grid-column-full barcode-address-container">
-          <p>Barcode number: {{ barcode }}</p>
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
               <img class="barcode-address-image" alt="The generated barcode image for {{ barcodeImageName }}" src="{{ barcodeImageUrl }}">
@@ -49,12 +48,12 @@
               classes: "govuk-button--secondary",
               element: "a",
               href: barcodeImageUrl,
-              attributes: { 'target': '_blank', 'download': barcodeImageName, 'data-qa': 'download-barcode-button' }
+              attributes: { 'target': '_blank', 'download': barcodeImageName, 'data-qa': 'download-image-button' }
             }) }}
             {{ govukButton({
               text: "Copy",
               classes: "govuk-button--secondary barcode-address-copy-button",
-              attributes: { 'data-qa': 'copy-barcode-button' }
+              attributes: { 'data-qa': 'copy-image-button' }
             }) }}
           </div>
         </div>

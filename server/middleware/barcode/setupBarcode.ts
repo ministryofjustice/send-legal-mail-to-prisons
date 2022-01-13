@@ -14,6 +14,7 @@ export default function setUpCreateBarcode(
   const findRecipientController = new FindRecipientController()
   const createContactController = new CreateContactController(prisonRegisterService)
   const reviewRecipientsController = new ReviewRecipientsController()
+  const generateImageController = new GenerateBarcodeImageController(createBarcodeService)
 
   router.get('/find-recipient', (req, res) => findRecipientController.getFindRecipientByPrisonNumberView(req, res))
   router.post('/find-recipient/by-prison-number', (req, res) =>

@@ -4,12 +4,7 @@ import validatePrisonNumber from './prisonNumberValidator'
 
 export default class FindRecipientController {
   async getFindRecipientByPrisonNumberView(req: Request, res: Response): Promise<void> {
-    const view = new FindRecipientView(
-      req.session?.findRecipientForm || {},
-      req.flash('errors'),
-      req.session.barcode, // TODO - remove when temp create barcode button is not on Find Recipient screen
-      req.session.barcodeImageUrl // TODO - remove when temp create barcode button is not on Find Recipient screen
-    )
+    const view = new FindRecipientView(req.session?.findRecipientForm || {}, req.flash('errors'))
     return res.render('pages/barcode/find-recipient-by-prison-number', { ...view.renderArgs })
   }
 
