@@ -41,7 +41,7 @@ context('Scan Barcode Page', () => {
     cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
     cy.signIn()
     cy.visit('/scan-barcode')
-    Page.verifyOnPage(ScanBarcodePage).hasHeaderTitle('Check Rule 39 Mail')
+    Page.verifyOnPage(ScanBarcodePage).hasHeaderTitle('Check Rule 39 mail')
   })
 
   it('should render barcode results page given form submitted with barcode that verifies as OK', () => {
