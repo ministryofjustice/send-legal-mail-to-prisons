@@ -15,14 +15,20 @@ context('Create Barcode on Review Recipient Page', () => {
     cy.visit('/barcode/find-recipient')
     Page.verifyOnPage(FindRecipientByPrisonNumberPage).submitWithValidPrisonNumber()
     Page.verifyOnPage(CreateNewContactPage).submitWithValidValues()
-    cy.task('stubCreateBarcode')
   })
 
   it('should create barcode', () => {
+    cy.task('stubCreateBarcode')
     Page.verifyOnPage(ReviewRecipientsPage).createBarcodeButton().click()
     Page.verifyOnPage(GenerateBarcodeImagePage)
       .barcodeAddressImageExists()
       .imageDownloadButtonExists('John-Smith-A1234BC.png') // TODO SLM-67 this should be gage hewett
       .imageCopyButtonExists()
+  })
+
+  it.only('should show an error if create barcode fails', () => {
+    cy.task('stubCreateBarcodeFailure')
+    Page.verifyOnPage(ReviewRecipientsPage).createBarcodeButton().click()
+    Page.verifyOnPage(ReviewRecipientsPage).hasErrorContaining('error')
   })
 })
