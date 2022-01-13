@@ -1,0 +1,99 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set pageTitle = applicationName + " - Find recipient" %}
+{% set pageId = 'find-recipient-by-prison-number' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+    {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: 'There is a problem',
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl">Enter a prison number</h1>
+        <p>The details you provide will be used to address your mail.</p>
+
+        <form id="find-recipient-by-prison-number-form" action="find-recipient/by-prison-number" method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {% call govukFieldset({ }) %}
+            <div class="moj-search">
+              {{ govukInput({
+                label: {
+                  text: "Enter the recipient's prison number",
+                  classes: "govuk-visually-hidden",
+                  isPageHeading: false
+                },
+                hint: {
+                  text: "Example prison number: A1234BC"
+                },
+                attributes: {
+                  autofocus: '',
+                  autocomplete: 'off'
+                },
+                id: "prisonNumber",
+                name: "prisonNumber",
+                value: form.prisonNumber,
+                errorMessage: errors | findError('prisonNumber')
+              }) }}
+
+              {{ govukButton({
+                text: "Enter",
+                preventDoubleClick: true,
+                classes: 'moj-search__button'
+              }) }}
+            </div>
+          {% endcall %}
+        </form>
+
+        <p class="govuk-!-margin-top-6">
+          {# TODO - Implementing SLM-81 will provide the href for this link #}
+          <a href="" class="govuk-link">I don't have their prison number</a>
+        </p>
+
+      </div>
+    </div>
+
+    <div class="govuk-grid-row govuk-!-margin-top-9">
+      <hr />
+      <div class="govuk-grid-column-full">
+
+        {% if barcode %}
+          <p>Barcode number: {{ barcode }}</p>
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+              <img alt="The generated barcode image" src="{{ barcodeImageUrl }}" id="barcodeImage">
+            </div>
+          </div>
+        {% else %}
+          <p>Press the button to generate a barcode</p>
+        {% endif %}
+
+        <form action="/barcode" method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          <div class="govuk-button-group">
+            {{ govukButton({
+              text: "Create Barcode",
+              attributes: {
+                id: 'create-barcode'
+              }
+            }) }}
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </section>
+
+{% endblock %}

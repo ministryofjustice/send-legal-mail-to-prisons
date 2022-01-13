@@ -1,14 +1,13 @@
 import Page from '../../pages/page'
 import RequestLinkPage from '../../pages/link/requestLink'
 import EmailSentPage from '../../pages/link/emailSent'
-import FindRecipientPage from '../../pages/barcode/findRecipient'
+import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientByPrisonNumber'
 
 context('Request Link Page', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubAuthToken')
     cy.task('stubRequestLink')
-    cy.task('stubGetPrisonRegister')
   })
 
   it('should render the correct title in the header', () => {
@@ -85,9 +84,9 @@ context('Request Link Page', () => {
   it('should redirect to Find Recipient page if already signed in', () => {
     cy.task('stubVerifyLink')
     cy.visit('/link/verify-link?secret=a-valid-secret')
-    Page.verifyOnPage(FindRecipientPage)
+    Page.verifyOnPage(FindRecipientByPrisonNumberPage)
 
     cy.visit('/link/request-link')
-    Page.verifyOnPage(FindRecipientPage)
+    Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   })
 })

@@ -1,0 +1,75 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% set pageTitle = applicationName + " - Create contact" %}
+{% set pageId = 'create-new-contact' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+    {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: 'There is a problem',
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row" id="create-new-contact-form">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Create new contact</h1>
+        <p>You need to add details for <strong>{{ form.prisonNumber }}</strong>. These will be saved for next time.</p>
+
+        <form action="/barcode/find-recipient/create-new-contact" method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {% call govukFieldset({ }) %}
+
+            {{ govukInput({
+              label: {
+                text: "Full name",
+                isPageHeading: false
+              },
+              hint: {
+                text: "Use their first and last name."
+              },
+              id: "prisonerName",
+              name: "prisonerName",
+              value: form.prisonerName,
+              attributes: {
+                autofocus: '',
+                autocomplete: 'off'
+              },
+              errorMessage: errors | findError('prisonerName')
+            }) }}
+
+            {{ govukSelect({
+              id: 'prisonId',
+              name: 'prisonId',
+              label: {
+                text: 'Select name of prison'
+              },
+              items: prisonRegister
+            }) }}
+
+            {{ govukButton({
+              text: "Save",
+              preventDoubleClick: true
+            }) }}
+
+          {% endcall %}
+        </form>
+      </div>
+
+      <div class="govuk-grid-column-one-third right-column">
+        <h2 class="govuk-heading-m">Get help locating this person</h2>
+        <a href="https://www.gov.uk/find-prisoner" target="_blank" class="govuk-link">Find them using the Prisoner Location Service (opens in a new tab)</a>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
