@@ -2,7 +2,8 @@ import config from '../../config'
 import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
 import RestClient from '../../data/restClient'
 import { PrisonDto } from '../../@types/prisonRegisterApiClientTypes'
-import { Prison } from '../../@types/prisonTypes'
+import { Prison, PrisonAddress } from '../../@types/prisonTypes'
+import prisonAddressData from './prisonAddressData.json'
 
 export default class PrisonRegisterService {
   constructor(private readonly prisonRegisterStore: PrisonRegisterStore) {}
@@ -18,6 +19,13 @@ export default class PrisonRegisterService {
     } catch (error) {
       return this.retrieveAndCacheActivePrisons()
     }
+  }
+
+  async getPrisonAddress(prison: Prison): Promise<PrisonAddress> {
+    const prisonAddress = prisonAddressData.find(row => row.agencyCode === prison.id)
+    return prisonAddress
+      ? Promise.resolve(this.strictCastToPrisonAddress(prisonAddress))
+      : Promise.reject(new Error(`PrisonAddress for prison ${prison.id} not found`))
   }
 
   private async retrieveAndCacheActivePrisons(): Promise<Array<Prison>> {
@@ -37,6 +45,26 @@ export default class PrisonRegisterService {
     } catch (error) {
       // There was an error calling the Prison Register API - return the error so it will be handled as part of the promise chain
       return error
+    }
+  }
+
+  private strictCastToPrisonAddress(source: {
+    flat?: string
+    premise?: string
+    street?: string
+    locality?: string
+    countyCode?: string
+    area?: string
+    postalCode?: string
+  }): PrisonAddress {
+    return {
+      flat: source.flat,
+      premise: source.premise,
+      street: source.street,
+      locality: source.locality,
+      countyCode: source.countyCode,
+      area: source.area,
+      postalCode: source.postalCode,
     }
   }
 }

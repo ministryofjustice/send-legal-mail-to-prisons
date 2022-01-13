@@ -3,6 +3,7 @@ import nock from 'nock'
 import PrisonRegisterService from './PrisonRegisterService'
 import config from '../../config'
 import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
+import { Prison, PrisonAddress } from '../../@types/prisonTypes'
 
 const prisonRegisterStore = {
   setActivePrisons: jest.fn(),
@@ -106,4 +107,65 @@ describe('Prison Register Service', () => {
       }
     })
   })
+
+  describe('getPrisonAddress', () => {
+    mockPrisonAddressData()
+
+    it('should get prison address given prison exists', async () => {
+      const prison = { id: 'ASI' } as Prison
+
+      const expectedPrisonAddress: PrisonAddress = {
+        flat: null,
+        premise: 'HMP & YOI ASHFIELD',
+        street: 'Shortwood Road',
+        locality: 'Pucklechurch',
+        countyCode: null,
+        area: 'Pucklechurch Bristol',
+        postalCode: 'BS16 9QJ',
+      }
+
+      const prisonAddress: PrisonAddress = await prisonRegisterService.getPrisonAddress(prison)
+
+      expect(prisonAddress).toStrictEqual(expectedPrisonAddress)
+    })
+
+    it('should not get prison address given prison does not exist', async () => {
+      const prison = { id: 'XYZ' } as Prison
+
+      try {
+        await prisonRegisterService.getPrisonAddress(prison)
+      } catch (error) {
+        expect(error).toStrictEqual(new Error('PrisonAddress for prison XYZ not found'))
+      }
+    })
+  })
+
+  function mockPrisonAddressData() {
+    jest.mock('./prisonAddressData.json', () => [
+      {
+        agencyCode: 'ACI',
+        agyDescription: 'ALTCOURSE (HMP)',
+        agyLocType: 'Prison',
+        flat: null,
+        premise: 'HMP ALTCOURSE',
+        street: 'Higher Lane',
+        locality: 'Fazakerley',
+        countyCode: null,
+        area: 'Fazakerley Liverpool',
+        postalCode: 'L9 7LH',
+      },
+      {
+        agencyCode: 'ASI',
+        agyDescription: 'ASHFIELD (HMP)',
+        agyLocType: 'Prison',
+        flat: null,
+        premise: 'HMP & YOI ASHFIELD',
+        street: 'Shortwood Road',
+        locality: 'Pucklechurch',
+        countyCode: null,
+        area: 'Pucklechurch Bristol',
+        postalCode: 'BS16 9QJ',
+      },
+    ])
+  }
 })
