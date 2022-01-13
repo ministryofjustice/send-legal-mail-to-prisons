@@ -32,3 +32,23 @@
     })
   })
 })($, document)
+;(enableCopyBarcodeButton = ($, document) => {
+  $(document).ready(() => {
+    if (typeof ClipboardItem !== 'function') {
+      return
+    }
+    $('.barcode-address-copy-button')
+      .css('display', 'inline-flex')
+      .click(e => {
+        const image = $(e.target).closest('div.barcode-address-container').find('img.barcode-address-image')[0]
+        const canvas = document.createElement('canvas')
+        // Note these are scaleFactor * CreateBarcodeController.canvasWidth / canvasHeight, which is required due to scaling
+        canvas.width = 1012
+        canvas.height = 392
+        canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height)
+        canvas.toBlob(blob => {
+          navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+        }, 'image/png')
+      })
+  })
+})($, document)

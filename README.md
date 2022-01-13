@@ -65,7 +65,7 @@ The app requires:
 
 To start the main services excluding the example typescript template app: 
 
-`docker-compose up redis hmpps-auth nomins-user-roles-api prison-register`
+`docker-compose up redis hmpps-auth nomis-user-roles-api prison-register`
 
 Install dependencies using `npm install`, ensuring you are using >= `Node v14.x`
 

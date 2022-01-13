@@ -1,0 +1,75 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% set pageTitle = applicationName + " - Generate Barcode Image" %}
+{% set pageId = 'generate-barcode-image' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+    {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: 'There is a problem',
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl">Copy the address and barcode into your own document</h1>
+
+        <ol>
+          <li>Copy or download a barcode and address image.</li>
+          <li>Paste or insert the image into your document.</li>
+          <li>Check the barcode will be visible in the window of your envelope and adjust if necessary.</li>
+          <li>Repeat for each image.</li>
+        </ol>
+
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+
+        <div class="govuk-grid-column-full barcode-address-container">
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+              <img class="barcode-address-image" alt="The generated barcode image for {{ barcodeImageName }}" src="{{ barcodeImageUrl }}">
+            </div>
+          </div>
+          <div class="govuk-button-group">
+            {{ govukButton({
+              text: "Download",
+              classes: "govuk-button--secondary",
+              element: "a",
+              href: barcodeImageUrl,
+              attributes: { 'target': '_blank', 'download': barcodeImageName, 'data-qa': 'download-image-button' }
+            }) }}
+            {{ govukButton({
+              text: "Copy",
+              classes: "govuk-button--secondary barcode-address-copy-button",
+              attributes: { 'data-qa': 'copy-image-button' }
+            }) }}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <hr />
+      <br />
+      <div class="govuk-grid-column-one-third">
+        <!-- TODO SLM-59 Add in the link to the feedback form -->
+        <a href="" target="_blank" class="govuk-link">Help us improve this service</a>
+      </div>
+    </div>
+
+  </section>
+
+{% endblock %}
