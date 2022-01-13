@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
-import { Prison } from '../../@types/prisonTypes'
+import type { CreateNewContactForm } from 'forms'
+import { Prison, PrisonAddress, Recipient } from '../../@types/prisonTypes'
 import validateNewContact from './newContactValidator'
 import config from '../../config'
 import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
@@ -36,12 +37,25 @@ export default class CreateContactController {
       return res.redirect('/barcode/find-recipient')
     }
 
-    req.session.findRecipientForm = { ...req.session.findRecipientForm, ...req.body }
+    req.session.createNewContactForm = { ...req.session.findRecipientForm, ...req.body }
     if (!validateNewContact(req)) {
       return res.redirect('/barcode/find-recipient/create-new-contact')
     }
 
-    return res.redirect('/barcode/review-recipients')
+    // TODO SLM-60 - save new contact to database via API
+
+    const newRecipient = req.session.createNewContactForm
+    try {
+      const prisonAddress = await this.prisonRegisterService.getPrisonAddress(newRecipient.prisonId)
+      this.addRecipient(req, newRecipient, prisonAddress)
+      return res.redirect('/barcode/review-recipients')
+    } catch (error) {
+      // An error getting the prison address
+      req.flash('errors', [
+        { href: 'prisonId', text: 'There was a problem getting the address for the selected prison' },
+      ])
+      return res.redirect('/barcode/find-recipient/create-new-contact')
+    }
   }
 
   private filterSupportedPrisons(activePrisons: Array<Prison>): Array<Prison> {
@@ -53,5 +67,19 @@ export default class CreateContactController {
       .split(',')
       .map(prisonId => prisonId.trim().toUpperCase())
     return activePrisons.filter(prison => supportedPrisons.includes(prison.id.toUpperCase()))
+  }
+
+  private addRecipient(req: Request, newRecipient: CreateNewContactForm, prisonAddress: PrisonAddress) {
+    if (!req.session.recipients) {
+      req.session.recipients = []
+    }
+
+    const recipient: Recipient = {
+      prisonNumber: newRecipient.prisonNumber,
+      prisonerName: newRecipient.prisonerName,
+      prisonAddress,
+    }
+
+    req.session.recipients.push(recipient)
   }
 }

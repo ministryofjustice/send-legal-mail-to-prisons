@@ -281,9 +281,10 @@ const stubCreateBarcode = (): SuperAgentRequest =>
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      body: '"1234-5678-9012"',
+      body: '"123456789012"',
     },
   })
+
 const stubCreateBarcodeFailure = (): SuperAgentRequest =>
   stubFor({
     request: {

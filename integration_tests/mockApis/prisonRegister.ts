@@ -15,7 +15,7 @@ const stubGetPrisonRegister = (): SuperAgentRequest =>
       jsonBody: [
         { prisonId: 'ALI', prisonName: 'Albany (HMP)', active: false },
         { prisonId: 'AKI', prisonName: 'Acklington (HMP)', active: false },
-        { prisonId: 'KTI', prisonName: 'Kennet (HMP)', active: true },
+        { prisonId: 'KTI', prisonName: 'Kennet (HMP)', active: false },
         { prisonId: 'ACI', prisonName: 'Altcourse (HMP)', active: true },
         { prisonId: 'ASI', prisonName: 'Ashfield (HMP)', active: true },
       ],

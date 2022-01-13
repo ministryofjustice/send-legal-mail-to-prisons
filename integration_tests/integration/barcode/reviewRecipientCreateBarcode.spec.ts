@@ -22,11 +22,11 @@ context('Create Barcode on Review Recipient Page', () => {
     Page.verifyOnPage(ReviewRecipientsPage).createBarcodeButton().click()
     Page.verifyOnPage(GenerateBarcodeImagePage)
       .barcodeAddressImageExists()
-      .imageDownloadButtonExists('John-Smith-A1234BC.png') // TODO SLM-67 this should be gage hewett
+      .imageDownloadButtonExists('Gage-Hewitt-A1234BC.png')
       .imageCopyButtonExists()
   })
 
-  it.only('should show an error if create barcode fails', () => {
+  it('should show an error if create barcode fails', () => {
     cy.task('stubCreateBarcodeFailure')
     Page.verifyOnPage(ReviewRecipientsPage).createBarcodeButton().click()
     Page.verifyOnPage(ReviewRecipientsPage).hasErrorContaining('error')

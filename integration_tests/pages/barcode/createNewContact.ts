@@ -13,7 +13,7 @@ export default class CreateNewContactPage extends Page {
 
   submitWithValidValues = (): ReviewRecipientsPage => {
     this.prisonerNameField().type('Gage Hewitt')
-    this.prisonIdField().type('kennet')
+    this.prisonIdField().type('ashfield')
     this.pressEnterInPrisonIdField()
     this.submitButton().click()
     return Page.verifyOnPage(ReviewRecipientsPage)

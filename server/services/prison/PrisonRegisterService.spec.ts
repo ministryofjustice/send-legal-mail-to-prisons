@@ -3,7 +3,7 @@ import nock from 'nock'
 import PrisonRegisterService from './PrisonRegisterService'
 import config from '../../config'
 import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
-import { Prison, PrisonAddress } from '../../@types/prisonTypes'
+import { PrisonAddress } from '../../@types/prisonTypes'
 
 const prisonRegisterStore = {
   setActivePrisons: jest.fn(),
@@ -112,7 +112,7 @@ describe('Prison Register Service', () => {
     mockPrisonAddressData()
 
     it('should get prison address given prison exists', async () => {
-      const prison = { id: 'ASI' } as Prison
+      const prisonId = 'ASI'
 
       const expectedPrisonAddress: PrisonAddress = {
         flat: null,
@@ -124,16 +124,16 @@ describe('Prison Register Service', () => {
         postalCode: 'BS16 9QJ',
       }
 
-      const prisonAddress: PrisonAddress = await prisonRegisterService.getPrisonAddress(prison)
+      const prisonAddress: PrisonAddress = await prisonRegisterService.getPrisonAddress(prisonId)
 
       expect(prisonAddress).toStrictEqual(expectedPrisonAddress)
     })
 
     it('should not get prison address given prison does not exist', async () => {
-      const prison = { id: 'XYZ' } as Prison
+      const prisonId = 'XYZ'
 
       try {
-        await prisonRegisterService.getPrisonAddress(prison)
+        await prisonRegisterService.getPrisonAddress(prisonId)
       } catch (error) {
         expect(error).toStrictEqual(new Error('PrisonAddress for prison XYZ not found'))
       }

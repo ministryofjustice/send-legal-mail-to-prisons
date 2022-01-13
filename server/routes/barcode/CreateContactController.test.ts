@@ -4,6 +4,7 @@ import CreateContactController from './CreateContactController'
 import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
 import config from '../../config'
 import newContactValidator from './newContactValidator'
+import { PrisonAddress } from '../../@types/prisonTypes'
 
 jest.mock('../../config')
 jest.mock('./newContactValidator')
@@ -19,6 +20,7 @@ const res = {
 
 const prisonRegisterService = {
   getActivePrisons: jest.fn(),
+  getPrisonAddress: jest.fn(),
 }
 
 describe('CreateContactController', () => {
@@ -30,9 +32,11 @@ describe('CreateContactController', () => {
 
   afterEach(() => {
     prisonRegisterService.getActivePrisons.mockReset()
+    prisonRegisterService.getPrisonAddress.mockReset()
     res.render.mockReset()
     res.redirect.mockReset()
     req.session = {} as SessionData
+    req.flash.mockReset()
   })
 
   describe('getCreateNewRecipientView', () => {
@@ -128,13 +132,38 @@ describe('CreateContactController', () => {
       mockNewContactValidator = newContactValidator as jest.MockedFunction<typeof newContactValidator>
     })
 
-    it('should redirect to review-recipients given new contact is validated', async () => {
+    it('should redirect to review-recipients given new contact is validated and prison address is resolved', async () => {
       req.session.findRecipientForm = { prisonNumber: 'A1234BC', prisonerName: 'Fred Bloggs', prisonId: 'SKI' }
       mockNewContactValidator.mockReturnValue(true)
+      const prisonAddress: PrisonAddress = {
+        flat: null,
+        premise: 'HMP COOKHAM WOOD',
+        street: null,
+        locality: null,
+        countyCode: 'KENT',
+        area: 'Rochester Kent',
+        postalCode: 'ME1 3LU',
+      }
+      prisonRegisterService.getPrisonAddress.mockResolvedValue(prisonAddress)
+      const expectedRecipients = [{ prisonAddress, prisonNumber: 'A1234BC', prisonerName: 'Fred Bloggs' }]
 
       await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
+      expect(req.session.recipients).toStrictEqual(expectedRecipients)
+    })
+
+    it('should redirect to create-new-contact given new contact is validated but prison address is not resolved', async () => {
+      req.session.findRecipientForm = { prisonNumber: 'A1234BC', prisonerName: 'Fred Bloggs', prisonId: 'SKI' }
+      mockNewContactValidator.mockReturnValue(true)
+      prisonRegisterService.getPrisonAddress.mockRejectedValue(new Error(`PrisonAddress for prison SKI not found`))
+
+      await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
+
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact')
+      expect(req.flash).toHaveBeenCalledWith('errors', [
+        { href: 'prisonId', text: 'There was a problem getting the address for the selected prison' },
+      ])
     })
 
     it('should redirect to create-new-contact given new contact is not validated', async () => {

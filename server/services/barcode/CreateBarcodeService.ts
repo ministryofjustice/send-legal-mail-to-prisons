@@ -5,6 +5,7 @@ import bwipjs from 'bwip-js'
 import { createCanvas, Image } from 'canvas'
 import RestClient from '../../data/restClient'
 import config from '../../config'
+import { Recipient } from '../../@types/prisonTypes'
 
 export default class CreateBarcodeService {
   private static restClient(token: string): RestClient {
@@ -51,7 +52,7 @@ export default class CreateBarcodeService {
     return this.opts.scaleFactor * pix
   }
 
-  generateAddressAndBarcodeImage(barcodeImageBuffer: Buffer): string {
+  generateAddressAndBarcodeImage(barcodeImageBuffer: Buffer, recipient: Recipient): string {
     const canvas = createCanvas(this.scale(this.opts.canvasWidth), this.scale(this.opts.canvasHeight))
     canvas.width = Math.ceil(this.scale(canvas.width))
     canvas.height = Math.ceil(this.scale(canvas.height))
@@ -71,17 +72,21 @@ export default class CreateBarcodeService {
     ctx.font = `bold ${this.scale(this.opts.fontPoints)}pt Arial`
     ctx.fillText(`Prison Rule 39`, this.scale(this.opts.headerTextX), this.scale(this.opts.headerTextY))
     ctx.font = `${this.scale(this.opts.fontPoints)}pt Arial`
-    // TODO SLM-67 When we capture the prisoner name and number we should use it below
-    // TODO SLM-75 When we populate the prison address from the prison we should use it below
     ctx.fillText(
-      `John Smith
-A1234BC
-HMP Preston
-2 Ribbleton Ln, Preston
-PR1 5AB`,
+      this.recipientNameAndAddress(recipient),
       this.scale(this.opts.addressX),
       this.scale(this.opts.addressY)
     )
     return `data:image/png;base64,${canvas.toBuffer('image/png', { resolution: this.scale(72) }).toString('base64')}`
+  }
+
+  private recipientNameAndAddress(recipient: Recipient): string {
+    return `${recipient.prisonerName}
+${recipient.prisonNumber}
+${recipient.prisonAddress.premise}
+${recipient.prisonAddress.street}
+${recipient.prisonAddress.locality}
+${recipient.prisonAddress.area}
+${recipient.prisonAddress.postalCode}`
   }
 }
