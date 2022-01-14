@@ -8,6 +8,11 @@ import config from '../../config'
 import { Recipient } from '../../@types/prisonTypes'
 
 export default class CreateBarcodeService {
+  constructor() {
+    registerFont('liberation_sans.ttf', { family: `${this.opts.font}` })
+    registerFont('liberation_sans_bold.ttf', { family: `${this.opts.font} Bold` })
+  }
+
   private static restClient(token: string): RestClient {
     return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, token)
   }
@@ -54,8 +59,6 @@ export default class CreateBarcodeService {
   }
 
   generateAddressAndBarcodeImage(barcodeImageBuffer: Buffer, recipient: Recipient): string {
-    registerFont('liberation_sans.ttf', { family: `${this.opts.font}` })
-    registerFont('liberation_sans_bold.ttf', { family: `${this.opts.font} Bold` })
     const canvas = createCanvas(this.scale(this.opts.canvasWidth), this.scale(this.opts.canvasHeight))
     canvas.width = Math.ceil(this.scale(canvas.width))
     canvas.height = Math.ceil(this.scale(canvas.height))
