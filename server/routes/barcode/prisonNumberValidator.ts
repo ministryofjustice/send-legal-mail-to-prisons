@@ -6,11 +6,8 @@ export default function validatePrisonNumber(req: Request): boolean {
   const errors: Array<Record<string, string>> = []
   if (!req.body.prisonNumber) {
     errors.push({ href: '#prisonNumber', text: 'Enter a prison number' })
-  } else {
-    req.body.prisonNumber = req.body.prisonNumber.trim().toUpperCase()
-    if (!PRISON_NUMBER_PATTERN.test(req.body.prisonNumber)) {
-      errors.push({ href: '#prisonNumber', text: 'Enter the prison number in the correct format.' })
-    }
+  } else if (!PRISON_NUMBER_PATTERN.test(req.body.prisonNumber)) {
+    errors.push({ href: '#prisonNumber', text: 'Enter the prison number in the correct format.' })
   }
 
   if (errors.length > 0) {

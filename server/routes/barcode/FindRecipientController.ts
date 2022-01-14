@@ -9,6 +9,7 @@ export default class FindRecipientController {
   }
 
   async submitFindByPrisonNumber(req: Request, res: Response): Promise<void> {
+    req.body.prisonNumber = req.body.prisonNumber.trim().toUpperCase()
     req.session.findRecipientForm = { ...req.body }
     if (!validatePrisonNumber(req)) {
       return res.redirect('/barcode/find-recipient')

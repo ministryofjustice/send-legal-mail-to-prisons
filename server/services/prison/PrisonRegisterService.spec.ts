@@ -115,12 +115,12 @@ describe('Prison Register Service', () => {
       const prisonId = 'ASI'
 
       const expectedPrisonAddress: PrisonAddress = {
-        flat: null,
+        flat: '',
         premise: 'HMP & YOI ASHFIELD',
         street: 'Shortwood Road',
         locality: 'Pucklechurch',
-        countyCode: null,
-        area: 'Pucklechurch Bristol',
+        countyCode: '',
+        area: 'Bristol',
         postalCode: 'BS16 9QJ',
       }
 
@@ -146,24 +146,24 @@ describe('Prison Register Service', () => {
         agencyCode: 'ACI',
         agyDescription: 'ALTCOURSE (HMP)',
         agyLocType: 'Prison',
-        flat: null,
+        flat: '',
         premise: 'HMP ALTCOURSE',
         street: 'Higher Lane',
         locality: 'Fazakerley',
-        countyCode: null,
-        area: 'Fazakerley Liverpool',
+        countyCode: '',
+        area: 'Liverpool',
         postalCode: 'L9 7LH',
       },
       {
         agencyCode: 'ASI',
         agyDescription: 'ASHFIELD (HMP)',
         agyLocType: 'Prison',
-        flat: null,
+        flat: '',
         premise: 'HMP & YOI ASHFIELD',
         street: 'Shortwood Road',
         locality: 'Pucklechurch',
-        countyCode: null,
-        area: 'Pucklechurch Bristol',
+        countyCode: '',
+        area: 'Bristol',
         postalCode: 'BS16 9QJ',
       },
     ])

@@ -2,7 +2,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import bwipjs from 'bwip-js'
-import { createCanvas, Image } from 'canvas'
+import { createCanvas, Image, registerFont } from 'canvas'
 import RestClient from '../../data/restClient'
 import config from '../../config'
 import { Recipient } from '../../@types/prisonTypes'
@@ -27,6 +27,7 @@ export default class CreateBarcodeService {
     addressX: 30,
     addressY: 40,
     fontPoints: 6,
+    font: 'Liberation Sans',
   }
 
   async createBarcode(token: string): Promise<string> {
@@ -53,6 +54,8 @@ export default class CreateBarcodeService {
   }
 
   generateAddressAndBarcodeImage(barcodeImageBuffer: Buffer, recipient: Recipient): string {
+    registerFont('liberation_sans.ttf', { family: `${this.opts.font}` })
+    registerFont('liberation_sans_bold.ttf', { family: `${this.opts.font} Bold` })
     const canvas = createCanvas(this.scale(this.opts.canvasWidth), this.scale(this.opts.canvasHeight))
     canvas.width = Math.ceil(this.scale(canvas.width))
     canvas.height = Math.ceil(this.scale(canvas.height))
@@ -69,9 +72,9 @@ export default class CreateBarcodeService {
       )
     }
     barcodeImage.src = `data:image/png;base64,${barcodeImageBuffer.toString('base64')}`
-    ctx.font = `bold ${this.scale(this.opts.fontPoints)}pt Arial`
+    ctx.font = `bold ${this.scale(this.opts.fontPoints)}pt "${this.opts.font} Bold"`
     ctx.fillText(`Prison Rule 39`, this.scale(this.opts.headerTextX), this.scale(this.opts.headerTextY))
-    ctx.font = `${this.scale(this.opts.fontPoints)}pt Arial`
+    ctx.font = `${this.scale(this.opts.fontPoints)}pt "${this.opts.font}"`
     ctx.fillText(
       this.recipientNameAndAddress(recipient),
       this.scale(this.opts.addressX),
@@ -86,7 +89,6 @@ ${recipient.prisonNumber}
 ${recipient.prisonAddress.premise}
 ${recipient.prisonAddress.street}
 ${recipient.prisonAddress.locality}
-${recipient.prisonAddress.area}
 ${recipient.prisonAddress.postalCode}`
   }
 }

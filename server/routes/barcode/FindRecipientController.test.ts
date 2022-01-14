@@ -9,6 +9,7 @@ jest.mock('./prisonNumberValidator')
 const req = {
   session: {} as SessionData,
   flash: jest.fn(),
+  body: { prisonNumber: '' },
 }
 const res = {
   render: jest.fn(),
@@ -45,6 +46,15 @@ describe('FindRecipientController', () => {
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
+    })
+
+    it('should uppercase and trim the prison number', async () => {
+      req.body.prisonNumber = ' a1234bc '
+      mockPrisonNumberValidator.mockReturnValue(true)
+
+      await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
+
+      expect(req.body.prisonNumber).toEqual('A1234BC')
     })
   })
 })

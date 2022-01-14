@@ -60,6 +60,12 @@ COPY --from=build --chown=appuser:appgroup \
 COPY --from=build --chown=appuser:appgroup \
         /app/node_modules ./node_modules
 
+COPY --from=build --chown=appuser:appgroup \
+        /app/liberation_sans.ttf ./liberation_sans.ttf
+
+COPY --from=build --chown=appuser:appgroup \
+        /app/liberation_sans_bold.ttf ./liberation_sans_bold.ttf
+
 EXPOSE 3000
 ENV NODE_ENV='production'
 USER 2000
