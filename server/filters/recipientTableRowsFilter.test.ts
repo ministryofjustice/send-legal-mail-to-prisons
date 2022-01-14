@@ -1,5 +1,5 @@
-import ReviewRecipientsView from './ReviewRecipientsView'
-import { PrisonAddress, Recipient } from '../../@types/prisonTypes'
+import { PrisonAddress, Recipient } from '../@types/prisonTypes'
+import recipientTableRowsFilter from './recipientTableRowsFilter'
 
 const HMP_BRINSFORD = {
   flat: null,
@@ -20,19 +20,16 @@ const HMP_BRIXTON = {
   postalCode: 'SW2 5XF',
 } as PrisonAddress
 
-describe('ReviewRecipientView', () => {
-  it('should render args with recipients suitable for rendering in a govukTable', () => {
+describe('recipientTableRowsFilter', () => {
+  it('should filter recipients into structure suitable for rendering in a govukTable', () => {
     const recipients: Array<Recipient> = [
       { prisonNumber: 'A1234BC', prisonerName: 'John Smith', prisonAddress: HMP_BRINSFORD },
       { prisonNumber: 'R9831RQ', prisonerName: 'Gage Hewitt', prisonAddress: HMP_BRIXTON },
     ]
-    const errors: Record<string, string>[] = []
 
-    const view = new ReviewRecipientsView(recipients, errors)
+    const tableRows = recipientTableRowsFilter(recipients)
 
-    const renderedArgs = view.renderArgs
-
-    expect(renderedArgs.recipients).toStrictEqual([
+    expect(tableRows).toStrictEqual([
       [
         { text: 'John Smith' },
         { text: 'A1234BC' },

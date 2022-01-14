@@ -1,13 +1,13 @@
 /* eslint-disable no-param-reassign */
 import nunjucks, { Environment } from 'nunjucks'
 import express from 'express'
-import moment from 'moment'
 import path from 'path'
-
-type Error = {
-  href: string
-  text: string
-}
+import recipientTableRowsFilter from '../filters/recipientTableRowsFilter'
+import initialiseNameFilter from '../filters/initialiseNameFilter'
+import findErrorFilter from '../filters/findErrorFilter'
+import calculateDaysSinceCreationFilter from '../filters/calculateDaysSinceCreationFilter'
+import formatDateTimeForResultsPageFilter from '../filters/formatDateTimeForResultsPageFilter'
+import formatDateForResultsPageFilter from '../filters/formatDateForResultsPageFilter'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -51,35 +51,12 @@ export function registerNunjucks(app?: express.Express): Environment {
     }
   )
 
-  njkEnv.addFilter('initialiseName', (fullName: string) => {
-    // this check is for the authError page
-    if (!fullName) {
-      return null
-    }
-    const array = fullName.split(' ')
-    return `${array[0][0]}. ${array.reverse()[0]}`
-  })
-
-  njkEnv.addFilter('findError', (array: Error[], formFieldId: string) => {
-    const item = array?.find(error => error.href === `#${formFieldId}`)
-    return item ? { text: item.text } : null
-  })
-
-  njkEnv.addFilter('formatDateTimeForResultsPage', (value: string) => {
-    const dateTime = moment(value)
-    return dateTime ? dateTime.format('h:mm a [on] D MMMM YYYY') : null
-  })
-
-  njkEnv.addFilter('formatDateForResultsPage', (value: string) => {
-    const dateTime = moment(value)
-    return dateTime ? dateTime.format('D MMMM YYYY') : null
-  })
-
-  njkEnv.addFilter('calculateDaysSinceCreation', (value: string) => {
-    const dateTime = moment(value)
-    const now = moment()
-    return dateTime ? now.diff(dateTime, 'days') : null
-  })
+  njkEnv.addFilter('initialiseName', initialiseNameFilter)
+  njkEnv.addFilter('findError', findErrorFilter)
+  njkEnv.addFilter('formatDateTimeForResultsPage', formatDateTimeForResultsPageFilter)
+  njkEnv.addFilter('formatDateForResultsPage', formatDateForResultsPageFilter)
+  njkEnv.addFilter('calculateDaysSinceCreation', calculateDaysSinceCreationFilter)
+  njkEnv.addFilter('recipientTableRows', recipientTableRowsFilter)
 
   return njkEnv
 }
