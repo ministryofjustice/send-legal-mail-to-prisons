@@ -10,7 +10,7 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
     SEND_LEGAL_MAIL_API_URL: "https://send-legal-mail-api-dev.prison.service.justice.gov.uk"
     PRISON_REGISTER_API_URL: "https://prison-register-dev.hmpps.service.justice.gov.uk"
-    SUPPORTED_PRISONS: "SKI"
+    SUPPORTED_PRISONS: "SKI,SLI,RSI,MDI"
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
