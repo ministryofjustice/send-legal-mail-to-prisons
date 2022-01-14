@@ -1,9 +1,7 @@
 {% extends "layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% set pageTitle = applicationName + " - Review recipients" %}
 {% set pageId = 'review-recipients' %}
@@ -21,19 +19,37 @@
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <h1 class="govuk-heading-xl">Review recipients placeholder page</h1>
+        <h1 class="govuk-heading-xl">Review your recipients</h1>
 
-        <h2 class="govuk-heading-m">Temporary display of recipients for dev purposes</h2>
-        <ul>
-          {% for recipient in recipients %}
-            <li>{{ recipient.prisonerName }}, {{ recipient.prisonNumber }}, {{ recipient.prisonAddress.premise }}, {{ recipient.prisonAddress.postalCode }}</li>
-          {% endfor %}
-        </ul>
+        {{ govukTable({
+          firstCellIsHeader: false,
+          head: [
+            { text: 'Name' },
+            { text: 'Prisoner number or date of birth' },
+            { text: 'Prison' },
+            { text: '' },
+            { text: '' }
+          ],
+          rows: recipients | recipientTableRows
+        }) }}
+
+        <p class="govuk-!-margin-top-6 govuk-!-margin-bottom-6">
+          {# TODO SLM-83 will implement the target page for this link #}
+          <a href="" class="govuk-link">Add another recipient</a>
+        </p>
+
+        {# TODO SLM-69 will implement the target page for this button #}
+        {{ govukButton({
+          text: 'Prepare barcodes',
+          href: '',
+          attributes: {'data-qa': 'prepare-barcodes-button' }
+        }) }}
 
       </div>
     </div>
 
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-row govuk-!-margin-top-6">
+      <hr />
       <div class="govuk-grid-column-full">
 
         <p>Press the button to generate a barcode</p>
