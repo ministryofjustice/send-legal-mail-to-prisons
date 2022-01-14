@@ -12,15 +12,13 @@ describe('prisonNumberValidator', () => {
     req.body = { prisonNumber: undefined as string }
   })
 
-  Array.of('A1234BC', 'a1234bc', '  s1366pc', 'd1234pc  ', ' D4356cc   ').forEach(prisonNumber => {
-    it(`should validate given valid prison number - '${prisonNumber}'`, () => {
-      req.body.prisonNumber = prisonNumber
+  it('should validate given a valid prison number', () => {
+    req.body.prisonNumber = 'A1234BC'
 
-      const valid = validatePrisonNumber(req as unknown as Request)
+    const valid = validatePrisonNumber(req as unknown as Request)
 
-      expect(valid).toBeTruthy()
-      expect(req.flash).not.toHaveBeenCalled()
-    })
+    expect(valid).toBeTruthy()
+    expect(req.flash).not.toHaveBeenCalled()
   })
 
   Array.of(null, undefined, '').forEach(prisonNumber => {
@@ -34,7 +32,7 @@ describe('prisonNumberValidator', () => {
     })
   })
 
-  Array.of('blah', 'A 1234 BC', 'a 1234 bc', 'a1234 bc', '1234ABC', 'AB1234A').forEach(prisonNumber => {
+  Array.of('blah', 'A 1234 BC', '1234ABC', 'AB1234A').forEach(prisonNumber => {
     it(`should not validate given invalid format prison number - '${prisonNumber}'`, () => {
       req.body.prisonNumber = prisonNumber
 
