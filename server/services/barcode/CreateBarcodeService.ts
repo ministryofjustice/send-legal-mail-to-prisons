@@ -6,6 +6,7 @@ import { createCanvas, Image, registerFont } from 'canvas'
 import RestClient from '../../data/restClient'
 import config from '../../config'
 import { Recipient } from '../../@types/prisonTypes'
+import { CreateBarcodeResponse } from '../../@types/sendLegalMailApiClientTypes'
 
 export default class CreateBarcodeService {
   constructor() {
@@ -38,8 +39,8 @@ export default class CreateBarcodeService {
   async createBarcode(token: string): Promise<string> {
     return CreateBarcodeService.restClient(token)
       .postCreateBarcode({ path: `/barcode` })
-      .then(response => {
-        return response.toString()
+      .then((response: CreateBarcodeResponse) => {
+        return response.barcode
       })
   }
 

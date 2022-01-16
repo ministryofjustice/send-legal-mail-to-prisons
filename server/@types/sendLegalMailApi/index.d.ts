@@ -23,14 +23,19 @@ export interface paths {
 export interface components {
   schemas: {
     VerifyLinkRequest: {
-      /** The secret to verify */
+      /** @description The secret to verify */
       secret: string
+    }
+    VerifyLinkResponse: {
+      /** @description The JWT */
+      token: string
     }
     AuthenticationError: {
       code: string
       userMessage: string
     }
     CheckBarcodeErrorCodes: components['schemas']['ErrorCode'] & {
+      /** @enum {string} */
       code?: 'DUPLICATE' | 'EXPIRED' | 'RANDOM_CHECK'
       userMessage?: string
     } & (
@@ -46,11 +51,21 @@ export interface components {
       userMessage: string
     }
     Duplicate: {
-      /** The time that the original barcode was scanned */
+      /**
+       * Format: date-time
+       * @description The time that the original barcode was scanned
+       * @example 2021-11-30T09:06:10Z
+       */
       scannedDate: string
-      /** The prison where the original barcode was scanned */
+      /**
+       * @description The prison where the original barcode was scanned
+       * @example MDI
+       */
       scannedLocation: string
-      /** The organisation that created the barcode in the first place */
+      /**
+       * @description The organisation that created the barcode in the first place
+       * @example Aardvark Solicitors
+       */
       createdBy: string
       code: string
       userMessage: string
@@ -71,24 +86,45 @@ export interface components {
       code: string
       userMessage: string
     }
-    /** The error code describing the error */
+    /** @description The error code describing the error */
     ErrorCode: {
-      /** The error code */
+      /**
+       * @description The error code
+       * @example ERROR_IDENTIFIER
+       */
       code: string
-      /** A human readable description of the error */
+      /**
+       * @description A human readable description of the error
+       * @example An error occurred
+       */
       userMessage: string
     }
     ErrorResponse: {
-      /** The HTTP status code */
+      /**
+       * Format: int32
+       * @description The HTTP status code
+       * @example 400
+       */
       status: number
       errorCode: components['schemas']['ErrorCode']
     }
     Expired: {
-      /** The time the barcode was created */
+      /**
+       * Format: date-time
+       * @description The time the barcode was created
+       * @example 2021-11-30T09:06:10Z
+       */
       createdDate: string
-      /** The number of days before a barcode expires */
+      /**
+       * Format: int64
+       * @description The number of days before a barcode expires
+       * @example 28
+       */
       barcodeExpiryDays: number
-      /** The organisation that created the barcode in the first place */
+      /**
+       * @description The organisation that created the barcode in the first place
+       * @example Aardvark Solicitors
+       */
       createdBy: string
       code: string
       userMessage: string
@@ -98,6 +134,7 @@ export interface components {
       userMessage: string
     }
     MagicLinkRequestErrorCodes: components['schemas']['ErrorCode'] & {
+      /** @enum {string} */
       code?: 'EMAIL_MANDATORY' | 'EMAIL_TOO_LONG' | 'INVALID_EMAIL' | 'INVALID_CJSM_EMAIL'
       userMessage?: string
     } & (
@@ -118,12 +155,16 @@ export interface components {
       userMessage: string
     }
     RandomCheck: {
-      /** The organisation that created the barcode in the first place */
+      /**
+       * @description The organisation that created the barcode in the first place
+       * @example Aardvark Solicitors
+       */
       createdBy: string
       code: string
       userMessage: string
     }
     StandardErrorCodes: components['schemas']['ErrorCode'] & {
+      /** @enum {string} */
       code?: 'AUTH' | 'DOWNSTREAM' | 'INTERNAL_ERROR' | 'MALFORMED_REQUEST' | 'NOT_FOUND'
       userMessage?: string
     } & (
@@ -136,20 +177,32 @@ export interface components {
         code: unknown
         userMessage: unknown
       }
-    VerifyLinkResponse: {
-      /** The JWT */
-      token: string
-    }
     MagicLinkRequest: {
-      /** The email address to send the magic link to */
+      /**
+       * @description The email address to send the magic link to
+       * @example andrew.barret@company.com
+       */
       email: string
     }
+    CreateBarcodeResponse: {
+      /**
+       * @description The generated barcode
+       * @example 123456789012
+       */
+      barcode: string
+    }
     CheckBarcodeRequest: {
-      /** The barcode being checked */
+      /**
+       * @description The barcode being checked
+       * @example 123456789012
+       */
       barcode: string
     }
     CheckBarcodeResponse: {
-      /** The organisation that created the barcode */
+      /**
+       * @description The organisation that created the barcode
+       * @example Aardvark Solicitors
+       */
       createdBy: string
     }
     Link: {
@@ -228,7 +281,7 @@ export interface operations {
       /** Barcode created */
       201: {
         content: {
-          'application/json': string
+          'application/json': components['schemas']['CreateBarcodeResponse']
         }
       }
       /** Bad request */
