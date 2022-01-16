@@ -34,6 +34,7 @@ describe('CreateBarcodeService', () => {
   describe('generateBarcodeImage', () => {
     beforeEach(() => {
       mockBwipjsToBuffer.mockClear()
+      createBarcodeService = new CreateBarcodeService()
     })
 
     it('should pass the barcode into the barcode generator', async () => {
