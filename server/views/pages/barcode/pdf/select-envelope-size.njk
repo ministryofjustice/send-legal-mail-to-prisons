@@ -1,0 +1,52 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = applicationName + " - Select envelope size" %}
+{% set pageId = 'select-envelope-size' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+    {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: 'There is a problem',
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl">Select envelope size</h1>
+
+        <form id="select-envelope-size-form">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {% call govukFieldset({ }) %}
+
+            {{ govukRadios({
+              name: 'envelopeSize',
+              fieldset: {
+                legend: {
+                  text: 'Select your envelope size',
+                  isPageHeading: false,
+                  classes: 'govuk-visually-hidden'
+                }
+              },
+              items: envelopeSizes | renderEnvelopeSizeRadios
+            }) }}
+
+            {{ govukButton({
+              text: 'Continue'
+            }) }}
+
+          {% endcall %}
+        </form>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

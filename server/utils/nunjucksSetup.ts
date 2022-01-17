@@ -8,6 +8,7 @@ import findErrorFilter from '../filters/findErrorFilter'
 import calculateDaysSinceCreationFilter from '../filters/calculateDaysSinceCreationFilter'
 import formatDateTimeForResultsPageFilter from '../filters/formatDateTimeForResultsPageFilter'
 import formatDateForResultsPageFilter from '../filters/formatDateForResultsPageFilter'
+import renderEnvelopeSizeRadiosFilter from '../filters/renderEnvelopeSizeRadiosFilter'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -57,6 +58,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('formatDateForResultsPage', formatDateForResultsPageFilter)
   njkEnv.addFilter('calculateDaysSinceCreation', calculateDaysSinceCreationFilter)
   njkEnv.addFilter('recipientTableRows', recipientTableRowsFilter)
+  njkEnv.addFilter('renderEnvelopeSizeRadios', renderEnvelopeSizeRadiosFilter)
 
   return njkEnv
 }

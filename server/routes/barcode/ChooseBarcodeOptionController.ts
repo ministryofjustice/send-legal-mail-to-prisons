@@ -20,6 +20,8 @@ export default class ChooseBarcodeOptionController {
       return res.redirect('/barcode/choose-barcode-option')
     }
 
-    return res.redirect('/barcode/generate-barcode-image')
+    return req.session.chooseBarcodeOptionForm.barcodeOption === 'coversheet'
+      ? res.redirect('/barcode/pdf/select-envelope-size')
+      : res.redirect('/barcode/generate-barcode-image')
   }
 }
