@@ -1,0 +1,63 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set pageTitle = applicationName + " - Choose barcode option" %}
+{% set pageId = 'choose-barcode-option' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+    {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: 'There is a problem',
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+
+        <form action="/barcode/choose-barcode-option" method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {{ govukRadios({
+            idPrefix: "barcodeOption",
+            name: "barcodeOption",
+            fieldset: {
+              legend: {
+                text: "How do you want to print the barcodes?",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--xl"
+              }
+            },
+            hint: {
+              text: "Each recipient's address will be displayed with the barcode. You'll need to use a window envelope."
+            },
+            items: [
+              {
+                value: "image",
+                text: "Print as part of your document"
+              },
+              {
+                value: "coversheet",
+                text: "Print on a separate sheet of paper"
+              }
+            ],
+            errorMessage: errors | findError('barcodeOption')
+          }) }}
+
+          {{ govukButton({
+            text: "Continue",
+            preventDoubleClick: true,
+            attributes: { 'data-qa': 'continue-button' }
+          }) }}
+
+        </form>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
