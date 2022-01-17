@@ -7,6 +7,12 @@ import RestClient from '../../data/restClient'
 import config from '../../config'
 import { Recipient } from '../../@types/prisonTypes'
 import { CreateBarcodeResponse } from '../../@types/sendLegalMailApiClientTypes'
+import logger from '../../../logger'
+
+export type BarcodeData = {
+  barcode: string
+  barcodeImageDataUrl: string
+}
 
 export default class CreateBarcodeService {
   constructor() {
@@ -36,7 +42,21 @@ export default class CreateBarcodeService {
     font: 'Liberation Sans',
   }
 
-  async createBarcode(token: string): Promise<string> {
+  async generateBarcode(token: string, recipient: Recipient): Promise<BarcodeData> {
+    try {
+      const barcodeValue = await this.createBarcode(token)
+      const barcodeImage = await this.generateBarcodeImage(barcodeValue)
+      return {
+        barcode: barcodeValue,
+        barcodeImageDataUrl: this.generateAddressAndBarcodeImage(barcodeImage, recipient),
+      }
+    } catch (error) {
+      logger.error('Error generating barcode image', error)
+      throw error
+    }
+  }
+
+  private async createBarcode(token: string): Promise<string> {
     return CreateBarcodeService.restClient(token)
       .postCreateBarcode({ path: `/barcode` })
       .then((response: CreateBarcodeResponse) => {
@@ -44,7 +64,7 @@ export default class CreateBarcodeService {
       })
   }
 
-  async generateBarcodeImage(barcode: string): Promise<Buffer> {
+  private async generateBarcodeImage(barcode: string): Promise<Buffer> {
     return bwipjs.toBuffer({
       bcid: 'code128',
       text: barcode,
@@ -59,7 +79,7 @@ export default class CreateBarcodeService {
     return this.opts.scaleFactor * pix
   }
 
-  generateAddressAndBarcodeImage(barcodeImageBuffer: Buffer, recipient: Recipient): string {
+  private generateAddressAndBarcodeImage(barcodeImageBuffer: Buffer, recipient: Recipient): string {
     const canvas = createCanvas(this.scale(this.opts.canvasWidth), this.scale(this.opts.canvasHeight))
     canvas.width = Math.ceil(this.scale(canvas.width))
     canvas.height = Math.ceil(this.scale(canvas.height))

@@ -9,37 +9,38 @@ jest.mock('bwip-js')
 const mockBwipjsToBuffer = <jest.Mock<typeof toBuffer>>toBuffer
 
 describe('CreateBarcodeService', () => {
-  let createBarcodeService: CreateBarcodeService
+  const createBarcodeService = new CreateBarcodeService()
   let mockedSendLegalMailApi: nock.Scope
 
   beforeEach(() => {
     mockedSendLegalMailApi = nock(config.apis.sendLegalMail.url)
-    createBarcodeService = new CreateBarcodeService()
+    mockBwipjsToBuffer.mockClear()
   })
 
   afterEach(() => {
     nock.cleanAll()
   })
 
-  describe('createBarcode', () => {
-    it('should call the create barcoe API', async () => {
+  describe('generateBarcode', () => {
+    it('should generate a barcode', async () => {
+      const recipient = {
+        prisonNumber: 'A1234BC',
+        prisonerName: 'John Smith',
+        prisonAddress: {
+          premise: 'HMP BRINSFORD',
+          street: 'New Road',
+          locality: 'Featherstone',
+          area: 'Featherstone Wolverhampton',
+          postalCode: 'WV10 7PY',
+        },
+      }
       mockedSendLegalMailApi.post('/barcode').reply(201, { barcode: '123456789012' })
+      mockBwipjsToBuffer.mockReturnValue(Buffer.from('barcode-image'))
 
-      createBarcodeService.createBarcode('some-token').then(barcode => {
-        expect(barcode).toEqual('123456789012')
-      })
-    })
-  })
+      const barcodeData = await createBarcodeService.generateBarcode('some-token', recipient)
 
-  describe('generateBarcodeImage', () => {
-    beforeEach(() => {
-      mockBwipjsToBuffer.mockClear()
-      createBarcodeService = new CreateBarcodeService()
-    })
-
-    it('should pass the barcode into the barcode generator', async () => {
-      await createBarcodeService.generateBarcodeImage('123456789012')
-
+      expect(barcodeData.barcode).toEqual('123456789012')
+      expect(barcodeData.barcodeImageDataUrl).toContain('data:image/png;base64,')
       expect(mockBwipjsToBuffer).toHaveBeenCalledWith(
         expect.objectContaining({ text: '123456789012', alttext: '1234-5678-9012' })
       )
