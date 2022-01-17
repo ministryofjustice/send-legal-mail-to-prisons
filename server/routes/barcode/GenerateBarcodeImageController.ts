@@ -12,22 +12,19 @@ export default class GenerateBarcodeImageController {
       return res.redirect('/barcode/find-recipient')
     }
 
-    const recipient = req.session.recipients[0]
-    let barcode = ''
-    let barcodeImageBuffer
     try {
-      barcode = await this.createBarcodeService.createBarcode(req.session.createBarcodeAuthToken)
-      barcodeImageBuffer = await this.createBarcodeService.generateBarcodeImage(barcode)
+      const recipient = req.session.recipients[0]
+      const barcodeData = await this.createBarcodeService.generateBarcode(req.session.createBarcodeAuthToken, recipient)
+      const barcodeImageName = this.barcodeFilename(recipient)
+      this.clearForms(req)
+
+      const view = new GenerateBarcodeImageView(barcodeData.barcodeImageDataUrl, barcodeImageName)
+      return res.render('pages/barcode/generate-barcode-image', { ...view.renderArgs })
     } catch (error) {
       logger.error(`An error was received when trying to create the barcode image: ${JSON.stringify(error)}`)
       req.flash('errors', [{ text: 'There was an error generating the barcode, please try again' }])
       return res.redirect('/barcode/review-recipients')
     }
-    const barcodeImageUrl = this.createBarcodeService.generateAddressAndBarcodeImage(barcodeImageBuffer, recipient)
-    const barcodeImageName = this.barcodeFilename(recipient)
-    this.clearForms(req)
-    const view = new GenerateBarcodeImageView(barcode, barcodeImageUrl, barcodeImageName)
-    return res.render('pages/barcode/generate-barcode-image', { ...view.renderArgs })
   }
 
   private barcodeFilename(recipient: Recipient): string {
