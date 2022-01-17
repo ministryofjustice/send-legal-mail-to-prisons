@@ -90,6 +90,9 @@ export default {
       },
       agent: new AgentConfig(),
     },
+    gotenberg: {
+      url: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
+    },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   gtmContainerId: get('GOOGLE_TAG_MANAGER_CONTAINER_ID', null),

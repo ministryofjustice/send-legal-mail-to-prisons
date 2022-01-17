@@ -12,6 +12,9 @@ generic-service:
     PRISON_REGISTER_API_URL: "https://prison-register-dev.hmpps.service.justice.gov.uk"
     SUPPORTED_PRISONS: ""
 
+gotenberg:
+  replicaCount: 1
+
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
 

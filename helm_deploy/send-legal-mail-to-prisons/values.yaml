@@ -25,6 +25,7 @@ generic-service:
     NODE_ENV: "production"
     REDIS_TLS_ENABLED: "true"
     TOKEN_VERIFICATION_ENABLED: "true"
+    GOTENBERG_API_URL: "http://send-legal-mail-to-prisons-gotenberg"
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
@@ -44,6 +45,46 @@ generic-service:
     slmtp-ui-elasticache-redis:
       REDIS_HOST: "primary_endpoint_address"
       REDIS_AUTH_TOKEN: "auth_token"
+
+gotenberg:
+  nameOverride: gotenberg
+  replicaCount: 2
+
+  image:
+    repository: thecodingmachine/gotenberg
+    tag: 6.3.0
+    port: 3000
+
+  ingress:
+    enabled: false
+
+  livenessProbe:
+    httpGet:
+      path: /ping
+    periodSeconds: 30
+    initialDelaySeconds: 60
+    timeoutSeconds: 20
+    failureThreshold: 10
+
+  readinessProbe:
+    httpGet:
+      path: /ping
+    periodSeconds: 20
+    initialDelaySeconds: 60
+    timeoutSeconds: 30
+    failureThreshold: 15
+
+  podSecurityContext:
+    fsGroup: 1001
+
+  securityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
+
+  env:
+    GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS: 1
+    DISABLE_UNOCONV: 1
+    DEFAULT_WAIT_TIMEOUT: 30
 
 generic-prometheus-alerts:
   targetApplication: send-legal-mail-to-prisons
