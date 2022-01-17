@@ -20,4 +20,8 @@ declare module 'forms' {
     createdBy?: string
     errorCode?: CheckBarcodeErrorCodes
   }
+
+  export interface ChooseBarcodeOptionForm {
+    barcodeOption?: 'coversheet' | 'image'
+  }
 }

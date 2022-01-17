@@ -5,6 +5,7 @@ import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
 import ReviewRecipientsController from '../../routes/barcode/ReviewRecipientsController'
 import CreateContactController from '../../routes/barcode/CreateContactController'
 import GenerateBarcodeImageController from '../../routes/barcode/GenerateBarcodeImageController'
+import ChooseBarcodeOptionController from '../../routes/barcode/ChooseBarcodeOptionController'
 
 export default function setUpCreateBarcode(
   createBarcodeService: CreateBarcodeService,
@@ -14,6 +15,7 @@ export default function setUpCreateBarcode(
   const findRecipientController = new FindRecipientController()
   const createContactController = new CreateContactController(prisonRegisterService)
   const reviewRecipientsController = new ReviewRecipientsController()
+  const chooseBarcodeOptionController = new ChooseBarcodeOptionController()
   const generateImageController = new GenerateBarcodeImageController(createBarcodeService)
 
   router.get('/find-recipient', (req, res) => findRecipientController.getFindRecipientByPrisonNumberView(req, res))
@@ -29,6 +31,9 @@ export default function setUpCreateBarcode(
   )
 
   router.get('/review-recipients', (req, res) => reviewRecipientsController.getReviewRecipientsView(req, res))
+
+  router.get('/choose-barcode-option', (req, res) => chooseBarcodeOptionController.getChooseBarcodeOptionView(req, res))
+  router.post('/choose-barcode-option', (req, res) => chooseBarcodeOptionController.submitChooseBarcodeOption(req, res))
 
   router.get('/generate-barcode-image', (req, res) => generateImageController.getGenerateImageView(req, res))
 

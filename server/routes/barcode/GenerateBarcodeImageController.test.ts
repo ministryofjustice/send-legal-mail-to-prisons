@@ -57,7 +57,7 @@ describe('GenerateBarcodeImageController', () => {
 
       await generateBarcodeImageController.getGenerateImageView(req as unknown as Request, res as unknown as Response)
 
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/choose-barcode-option')
       expect(req.flash).toHaveBeenCalledWith('errors', [
         { text: 'There was an error generating the barcode, please try again' },
       ])

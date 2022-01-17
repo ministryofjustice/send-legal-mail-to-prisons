@@ -23,7 +23,7 @@ export default class GenerateBarcodeImageController {
     } catch (error) {
       logger.error(`An error was received when trying to create the barcode image: ${JSON.stringify(error)}`)
       req.flash('errors', [{ text: 'There was an error generating the barcode, please try again' }])
-      return res.redirect('/barcode/review-recipients')
+      return res.redirect('/barcode/choose-barcode-option')
     }
   }
 
