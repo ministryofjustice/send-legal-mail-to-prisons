@@ -12,9 +12,6 @@ generic-service:
     PRISON_REGISTER_API_URL: "https://prison-register-preprod.hmpps.service.justice.gov.uk"
     SUPPORTED_PRISONS: "SKI"
 
-gotenberg:
-  replicaCount: 1
-
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
 
