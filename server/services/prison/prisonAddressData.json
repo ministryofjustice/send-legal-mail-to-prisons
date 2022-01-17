@@ -480,6 +480,18 @@
     "postalCode": "YO41 1PS"
   },
   {
+    "agencyCode": "FWI",
+    "agyDescription": "FIVE WELLS (HMP)",
+    "agyLocType": "Prison",
+    "flat": "",
+    "premise": "HMP FIVE WELLS",
+    "street": "Doddington Road",
+    "locality": "Wellingborough",
+    "countyCode": "",
+    "area": "Northamptonshire",
+    "postalCode": "NN8 2NG"
+  },
+  {
     "agencyCode": "GHI",
     "agyDescription": "GARTH (HMP)",
     "agyLocType": "Prison",
