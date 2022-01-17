@@ -18,7 +18,7 @@ export default class GenerateBarcodeImagePage extends Page {
   }
 
   imageCopyButtonExists = (): GenerateBarcodeImagePage => {
-    this.imageDownloadButton().should('exist')
+    this.imageCopyButton().should('exist')
     return Page.verifyOnPage(GenerateBarcodeImagePage)
   }
 
@@ -27,4 +27,8 @@ export default class GenerateBarcodeImagePage extends Page {
   imageDownloadButton = (): PageElement => cy.get('[data-qa=download-image-button]')
 
   imageCopyButton = (): PageElement => cy.get('[data-qa=copy-image-button]')
+
+  hasErrorContaining = (partialMessage: string): void => {
+    cy.get('.govuk-error-summary__list').should('contain', partialMessage)
+  }
 }
