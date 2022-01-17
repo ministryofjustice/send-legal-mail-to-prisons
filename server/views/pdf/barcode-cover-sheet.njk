@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <style>
+      @page {
+        size: A4 portrait;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @media print {
+        body {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        .address {
+          width: 90mm;
+          display: block;
+          box-sizing: border-box;
+        }
+
+        .dl {
+          margin-top: 55mm;
+          margin-left: 20mm;
+        }
+
+        .c5 {
+          margin-top: 42mm;
+          margin-left: 20mm;
+        }
+
+        .c4 {
+          margin-top: 67mm;
+          margin-left: 24mm;
+        }
+
+        .debug-borders-true {
+          border: 1px solid black;
+        }
+        .debug-borders-true .address {
+          border: 1px solid black;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="debug-borders-{{ debugBorders }}>
+    <img class="address {{ envelopeSize }}" src="{{ barcodeImageUrl }}">
+  </body>
+</html>
