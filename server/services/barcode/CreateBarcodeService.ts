@@ -85,6 +85,9 @@ export default class CreateBarcodeService {
     canvas.height = Math.ceil(this.scale(canvas.height))
     const ctx = canvas.getContext('2d')
     ctx.scale(this.opts.scaleFactor, this.opts.scaleFactor)
+    ctx.fillStyle = 'white'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.fillStyle = 'black'
     const barcodeImage = new Image()
     barcodeImage.onload = () => {
       ctx.drawImage(
