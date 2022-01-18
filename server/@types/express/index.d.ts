@@ -3,6 +3,7 @@ import {
   ChooseBarcodeOptionForm,
   CreateNewContactForm,
   FindRecipientForm,
+  PdfForm,
   RequestLinkForm,
 } from '../forms'
 import { Recipient } from '../prisonTypes'
@@ -24,6 +25,7 @@ declare module 'express-session' {
     scannedAtLeastOneBarcode: boolean
     recipients: Array<Recipient>
     chooseBarcodeOptionForm: ChooseBarcodeOptionForm
+    pdfForm: PdfForm
   }
 }
 

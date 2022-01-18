@@ -24,4 +24,8 @@ declare module 'forms' {
   export interface ChooseBarcodeOptionForm {
     barcodeOption?: 'coversheet' | 'image'
   }
+
+  export interface PdfForm {
+    envelopeSize?: 'dl' | 'c4' | 'c5'
+  }
 }
