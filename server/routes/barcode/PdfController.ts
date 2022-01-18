@@ -19,7 +19,7 @@ export default class PdfController {
 
     req.session.pdfForm = { ...req.body }
     if (!validateEnvelopeSizeOption(req)) {
-      res.redirect('/barcode/pdf/select-envelope-size')
+      return res.redirect('/barcode/pdf/select-envelope-size')
     }
 
     return res.redirect('/barcode/pdf/print')
