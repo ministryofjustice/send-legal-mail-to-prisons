@@ -4,7 +4,6 @@ import CreateNewContactPage from '../../pages/barcode/createNewContact'
 import ReviewRecipientsPage from '../../pages/barcode/reviewRecipients'
 import ChooseBarcodeOptionPage from '../../pages/barcode/chooseBarcodeOption'
 import SelectEnvelopeSizePage from '../../pages/barcode/selectEnvelopeSize'
-import PrintCoversheetsPage from '../../pages/barcode/printCoversheets'
 
 context('Select envelope size', () => {
   beforeEach(() => {
@@ -27,14 +26,11 @@ context('Select envelope size', () => {
     selectEnvelopeSizePage.submitWithoutSelectingEnvelopeSize()
 
     selectEnvelopeSizePage.hasErrorContaining('Select an option')
-    selectEnvelopeSizePage.signOut().click()
   })
 
   it('should goto print coversheets given envelope size selected', () => {
     const selectEnvelopeSizePage = Page.verifyOnPage(SelectEnvelopeSizePage)
 
     selectEnvelopeSizePage.submitHavingSelectedC4EnvelopeSize()
-
-    Page.verifyOnPage(PrintCoversheetsPage).signOut().click()
   })
 })

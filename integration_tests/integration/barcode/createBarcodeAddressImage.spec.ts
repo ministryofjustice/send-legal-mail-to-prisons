@@ -26,13 +26,11 @@ context('Create Barcode Image', () => {
       .barcodeAddressImageExists()
       .imageDownloadButtonExists('Gage-Hewitt-A1234BC.png')
       .imageCopyButtonExists()
-      .signOut()
   })
 
   it('should show an error if create barcode fails', () => {
     cy.task('stubCreateBarcodeFailure')
     const page = Page.verifyOnPage(ChooseBarcodeOptionPage)
     page.continueToImageErrors().hasErrorContaining('error')
-    page.signOut()
   })
 })
