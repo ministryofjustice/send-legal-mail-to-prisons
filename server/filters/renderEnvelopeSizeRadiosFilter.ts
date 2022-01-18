@@ -1,10 +1,5 @@
+import type { RadioButtonOption } from 'forms'
 import { EnvelopeSizeSpec } from '../routes/barcode/PdfControllerView'
-
-export type RadioButtonOption = {
-  value: string
-  html: string
-  checked: boolean
-}
 
 export default function renderEnvelopeSizeRadiosFilter(
   envelopeSizes: Array<EnvelopeSizeSpec>

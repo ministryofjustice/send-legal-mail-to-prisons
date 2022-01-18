@@ -2,6 +2,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% set pageTitle = applicationName + " - Choose barcode option" %}
 {% set pageId = 'choose-barcode-option' %}
@@ -36,16 +37,7 @@
             hint: {
               text: "Each recipient's address will be displayed with the barcode. You'll need to use a window envelope."
             },
-            items: [
-              {
-                value: "image",
-                text: "Print as part of your document"
-              },
-              {
-                value: "coversheet",
-                text: "Print on a separate sheet of paper"
-              }
-            ],
+            items: ['image', 'coversheet'] | renderChooseBarcodeOptionRadiosFilter,
             errorMessage: errors | findError('barcodeOption')
           }) }}
 
