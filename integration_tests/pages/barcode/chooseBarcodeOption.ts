@@ -1,5 +1,6 @@
 import Page, { PageElement } from '../page'
 import GenerateBarcodeImagePage from './generateBarcodeImage'
+import SelectEnvelopeSizePage from './selectEnvelopeSize'
 
 export default class ChooseBarcodeOptionPage extends Page {
   constructor() {
@@ -8,12 +9,14 @@ export default class ChooseBarcodeOptionPage extends Page {
 
   continueToImage = (): GenerateBarcodeImagePage => {
     this.selectImage().check()
-    return this.continue()
-  }
-
-  continue = (): GenerateBarcodeImagePage => {
     this.continueButton().click()
     return Page.verifyOnPage(GenerateBarcodeImagePage)
+  }
+
+  continueToCoversheet = (): SelectEnvelopeSizePage => {
+    this.selectCoversheet().check()
+    this.continueButton().click()
+    return Page.verifyOnPage(SelectEnvelopeSizePage)
   }
 
   continueToImageErrors = (): ChooseBarcodeOptionPage => {
@@ -22,9 +25,9 @@ export default class ChooseBarcodeOptionPage extends Page {
     return Page.verifyOnPage(ChooseBarcodeOptionPage)
   }
 
-  selectImage = (): PageElement => cy.get('input#barcodeOption[value=image]')
+  selectImage = (): PageElement => cy.get('input[name=barcodeOption][value=image]')
 
-  selectCoversheet = (): PageElement => cy.get('input#barcodeOption[value=coversheet]')
+  selectCoversheet = (): PageElement => cy.get('input[name=barcodeOption][value=coversheet]')
 
   continueButton = (): PageElement => cy.get('button[data-qa="continue-button"]')
 

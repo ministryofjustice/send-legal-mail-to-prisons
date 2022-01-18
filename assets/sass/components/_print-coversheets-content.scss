@@ -1,0 +1,27 @@
+#print-coversheets-content {
+
+  .envelope span {
+    display: inline-block;
+    padding: 0 10px;
+    position: relative;
+  }
+  .envelope.dl span::after {
+    position: absolute;
+    content: ' ';
+    border-top: 1px dashed grey;
+    border-bottom: 1px dashed grey;
+    height: 33%;
+    width: 100%;
+    top: 35%;
+    left: 0;
+  }
+  .envelope.c5 span::after {
+    position: absolute;
+    content: ' ';
+    border-top: 1px dashed grey;
+    height: 1px;
+    width: 100%;
+    top: 50%;
+    left: 0;
+  }
+}

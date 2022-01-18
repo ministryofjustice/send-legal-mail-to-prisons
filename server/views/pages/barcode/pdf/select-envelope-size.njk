@@ -20,23 +20,24 @@
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <h1 class="govuk-heading-xl">Select envelope size</h1>
 
-        <form id="select-envelope-size-form">
+        <form id="select-envelope-size-form" action="/barcode/pdf/select-envelope-size" method="POST">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
           {% call govukFieldset({ }) %}
 
             {{ govukRadios({
-              name: 'envelopeSize',
               fieldset: {
                 legend: {
-                  text: 'Select your envelope size',
-                  isPageHeading: false,
-                  classes: 'govuk-visually-hidden'
+                  text: 'Select envelope size',
+                  isPageHeading: true,
+                  classes: 'govuk-fieldset__legend--xl'
                 }
               },
-              items: envelopeSizes | renderEnvelopeSizeRadios
+              items: envelopeSizes | renderEnvelopeSizeRadios,
+              id: 'envelopeSize',
+              name: 'envelopeSize',
+              errorMessage: errors | findError('envelopeSize')
             }) }}
 
             {{ govukButton({

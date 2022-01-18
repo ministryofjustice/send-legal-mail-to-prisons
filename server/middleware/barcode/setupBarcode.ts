@@ -38,6 +38,8 @@ export default function setUpCreateBarcode(
   router.post('/choose-barcode-option', (req, res) => chooseBarcodeOptionController.submitChooseBarcodeOption(req, res))
 
   router.get('/pdf/select-envelope-size', (req, res) => pdfController.getEnvelopeSizeView(req, res))
+  router.post('/pdf/select-envelope-size', (req, res) => pdfController.submitEnvelopeSize(req, res))
+  router.get('/pdf/print', (req, res) => pdfController.getPrintCoverSheetView(req, res))
 
   router.get('/generate-barcode-image', (req, res) => generateImageController.getGenerateImageView(req, res))
 

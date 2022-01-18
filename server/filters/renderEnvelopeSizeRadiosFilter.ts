@@ -1,4 +1,4 @@
-import { EnvelopeSizeSpec } from '../routes/barcode/PdfController'
+import { EnvelopeSizeSpec } from '../routes/barcode/PdfControllerView'
 
 export type RadioButtonOption = {
   value: string
