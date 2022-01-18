@@ -28,4 +28,10 @@ declare module 'forms' {
   export interface PdfForm {
     envelopeSize?: 'dl' | 'c4' | 'c5'
   }
+
+  export type RadioButtonOption = {
+    value: string
+    html: string
+    checked: boolean
+  }
 }
