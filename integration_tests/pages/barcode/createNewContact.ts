@@ -1,5 +1,7 @@
+/* eslint-disable import/no-cycle */
 import Page, { PageElement } from '../page'
 import ReviewRecipientsPage from './reviewRecipients'
+import FindRecipientByPrisonNumberPage from './findRecipientByPrisonNumber'
 
 export default class CreateNewContactPage extends Page {
   constructor() {
@@ -28,4 +30,8 @@ export default class CreateNewContactPage extends Page {
   prisonIdField = (): PageElement => cy.get('#prisonId')
 
   submitButton = (): PageElement => cy.get('#create-new-contact-form button')
+
+  static goToPage = (): CreateNewContactPage => FindRecipientByPrisonNumberPage.goToPage().happyPath()
+
+  happyPath = (): ReviewRecipientsPage => this.submitWithValidValues()
 }

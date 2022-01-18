@@ -1,5 +1,7 @@
+/* eslint-disable import/no-cycle */
 import Page, { PageElement } from '../page'
 import PrintCoversheetsPage from './printCoversheets'
+import ChooseBarcodeOptionPage from './chooseBarcodeOption'
 
 export default class SelectEnvelopeSizePage extends Page {
   constructor() {
@@ -41,4 +43,12 @@ export default class SelectEnvelopeSizePage extends Page {
   c4Radio = (): PageElement => cy.get('#select-envelope-size-form input[name=envelopeSize][value=c4]')
 
   submitButton = (): PageElement => cy.get('#select-envelope-size-form button')
+
+  static goToPage = (): SelectEnvelopeSizePage => ChooseBarcodeOptionPage.goToPage().happyPathCoversheet()
+
+  happyPathDl = (): PrintCoversheetsPage => this.submitHavingSelectedDlEnvelopeSize()
+
+  happyPathC4 = (): PrintCoversheetsPage => this.submitHavingSelectedC4EnvelopeSize()
+
+  happyPathC5 = (): PrintCoversheetsPage => this.submitHavingSelectedC5EnvelopeSize()
 }

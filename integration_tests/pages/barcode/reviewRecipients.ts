@@ -1,5 +1,7 @@
+/* eslint-disable import/no-cycle */
 import Page, { PageElement } from '../page'
 import ChooseBarcodeOptionPage from './chooseBarcodeOption'
+import CreateNewContactPage from './createNewContact'
 
 export default class ReviewRecipientsPage extends Page {
   constructor() {
@@ -12,4 +14,8 @@ export default class ReviewRecipientsPage extends Page {
   }
 
   prepareBarcodesButton = (): PageElement => cy.get('[data-qa=prepare-barcodes-button]')
+
+  static goToPage = (): ReviewRecipientsPage => CreateNewContactPage.goToPage().happyPath()
+
+  happyPath = (): ChooseBarcodeOptionPage => this.prepareBarcodes()
 }

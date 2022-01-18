@@ -1,4 +1,6 @@
+/* eslint-disable import/no-cycle */
 import Page, { PageElement } from '../page'
+import ChooseBarcodeOptionPage from './chooseBarcodeOption'
 
 export default class GenerateBarcodeImagePage extends Page {
   constructor() {
@@ -31,4 +33,6 @@ export default class GenerateBarcodeImagePage extends Page {
   hasErrorContaining = (partialMessage: string): void => {
     cy.get('.govuk-error-summary__list').should('contain', partialMessage)
   }
+
+  static goToPage = (): GenerateBarcodeImagePage => ChooseBarcodeOptionPage.goToPage().happyPathImage()
 }

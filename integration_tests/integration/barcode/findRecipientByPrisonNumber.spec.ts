@@ -4,13 +4,6 @@ import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientBy
 import CreateNewContactPage from '../../pages/barcode/createNewContact'
 
 context('Find Recipient By Prison Number Page', () => {
-  beforeEach(() => {
-    cy.task('reset')
-    cy.task('stubAuthToken')
-    cy.task('stubRequestLink')
-    cy.task('stubGetPrisonRegister')
-  })
-
   it('should redirect to Request List page if visiting without an auth token in the session', () => {
     cy.visit('/barcode/find-recipient')
 
@@ -18,9 +11,7 @@ context('Find Recipient By Prison Number Page', () => {
   })
 
   it('should redisplay form with errors given invalid prison number', () => {
-    cy.task('stubVerifyLink')
-    cy.visit('/link/verify-link?secret=a-valid-secret')
-    const findRecipientByPrisonNumberPage = Page.verifyOnPage(FindRecipientByPrisonNumberPage)
+    const findRecipientByPrisonNumberPage = FindRecipientByPrisonNumberPage.goToPage()
 
     findRecipientByPrisonNumberPage.submitWithInvalidPrisonNumber()
 
@@ -28,9 +19,7 @@ context('Find Recipient By Prison Number Page', () => {
   })
 
   it('should render create-contact form given valid prison number', () => {
-    cy.task('stubVerifyLink')
-    cy.visit('/link/verify-link?secret=a-valid-secret')
-    const findRecipientByPrisonNumberPage = Page.verifyOnPage(FindRecipientByPrisonNumberPage)
+    const findRecipientByPrisonNumberPage = FindRecipientByPrisonNumberPage.goToPage()
 
     findRecipientByPrisonNumberPage.submitWithValidPrisonNumber()
 
