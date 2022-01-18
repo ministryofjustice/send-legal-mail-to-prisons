@@ -96,7 +96,7 @@ describe('ChooseBarcodeOptionController', () => {
       expect(res.redirect).toHaveBeenCalledWith('/barcode/choose-barcode-option')
     })
 
-    it('should redirect to barcode image page if form is valid', async () => {
+    it('should redirect to barcode image page if barcodeOption is image', async () => {
       req.body = { barcodeOption: 'image' }
       mockValidateBarcodeOption.mockReturnValue(true)
 
@@ -106,6 +106,18 @@ describe('ChooseBarcodeOptionController', () => {
       )
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/generate-barcode-image')
+    })
+
+    it('should redirect to barcode image page if barcodeOption is coversheet', async () => {
+      req.body = { barcodeOption: 'coversheet' }
+      mockValidateBarcodeOption.mockReturnValue(true)
+
+      await chooseBarcodeOptionController.submitChooseBarcodeOption(
+        req as unknown as Request,
+        res as unknown as Response
+      )
+
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/pdf/select-envelope-size')
     })
   })
 })
