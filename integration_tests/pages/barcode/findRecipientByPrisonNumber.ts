@@ -42,6 +42,4 @@ export default class FindRecipientByPrisonNumberPage extends Page {
     cy.visit('/link/verify-link?secret=a-valid-secret')
     return Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   }
-
-  happyPath = (): CreateNewContactPage => this.submitWithValidPrisonNumber()
 }

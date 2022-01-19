@@ -11,7 +11,7 @@ context('Create New Contact Page', () => {
   })
 
   it('should render review-recipients given form submitted with valid data', () => {
-    const createNewContactPage = FindRecipientByPrisonNumberPage.goToPage().happyPath()
+    const createNewContactPage = FindRecipientByPrisonNumberPage.goToPage().submitWithValidPrisonNumber()
 
     createNewContactPage.submitWithValidValues()
 

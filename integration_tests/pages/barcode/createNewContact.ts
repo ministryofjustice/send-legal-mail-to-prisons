@@ -31,7 +31,5 @@ export default class CreateNewContactPage extends Page {
 
   submitButton = (): PageElement => cy.get('#create-new-contact-form button')
 
-  static goToPage = (): CreateNewContactPage => FindRecipientByPrisonNumberPage.goToPage().happyPath()
-
-  happyPath = (): ReviewRecipientsPage => this.submitWithValidValues()
+  static goToPage = (): CreateNewContactPage => FindRecipientByPrisonNumberPage.goToPage().submitWithValidPrisonNumber()
 }

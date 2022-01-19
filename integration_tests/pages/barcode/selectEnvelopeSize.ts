@@ -44,11 +44,5 @@ export default class SelectEnvelopeSizePage extends Page {
 
   submitButton = (): PageElement => cy.get('#select-envelope-size-form button')
 
-  static goToPage = (): SelectEnvelopeSizePage => ChooseBarcodeOptionPage.goToPage().happyPathCoversheet()
-
-  happyPathDl = (): PrintCoversheetsPage => this.submitHavingSelectedDlEnvelopeSize()
-
-  happyPathC4 = (): PrintCoversheetsPage => this.submitHavingSelectedC4EnvelopeSize()
-
-  happyPathC5 = (): PrintCoversheetsPage => this.submitHavingSelectedC5EnvelopeSize()
+  static goToPage = (): SelectEnvelopeSizePage => ChooseBarcodeOptionPage.goToPage().continueToCoversheet()
 }

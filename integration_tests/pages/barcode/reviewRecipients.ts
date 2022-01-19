@@ -15,7 +15,5 @@ export default class ReviewRecipientsPage extends Page {
 
   prepareBarcodesButton = (): PageElement => cy.get('[data-qa=prepare-barcodes-button]')
 
-  static goToPage = (): ReviewRecipientsPage => CreateNewContactPage.goToPage().happyPath()
-
-  happyPath = (): ChooseBarcodeOptionPage => this.prepareBarcodes()
+  static goToPage = (): ReviewRecipientsPage => CreateNewContactPage.goToPage().submitWithValidValues()
 }

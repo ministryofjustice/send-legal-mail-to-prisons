@@ -34,5 +34,5 @@ export default class GenerateBarcodeImagePage extends Page {
     cy.get('.govuk-error-summary__list').should('contain', partialMessage)
   }
 
-  static goToPage = (): GenerateBarcodeImagePage => ChooseBarcodeOptionPage.goToPage().happyPathImage()
+  static goToPage = (): GenerateBarcodeImagePage => ChooseBarcodeOptionPage.goToPage().continueToImage()
 }

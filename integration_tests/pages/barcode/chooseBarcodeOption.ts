@@ -37,9 +37,5 @@ export default class ChooseBarcodeOptionPage extends Page {
     cy.get('.govuk-error-summary__list').should('contain', partialMessage)
   }
 
-  static goToPage = (): ChooseBarcodeOptionPage => ReviewRecipientsPage.goToPage().happyPath()
-
-  happyPathImage = (): GenerateBarcodeImagePage => this.continueToImage()
-
-  happyPathCoversheet = (): SelectEnvelopeSizePage => this.continueToCoversheet()
+  static goToPage = (): ChooseBarcodeOptionPage => ReviewRecipientsPage.goToPage().prepareBarcodes()
 }

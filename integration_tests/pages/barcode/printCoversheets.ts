@@ -7,5 +7,5 @@ export default class PrintCoversheetsPage extends Page {
     super('print-coversheets')
   }
 
-  static goToPage = (): PrintCoversheetsPage => SelectEnvelopeSizePage.goToPage().happyPathDl()
+  static goToPage = (): PrintCoversheetsPage => SelectEnvelopeSizePage.goToPage().submitHavingSelectedDlEnvelopeSize()
 }
