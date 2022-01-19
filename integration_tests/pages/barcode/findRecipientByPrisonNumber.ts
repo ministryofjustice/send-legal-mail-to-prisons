@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import Page, { PageElement } from '../page'
 import CreateNewContactPage from './createNewContact'
 
@@ -30,5 +31,15 @@ export default class FindRecipientByPrisonNumberPage extends Page {
   hasErrorContaining = (partialMessage: string): void => {
     cy.get('.govuk-error-summary__list').should('contain', partialMessage)
     cy.get('#prisonNumber-error').should('contain', partialMessage)
+  }
+
+  static goToPage = (): FindRecipientByPrisonNumberPage => {
+    cy.task('reset')
+    cy.task('stubAuthToken')
+    cy.task('stubRequestLink')
+    cy.task('stubGetPrisonRegister')
+    cy.task('stubVerifyLink')
+    cy.visit('/link/verify-link?secret=a-valid-secret')
+    return Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   }
 }
