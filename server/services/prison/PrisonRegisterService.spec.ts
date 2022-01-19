@@ -116,7 +116,7 @@ describe('Prison Register Service', () => {
 
       const expectedPrisonAddress: PrisonAddress = {
         flat: '',
-        premise: 'HMP & YOI ASHFIELD',
+        premise: 'HMP Ashfield',
         street: 'Shortwood Road',
         locality: 'Pucklechurch',
         countyCode: '',
