@@ -15,38 +15,89 @@
           box-sizing: border-box;
         }
 
-        .address {
+        .coversheet {
+          page-break-before: always;
+          border: 1px solid transparent; /* border is necessary for height to work correctly */
+          position: relative;
+          box-sizing: border-box;
+        }
+
+        .coversheet img {
           width: 90mm;
           display: block;
           box-sizing: border-box;
         }
 
-        .dl {
+        .coversheet::after {
+          position: absolute;
+          content: ' ';
+          width: 2cm;
+          width: 20px;
+          left: 0;
+        }
+
+        .dl .coversheet {
+          height: 196mm; /* 66% of 297mm (A4 height) */
+        }
+        .dl .coversheet::after {
+          border-top: 1px dashed grey;
+          border-bottom: 1px dashed grey;
+          height: 50%;
+          bottom: 0;
+        }
+
+        .c5 .coversheet {
+          height: 148mm; /* 50% of 297mm (A4 height) */
+        }
+        .c5 .coversheet::after {
+          border-bottom: 1px dashed grey;
+          height: 100%;
+          top: 0;
+        }
+
+        .dl img {
           margin-top: 55mm;
           margin-left: 20mm;
         }
 
-        .c5 {
+        .c5 img {
           margin-top: 42mm;
           margin-left: 20mm;
         }
 
-        .c4 {
+        .c4 img {
           margin-top: 67mm;
           margin-left: 24mm;
         }
 
-        .debug-borders-true {
-          border: 1px solid black;
+        .debug-true img {
+          border: 1px dashed gray;
         }
-        .debug-borders-true .address {
-          border: 1px solid black;
+        .debug-true .coversheet::before {
+          position: absolute;
+          top: 1.5em;
+          left: 1.5em;
+          font-size: 1.5em;
+          font-family: sans-serif;
+        }
+        .debug-true.dl .coversheet::before {
+          content: 'DL Envelope';
+        }
+        .debug-true.c5 .coversheet::before {
+          content: 'C5 Envelope';
+        }
+        .debug-true.c4 .coversheet::before {
+          content: 'C4 Envelope';
         }
       }
     </style>
   </head>
 
-  <body class="debug-borders-{{ debugBorders }}>
-    <img class="address {{ envelopeSize }}" src="{{ barcodeImageUrl }}">
+  <body class="{{ envelopeSize }} debug-{{ printDebugInfo }}">
+    {% for barcodeImage in barcodeImages %}
+      <div class="coversheet">
+        <img src="{{ barcodeImage }}">
+      </div>
+    {% endfor %}
   </body>
 </html>

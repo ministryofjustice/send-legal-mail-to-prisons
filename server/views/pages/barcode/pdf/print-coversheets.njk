@@ -47,10 +47,13 @@
     <div class="govuk-grid-row govuk-!-margin-top-6">
       <div class="govuk-grid-column-full">
 
-        {{ govukButton({
-          text: 'Print all PDF coversheets',
-          href: ''
-        }) }}
+        <form id="print-coversheets-form" action="/barcode/pdf/print" method="POST">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {{ govukButton({
+            text: 'Print all PDF coversheets'
+          }) }}
+        </form>
 
         <p class="govuk-!-margin-top-6 govuk-!-margin-bottom-6">
           <a href="" class="govuk-link">Help us improve this service (opens in a new tab)</a>

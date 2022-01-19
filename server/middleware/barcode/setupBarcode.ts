@@ -18,7 +18,7 @@ export default function setUpCreateBarcode(
   const reviewRecipientsController = new ReviewRecipientsController()
   const chooseBarcodeOptionController = new ChooseBarcodeOptionController()
   const generateImageController = new GenerateBarcodeImageController(createBarcodeService)
-  const pdfController = new PdfController()
+  const pdfController = new PdfController(createBarcodeService)
 
   router.get('/find-recipient', (req, res) => findRecipientController.getFindRecipientByPrisonNumberView(req, res))
   router.post('/find-recipient/by-prison-number', (req, res) =>
@@ -40,6 +40,7 @@ export default function setUpCreateBarcode(
   router.get('/pdf/select-envelope-size', (req, res) => pdfController.getEnvelopeSizeView(req, res))
   router.post('/pdf/select-envelope-size', (req, res) => pdfController.submitEnvelopeSize(req, res))
   router.get('/pdf/print', (req, res) => pdfController.getPrintCoverSheetView(req, res))
+  router.post('/pdf/print', (req, res) => pdfController.submitPrintCoverSheet(req, res))
 
   router.get('/generate-barcode-image', (req, res) => generateImageController.getGenerateImageView(req, res))
 

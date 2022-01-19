@@ -42,5 +42,9 @@ export declare global {
       flash(type: string, message: Array<Record<string, string>>): number
       flash(message: 'errors'): Array<Record<string, string>>
     }
+
+    interface Response {
+      renderPDF(view: string, pageData: Record<string, unknown>, options?: Record<string, unknown>): void
+    }
   }
 }
