@@ -28,6 +28,8 @@ import ScanBarcodeService from './services/scan/ScanBarcodeService'
 import CreateBarcodeService from './services/barcode/CreateBarcodeService'
 import AppInsightsService from './services/AppInsightsService'
 import PrisonRegisterService from './services/prison/PrisonRegisterService'
+import GotenbergClient from './data/gotenbergClient'
+import setupPdfRenderer from './middleware/setupPdfRenderer'
 
 export default function createApp(
   userService: UserService,
@@ -48,6 +50,7 @@ export default function createApp(
   app.use(setUpWebSession())
   app.use(setUpWebRequestParsing())
   app.use(setUpStaticResources())
+  app.use(setupPdfRenderer(new GotenbergClient()))
   nunjucksSetup(app)
 
   // no authentication
