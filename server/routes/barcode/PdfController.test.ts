@@ -17,7 +17,9 @@ const res = {
 }
 
 const createBarcodeService = {
-  generateBarcode: jest.fn(),
+  generateBarcodeValue: jest.fn(),
+  generateAddressAndBarcodeDataUrlImage: jest.fn(),
+  addBarcodeValuesToRecipients: jest.fn(),
 }
 
 describe('PdfController', () => {
@@ -28,7 +30,9 @@ describe('PdfController', () => {
     res.redirect.mockReset()
     req.session = {} as SessionData
     req.flash.mockReset()
-    createBarcodeService.generateBarcode.mockReset()
+    createBarcodeService.generateBarcodeValue.mockReset()
+    createBarcodeService.generateAddressAndBarcodeDataUrlImage.mockReset()
+    createBarcodeService.addBarcodeValuesToRecipients.mockReset()
   })
 
   describe('getEnvelopeSizeView', () => {
@@ -87,8 +91,22 @@ describe('PdfController', () => {
 
   describe('getPrintCoverSheetView', () => {
     it('should render view', async () => {
-      req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
+      req.session.recipients = [
+        {
+          prisonerName: 'John Smith',
+          prisonNumber: 'A1234BC',
+          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+        },
+      ]
       req.session.pdfForm = { envelopeSize: 'dl' }
+      createBarcodeService.addBarcodeValuesToRecipients.mockReturnValue([
+        {
+          prisonerName: 'John Smith',
+          prisonNumber: 'A1234BC',
+          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          barcodeValue: '123456789012',
+        },
+      ])
 
       await pdfController.getPrintCoverSheetView(req as unknown as Request, res as unknown as Response)
 
@@ -96,6 +114,14 @@ describe('PdfController', () => {
         'pages/barcode/pdf/print-coversheets',
         expect.objectContaining({ errors: [], form: { envelopeSize: 'dl' } })
       )
+      expect(req.session.recipients).toStrictEqual([
+        {
+          prisonerName: 'John Smith',
+          prisonNumber: 'A1234BC',
+          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          barcodeValue: '123456789012',
+        },
+      ])
     })
 
     it('should redirect to find-recipient given no recipients in the session', async () => {

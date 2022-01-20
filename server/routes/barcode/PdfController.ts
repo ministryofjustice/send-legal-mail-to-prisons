@@ -37,6 +37,11 @@ export default class PdfController {
       return res.redirect('/barcode/pdf/select-envelope-size')
     }
 
+    req.session.recipients = await this.createBarcodeService.addBarcodeValuesToRecipients(
+      req.session.recipients,
+      req.session.createBarcodeAuthToken
+    )
+
     const view = new PdfControllerView(req.session.pdfForm, req.flash('errors'))
     return res.render('pages/barcode/pdf/print-coversheets', { ...view.renderArgs })
   }
@@ -52,11 +57,7 @@ export default class PdfController {
     const barcodeImages = await Promise.all(
       req.session.recipients.map(async recipient => {
         try {
-          const barcodeData = await this.createBarcodeService.generateBarcode(
-            req.session.createBarcodeAuthToken,
-            recipient
-          )
-          return barcodeData.barcodeImageDataUrl
+          return await this.createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient)
         } catch (error) {
           logger.error(`Could not generate a barcode for ${recipient.prisonNumber}, ${error}`)
           return undefined

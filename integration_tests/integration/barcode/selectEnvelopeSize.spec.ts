@@ -15,6 +15,8 @@ context('Select envelope size', () => {
   })
 
   it('should goto print coversheets given envelope size selected', () => {
+    cy.task('stubCreateBarcode')
+
     selectEnvelopeSizePage = Page.verifyOnPage(SelectEnvelopeSizePage)
 
     selectEnvelopeSizePage.submitHavingSelectedC4EnvelopeSize()
