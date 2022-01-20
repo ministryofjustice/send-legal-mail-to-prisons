@@ -35,17 +35,14 @@
     }
     function suggest(query, populateResults) {
       const queryWords = query.toLowerCase().split(' ')
-      // for each query word create an array of matching prison names
-      const queryWordsMatches = queryWords.map(queryWord =>
+      // find all matching prisons for each query word
+      const queryWordsMatches = queryWords.flatMap(queryWord =>
         prisonNames.filter(option => option.toLowerCase().indexOf(queryWord) !== -1)
       )
-      // Reduce to a map of matching prison names and their counts (no I can't read reduce functions)
-      const prisonNameCounts = {}
-      queryWordsMatches.forEach(matches => {
-        matches.forEach(prisonName => {
-          prisonNameCounts[prisonName] = prisonNameCounts[prisonName] ? prisonNameCounts[prisonName] + 1 : 1
-        })
-      })
+      // Reduce to a map of matching prison names and their counts
+      const prisonNameCounts = queryWordsMatches.reduce((counts, prisonName) => {
+        return (counts[prisonName] = (counts[prisonName] || 0) + 1), counts
+      }, {})
       // sort the matching options by highest count first
       const sortedMatchingPrisonNames = Object.keys(prisonNameCounts).sort((a, b) => {
         return prisonNameCounts[b] - prisonNameCounts[a]
