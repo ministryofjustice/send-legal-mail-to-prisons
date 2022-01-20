@@ -76,6 +76,15 @@ describe('CreateBarcodeService', () => {
           },
         },
         {
+          prisonNumber: 'A5566JD',
+          prisonerName: 'Jane Doe',
+          prisonAddress: {
+            premise: 'HMP Bristol',
+            postalCode: 'BS1 1AA',
+          },
+          barcodeValue: '121212121212',
+        },
+        {
           prisonNumber: 'Q9876TY',
           prisonerName: 'Fred Bloggs',
           prisonAddress: {
@@ -102,6 +111,15 @@ describe('CreateBarcodeService', () => {
             postalCode: 'WV10 7PY',
           },
           barcodeValue: '123456789012',
+        },
+        {
+          prisonNumber: 'A5566JD',
+          prisonerName: 'Jane Doe',
+          prisonAddress: {
+            premise: 'HMP Bristol',
+            postalCode: 'BS1 1AA',
+          },
+          barcodeValue: '121212121212',
         },
         {
           prisonNumber: 'Q9876TY',

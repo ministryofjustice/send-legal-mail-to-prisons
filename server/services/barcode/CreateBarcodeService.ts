@@ -61,10 +61,16 @@ export default class CreateBarcodeService {
   async addBarcodeValuesToRecipients(recipients: Array<Recipient>, token: string): Promise<Array<Recipient>> {
     return Promise.all(
       recipients.map(async recipient => {
-        const barcodeValue = await this.generateBarcodeValue(token)
-        return { ...recipient, barcodeValue }
+        if (!recipient.barcodeValue) {
+          const barcodeValue = await this.generateBarcodeValue(token)
+          return { ...recipient, barcodeValue }
+        }
+        return recipient
       })
     )
+    // TODO - this will need some error handling to support multiple recipients in SLM-83
+    // Specifically does the failure to generate a barcode for 1 recipient fail them all, or just that 1
+    // And if it is just the 1, how do we tell the user we generated barcode for n-1 recipients, and the person we couldn't generate for was Fred
   }
 
   private async generateBarcodeImage(barcode: string): Promise<Buffer> {

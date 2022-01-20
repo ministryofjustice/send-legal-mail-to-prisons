@@ -26,6 +26,11 @@ export default class PdfController {
       return res.redirect('/barcode/pdf/select-envelope-size')
     }
 
+    req.session.recipients = await this.createBarcodeService.addBarcodeValuesToRecipients(
+      req.session.recipients,
+      req.session.createBarcodeAuthToken
+    )
+
     return res.redirect('/barcode/pdf/print')
   }
 
@@ -36,11 +41,6 @@ export default class PdfController {
     if (!req.session.pdfForm) {
       return res.redirect('/barcode/pdf/select-envelope-size')
     }
-
-    req.session.recipients = await this.createBarcodeService.addBarcodeValuesToRecipients(
-      req.session.recipients,
-      req.session.createBarcodeAuthToken
-    )
 
     const view = new PdfControllerView(req.session.pdfForm, req.flash('errors'))
     return res.render('pages/barcode/pdf/print-coversheets', { ...view.renderArgs })

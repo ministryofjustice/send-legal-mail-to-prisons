@@ -65,10 +65,26 @@ describe('PdfController', () => {
       req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
       req.session.pdfForm = { envelopeSize: 'dl' }
       mockValidateEnvelopeSizeOption.mockReturnValue(true)
+      createBarcodeService.addBarcodeValuesToRecipients.mockReturnValue([
+        {
+          prisonerName: 'John Smith',
+          prisonNumber: 'A1234BC',
+          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          barcodeValue: '123456789012',
+        },
+      ])
 
       await pdfController.submitEnvelopeSize(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/pdf/print')
+      expect(req.session.recipients).toStrictEqual([
+        {
+          prisonerName: 'John Smith',
+          prisonNumber: 'A1234BC',
+          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          barcodeValue: '123456789012',
+        },
+      ])
     })
 
     it('should redirect to find-recipient given no recipients in the session', async () => {
@@ -96,17 +112,10 @@ describe('PdfController', () => {
           prisonerName: 'John Smith',
           prisonNumber: 'A1234BC',
           prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          barcodeValue: '123456789012',
         },
       ]
       req.session.pdfForm = { envelopeSize: 'dl' }
-      createBarcodeService.addBarcodeValuesToRecipients.mockReturnValue([
-        {
-          prisonerName: 'John Smith',
-          prisonNumber: 'A1234BC',
-          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
-          barcodeValue: '123456789012',
-        },
-      ])
 
       await pdfController.getPrintCoverSheetView(req as unknown as Request, res as unknown as Response)
 
@@ -114,14 +123,6 @@ describe('PdfController', () => {
         'pages/barcode/pdf/print-coversheets',
         expect.objectContaining({ errors: [], form: { envelopeSize: 'dl' } })
       )
-      expect(req.session.recipients).toStrictEqual([
-        {
-          prisonerName: 'John Smith',
-          prisonNumber: 'A1234BC',
-          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
-          barcodeValue: '123456789012',
-        },
-      ])
     })
 
     it('should redirect to find-recipient given no recipients in the session', async () => {
