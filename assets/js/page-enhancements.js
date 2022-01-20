@@ -25,9 +25,37 @@
 })($, document)
 ;(convertPrisonDropdownToAutoComplete = ($, document) => {
   $(document).ready(() => {
+    // get the prison names
+    const prisonNames = $('#create-new-contact-form select#prisonId option')
+      .toArray()
+      .map(option => option.text)
+      .filter(prisonName => prisonName !== '')
+    if (prisonNames.length === 0) {
+      return
+    }
+    function suggest(query, populateResults) {
+      const queryWords = query.toLowerCase().split(' ')
+      // for each query word create an array of matching prison names
+      const queryWordsMatches = queryWords.map(queryWord =>
+        prisonNames.filter(option => option.toLowerCase().indexOf(queryWord) !== -1)
+      )
+      // Reduce to a map of matching prison names and their counts (no I can't read reduce functions)
+      const prisonNameCounts = {}
+      queryWordsMatches.forEach(matches => {
+        matches.forEach(prisonName => {
+          prisonNameCounts[prisonName] = prisonNameCounts[prisonName] ? prisonNameCounts[prisonName] + 1 : 1
+        })
+      })
+      // sort the matching options by highest count first
+      const sortedMatchingPrisonNames = Object.keys(prisonNameCounts).sort((a, b) => {
+        return prisonNameCounts[b] - prisonNameCounts[a]
+      })
+      populateResults(sortedMatchingPrisonNames)
+    }
     $('#create-new-contact-form select#prisonId').each((idx, element) => {
       accessibleAutocomplete.enhanceSelectElement({
         selectElement: element,
+        source: suggest,
       })
     })
     $('#create-new-contact-form').submit(event => {
