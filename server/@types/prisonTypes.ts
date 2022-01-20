@@ -19,4 +19,5 @@ export type Recipient = {
   prisonNumber: string
   prisonerName: string
   prisonAddress: PrisonAddress
+  barcodeValue?: string
 }

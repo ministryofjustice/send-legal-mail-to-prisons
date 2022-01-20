@@ -17,7 +17,9 @@ const res = {
 }
 
 const createBarcodeService = {
-  generateBarcode: jest.fn(),
+  generateBarcodeValue: jest.fn(),
+  generateAddressAndBarcodeDataUrlImage: jest.fn(),
+  addBarcodeValuesToRecipients: jest.fn(),
 }
 
 describe('PdfController', () => {
@@ -28,7 +30,9 @@ describe('PdfController', () => {
     res.redirect.mockReset()
     req.session = {} as SessionData
     req.flash.mockReset()
-    createBarcodeService.generateBarcode.mockReset()
+    createBarcodeService.generateBarcodeValue.mockReset()
+    createBarcodeService.generateAddressAndBarcodeDataUrlImage.mockReset()
+    createBarcodeService.addBarcodeValuesToRecipients.mockReset()
   })
 
   describe('getEnvelopeSizeView', () => {
@@ -61,10 +65,26 @@ describe('PdfController', () => {
       req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
       req.session.pdfForm = { envelopeSize: 'dl' }
       mockValidateEnvelopeSizeOption.mockReturnValue(true)
+      createBarcodeService.addBarcodeValuesToRecipients.mockReturnValue([
+        {
+          prisonerName: 'John Smith',
+          prisonNumber: 'A1234BC',
+          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          barcodeValue: '123456789012',
+        },
+      ])
 
       await pdfController.submitEnvelopeSize(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/pdf/print')
+      expect(req.session.recipients).toStrictEqual([
+        {
+          prisonerName: 'John Smith',
+          prisonNumber: 'A1234BC',
+          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          barcodeValue: '123456789012',
+        },
+      ])
     })
 
     it('should redirect to find-recipient given no recipients in the session', async () => {
@@ -87,7 +107,14 @@ describe('PdfController', () => {
 
   describe('getPrintCoverSheetView', () => {
     it('should render view', async () => {
-      req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
+      req.session.recipients = [
+        {
+          prisonerName: 'John Smith',
+          prisonNumber: 'A1234BC',
+          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          barcodeValue: '123456789012',
+        },
+      ]
       req.session.pdfForm = { envelopeSize: 'dl' }
 
       await pdfController.getPrintCoverSheetView(req as unknown as Request, res as unknown as Response)

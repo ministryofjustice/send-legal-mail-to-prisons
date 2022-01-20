@@ -13,12 +13,17 @@ export default class GenerateBarcodeImageController {
     }
 
     try {
+      req.session.recipients = await this.createBarcodeService.addBarcodeValuesToRecipients(
+        req.session.recipients,
+        req.session.createBarcodeAuthToken
+      )
+
       const recipient = req.session.recipients[0]
-      const barcodeData = await this.createBarcodeService.generateBarcode(req.session.createBarcodeAuthToken, recipient)
+      const barcodeImageDataUrl = await this.createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient)
       const barcodeImageName = this.barcodeFilename(recipient)
       this.clearForms(req)
 
-      const view = new GenerateBarcodeImageView(barcodeData.barcodeImageDataUrl, barcodeImageName)
+      const view = new GenerateBarcodeImageView(barcodeImageDataUrl, barcodeImageName)
       return res.render('pages/barcode/generate-barcode-image', { ...view.renderArgs })
     } catch (error) {
       logger.error(`An error was received when trying to create the barcode image: ${JSON.stringify(error)}`)

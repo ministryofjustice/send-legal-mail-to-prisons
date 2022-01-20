@@ -7,12 +7,6 @@ import RestClient from '../../data/restClient'
 import config from '../../config'
 import { Recipient } from '../../@types/prisonTypes'
 import { CreateBarcodeResponse } from '../../@types/sendLegalMailApiClientTypes'
-import logger from '../../../logger'
-
-export type BarcodeData = {
-  barcode: string
-  barcodeImageDataUrl: string
-}
 
 export default class CreateBarcodeService {
   constructor() {
@@ -42,26 +36,41 @@ export default class CreateBarcodeService {
     font: 'Liberation Sans',
   }
 
-  async generateBarcode(token: string, recipient: Recipient): Promise<BarcodeData> {
-    try {
-      const barcodeValue = await this.createBarcode(token)
-      const barcodeImage = await this.generateBarcodeImage(barcodeValue)
-      return {
-        barcode: barcodeValue,
-        barcodeImageDataUrl: this.generateAddressAndBarcodeImage(barcodeImage, recipient),
-      }
-    } catch (error) {
-      logger.error('Error generating barcode image', error)
-      throw error
-    }
-  }
-
-  private async createBarcode(token: string): Promise<string> {
+  /**
+   * Returns a string containing a freshly generated barcode value.
+   */
+  async generateBarcodeValue(token: string): Promise<string> {
     return CreateBarcodeService.restClient(token)
       .postCreateBarcode({ path: `/barcode` })
       .then((response: CreateBarcodeResponse) => {
         return response.barcode
       })
+  }
+
+  /**
+   * Returns a data url string representing the png image data of the address and barcode image.
+   */
+  async generateAddressAndBarcodeDataUrlImage(recipient: Recipient): Promise<string> {
+    const barcodeImage = await this.generateBarcodeImage(recipient.barcodeValue)
+    return this.generateAddressAndBarcodeImage(barcodeImage, recipient)
+  }
+
+  /**
+   * Returns the array of Recipients with a freshly generated barcode value for each Recipient
+   */
+  async addBarcodeValuesToRecipients(recipients: Array<Recipient>, token: string): Promise<Array<Recipient>> {
+    return Promise.all(
+      recipients.map(async recipient => {
+        if (!recipient.barcodeValue) {
+          const barcodeValue = await this.generateBarcodeValue(token)
+          return { ...recipient, barcodeValue }
+        }
+        return recipient
+      })
+    )
+    // TODO - this will need some error handling to support multiple recipients in SLM-83
+    // Specifically does the failure to generate a barcode for 1 recipient fail them all, or just that 1
+    // And if it is just the 1, how do we tell the user we generated barcode for n-1 recipients, and the person we couldn't generate for was Fred
   }
 
   private async generateBarcodeImage(barcode: string): Promise<Buffer> {
@@ -111,6 +120,7 @@ export default class CreateBarcodeService {
   }
 
   private recipientNameAndAddress(recipient: Recipient): string {
+    // TODO add logic for prison number or prisoner DOB - SLM-81
     return `${recipient.prisonerName}
 ${recipient.prisonNumber}
 ${recipient.prisonAddress.premise}
