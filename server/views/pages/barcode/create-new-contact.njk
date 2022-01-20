@@ -53,7 +53,8 @@
               label: {
                 text: 'Select name of prison'
               },
-              items: prisonRegister
+              items: prisonRegister,
+              errorMessage: errors | findError('prisonId')
             }) }}
 
             {{ govukButton({
