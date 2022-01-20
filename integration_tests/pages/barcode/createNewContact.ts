@@ -34,7 +34,7 @@ export default class CreateNewContactPage extends Page {
 
   typeAheadAnInvalidPrison = (): CreateNewContactPage => {
     this.clearPrisonField()
-    this.prisonIdField().type('not a valid prison')
+    this.prisonIdField().type('invalid prison')
     this.pressEnterInPrisonIdField()
     return this
   }

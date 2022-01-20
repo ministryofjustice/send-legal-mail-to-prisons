@@ -25,9 +25,34 @@
 })($, document)
 ;(convertPrisonDropdownToAutoComplete = ($, document) => {
   $(document).ready(() => {
+    // get the prison names
+    const prisonNames = $('#create-new-contact-form select#prisonId option')
+      .toArray()
+      .map(option => option.text)
+      .filter(prisonName => prisonName !== '')
+    if (prisonNames.length === 0) {
+      return
+    }
+    function suggest(query, populateResults) {
+      const queryWords = query.toLowerCase().split(' ')
+      // find all matching prisons for each query word
+      const queryWordsMatches = queryWords.flatMap(queryWord =>
+        prisonNames.filter(option => option.toLowerCase().indexOf(queryWord) !== -1)
+      )
+      // Reduce to a map of matching prison names and their counts
+      const prisonNameCounts = queryWordsMatches.reduce((counts, prisonName) => {
+        return (counts[prisonName] = (counts[prisonName] || 0) + 1), counts
+      }, {})
+      // sort the matching options by highest count first
+      const sortedMatchingPrisonNames = Object.keys(prisonNameCounts).sort((a, b) => {
+        return prisonNameCounts[b] - prisonNameCounts[a]
+      })
+      populateResults(sortedMatchingPrisonNames)
+    }
     $('#create-new-contact-form select#prisonId').each((idx, element) => {
       accessibleAutocomplete.enhanceSelectElement({
         selectElement: element,
+        source: suggest,
       })
     })
     $('#create-new-contact-form').submit(event => {
