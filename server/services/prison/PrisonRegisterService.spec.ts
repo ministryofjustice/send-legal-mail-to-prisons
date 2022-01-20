@@ -25,7 +25,7 @@ describe('Prison Register Service', () => {
     prisonRegisterStore.setActivePrisons.mockReset()
   })
 
-  describe('getActivePrisons', () => {
+  describe('getActivePrisonsFromPrisonRegister', () => {
     it('should make the request to the prison register without an authorization header', async () => {
       prisonRegisterStore.getActivePrisons.mockResolvedValue(null)
       nock(config.apis.prisonRegister.url, {
@@ -34,7 +34,7 @@ describe('Prison Register Service', () => {
         .get('/prisons')
         .reply(200, [])
 
-      await prisonRegisterService.getActivePrisons()
+      await prisonRegisterService.getActivePrisonsFromPrisonRegister()
     })
 
     it('should get all active prisons from the prison register given they are not in the redis store', async () => {
@@ -53,7 +53,7 @@ describe('Prison Register Service', () => {
         { id: 'ASI', name: 'Ashfield (HMP)' },
       ]
 
-      const activePrisons = await prisonRegisterService.getActivePrisons()
+      const activePrisons = await prisonRegisterService.getActivePrisonsFromPrisonRegister()
 
       expect(activePrisons).toStrictEqual(expectedActivePrisons)
       expect(prisonRegisterStore.setActivePrisons).toHaveBeenCalledWith(expectedActivePrisons)
@@ -75,7 +75,7 @@ describe('Prison Register Service', () => {
         { id: 'ASI', name: 'Ashfield (HMP)' },
       ]
 
-      const activePrisons = await prisonRegisterService.getActivePrisons()
+      const activePrisons = await prisonRegisterService.getActivePrisonsFromPrisonRegister()
 
       expect(activePrisons).toStrictEqual(expectedActivePrisons)
       expect(prisonRegisterStore.setActivePrisons).toHaveBeenCalledWith(expectedActivePrisons)
@@ -89,7 +89,7 @@ describe('Prison Register Service', () => {
       ]
       prisonRegisterStore.getActivePrisons.mockResolvedValue(expectedActivePrisons)
 
-      const activePrisons = await prisonRegisterService.getActivePrisons()
+      const activePrisons = await prisonRegisterService.getActivePrisonsFromPrisonRegister()
 
       expect(activePrisons).toStrictEqual(expectedActivePrisons)
       expect(prisonRegisterStore.setActivePrisons).not.toHaveBeenCalled()
@@ -100,11 +100,25 @@ describe('Prison Register Service', () => {
       mockedPrisonRegisterApi.get('/prisons').reply(404, 'Error calling the Prison Register API')
 
       try {
-        await prisonRegisterService.getActivePrisons()
+        await prisonRegisterService.getActivePrisonsFromPrisonRegister()
       } catch (error) {
         expect(error).toBe('Error calling the Prison Register API')
         expect(prisonRegisterStore.setActivePrisons).not.toHaveBeenCalled()
       }
+    })
+  })
+
+  describe('getActivePrisons', () => {
+    it('should get all active prisons from the prison register given they are not in the redis store', async () => {
+      const activePrisons = prisonRegisterService.getActivePrisons()
+
+      const firstPrison = activePrisons.find(prison => prison.id === 'ACI')
+      const somePrison = activePrisons.find(prison => prison.id === 'HDI')
+      const lastPrison = activePrisons.find(prison => prison.id === 'WMI')
+
+      expect(firstPrison.name).toStrictEqual('Altcourse (HMP)')
+      expect(somePrison.name).toStrictEqual('Hatfield (HMP/YOI)')
+      expect(lastPrison.name).toStrictEqual('Wymott (HMP)')
     })
   })
 

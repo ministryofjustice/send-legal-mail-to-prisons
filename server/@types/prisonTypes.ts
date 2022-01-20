@@ -4,6 +4,8 @@ export type Prison = {
 }
 
 export type PrisonAddress = {
+  agencyCode?: string
+  agyDescription?: string
   flat?: string
   premise?: string
   street?: string
