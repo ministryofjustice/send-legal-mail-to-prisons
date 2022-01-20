@@ -12,13 +12,23 @@ export default class PrisonRegisterService {
     return new RestClient('Prison Register API Client', config.apis.prisonRegister)
   }
 
-  async getActivePrisons(): Promise<Array<Prison>> {
+  async getActivePrisonsFromPrisonRegister(): Promise<Array<Prison>> {
     try {
       const activePrisons = await this.prisonRegisterStore.getActivePrisons()
       return activePrisons || this.retrieveAndCacheActivePrisons()
     } catch (error) {
       return this.retrieveAndCacheActivePrisons()
     }
+  }
+
+  // TODO due to bad data quality we are ignoring Prison Register for now - the plan is for Prison Register to be updated with our data when they have added the addresses on https://dsdmoj.atlassian.net/browse/HAAR-32
+  getActivePrisons(): Array<Prison> {
+    return prisonAddressData
+      .map(
+        (prisonAddress: PrisonAddress) =>
+          ({ id: prisonAddress.agencyCode, name: prisonAddress.agyDescription } as Prison)
+      )
+      .sort((prison1: Prison, prison2: Prison) => (prison1.name < prison2.name ? -1 : 1))
   }
 
   async getPrisonAddress(prisonId: string): Promise<PrisonAddress> {

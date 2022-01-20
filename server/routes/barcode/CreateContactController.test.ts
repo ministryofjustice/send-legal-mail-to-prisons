@@ -42,7 +42,8 @@ describe('CreateContactController', () => {
   describe('getCreateNewRecipientView', () => {
     it('should create and return view given no active prison filtering', async () => {
       config.supportedPrisons = ''
-      prisonRegisterService.getActivePrisons.mockResolvedValue([
+      // TODO reinstate mockResolvedValue when we switch back to Prison Register - see PrisonRegisterService#getActivePrisons
+      prisonRegisterService.getActivePrisons.mockReturnValue([
         { id: 'KTI', name: 'Kennet (HMP)' },
         { id: 'ASI', name: 'Ashfield (HMP)' },
         { id: 'ACI', name: 'Altcourse (HMP)' },
@@ -71,7 +72,8 @@ describe('CreateContactController', () => {
 
     it('should create and return view given active prison filtering', async () => {
       config.supportedPrisons = 'ASI'
-      prisonRegisterService.getActivePrisons.mockResolvedValue([
+      // TODO reinstate mockResolvedValue when we switch back to Prison Register - see PrisonRegisterService#getActivePrisons
+      prisonRegisterService.getActivePrisons.mockReturnValue([
         { id: 'KTI', name: 'Kennet (HMP)' },
         { id: 'ASI', name: 'Ashfield (HMP)' },
         { id: 'ACI', name: 'Altcourse (HMP)' },
@@ -96,7 +98,8 @@ describe('CreateContactController', () => {
       expect(req.flash).toHaveBeenCalledWith('errors')
     })
 
-    it('should create and return view with error given prison register service fails', async () => {
+    // TODO Reinstate this test when we switch back to using Prison Register - see PrisonRegisterService#getActivePrisons
+    it.skip('should create and return view with error given prison register service fails', async () => {
       prisonRegisterService.getActivePrisons.mockRejectedValue('An error retrieving prison register')
 
       req.session.findRecipientForm = { prisonNumber: 'A1234BC' }
@@ -136,6 +139,8 @@ describe('CreateContactController', () => {
       req.session.findRecipientForm = { prisonNumber: 'A1234BC', prisonerName: 'Fred Bloggs', prisonId: 'SKI' }
       mockNewContactValidator.mockReturnValue(true)
       const prisonAddress: PrisonAddress = {
+        agencyCode: 'CKI',
+        agyDescription: 'Cookham Wood (YOI)',
         flat: null,
         premise: 'HMP COOKHAM WOOD',
         street: null,
