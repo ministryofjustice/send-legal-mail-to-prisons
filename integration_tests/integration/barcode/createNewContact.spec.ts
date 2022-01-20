@@ -19,6 +19,14 @@ context('Create New Contact Page', () => {
     Page.verifyOnPage(ReviewRecipientsPage)
   })
 
+  it.only('should find a prison when searching with HMP prefix', () => {
+    const createNewContactPage = FindRecipientByPrisonNumberPage.goToPage().submitWithValidPrisonNumber()
+
+    createNewContactPage.enterAValidPrisonerName().typeAheadHMPValidPrison().submitForm(ReviewRecipientsPage)
+
+    Page.verifyOnPage(ReviewRecipientsPage)
+  })
+
   it('should redisplay create-new-contact given form submitted with prison that was previously correctly selected but an invalid prison typed in', () => {
     const createNewContactPage = FindRecipientByPrisonNumberPage.goToPage().submitWithValidPrisonNumber()
 

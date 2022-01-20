@@ -32,6 +32,13 @@ export default class CreateNewContactPage extends Page {
     return this
   }
 
+  typeAheadHMPValidPrison = (): CreateNewContactPage => {
+    this.clearPrisonField()
+    this.prisonIdField().type('hmp ashfield')
+    this.pressEnterInPrisonIdField()
+    return this
+  }
+
   typeAheadAnInvalidPrison = (): CreateNewContactPage => {
     this.clearPrisonField()
     this.prisonIdField().type('invalid prison')
