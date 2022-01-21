@@ -5,9 +5,6 @@ const PRISONER_NAME_PATTERN = /^[a-zA-Z '`-]+$/
 export default function validateNewContact(req: Request): boolean {
   const errors: Array<Record<string, string>> = []
 
-  if (!req.body.prisonId) {
-    errors.push({ href: '#prisonId', text: 'Select a prison name' })
-  }
   if (!req.body.prisonerName) {
     errors.push({ href: '#prisonerName', text: 'Enter a full name' })
   } else if (req.body.prisonerName.trim().length > 60) {
@@ -17,6 +14,9 @@ export default function validateNewContact(req: Request): boolean {
     if (!PRISONER_NAME_PATTERN.test(req.body.prisonerName)) {
       errors.push({ href: '#prisonerName', text: 'Enter names that only use letters, not numbers or symbols.' })
     }
+  }
+  if (!req.body.prisonId) {
+    errors.push({ href: '#prisonId', text: 'Select a prison name' })
   }
 
   if (errors.length > 0) {
