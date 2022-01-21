@@ -9,7 +9,7 @@ import CreateContactView from './CreateContactView'
 export default class CreateContactController {
   constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
 
-  async getCreateNewContactView(req: Request, res: Response): Promise<void> {
+  async getCreateNewContactByPrisonNumberView(req: Request, res: Response): Promise<void> {
     if (!req.session.findRecipientForm) {
       return res.redirect('/barcode/find-recipient')
     }
@@ -32,14 +32,14 @@ export default class CreateContactController {
     return res.render('pages/barcode/create-new-contact', { ...view.renderArgs })
   }
 
-  async submitCreateNewContact(req: Request, res: Response): Promise<void> {
+  async submitCreateNewContactByPrisonNumber(req: Request, res: Response): Promise<void> {
     if (!req.session.findRecipientForm) {
       return res.redirect('/barcode/find-recipient')
     }
 
     req.session.createNewContactForm = { ...req.session.findRecipientForm, ...req.body }
     if (!validateNewContact(req)) {
-      return res.redirect('/barcode/find-recipient/create-new-contact')
+      return res.redirect('/barcode/find-recipient/create-new-contact/by-prison-number')
     }
 
     // TODO SLM-60 - save new contact to database via API
@@ -54,7 +54,7 @@ export default class CreateContactController {
       req.flash('errors', [
         { href: 'prisonId', text: 'There was a problem getting the address for the selected prison' },
       ])
-      return res.redirect('/barcode/find-recipient/create-new-contact')
+      return res.redirect('/barcode/find-recipient/create-new-contact/by-prison-number')
     }
   }
 

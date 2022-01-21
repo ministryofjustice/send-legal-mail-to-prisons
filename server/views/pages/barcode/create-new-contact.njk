@@ -24,7 +24,7 @@
         <h1 class="govuk-heading-xl">Create new contact</h1>
         <p>You need to add details for <strong>{{ form.prisonNumber }}</strong>. These will be saved for next time.</p>
 
-        <form action="/barcode/find-recipient/create-new-contact" method="post">
+        <form action="/barcode/find-recipient/create-new-contact/by-prison-number" method="post">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
           {% call govukFieldset({ }) %}

@@ -23,7 +23,7 @@
         <h1 class="govuk-heading-xl">Enter a prison number</h1>
         <p>The details you provide will be used to address your mail.</p>
 
-        <form id="find-recipient-by-prison-number-form" action="find-recipient/by-prison-number" method="post" novalidate>
+        <form id="find-recipient-by-prison-number-form" action="/barcode/find-recipient/by-prison-number" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
           {% call govukFieldset({ }) %}
