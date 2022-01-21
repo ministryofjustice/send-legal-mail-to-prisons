@@ -1,13 +1,13 @@
-import type { FindRecipientForm } from 'forms'
+import type { FindRecipientByPrisonNumberForm } from 'forms'
 
 export default class FindRecipientView {
   constructor(
-    private readonly findRecipientForm: FindRecipientForm,
+    private readonly findRecipientForm: FindRecipientByPrisonNumberForm,
     private readonly errors?: Array<Record<string, string>>
   ) {}
 
   get renderArgs(): {
-    form: FindRecipientForm
+    form: FindRecipientByPrisonNumberForm
     errors: Array<Record<string, string>>
   } {
     return {

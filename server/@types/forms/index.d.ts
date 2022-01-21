@@ -5,8 +5,12 @@ declare module 'forms' {
     email?: string
   }
 
-  export interface FindRecipientForm {
+  export interface FindRecipientByPrisonNumberForm {
     prisonNumber?: string
+  }
+
+  export interface FindRecipientByPrisonerNameForm {
+    prisonerName?: string
   }
 
   export interface CreateNewContactForm {

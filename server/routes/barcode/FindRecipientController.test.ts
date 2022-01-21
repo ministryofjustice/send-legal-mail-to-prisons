@@ -33,24 +33,25 @@ describe('FindRecipientController', () => {
     })
 
     it('should redirect to create-new-contact given prison number is validated', async () => {
-      mockPrisonNumberValidator.mockReturnValue(true)
+      mockPrisonNumberValidator.mockReturnValue([])
 
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact/by-prison-number')
     })
 
-    it('should redirect to find-recipient given prison number is validated', async () => {
-      mockPrisonNumberValidator.mockReturnValue(false)
+    it('should redirect to find-recipient/by-prison-number given prison number is validated', async () => {
+      mockPrisonNumberValidator.mockReturnValue([{ href: '#prisonNumber', text: 'Enter a prison number' }])
 
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
 
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
+      expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#prisonNumber', text: 'Enter a prison number' }])
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/by-prison-number')
     })
 
     it('should uppercase and trim the prison number', async () => {
       req.body.prisonNumber = ' a1234bc '
-      mockPrisonNumberValidator.mockReturnValue(true)
+      mockPrisonNumberValidator.mockReturnValue([])
 
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
 

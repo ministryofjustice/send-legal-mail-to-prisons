@@ -22,7 +22,7 @@
       <div class="govuk-grid-column-full">
         <h1 class="govuk-heading-xl">Enter a full name</h1>
 
-        <form id="find-recipient-by-prisoner-name-form" action="/barcode/find-recipient/by-prison-name" method="post" novalidate>
+        <form id="find-recipient-by-prisoner-name-form" action="/barcode/find-recipient/by-prisoner-name" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
           {% call govukFieldset({ }) %}

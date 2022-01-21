@@ -38,7 +38,9 @@ export default class CreateContactController {
     }
 
     req.session.createNewContactForm = { ...req.session.findRecipientForm, ...req.body }
-    if (!validateNewContact(req)) {
+    const errors = validateNewContact(req.session.createNewContactForm)
+    if (errors.length > 0) {
+      req.flash('errors', errors)
       return res.redirect('/barcode/find-recipient/create-new-contact/by-prison-number')
     }
 
