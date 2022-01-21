@@ -20,7 +20,7 @@ describe('Choose Barcode Option View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#choose-barcode-option')).toBeDefined()
+    expect($('#choose-barcode-option').length).toStrictEqual(1)
   })
 
   it('should show available radio options', () => {
@@ -37,7 +37,7 @@ describe('Choose Barcode Option View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('button[data-qa="continue-button"]')).toBeDefined()
+    expect($('button[data-qa="continue-button"]').length).toStrictEqual(1)
   })
 
   it('should show errors', () => {

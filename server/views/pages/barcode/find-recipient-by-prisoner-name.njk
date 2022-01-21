@@ -1,0 +1,64 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set pageTitle = applicationName + " - Find recipient" %}
+{% set pageId = 'find-recipient-by-prisoner-name' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+    {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: 'There is a problem',
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl">Enter a full name</h1>
+
+        <form id="find-recipient-by-prisoner-name-form" action="/barcode/find-recipient/by-prison-name" method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {% call govukFieldset({ }) %}
+            <div class="moj-search">
+              {{ govukInput({
+                label: {
+                  text: "Enter the recipient's full name",
+                  classes: "govuk-visually-hidden",
+                  isPageHeading: false
+                },
+                hint: {
+                  text: "Use their first name and last name"
+                },
+                attributes: {
+                  autofocus: '',
+                  autocomplete: 'off'
+                },
+                id: "prisonerName",
+                name: "prisonerName",
+                value: form.prisonerName,
+                errorMessage: errors | findError('prisonerName')
+              }) }}
+
+              {{ govukButton({
+                text: "Enter",
+                preventDoubleClick: true,
+                classes: 'moj-search__button',
+                attributes: { 'data-qa': 'enter-button' }
+              }) }}
+            </div>
+          {% endcall %}
+        </form>
+
+      </div>
+    </div>
+
+  </section>
+
+{% endblock %}
