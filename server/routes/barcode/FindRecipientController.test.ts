@@ -37,7 +37,7 @@ describe('FindRecipientController', () => {
 
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
 
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact')
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact/by-prison-number')
     })
 
     it('should redirect to find-recipient given prison number is validated', async () => {

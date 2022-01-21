@@ -20,16 +20,22 @@ export default function setUpCreateBarcode(
   const generateImageController = new GenerateBarcodeImageController(createBarcodeService)
   const pdfController = new PdfController(createBarcodeService)
 
-  router.get('/find-recipient', (req, res) => findRecipientController.getFindRecipientByPrisonNumberView(req, res))
+  router.get('/find-recipient', (req, res) => res.redirect('/barcode/find-recipient/by-prison-number'))
+  router.get('/find-recipient/by-prison-number', (req, res) =>
+    findRecipientController.getFindRecipientByPrisonNumberView(req, res)
+  )
   router.post('/find-recipient/by-prison-number', (req, res) =>
     findRecipientController.submitFindByPrisonNumber(req, res)
   )
 
   router.get('/find-recipient/create-new-contact', (req, res) =>
-    createContactController.getCreateNewContactView(req, res)
+    res.redirect('/barcode/find-recipient/create-new-contact/by-prison-number')
   )
-  router.post('/find-recipient/create-new-contact', (req, res) =>
-    createContactController.submitCreateNewContact(req, res)
+  router.get('/find-recipient/create-new-contact/by-prison-number', (req, res) =>
+    createContactController.getCreateNewContactByPrisonNumberView(req, res)
+  )
+  router.post('/find-recipient/create-new-contact/by-prison-number', (req, res) =>
+    createContactController.submitCreateNewContactByPrisonNumber(req, res)
   )
 
   router.get('/review-recipients', (req, res) => reviewRecipientsController.getReviewRecipientsView(req, res))

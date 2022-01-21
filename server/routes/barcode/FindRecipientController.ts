@@ -16,6 +16,6 @@ export default class FindRecipientController {
     }
 
     // TODO - lookup contact by prison number and redirect to appropriate endpoint
-    return res.redirect('/barcode/find-recipient/create-new-contact')
+    return res.redirect('/barcode/find-recipient/create-new-contact/by-prison-number')
   }
 }
