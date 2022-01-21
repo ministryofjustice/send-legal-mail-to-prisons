@@ -20,7 +20,7 @@ describe('Print Coversheets View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#print-coversheets')).toBeDefined()
+    expect($('#print-coversheets').length).toStrictEqual(1)
   })
 
   it('should show correct text given dl envelope was selected', () => {
