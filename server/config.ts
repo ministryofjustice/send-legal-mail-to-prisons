@@ -98,4 +98,14 @@ export default {
   gtmContainerId: get('GOOGLE_TAG_MANAGER_CONTAINER_ID', null),
   magicLinkValidityDuration: Number(get('MAGIC_LINK_VALIDITY_DURATION_IN_MINUTES', 60)),
   supportedPrisons: get('SUPPORTED_PRISONS', ''),
+  coversheetPdf: {
+    printDebugInfo: get('COVERSHEET_PRINT_DEBUG', false),
+    addressLabelWidth: get('COVERSHEET_ADDRESS_LABEL_WIDTH', '90mm'),
+    xOffsetDl: get('COVERSHEET_DL_OFFSET_X', '20mm'),
+    yOffsetDl: get('COVERSHEET_DL_OFFSET_Y', '55mm'),
+    xOffsetC5: get('COVERSHEET_C5_OFFSET_X', '20mm'),
+    yOffsetC5: get('COVERSHEET_C5_OFFSET_Y', '42mm'),
+    xOffsetC4: get('COVERSHEET_C4_OFFSET_X', '24mm'),
+    yOffsetC4: get('COVERSHEET_C4_OFFSET_Y', '67mm'),
+  },
 }

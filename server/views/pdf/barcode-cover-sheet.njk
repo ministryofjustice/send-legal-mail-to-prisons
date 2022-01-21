@@ -23,7 +23,7 @@
         }
 
         .coversheet img {
-          width: 90mm;
+          width: {{ addressLabelWidth }};
           display: block;
           box-sizing: border-box;
         }
@@ -56,18 +56,18 @@
         }
 
         .dl img {
-          margin-top: 55mm;
-          margin-left: 20mm;
+          margin-top: {{ yOffsetDl }};
+          margin-left: {{ xOffsetDl }};
         }
 
         .c5 img {
-          margin-top: 42mm;
-          margin-left: 20mm;
+          margin-top: {{ yOffsetC5 }};
+          margin-left: {{ xOffsetC5 }};
         }
 
         .c4 img {
-          margin-top: 67mm;
-          margin-left: 24mm;
+          margin-top: {{ yOffsetC4 }};
+          margin-left: {{ xOffsetC4 }};
         }
 
         .debug-true img {

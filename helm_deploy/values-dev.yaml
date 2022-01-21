@@ -11,6 +11,7 @@ generic-service:
     SEND_LEGAL_MAIL_API_URL: "https://send-legal-mail-api-dev.prison.service.justice.gov.uk"
     PRISON_REGISTER_API_URL: "https://prison-register-dev.hmpps.service.justice.gov.uk"
     SUPPORTED_PRISONS: ""
+    COVERSHEET_PRINT_DEBUG: "true"
 
 gotenberg:
   replicaCount: 1
