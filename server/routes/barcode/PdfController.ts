@@ -3,6 +3,7 @@ import PdfControllerView from './PdfControllerView'
 import validateEnvelopeSizeOption from './envelopeSizeOptionValidator'
 import CreateBarcodeService from '../../services/barcode/CreateBarcodeService'
 import logger from '../../../logger'
+import { Recipient } from '../../@types/prisonTypes'
 
 export default class PdfController {
   constructor(private readonly createBarcodeService: CreateBarcodeService) {}
@@ -46,7 +47,7 @@ export default class PdfController {
     return res.render('pages/barcode/pdf/print-coversheets', { ...view.renderArgs })
   }
 
-  async submitPrintCoverSheet(req: Request, res: Response): Promise<void> {
+  async downloadPdf(req: Request, res: Response): Promise<void> {
     if (!req.session.recipients) {
       return res.redirect('/barcode/find-recipient')
     }
@@ -65,10 +66,21 @@ export default class PdfController {
       })
     )
 
-    return res.renderPDF('pdf/barcode-cover-sheet', {
-      envelopeSize: req.session.pdfForm.envelopeSize,
-      barcodeImages,
-      printDebugInfo: true,
-    })
+    // TODO - will need to work out what to do with this when we support multiple recipients - SLM-83
+    const pdfFilename = this.pdfFilename(req.session.recipients[0])
+
+    return res.renderPDF(
+      'pdf/barcode-cover-sheet',
+      {
+        envelopeSize: req.session.pdfForm.envelopeSize,
+        barcodeImages,
+        printDebugInfo: true,
+      },
+      { filename: pdfFilename, contentDisposition: 'attachment' }
+    )
+  }
+
+  private pdfFilename(recipient: Recipient): string {
+    return `${recipient.prisonerName} ${recipient.prisonNumber}.pdf`.replace(/ /g, '-')
   }
 }

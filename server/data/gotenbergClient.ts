@@ -1,25 +1,10 @@
 import superagent from 'superagent'
 import logger from '../../logger'
 import config from '../config'
-
-export type PdfOptions = {
-  headerHtml?: string
-  footerHtml?: string
-  marginTop: number
-  marginBottom: number
-  marginLeft: number
-  marginRight: number
-}
-
-const DEFAULT_PDF_OPTIONS: PdfOptions = {
-  marginTop: 0,
-  marginRight: 0,
-  marginBottom: 0,
-  marginLeft: 0,
-}
+import type { PdfOptions } from '../middleware/setupPdfRenderer'
 
 export default class GotenbergClient {
-  async renderPdfFromHtml(html: string, options: PdfOptions = DEFAULT_PDF_OPTIONS): Promise<Buffer> {
+  async renderPdfFromHtml(html: string, options: PdfOptions): Promise<Buffer> {
     const { headerHtml, footerHtml, marginBottom, marginLeft, marginRight, marginTop } = options
 
     const request = superagent
