@@ -32,6 +32,7 @@ export default class CreateBarcodeService {
     headerTextY: 30,
     addressX: 30,
     addressY: 40,
+    addressWidth: 108,
     fontPoints: 6,
     font: 'Liberation Sans',
   }
@@ -111,21 +112,43 @@ export default class CreateBarcodeService {
     ctx.font = `bold ${this.scale(this.opts.fontPoints)}pt "${this.opts.font} Bold"`
     ctx.fillText(`Prison Rule 39`, this.scale(this.opts.headerTextX), this.scale(this.opts.headerTextY))
     ctx.font = `${this.scale(this.opts.fontPoints)}pt "${this.opts.font}"`
-    ctx.fillText(
-      this.recipientNameAndAddress(recipient),
-      this.scale(this.opts.addressX),
-      this.scale(this.opts.addressY)
-    )
+    this.formatAddressContent(recipient).forEach((text, index) => {
+      if (text !== '') {
+        ctx.fillText(
+          text,
+          this.scale(this.opts.addressX),
+          this.scale(this.opts.addressY + index * (this.opts.fontPoints + 2)),
+          this.scale(this.opts.addressWidth)
+        )
+      }
+    })
     return `data:image/png;base64,${canvas.toBuffer('image/png', { resolution: this.scale(72) }).toString('base64')}`
   }
 
-  private recipientNameAndAddress(recipient: Recipient): string {
-    // TODO add logic for prison number or prisoner DOB - SLM-81
-    return `${recipient.prisonerName}
-${recipient.prisonNumber}
-${recipient.prisonAddress.premise}
-${recipient.prisonAddress.street}
-${recipient.prisonAddress.locality}
-${recipient.prisonAddress.postalCode}`
+  formatAddressContent(recipient: Recipient): Array<string> {
+    const name = recipient.prisonerName
+    const address = { ...recipient.prisonAddress }
+    if (name.length <= 30) {
+      return Array.of(
+        name,
+        recipient.prisonNumber,
+        address.premise,
+        address.street,
+        address.locality,
+        address.postalCode
+      )
+    }
+    // Calculate how to split the name into 2 lines
+    let name1length = Math.min(30, name.length - 4)
+    let lineBreakChar = '-'
+    const naturalLineBreak = name.substring(26, 34).indexOf(' ')
+    if (naturalLineBreak !== -1) {
+      lineBreakChar = ''
+      name1length = naturalLineBreak + 26
+    }
+    // Return address including 2 lines of names but without street
+    const name1 = `${name.substring(0, name1length)}${lineBreakChar}`.trim()
+    const name2 = name.substring(name1length, name.length).trim()
+    return Array.of(name1, name2, recipient.prisonNumber, address.premise, address.locality, address.postalCode)
   }
 }

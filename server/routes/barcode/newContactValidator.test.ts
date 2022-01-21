@@ -83,4 +83,15 @@ describe('newContactValidator', () => {
       ])
     })
   })
+  it(`should not allow names longer than 60 characters`, () => {
+    req.body.prisonerName = '012345678901234567890 2345678901234567890 23456789012345678901'
+    req.body.prisonId = 'SKI'
+
+    const valid = validateNewContact(req as unknown as Request)
+
+    expect(valid).toBeFalsy()
+    expect(req.flash).toHaveBeenCalledWith('errors', [
+      { href: '#prisonerName', text: 'Name can have a maximum length of 60 characters.' },
+    ])
+  })
 })

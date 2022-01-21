@@ -133,4 +133,112 @@ describe('CreateBarcodeService', () => {
       ])
     })
   })
+
+  describe('formatAddressContent', () => {
+    const defaultAddress = {
+      prisonNumber: 'A1234BC',
+      prisonAddress: {
+        premise: 'HMP Somewhere',
+        street: 'A Street',
+        locality: 'Town',
+        postCode: 'SW1 1SW',
+      },
+    }
+    it('should allow name of 30 characters or less', () => {
+      const address = createBarcodeService.formatAddressContent({
+        prisonerName: '123456789012345678901234567890',
+        ...defaultAddress,
+      })
+
+      expect(address[0]).toStrictEqual('123456789012345678901234567890')
+    })
+
+    it('should include street if name is 30 characters or less', () => {
+      const address = createBarcodeService.formatAddressContent({
+        prisonerName: '123456789012345678901234567890',
+        ...defaultAddress,
+      })
+
+      expect(address).toEqual(expect.arrayContaining([expect.stringMatching('A Street')]))
+    })
+
+    it('should hyphenate name of more than 30', () => {
+      const address = createBarcodeService.formatAddressContent({
+        prisonerName: '1234567890123456789012345678901',
+        ...defaultAddress,
+      })
+
+      expect(address).toContain('123456789012345678901234567-')
+      expect(address[1]).toStrictEqual('8901')
+    })
+
+    it('should not include street if name on 2 lines', () => {
+      const address = createBarcodeService.formatAddressContent({
+        prisonerName: '1234567890123456789012345678901',
+        ...defaultAddress,
+      })
+
+      expect(address).not.toEqual(expect.arrayContaining([expect.stringMatching('A Street')]))
+    })
+
+    it('should hyphenate name of max length 60', () => {
+      const address = createBarcodeService.formatAddressContent({
+        prisonerName: '123456789012345678901234567890123456789012345678901234567890',
+        ...defaultAddress,
+      })
+
+      expect(address[0]).toStrictEqual('123456789012345678901234567890-')
+      expect(address[1]).toStrictEqual('123456789012345678901234567890')
+    })
+
+    it('should not hyphenate next to a space', () => {
+      const address = createBarcodeService.formatAddressContent({
+        prisonerName: '123456789012345678901234567890 23456789012345678901234567890',
+        ...defaultAddress,
+      })
+
+      expect(address[0]).toStrictEqual('123456789012345678901234567890')
+      expect(address[1]).toStrictEqual('23456789012345678901234567890')
+    })
+
+    it('should not hyphenate space up to 4 chars before 30 limit', () => {
+      const address = createBarcodeService.formatAddressContent({
+        prisonerName: '12345678901234567890123456 890123456789012345678901234567890',
+        ...defaultAddress,
+      })
+
+      expect(address[0]).toStrictEqual('12345678901234567890123456')
+      expect(address[1]).toStrictEqual('890123456789012345678901234567890')
+    })
+
+    it('should not hyphenate space up to 4 chars after 30 limit', () => {
+      const address = createBarcodeService.formatAddressContent({
+        prisonerName: '123456789012345678901234567890123 56789012345678901234567890',
+        ...defaultAddress,
+      })
+
+      expect(address[0]).toStrictEqual('123456789012345678901234567890123')
+      expect(address[1]).toStrictEqual('56789012345678901234567890')
+    })
+
+    it('should not hyphenate small 2nd name just before 30 limit', () => {
+      const address = createBarcodeService.formatAddressContent({
+        prisonerName: '12345678901234567890123456 de 123456789012345678901234567890',
+        ...defaultAddress,
+      })
+
+      expect(address[0]).toStrictEqual('12345678901234567890123456')
+      expect(address[1]).toStrictEqual('de 123456789012345678901234567890')
+    })
+
+    it('should not hyphenate small 2nd name just after 30 limit', () => {
+      const address = createBarcodeService.formatAddressContent({
+        prisonerName: '1234567890123456789012345678901 de 6789012345678901234567890',
+        ...defaultAddress,
+      })
+
+      expect(address[0]).toStrictEqual('1234567890123456789012345678901')
+      expect(address[1]).toStrictEqual('de 6789012345678901234567890')
+    })
+  })
 })
