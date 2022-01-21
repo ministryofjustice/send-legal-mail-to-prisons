@@ -178,7 +178,7 @@ describe('CreateBarcodeService', () => {
         ...defaultAddress,
       })
 
-      expect(address).not.toEqual(expect.arrayContaining([expect.stringMatching('A street')]))
+      expect(address).not.toEqual(expect.arrayContaining([expect.stringMatching('A Street')]))
     })
 
     it('should hyphenate name of max length 60', () => {
