@@ -4,6 +4,7 @@ import validateEnvelopeSizeOption from './envelopeSizeOptionValidator'
 import CreateBarcodeService from '../../services/barcode/CreateBarcodeService'
 import logger from '../../../logger'
 import { Recipient } from '../../@types/prisonTypes'
+import config from '../../config'
 
 export default class PdfController {
   constructor(private readonly createBarcodeService: CreateBarcodeService) {}
@@ -74,7 +75,14 @@ export default class PdfController {
       {
         envelopeSize: req.session.pdfForm.envelopeSize,
         barcodeImages,
-        printDebugInfo: true,
+        printDebugInfo: config.coversheetPdf.printDebugInfo,
+        addressLabelWidth: config.coversheetPdf.addressLabelWidth,
+        xOffsetDl: config.coversheetPdf.xOffsetDl,
+        yOffsetDl: config.coversheetPdf.yOffsetDl,
+        xOffsetC5: config.coversheetPdf.xOffsetC5,
+        yOffsetC5: config.coversheetPdf.yOffsetC5,
+        xOffsetC4: config.coversheetPdf.xOffsetC4,
+        yOffsetC4: config.coversheetPdf.yOffsetC4,
       },
       { filename: pdfFilename, contentDisposition: 'attachment' }
     )
