@@ -10,6 +10,8 @@ export default function validateNewContact(req: Request): boolean {
   }
   if (!req.body.prisonerName) {
     errors.push({ href: '#prisonerName', text: 'Enter a full name' })
+  } else if (req.body.prisonerName.trim().length > 60) {
+    errors.push({ href: '#prisonerName', text: 'Name can have a maximum length of 60 characters.' })
   } else {
     req.body.prisonerName = req.body.prisonerName.trim()
     if (!PRISONER_NAME_PATTERN.test(req.body.prisonerName)) {
