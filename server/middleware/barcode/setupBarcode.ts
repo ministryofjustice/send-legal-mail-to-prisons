@@ -28,6 +28,13 @@ export default function setUpCreateBarcode(
     findRecipientController.submitFindByPrisonNumber(req, res)
   )
 
+  router.get('/find-recipient/by-prisoner-name', (req, res) =>
+    findRecipientController.getFindRecipientByPrisonerNameView(req, res)
+  )
+  router.post('/find-recipient/by-prisoner-name', (req, res) =>
+    findRecipientController.submitFindByPrisonerName(req, res)
+  )
+
   router.get('/find-recipient/create-new-contact', (req, res) =>
     res.redirect('/barcode/find-recipient/create-new-contact/by-prison-number')
   )

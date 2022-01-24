@@ -1,28 +1,13 @@
-import { Request } from 'express'
+import type { CreateNewContactForm } from 'forms'
+import validatePrisonerName from './prisonerNameValidator'
+import validatePrisonId from './prisonIdValidator'
+import formatErrors from '../errorFormatter'
 
-const PRISONER_NAME_PATTERN = /^[a-zA-Z '`-]+$/
-
-export default function validateNewContact(req: Request): boolean {
+export default function validateNewContact(createNewContactForm: CreateNewContactForm): Array<Record<string, string>> {
   const errors: Array<Record<string, string>> = []
 
-  if (!req.body.prisonerName) {
-    errors.push({ href: '#prisonerName', text: 'Enter a full name' })
-  } else if (req.body.prisonerName.trim().length > 60) {
-    errors.push({ href: '#prisonerName', text: 'Name can have a maximum length of 60 characters.' })
-  } else {
-    req.body.prisonerName = req.body.prisonerName.trim()
-    if (!PRISONER_NAME_PATTERN.test(req.body.prisonerName)) {
-      errors.push({ href: '#prisonerName', text: 'Enter names that only use letters, not numbers or symbols.' })
-    }
-  }
-  if (!req.body.prisonId) {
-    errors.push({ href: '#prisonId', text: 'Select a prison name' })
-  }
+  errors.push(...formatErrors('prisonerName', validatePrisonerName(createNewContactForm.prisonerName)))
+  errors.push(...formatErrors('prisonId', validatePrisonId(createNewContactForm.prisonId)))
 
-  if (errors.length > 0) {
-    req.flash('errors', errors)
-    return false
-  }
-
-  return true
+  return errors
 }

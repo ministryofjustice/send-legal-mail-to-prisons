@@ -1,97 +1,52 @@
-import { Request } from 'express'
+import type { CreateNewContactForm } from 'forms'
 import validateNewContact from './newContactValidator'
+import validatePrisonerName from './prisonerNameValidator'
+import validatePrisonId from './prisonIdValidator'
+
+jest.mock('./prisonerNameValidator')
+jest.mock('./prisonIdValidator')
 
 describe('newContactValidator', () => {
-  const req = {
-    flash: jest.fn(),
-    body: { prisonerName: undefined as string, prisonId: undefined as string },
-  }
+  let mockValidatePrisonerName: jest.MockedFunction<typeof validatePrisonerName>
+  let mockValidatePrisonId: jest.MockedFunction<typeof validatePrisonId>
 
-  afterEach(() => {
-    req.flash.mockReset()
-    req.body = { prisonerName: undefined as string, prisonId: undefined as string }
+  beforeEach(() => {
+    mockValidatePrisonerName = validatePrisonerName as jest.MockedFunction<typeof validatePrisonerName>
+    mockValidatePrisonId = validatePrisonId as jest.MockedFunction<typeof validatePrisonId>
   })
 
-  Array.of(
-    { prisonerName: 'Fred Bloggs', prisonId: 'SKI' },
-    { prisonerName: 'Fred', prisonId: 'SKI' },
-    { prisonerName: 'Mr Fred Bloggs Esquire', prisonId: 'SKI' },
-    { prisonerName: 'Jane Ryder Richardson', prisonId: 'SKI' },
-    { prisonerName: '   Joanne Ryder-Richardson  ', prisonId: 'SKI' },
-    { prisonerName: 'Patrick O`Leary', prisonId: 'SKI' },
-    { prisonerName: `Desmond O'Leary  `, prisonId: 'SKI' }
-  ).forEach(form => {
-    it(`should validate given valid prisoner name and prison id - ${JSON.stringify(form)}`, () => {
-      req.body.prisonerName = form.prisonerName
-      req.body.prisonId = form.prisonId
+  const form = { prisonNumber: 'A1234BC', prisonerName: 'name', prisonId: 'id' } as CreateNewContactForm
 
-      const valid = validateNewContact(req as unknown as Request)
+  it('should return no errors if valid', () => {
+    mockValidatePrisonId.mockReturnValue([])
+    mockValidatePrisonerName.mockReturnValue([])
 
-      expect(valid).toBeTruthy()
-      expect(req.flash).not.toHaveBeenCalled()
-    })
+    expect(validateNewContact(form)).toEqual([])
   })
 
-  Array.of(
-    { prisonerName: 'Fred Bloggs', prisonId: '' },
-    { prisonerName: 'Fred Bloggs', prisonId: null },
-    { prisonerName: 'Fred Bloggs', prisonId: undefined }
-  ).forEach(form => {
-    it(`should not validate given null/empty prison id - ${JSON.stringify(form)}`, () => {
-      req.body.prisonerName = form.prisonerName
-      req.body.prisonId = form.prisonId
+  it('should return prison id errors', () => {
+    mockValidatePrisonId.mockReturnValue(['Select a prison name'])
+    mockValidatePrisonerName.mockReturnValue([])
 
-      const valid = validateNewContact(req as unknown as Request)
-
-      expect(valid).toBeFalsy()
-      expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#prisonId', text: 'Select a prison name' }])
-    })
+    expect(validateNewContact(form)).toEqual([{ href: '#prisonId', text: 'Select a prison name' }])
   })
 
-  Array.of(
-    { prisonerName: '', prisonId: 'SKI' },
-    { prisonerName: null, prisonId: 'SKI' },
-    { prisonerName: undefined, prisonId: 'SKI' }
-  ).forEach(form => {
-    it(`should not validate given null/empty prisoner name - ${JSON.stringify(form)}`, () => {
-      req.body.prisonerName = form.prisonerName
-      req.body.prisonId = form.prisonId
+  it('should return prisoner name errors', () => {
+    mockValidatePrisonId.mockReturnValue([])
+    mockValidatePrisonerName.mockReturnValue(['Enter a full name'])
 
-      const valid = validateNewContact(req as unknown as Request)
-
-      expect(valid).toBeFalsy()
-      expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#prisonerName', text: 'Enter a full name' }])
-    })
+    expect(validateNewContact(form)).toEqual([{ href: '#prisonerName', text: 'Enter a full name' }])
   })
 
-  Array.of(
-    { prisonerName: 'Fr3d Bl0ggs', prisonId: 'SKI' },
-    { prisonerName: 'Fred!!', prisonId: 'SKI' },
-    { prisonerName: 'Mr & Mrs Bloggs', prisonId: 'SKI' },
-    { prisonerName: 'Jane Ryder Richardson @ HMP Stoken', prisonId: 'SKI' },
-    { prisonerName: 'Joanne Ryder-Richardson (Mrs)', prisonId: 'SKI' }
-  ).forEach(form => {
-    it(`should not validate given invalid format prisoner name - ${JSON.stringify(form)}`, () => {
-      req.body.prisonerName = form.prisonerName
-      req.body.prisonId = form.prisonId
+  it('should return all errors', () => {
+    mockValidatePrisonId.mockReturnValue(['Select a prison name'])
+    mockValidatePrisonerName.mockReturnValue(['Enter a full name'])
 
-      const valid = validateNewContact(req as unknown as Request)
-
-      expect(valid).toBeFalsy()
-      expect(req.flash).toHaveBeenCalledWith('errors', [
-        { href: '#prisonerName', text: 'Enter names that only use letters, not numbers or symbols.' },
+    expect(validateNewContact(form)).toEqual(
+      expect.arrayContaining([
+        { href: '#prisonId', text: 'Select a prison name' },
+        { href: '#prisonerName', text: 'Enter a full name' },
       ])
-    })
-  })
-  it(`should not allow names longer than 60 characters`, () => {
-    req.body.prisonerName = '012345678901234567890 2345678901234567890 23456789012345678901'
-    req.body.prisonId = 'SKI'
-
-    const valid = validateNewContact(req as unknown as Request)
-
-    expect(valid).toBeFalsy()
-    expect(req.flash).toHaveBeenCalledWith('errors', [
-      { href: '#prisonerName', text: 'Name can have a maximum length of 60 characters.' },
-    ])
+    )
   })
 })
