@@ -1,4 +1,3 @@
-import { Request } from 'express'
 import validateEnvelopeSizeOption from './envelopeSizeOptionValidator'
 
 describe('envelopeSizeValidator', () => {
@@ -13,27 +12,22 @@ describe('envelopeSizeValidator', () => {
   })
 
   it('should reject missing value', () => {
-    const valid = validateEnvelopeSizeOption(req as unknown as Request)
+    const errors = validateEnvelopeSizeOption(undefined)
 
-    expect(valid).toBeFalsy()
-    expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#envelopeSize', text: 'Select an option' }])
+    expect(errors).toStrictEqual(['Select an option'])
   })
 
   it('should reject invalid value', () => {
-    req.body.envelopeSize = 'invalid-value'
+    const errors = validateEnvelopeSizeOption('invalid-value')
 
-    const valid = validateEnvelopeSizeOption(req as unknown as Request)
-
-    expect(valid).toBeFalsy()
-    expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#envelopeSize', text: 'Select an option' }])
+    expect(errors).toStrictEqual(['Select an option'])
   })
 
   Array.of({ envelopeSize: 'c5' }, { envelopeSize: 'c4' }, { envelopeSize: 'dl' }).forEach(body => {
     it(`should accept value - ${body.envelopeSize}`, () => {
-      req.body.envelopeSize = body.envelopeSize
-      const valid = validateEnvelopeSizeOption(req as unknown as Request)
+      const errors = validateEnvelopeSizeOption(body.envelopeSize)
 
-      expect(valid).toBeTruthy()
+      expect(errors).toStrictEqual([])
     })
   })
 })

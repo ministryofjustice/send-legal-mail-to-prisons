@@ -5,6 +5,7 @@ import CreateBarcodeService from '../../services/barcode/CreateBarcodeService'
 import logger from '../../../logger'
 import { Recipient } from '../../@types/prisonTypes'
 import config from '../../config'
+import formatErrors from '../errorFormatter'
 
 export default class PdfController {
   constructor(private readonly createBarcodeService: CreateBarcodeService) {}
@@ -24,7 +25,9 @@ export default class PdfController {
     }
 
     req.session.pdfForm = { ...req.body }
-    if (!validateEnvelopeSizeOption(req)) {
+    const errors = validateEnvelopeSizeOption(req.body.envelopeSize)
+    if (errors.length > 0) {
+      req.flash('errors', formatErrors('envelopeSize', errors))
       return res.redirect('/barcode/pdf/select-envelope-size')
     }
 

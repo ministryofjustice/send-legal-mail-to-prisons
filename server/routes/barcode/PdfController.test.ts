@@ -9,6 +9,7 @@ jest.mock('./envelopeSizeOptionValidator')
 const req = {
   session: {} as SessionData,
   flash: jest.fn(),
+  body: {},
 }
 
 const res = {
@@ -65,8 +66,8 @@ describe('PdfController', () => {
 
     it('should redirect to pdf print given envelope size is valid', async () => {
       req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
-      req.session.pdfForm = { envelopeSize: 'dl' }
-      mockValidateEnvelopeSizeOption.mockReturnValue(true)
+      req.body = { envelopeSize: 'dl' }
+      mockValidateEnvelopeSizeOption.mockReturnValue([])
       createBarcodeService.addBarcodeValuesToRecipients.mockReturnValue([
         {
           prisonerName: 'John Smith',
@@ -99,10 +100,12 @@ describe('PdfController', () => {
 
     it('should redirect to select-envelope-size given envelope size is not valid', async () => {
       req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
-      mockValidateEnvelopeSizeOption.mockReturnValue(false)
+      req.body = {}
+      mockValidateEnvelopeSizeOption.mockReturnValue(['Select an envelope size'])
 
       await pdfController.submitEnvelopeSize(req as unknown as Request, res as unknown as Response)
 
+      expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#envelopeSize', text: 'Select an envelope size' }])
       expect(res.redirect).toHaveBeenCalledWith('/barcode/pdf/select-envelope-size')
     })
   })
