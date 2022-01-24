@@ -69,7 +69,7 @@ describe('CreateContactController', () => {
         res as unknown as Response
       )
 
-      expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact', expectedRenderArgs)
+      expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact-by-prison-number', expectedRenderArgs)
       expect(req.flash).toHaveBeenCalledWith('errors')
     })
 
@@ -100,7 +100,7 @@ describe('CreateContactController', () => {
         res as unknown as Response
       )
 
-      expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact', expectedRenderArgs)
+      expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact-by-prison-number', expectedRenderArgs)
       expect(req.flash).toHaveBeenCalledWith('errors')
     })
 
@@ -123,7 +123,7 @@ describe('CreateContactController', () => {
         res as unknown as Response
       )
 
-      expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact', expectedRenderArgs)
+      expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact-by-prison-number', expectedRenderArgs)
       expect(req.flash).toHaveBeenCalledWith('errors', [{ text: 'There was an error retrieving the list of prisons' }])
       expect(req.flash).toHaveBeenCalledWith('errors')
     })

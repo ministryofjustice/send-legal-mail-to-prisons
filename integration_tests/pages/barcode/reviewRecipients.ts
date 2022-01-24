@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import Page, { PageElement } from '../page'
 import ChooseBarcodeOptionPage from './chooseBarcodeOption'
-import CreateNewContactPage from './createNewContact'
+import CreateNewContactByPrisonNumberPage from './createNewContactByPrisonNumber'
 import FindRecipientByPrisonNumberPage from './findRecipientByPrisonNumber'
 
 export default class ReviewRecipientsPage extends Page {
@@ -50,5 +50,5 @@ export default class ReviewRecipientsPage extends Page {
 
   prepareBarcodesButton = (): PageElement => cy.get('[data-qa=prepare-barcodes-button]')
 
-  static goToPage = (): ReviewRecipientsPage => CreateNewContactPage.goToPage().submitWithValidValues()
+  static goToPage = (): ReviewRecipientsPage => CreateNewContactByPrisonNumberPage.goToPage().submitWithValidValues()
 }

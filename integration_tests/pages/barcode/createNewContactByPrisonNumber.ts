@@ -3,9 +3,9 @@ import Page, { PageElement } from '../page'
 import ReviewRecipientsPage from './reviewRecipients'
 import FindRecipientByPrisonNumberPage from './findRecipientByPrisonNumber'
 
-export default class CreateNewContactPage extends Page {
+export default class CreateNewContactByPrisonNumberPage extends Page {
   constructor() {
-    super('create-new-contact')
+    super('create-new-contact-by-prison-number')
     this.prisonerNameFieldIsFocussed()
   }
 
@@ -19,34 +19,34 @@ export default class CreateNewContactPage extends Page {
     return this.submitForm(ReviewRecipientsPage)
   }
 
-  enterAValidPrisonerName = (prisonerName = 'Gage Hewitt'): CreateNewContactPage => {
+  enterAValidPrisonerName = (prisonerName = 'Gage Hewitt'): CreateNewContactByPrisonNumberPage => {
     this.prisonerNameField().clear()
     this.prisonerNameField().type(prisonerName)
     return this
   }
 
-  typeAheadAValidPrison = (prisonName = 'ashfield'): CreateNewContactPage => {
+  typeAheadAValidPrison = (prisonName = 'ashfield'): CreateNewContactByPrisonNumberPage => {
     this.clearPrisonField()
     this.prisonIdField().type(prisonName)
     this.pressEnterInPrisonIdField()
     return this
   }
 
-  typeAheadHMPValidPrison = (): CreateNewContactPage => {
+  typeAheadHMPValidPrison = (): CreateNewContactByPrisonNumberPage => {
     this.clearPrisonField()
     this.prisonIdField().type('hmp ashfield')
     this.pressEnterInPrisonIdField()
     return this
   }
 
-  typeAheadAnInvalidPrison = (): CreateNewContactPage => {
+  typeAheadAnInvalidPrison = (): CreateNewContactByPrisonNumberPage => {
     this.clearPrisonField()
     this.prisonIdField().type('invalid prison')
     this.pressEnterInPrisonIdField()
     return this
   }
 
-  clearPrisonField = (): CreateNewContactPage => {
+  clearPrisonField = (): CreateNewContactByPrisonNumberPage => {
     this.prisonIdField().clear()
     return this
   }
@@ -76,5 +76,6 @@ export default class CreateNewContactPage extends Page {
 
   submitButton = (): PageElement => cy.get('#create-new-contact-form button')
 
-  static goToPage = (): CreateNewContactPage => FindRecipientByPrisonNumberPage.goToPage().submitWithValidPrisonNumber()
+  static goToPage = (): CreateNewContactByPrisonNumberPage =>
+    FindRecipientByPrisonNumberPage.goToPage().submitWithValidPrisonNumber()
 }
