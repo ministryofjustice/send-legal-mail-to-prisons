@@ -25,7 +25,7 @@ describe('newContactValidator', () => {
   })
 
   it('should return prison id errors', () => {
-    mockValidatePrisonId.mockReturnValue([{ href: '#prisonId', text: 'Select a prison name' }])
+    mockValidatePrisonId.mockReturnValue(['Select a prison name'])
     mockValidatePrisonerName.mockReturnValue([])
 
     expect(validateNewContact(form)).toEqual([{ href: '#prisonId', text: 'Select a prison name' }])
@@ -33,14 +33,14 @@ describe('newContactValidator', () => {
 
   it('should return prisoner name errors', () => {
     mockValidatePrisonId.mockReturnValue([])
-    mockValidatePrisonerName.mockReturnValue([{ href: '#prisonerName', text: 'Enter a full name' }])
+    mockValidatePrisonerName.mockReturnValue(['Enter a full name'])
 
     expect(validateNewContact(form)).toEqual([{ href: '#prisonerName', text: 'Enter a full name' }])
   })
 
   it('should return all errors', () => {
-    mockValidatePrisonId.mockReturnValue([{ href: '#prisonId', text: 'Select a prison name' }])
-    mockValidatePrisonerName.mockReturnValue([{ href: '#prisonerName', text: 'Enter a full name' }])
+    mockValidatePrisonId.mockReturnValue(['Select a prison name'])
+    mockValidatePrisonerName.mockReturnValue(['Enter a full name'])
 
     expect(validateNewContact(form)).toEqual(
       expect.arrayContaining([

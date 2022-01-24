@@ -41,7 +41,7 @@ describe('FindRecipientController', () => {
     })
 
     it('should redirect to find-recipient/by-prison-number given prison number is validated', async () => {
-      mockPrisonNumberValidator.mockReturnValue([{ href: '#prisonNumber', text: 'Enter a prison number' }])
+      mockPrisonNumberValidator.mockReturnValue(['Enter a prison number'])
 
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
 

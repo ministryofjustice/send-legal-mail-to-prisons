@@ -11,7 +11,7 @@ describe('prisonNumberValidator', () => {
     it(`should not validate given null/empty prison number - '${prisonNumber}'`, () => {
       const errors = validatePrisonNumber(prisonNumber)
 
-      expect(errors).toEqual(expect.arrayContaining([{ href: '#prisonNumber', text: 'Enter a prison number' }]))
+      expect(errors).toEqual(expect.arrayContaining(['Enter a prison number']))
     })
   })
 
@@ -19,9 +19,7 @@ describe('prisonNumberValidator', () => {
     it(`should not validate given invalid format prison number - '${prisonNumber}'`, () => {
       const errors = validatePrisonNumber(prisonNumber)
 
-      expect(errors).toEqual(
-        expect.arrayContaining([{ href: '#prisonNumber', text: 'Enter the prison number in the correct format.' }])
-      )
+      expect(errors).toEqual(expect.arrayContaining(['Enter the prison number in the correct format.']))
     })
   })
 })

@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import FindRecipientView from './FindRecipientView'
 import validatePrisonNumber from './prisonNumberValidator'
 import validatePrisonerName from './prisonerNameValidator'
+import formatErrors from '../errorFormatter'
 
 export default class FindRecipientController {
   async getFindRecipientByPrisonNumberView(req: Request, res: Response): Promise<void> {
@@ -14,7 +15,7 @@ export default class FindRecipientController {
     req.session.findRecipientForm = { ...req.body }
     const errors = validatePrisonNumber(req.body.prisonNumber)
     if (errors.length > 0) {
-      req.flash('errors', errors)
+      req.flash('errors', formatErrors('prisonNumber', errors))
       return res.redirect('/barcode/find-recipient/by-prison-number')
     }
 
@@ -32,7 +33,7 @@ export default class FindRecipientController {
     req.session.findRecipientForm = { ...req.body }
     const errors = validatePrisonerName(req.body.prisonerName)
     if (errors.length > 0) {
-      req.flash('errors', errors)
+      req.flash('errors', formatErrors('prisonerName', errors))
       return res.redirect('/barcode/find-recipient/by-prisoner-name')
     }
 

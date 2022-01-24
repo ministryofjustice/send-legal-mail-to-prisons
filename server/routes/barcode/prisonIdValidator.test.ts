@@ -11,7 +11,7 @@ describe('prisonIdValidator', () => {
     it(`should not validate given null/empty prison id - '${prisonId}'`, () => {
       const errors = validatePrisonId(prisonId)
 
-      expect(errors).toEqual(expect.arrayContaining([{ href: '#prisonId', text: 'Select a prison name' }]))
+      expect(errors).toEqual(expect.arrayContaining(['Select a prison name']))
     })
   })
 })
