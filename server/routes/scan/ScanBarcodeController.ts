@@ -2,8 +2,9 @@ import { Request, Response } from 'express'
 import BarcodeEntryView from './BarcodeEntryView'
 import validate from './BarcodeEntryFormValidator'
 import ScanBarcodeService from '../../services/scan/ScanBarcodeService'
-import { CheckBarcodeResponse } from '../../@types/sendLegalMailApiClientTypes'
+import { CheckBarcodeResponse, DuplicateErrorCode } from '../../@types/sendLegalMailApiClientTypes'
 import AppInsightsService from '../../services/AppInsightsService'
+import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
 
 /**
  * Controller class responsible for scanning and verifying barcodes.
@@ -15,6 +16,7 @@ import AppInsightsService from '../../services/AppInsightsService'
 export default class ScanBarcodeController {
   constructor(
     private readonly scanBarcodeService: ScanBarcodeService,
+    private readonly prisonRegisterService: PrisonRegisterService,
     private readonly appInsightsClient: AppInsightsService
   ) {}
 
@@ -98,9 +100,16 @@ export default class ScanBarcodeController {
         const checkBarcodeResponse = apiResponse as CheckBarcodeResponse
         req.session.barcodeEntryForm.createdBy = checkBarcodeResponse.createdBy
       })
-      .catch(errorResponse => {
+      .catch(async errorResponse => {
         const errorType = errorResponse.data?.errorCode?.code
-        if (errorType === 'DUPLICATE' || errorType === 'RANDOM_CHECK' || errorType === 'EXPIRED') {
+        if (errorType === 'DUPLICATE') {
+          const { scannedLocation } = errorResponse.data.errorCode as DuplicateErrorCode
+          const prisonName = this.prisonRegisterService.getPrisonNameOrId(scannedLocation)
+          req.session.barcodeEntryForm.errorCode = {
+            ...errorResponse.data.errorCode,
+            scannedLocation: prisonName,
+          }
+        } else if (errorType === 'RANDOM_CHECK' || errorType === 'EXPIRED') {
           req.session.barcodeEntryForm.errorCode = errorResponse.data.errorCode
         } else if (errorResponse.status === 404) {
           req.session.barcodeEntryForm.errorCode = { code: 'NOT_FOUND' }

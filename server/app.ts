@@ -69,7 +69,7 @@ export default function createApp(
   app.use('/', indexRoutes(standardRouter(userService)))
   app.use('/', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_SECURITY_ANALYST']))
 
-  app.use('/', setupScanBarcode(scanBarcodeService, appInsightsClient))
+  app.use('/', setupScanBarcode(scanBarcodeService, prisonRegisterService, appInsightsClient))
 
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler(process.env.NODE_ENV === 'production'))

@@ -38,6 +38,15 @@ export default class PrisonRegisterService {
       : Promise.reject(new Error(`PrisonAddress for prison ${prisonId} not found`))
   }
 
+  /**
+   * Returns the name of the prison (`premise` field from the PrisonAddress) for the specified prisonId
+   * or simply the prisonId if the prison cannot be found by it's ID
+   */
+  getPrisonNameOrId(prisonId: string): string {
+    const prisonAddress = prisonAddressData.find(row => row.agencyCode === prisonId)
+    return prisonAddress?.premise || prisonId
+  }
+
   private async retrieveAndCacheActivePrisons(): Promise<Array<Prison>> {
     try {
       // Active Prisons were not returned from the redis store. Retrieve them from the service and put them in the redis store.
