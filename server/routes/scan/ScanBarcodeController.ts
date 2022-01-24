@@ -100,7 +100,7 @@ export default class ScanBarcodeController {
         const checkBarcodeResponse = apiResponse as CheckBarcodeResponse
         req.session.barcodeEntryForm.createdBy = checkBarcodeResponse.createdBy
       })
-      .catch(async errorResponse => {
+      .catch(errorResponse => {
         const errorType = errorResponse.data?.errorCode?.code
         if (errorType === 'DUPLICATE') {
           const { scannedLocation } = errorResponse.data.errorCode as DuplicateErrorCode
