@@ -13,21 +13,21 @@ export default class CreateNewContactPage extends Page {
     this.prisonerNameField().should('be.focused')
   }
 
-  submitWithValidValues = (): ReviewRecipientsPage => {
-    this.enterAValidPrisonerName()
-    this.typeAheadAValidPrison()
+  submitWithValidValues = (prisonerName = 'Gage Hewitt', prisonName = 'ashfield'): ReviewRecipientsPage => {
+    this.enterAValidPrisonerName(prisonerName)
+    this.typeAheadAValidPrison(prisonName)
     return this.submitForm(ReviewRecipientsPage)
   }
 
-  enterAValidPrisonerName = (): CreateNewContactPage => {
+  enterAValidPrisonerName = (prisonerName = 'Gage Hewitt'): CreateNewContactPage => {
     this.prisonerNameField().clear()
-    this.prisonerNameField().type('Gage Hewitt')
+    this.prisonerNameField().type(prisonerName)
     return this
   }
 
-  typeAheadAValidPrison = (): CreateNewContactPage => {
+  typeAheadAValidPrison = (prisonName = 'ashfield'): CreateNewContactPage => {
     this.clearPrisonField()
-    this.prisonIdField().type('ashfield')
+    this.prisonIdField().type(prisonName)
     this.pressEnterInPrisonIdField()
     return this
   }

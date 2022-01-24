@@ -50,6 +50,8 @@ export default class CreateContactController {
     try {
       const prisonAddress = await this.prisonRegisterService.getPrisonAddress(newRecipient.prisonId)
       this.addRecipient(req, newRecipient, prisonAddress)
+      req.session.findRecipientForm = undefined
+      req.session.createNewContactForm = undefined
       return res.redirect('/barcode/review-recipients')
     } catch (error) {
       // An error getting the prison address

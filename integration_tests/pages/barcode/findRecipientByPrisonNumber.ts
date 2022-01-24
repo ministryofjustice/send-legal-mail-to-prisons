@@ -12,8 +12,8 @@ export default class FindRecipientByPrisonNumberPage extends Page {
     this.prisonNumberField().should('be.focused')
   }
 
-  submitWithValidPrisonNumber = (): CreateNewContactPage => {
-    this.prisonNumberField().type('A1234BC')
+  submitWithValidPrisonNumber = (prisonNumber = 'A1234BC'): CreateNewContactPage => {
+    this.prisonNumberField().type(prisonNumber)
     this.submitButton().click()
     return Page.verifyOnPage(CreateNewContactPage)
   }

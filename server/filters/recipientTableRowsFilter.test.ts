@@ -35,14 +35,14 @@ describe('recipientTableRowsFilter', () => {
         { text: 'A1234BC' },
         { text: 'HMP BRINSFORD' },
         { html: '<a href="" class="govuk-link">Edit details</a>' },
-        { html: '<a href="" class="govuk-link">Remove</a>' },
+        { html: '<a href="/barcode/review-recipients/remove/0" class="govuk-link">Remove</a>' },
       ],
       [
         { text: 'Gage Hewitt' },
         { text: 'R9831RQ' },
         { text: 'HMP BRIXTON' },
         { html: '<a href="" class="govuk-link">Edit details</a>' },
-        { html: '<a href="" class="govuk-link">Remove</a>' },
+        { html: '<a href="/barcode/review-recipients/remove/1" class="govuk-link">Remove</a>' },
       ],
     ])
   })
