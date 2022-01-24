@@ -4,6 +4,7 @@ import ScanBarcodeController from '../../routes/scan/ScanBarcodeController'
 import ScanBarcodeService from '../../services/scan/ScanBarcodeService'
 import AppInsightsService from '../../services/AppInsightsService'
 import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
+import VerifyBarcodeErrorResponseMapper from '../../routes/scan/VerifyBarcodeErrorResponseMapper'
 
 export default function setupScanBarcode(
   scanBarcodeService: ScanBarcodeService,
@@ -12,7 +13,11 @@ export default function setupScanBarcode(
 ): Router {
   const router = express.Router()
 
-  const scanBarcodeController = new ScanBarcodeController(scanBarcodeService, prisonRegisterService, appInsightsClient)
+  const scanBarcodeController = new ScanBarcodeController(
+    scanBarcodeService,
+    new VerifyBarcodeErrorResponseMapper(prisonRegisterService),
+    appInsightsClient
+  )
 
   router.use('/scan-barcode', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE']))
   router.get('/scan-barcode', (req, res) => scanBarcodeController.getScanBarcodeView(req, res))
