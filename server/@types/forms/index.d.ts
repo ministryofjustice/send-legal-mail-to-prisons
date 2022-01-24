@@ -19,6 +19,12 @@ declare module 'forms' {
     prisonId?: string
   }
 
+  export interface CreateNewContactByPrisonerNameForm {
+    prisonerName: string
+    prisonId?: string
+    prisonerDob?: string
+  }
+
   export interface BarcodeEntryForm {
     barcode?: string
     createdBy?: string
