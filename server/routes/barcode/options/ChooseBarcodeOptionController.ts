@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import ChooseBarcodeOptionView from './ChooseBarcodeOptionView'
 import validateBarcodeOption from './barcodeOptionValidator'
-import formatErrors from '../errorFormatter'
+import formatErrors from '../../errorFormatter'
 
 export default class ChooseBarcodeOptionController {
   async getChooseBarcodeOptionView(req: Request, res: Response): Promise<void> {

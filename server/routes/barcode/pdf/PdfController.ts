@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 import PdfControllerView from './PdfControllerView'
 import validateEnvelopeSizeOption from './envelopeSizeOptionValidator'
-import CreateBarcodeService from '../../services/barcode/CreateBarcodeService'
-import logger from '../../../logger'
-import { Recipient } from '../../@types/prisonTypes'
-import config from '../../config'
-import formatErrors from '../errorFormatter'
+import CreateBarcodeService from '../../../services/barcode/CreateBarcodeService'
+import logger from '../../../../logger'
+import { Recipient } from '../../../@types/prisonTypes'
+import config from '../../../config'
+import formatErrors from '../../errorFormatter'
 
 export default class PdfController {
   constructor(private readonly createBarcodeService: CreateBarcodeService) {}

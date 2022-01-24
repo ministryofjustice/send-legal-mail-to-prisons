@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import FindRecipientView from './FindRecipientView'
-import validatePrisonNumber from './prisonNumberValidator'
-import validatePrisonerName from './prisonerNameValidator'
-import formatErrors from '../errorFormatter'
+import validatePrisonNumber from '../validators/prisonNumberValidator'
+import validatePrisonerName from '../validators/prisonerNameValidator'
+import formatErrors from '../../errorFormatter'
 
 export default class FindRecipientController {
   async getFindRecipientByPrisonNumberView(req: Request, res: Response): Promise<void> {

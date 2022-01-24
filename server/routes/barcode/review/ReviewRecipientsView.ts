@@ -1,4 +1,4 @@
-import { Recipient } from '../../@types/prisonTypes'
+import { Recipient } from '../../../@types/prisonTypes'
 
 export default class ReviewRecipientsView {
   constructor(private readonly recipients: Array<Recipient>, private readonly errors?: Array<Record<string, string>>) {}

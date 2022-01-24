@@ -1,12 +1,12 @@
 import express, { Router } from 'express'
-import FindRecipientController from '../../routes/barcode/FindRecipientController'
+import FindRecipientController from '../../routes/barcode/recipients/FindRecipientController'
 import CreateBarcodeService from '../../services/barcode/CreateBarcodeService'
 import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
-import ReviewRecipientsController from '../../routes/barcode/ReviewRecipientsController'
-import CreateContactController from '../../routes/barcode/CreateContactController'
-import GenerateBarcodeImageController from '../../routes/barcode/GenerateBarcodeImageController'
-import PdfController from '../../routes/barcode/PdfController'
-import ChooseBarcodeOptionController from '../../routes/barcode/ChooseBarcodeOptionController'
+import ReviewRecipientsController from '../../routes/barcode/review/ReviewRecipientsController'
+import CreateContactController from '../../routes/barcode/contacts/CreateContactController'
+import GenerateBarcodeImageController from '../../routes/barcode/image/GenerateBarcodeImageController'
+import PdfController from '../../routes/barcode/pdf/PdfController'
+import ChooseBarcodeOptionController from '../../routes/barcode/options/ChooseBarcodeOptionController'
 
 export default function setUpCreateBarcode(
   createBarcodeService: CreateBarcodeService,

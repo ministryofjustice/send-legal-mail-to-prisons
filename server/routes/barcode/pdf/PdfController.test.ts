@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
 import PdfController from './PdfController'
 import validateEnvelopeSizeOption from './envelopeSizeOptionValidator'
-import CreateBarcodeService from '../../services/barcode/CreateBarcodeService'
+import CreateBarcodeService from '../../../services/barcode/CreateBarcodeService'
 
 jest.mock('./envelopeSizeOptionValidator')
 

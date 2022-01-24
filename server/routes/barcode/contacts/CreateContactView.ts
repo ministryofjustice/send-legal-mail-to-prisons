@@ -1,5 +1,5 @@
 import type { CreateNewContactForm } from 'forms'
-import { Prison } from '../../@types/prisonTypes'
+import { Prison } from '../../../@types/prisonTypes'
 
 type DropDownOption = {
   value: string

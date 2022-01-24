@@ -3,7 +3,6 @@ import { Request, Response } from 'express'
 import ChooseBarcodeOptionController from './ChooseBarcodeOptionController'
 import validateBarcodeOption from './barcodeOptionValidator'
 
-jest.mock('../../config')
 jest.mock('./barcodeOptionValidator')
 
 const req = {
