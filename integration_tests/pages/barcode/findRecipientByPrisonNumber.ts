@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import Page, { PageElement } from '../page'
-import CreateNewContactPage from './createNewContact'
+import CreateNewContactByPrisonNumberPage from './createNewContactByPrisonNumber'
 
 export default class FindRecipientByPrisonNumberPage extends Page {
   constructor() {
@@ -12,10 +12,10 @@ export default class FindRecipientByPrisonNumberPage extends Page {
     this.prisonNumberField().should('be.focused')
   }
 
-  submitWithValidPrisonNumber = (prisonNumber = 'A1234BC'): CreateNewContactPage => {
+  submitWithValidPrisonNumber = (prisonNumber = 'A1234BC'): CreateNewContactByPrisonNumberPage => {
     this.prisonNumberField().type(prisonNumber)
     this.submitButton().click()
-    return Page.verifyOnPage(CreateNewContactPage)
+    return Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
   }
 
   submitWithInvalidPrisonNumber = (): FindRecipientByPrisonNumberPage => {

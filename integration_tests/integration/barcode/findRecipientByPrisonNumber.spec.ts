@@ -1,7 +1,7 @@
 import Page from '../../pages/page'
 import RequestLinkPage from '../../pages/link/requestLink'
 import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientByPrisonNumber'
-import CreateNewContactPage from '../../pages/barcode/createNewContact'
+import CreateNewContactByPrisonNumberPage from '../../pages/barcode/createNewContactByPrisonNumber'
 
 context('Find Recipient By Prison Number Page', () => {
   it('should redirect to Request List page if visiting without an auth token in the session', () => {
@@ -23,6 +23,6 @@ context('Find Recipient By Prison Number Page', () => {
 
     findRecipientByPrisonNumberPage.submitWithValidPrisonNumber()
 
-    Page.verifyOnPage(CreateNewContactPage)
+    Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
   })
 })

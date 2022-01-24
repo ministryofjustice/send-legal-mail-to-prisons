@@ -1,7 +1,7 @@
 import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientByPrisonNumber'
 import Page from '../../pages/page'
 import ReviewRecipientsPage from '../../pages/barcode/reviewRecipients'
-import CreateNewContactPage from '../../pages/barcode/createNewContact'
+import CreateNewContactByPrisonNumberPage from '../../pages/barcode/createNewContactByPrisonNumber'
 
 context('Create New Contact Page', () => {
   it('should redirect to find-recipient given user navigates to Create New Contact without going via find-recipients first', () => {
@@ -34,9 +34,9 @@ context('Create New Contact Page', () => {
       .enterAValidPrisonerName()
       .typeAheadAValidPrison()
       .typeAheadAnInvalidPrison()
-      .submitForm(CreateNewContactPage)
+      .submitForm(CreateNewContactByPrisonNumberPage)
 
-    Page.verifyOnPage(CreateNewContactPage).hasPrisonIdErrorContaining('prison name')
+    Page.verifyOnPage(CreateNewContactByPrisonNumberPage).hasPrisonIdErrorContaining('prison name')
   })
 
   it('should redisplay create-new-contact given form submitted with prison that was previously correctly selected but then blanked out', () => {
@@ -46,8 +46,8 @@ context('Create New Contact Page', () => {
       .enterAValidPrisonerName()
       .typeAheadAValidPrison()
       .clearPrisonField()
-      .submitForm(CreateNewContactPage)
+      .submitForm(CreateNewContactByPrisonNumberPage)
 
-    Page.verifyOnPage(CreateNewContactPage).hasPrisonIdErrorContaining('prison name')
+    Page.verifyOnPage(CreateNewContactByPrisonNumberPage).hasPrisonIdErrorContaining('prison name')
   })
 })

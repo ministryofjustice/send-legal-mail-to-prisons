@@ -1,0 +1,93 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+
+{% set pageTitle = applicationName + " - Create contact" %}
+{% set pageId = 'create-new-contact-by-prisoner-name' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+    {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: 'There is a problem',
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row" id="create-new-contact-form">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Create new contact</h1>
+        <p data-qa="add-details">You need to add details for <strong>{{ form.prisonerName }}</strong>. These will be saved for next time.</p>
+
+        <form action="/barcode/find-recipient/create-new-contact/by-prisoner-name" method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {% set errorPrisonerDob = errors | findError('prisonerDob') %}
+          {% set dobErrorClass = " govuk-input--error" if errorPrisonerDob %}
+
+          {% call govukFieldset({ }) %}
+
+            {{ govukDateInput({
+              id: "prisonerDob",
+              namePrefix: "prisonerDob",
+              fieldset: {
+                label: {
+                  text: "Enter their date of birth",
+                  isPageHeading: false
+                }
+              },
+              hint: {
+                text: "For example, 27 03 1996"
+              },
+              errorMessage: errorPrisonerDob,
+              items: [
+                {
+                  name: "day",
+                  classes: "govuk-input--width-2" + dobErrorClass,
+                  value: form['prisonerDob-day']
+                },
+                {
+                  name: "month",
+                  classes: "govuk-input--width-2" + dobErrorClass,
+                  value: form['prisonerDob-month']
+                },
+                {
+                  name: "year",
+                  classes: "govuk-input--width-4" + dobErrorClass,
+                  value: form['prisonerDob-year']
+                }
+              ]
+            }) }}
+
+            {{ govukSelect({
+              id: 'prisonId',
+              name: 'prisonId',
+              label: {
+                text: 'Select name of prison'
+              },
+              items: prisonRegister,
+              errorMessage: errors | findError('prisonId')
+            }) }}
+
+            {{ govukButton({
+              text: "Save",
+              preventDoubleClick: true
+            }) }}
+
+          {% endcall %}
+        </form>
+      </div>
+
+      <div class="govuk-grid-column-one-third right-column">
+        <h2 data-qa="locate" class="govuk-heading-m">Get help locating {{ form.prisonerName }}</h2>
+        <a href="https://www.gov.uk/find-prisoner" target="_blank" class="govuk-link">Find them using the Prisoner Location Service (opens in a new tab)</a>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

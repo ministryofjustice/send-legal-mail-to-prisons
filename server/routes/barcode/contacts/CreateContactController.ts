@@ -29,7 +29,7 @@ export default class CreateContactController {
       this.filterSupportedPrisons(activePrisons),
       req.flash('errors')
     )
-    return res.render('pages/barcode/create-new-contact', { ...view.renderArgs })
+    return res.render('pages/barcode/create-new-contact-by-prison-number', { ...view.renderArgs })
   }
 
   async submitCreateNewContactByPrisonNumber(req: Request, res: Response): Promise<void> {
