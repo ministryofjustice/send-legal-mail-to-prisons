@@ -123,8 +123,6 @@ describe('Prison Register Service', () => {
   })
 
   describe('getPrisonAddress', () => {
-    mockPrisonAddressData()
-
     it('should get prison address given prison exists', async () => {
       const prisonId = 'ASI'
 
@@ -154,32 +152,17 @@ describe('Prison Register Service', () => {
     })
   })
 
-  function mockPrisonAddressData() {
-    jest.mock('./prisonAddressData.json', () => [
-      {
-        agencyCode: 'ACI',
-        agyDescription: 'ALTCOURSE (HMP)',
-        agyLocType: 'Prison',
-        flat: '',
-        premise: 'HMP ALTCOURSE',
-        street: 'Higher Lane',
-        locality: 'Fazakerley',
-        countyCode: '',
-        area: 'Liverpool',
-        postalCode: 'L9 7LH',
-      },
-      {
-        agencyCode: 'ASI',
-        agyDescription: 'ASHFIELD (HMP)',
-        agyLocType: 'Prison',
-        flat: '',
-        premise: 'HMP & YOI ASHFIELD',
-        street: 'Shortwood Road',
-        locality: 'Pucklechurch',
-        countyCode: '',
-        area: 'Bristol',
-        postalCode: 'BS16 9QJ',
-      },
-    ])
-  }
+  describe('getPrisonNameOrId', () => {
+    it('should get prison name given valid prison ID', () => {
+      const prisonName = prisonRegisterService.getPrisonNameOrId('ASI')
+
+      expect(prisonName).toBe('HMP Ashfield')
+    })
+
+    it('should return prison ID given invalid prison id', () => {
+      const prisonName = prisonRegisterService.getPrisonNameOrId('XYZ')
+
+      expect(prisonName).toBe('XYZ')
+    })
+  })
 })

@@ -4,6 +4,7 @@ import validate from './BarcodeEntryFormValidator'
 import ScanBarcodeService from '../../services/scan/ScanBarcodeService'
 import { CheckBarcodeResponse } from '../../@types/sendLegalMailApiClientTypes'
 import AppInsightsService from '../../services/AppInsightsService'
+import VerifyBarcodeErrorResponseMapper from './VerifyBarcodeErrorResponseMapper'
 
 /**
  * Controller class responsible for scanning and verifying barcodes.
@@ -15,6 +16,7 @@ import AppInsightsService from '../../services/AppInsightsService'
 export default class ScanBarcodeController {
   constructor(
     private readonly scanBarcodeService: ScanBarcodeService,
+    private readonly verifyBarcodeErrorResponseMapper: VerifyBarcodeErrorResponseMapper,
     private readonly appInsightsClient: AppInsightsService
   ) {}
 
@@ -99,14 +101,7 @@ export default class ScanBarcodeController {
         req.session.barcodeEntryForm.createdBy = checkBarcodeResponse.createdBy
       })
       .catch(errorResponse => {
-        const errorType = errorResponse.data?.errorCode?.code
-        if (errorType === 'DUPLICATE' || errorType === 'RANDOM_CHECK' || errorType === 'EXPIRED') {
-          req.session.barcodeEntryForm.errorCode = errorResponse.data.errorCode
-        } else if (errorResponse.status === 404) {
-          req.session.barcodeEntryForm.errorCode = { code: 'NOT_FOUND' }
-        } else {
-          throw new Error(`Unsupported error code ${errorType}`)
-        }
+        req.session.barcodeEntryForm.errorCode = this.verifyBarcodeErrorResponseMapper.mapErrorResponse(errorResponse)
       })
   }
 
