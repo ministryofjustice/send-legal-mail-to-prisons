@@ -75,30 +75,22 @@ describe('ChooseBarcodeOptionController', () => {
       mockValidateBarcodeOption = validateBarcodeOption as jest.MockedFunction<typeof validateBarcodeOption>
     })
 
-    it(`should go back to the form if it wasn't actually submitted`, async () => {
-      await chooseBarcodeOptionController.submitChooseBarcodeOption(
-        req as unknown as Request,
-        res as unknown as Response
-      )
-
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/choose-barcode-option')
-    })
-
     it(`should go back to the form if it's invalid`, async () => {
       req.body = {}
-      mockValidateBarcodeOption.mockReturnValue(false)
+      mockValidateBarcodeOption.mockReturnValue(['Select an option'])
 
       await chooseBarcodeOptionController.submitChooseBarcodeOption(
         req as unknown as Request,
         res as unknown as Response
       )
 
+      expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#barcodeOption', text: 'Select an option' }])
       expect(res.redirect).toHaveBeenCalledWith('/barcode/choose-barcode-option')
     })
 
     it('should redirect to barcode image page if barcodeOption is image', async () => {
       req.body = { barcodeOption: 'image' }
-      mockValidateBarcodeOption.mockReturnValue(true)
+      mockValidateBarcodeOption.mockReturnValue([])
 
       await chooseBarcodeOptionController.submitChooseBarcodeOption(
         req as unknown as Request,
@@ -110,7 +102,7 @@ describe('ChooseBarcodeOptionController', () => {
 
     it('should redirect to barcode image page if barcodeOption is coversheet', async () => {
       req.body = { barcodeOption: 'coversheet' }
-      mockValidateBarcodeOption.mockReturnValue(true)
+      mockValidateBarcodeOption.mockReturnValue([])
 
       await chooseBarcodeOptionController.submitChooseBarcodeOption(
         req as unknown as Request,

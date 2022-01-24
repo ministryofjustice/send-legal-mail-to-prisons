@@ -1,4 +1,3 @@
-import { Request } from 'express'
 import validateBarcodeOption from './barcodeOptionValidator'
 
 describe('barcodeOptionValidator', () => {
@@ -13,27 +12,22 @@ describe('barcodeOptionValidator', () => {
   })
 
   it('should reject missing value', () => {
-    const valid = validateBarcodeOption(req as unknown as Request)
+    const errors = validateBarcodeOption('')
 
-    expect(valid).toBeFalsy()
-    expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#barcodeOption', text: 'Select an option' }])
+    expect(errors).toStrictEqual(['Select an option'])
   })
 
   it('should reject invalid value', () => {
-    req.body.barcodeOption = 'invalid-value'
+    const errors = validateBarcodeOption('invalid-value')
 
-    const valid = validateBarcodeOption(req as unknown as Request)
-
-    expect(valid).toBeFalsy()
-    expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#barcodeOption', text: 'Select an option' }])
+    expect(errors).toStrictEqual(['Select an option'])
   })
 
   Array.of({ barcodeOption: 'image' }, { barcodeOption: 'coversheet' }).forEach(body => {
-    it('should accept value', () => {
-      req.body.barcodeOption = body.barcodeOption
-      const valid = validateBarcodeOption(req as unknown as Request)
+    it(`should accept value - ${body.barcodeOption}`, () => {
+      const errors = validateBarcodeOption(body.barcodeOption)
 
-      expect(valid).toBeTruthy()
+      expect(errors).toStrictEqual([])
     })
   })
 })

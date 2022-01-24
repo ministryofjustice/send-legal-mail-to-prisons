@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import ChooseBarcodeOptionView from './ChooseBarcodeOptionView'
 import validateBarcodeOption from './barcodeOptionValidator'
+import formatErrors from '../errorFormatter'
 
 export default class ChooseBarcodeOptionController {
   async getChooseBarcodeOptionView(req: Request, res: Response): Promise<void> {
@@ -16,7 +17,9 @@ export default class ChooseBarcodeOptionController {
 
   async submitChooseBarcodeOption(req: Request, res: Response): Promise<void> {
     req.session.chooseBarcodeOptionForm = { ...req.body }
-    if (!validateBarcodeOption(req)) {
+    const errors = validateBarcodeOption(req.body.barcodeOption)
+    if (errors.length > 0) {
+      req.flash('errors', formatErrors('barcodeOption', errors))
       return res.redirect('/barcode/choose-barcode-option')
     }
 
