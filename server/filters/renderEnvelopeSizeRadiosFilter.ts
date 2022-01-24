@@ -1,5 +1,5 @@
 import type { RadioButtonOption } from 'forms'
-import { EnvelopeSizeSpec } from '../routes/barcode/PdfControllerView'
+import { EnvelopeSizeSpec } from '../routes/barcode/pdf/PdfControllerView'
 
 export default function renderEnvelopeSizeRadiosFilter(
   envelopeSizes: Array<EnvelopeSizeSpec>

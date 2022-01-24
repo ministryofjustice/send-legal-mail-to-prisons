@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import GenerateBarcodeImageView from './GenerateBarcodeImageView'
-import CreateBarcodeService from '../../services/barcode/CreateBarcodeService'
-import { Recipient } from '../../@types/prisonTypes'
-import logger from '../../../logger'
+import CreateBarcodeService from '../../../services/barcode/CreateBarcodeService'
+import { Recipient } from '../../../@types/prisonTypes'
+import logger from '../../../../logger'
 
 export default class GenerateBarcodeImageController {
   constructor(private readonly createBarcodeService: CreateBarcodeService) {}

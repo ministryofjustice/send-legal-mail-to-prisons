@@ -1,10 +1,10 @@
 import type { CreateNewContactForm } from 'forms'
 import validateNewContact from './newContactValidator'
-import validatePrisonerName from './prisonerNameValidator'
-import validatePrisonId from './prisonIdValidator'
+import validatePrisonerName from '../validators/prisonerNameValidator'
+import validatePrisonId from '../validators/prisonIdValidator'
 
-jest.mock('./prisonerNameValidator')
-jest.mock('./prisonIdValidator')
+jest.mock('../validators/prisonerNameValidator')
+jest.mock('../validators/prisonIdValidator')
 
 describe('newContactValidator', () => {
   let mockValidatePrisonerName: jest.MockedFunction<typeof validatePrisonerName>

@@ -1,10 +1,9 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
 import FindRecipientController from './FindRecipientController'
-import prisonNumberValidator from './prisonNumberValidator'
+import prisonNumberValidator from '../validators/prisonNumberValidator'
 
-jest.mock('../../config')
-jest.mock('./prisonNumberValidator')
+jest.mock('../validators/prisonNumberValidator')
 
 const req = {
   session: {} as SessionData,

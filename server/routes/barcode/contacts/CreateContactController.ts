@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import type { CreateNewContactForm } from 'forms'
-import { Prison, PrisonAddress, Recipient } from '../../@types/prisonTypes'
+import { Prison, PrisonAddress, Recipient } from '../../../@types/prisonTypes'
 import validateNewContact from './newContactValidator'
-import config from '../../config'
-import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
+import config from '../../../config'
+import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import CreateContactView from './CreateContactView'
 
 export default class CreateContactController {

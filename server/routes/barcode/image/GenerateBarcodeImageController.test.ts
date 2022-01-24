@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
 import GenerateBarcodeImageController from './GenerateBarcodeImageController'
-import CreateBarcodeService from '../../services/barcode/CreateBarcodeService'
+import CreateBarcodeService from '../../../services/barcode/CreateBarcodeService'
 
 const req = {
   session: {} as SessionData,

@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
 import CreateContactController from './CreateContactController'
-import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
-import config from '../../config'
+import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
+import config from '../../../config'
 import newContactValidator from './newContactValidator'
-import { PrisonAddress } from '../../@types/prisonTypes'
+import { PrisonAddress } from '../../../@types/prisonTypes'
 
-jest.mock('../../config')
+jest.mock('../../../config')
 jest.mock('./newContactValidator')
 
 const req = {
