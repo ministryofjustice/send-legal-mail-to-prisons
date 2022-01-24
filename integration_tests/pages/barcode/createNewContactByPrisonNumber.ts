@@ -19,34 +19,34 @@ export default class CreateNewContactByPrisonNumberPage extends Page {
     return this.submitForm(ReviewRecipientsPage)
   }
 
-  enterAValidPrisonerName = (prisonerName = 'Gage Hewitt'): CreateNewContactPageByPrisonNumberPage => {
+  enterAValidPrisonerName = (prisonerName = 'Gage Hewitt'): CreateNewContactByPrisonNumberPage => {
     this.prisonerNameField().clear()
     this.prisonerNameField().type(prisonerName)
     return this
   }
 
-  typeAheadAValidPrison = (prisonName = 'ashfield'): CreateNewContactPageByPrisonNumberPage => {
+  typeAheadAValidPrison = (prisonName = 'ashfield'): CreateNewContactByPrisonNumberPage => {
     this.clearPrisonField()
     this.prisonIdField().type(prisonName)
     this.pressEnterInPrisonIdField()
     return this
   }
 
-  typeAheadHMPValidPrison = (): CreateNewContactPageByPrisonNumberPage => {
+  typeAheadHMPValidPrison = (): CreateNewContactByPrisonNumberPage => {
     this.clearPrisonField()
     this.prisonIdField().type('hmp ashfield')
     this.pressEnterInPrisonIdField()
     return this
   }
 
-  typeAheadAnInvalidPrison = (): CreateNewContactPageByPrisonNumberPage => {
+  typeAheadAnInvalidPrison = (): CreateNewContactByPrisonNumberPage => {
     this.clearPrisonField()
     this.prisonIdField().type('invalid prison')
     this.pressEnterInPrisonIdField()
     return this
   }
 
-  clearPrisonField = (): CreateNewContactPageByPrisonNumberPage => {
+  clearPrisonField = (): CreateNewContactByPrisonNumberPage => {
     this.prisonIdField().clear()
     return this
   }
@@ -76,5 +76,6 @@ export default class CreateNewContactByPrisonNumberPage extends Page {
 
   submitButton = (): PageElement => cy.get('#create-new-contact-form button')
 
-  static goToPage = (): CreateNewContactPageByPrisonNumberPage => FindRecipientByPrisonNumberPage.goToPage().submitWithValidPrisonNumber()
+  static goToPage = (): CreateNewContactByPrisonNumberPage =>
+    FindRecipientByPrisonNumberPage.goToPage().submitWithValidPrisonNumber()
 }

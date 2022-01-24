@@ -1,7 +1,7 @@
 import Page from '../../pages/page'
 import RequestLinkPage from '../../pages/link/requestLink'
 import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientByPrisonNumber'
-import CreateNewContactPage from '../../pages/barcode/createNewContact'
+import CreateNewContactByPrisonNumberPage from '../../pages/barcode/createNewContactByPrisonNumber'
 import ReviewRecipientsPage from '../../pages/barcode/reviewRecipients'
 import PrintCoversheetsPage from '../../pages/barcode/printCoversheets'
 import GenerateBarcodeImagePage from '../../pages/barcode/generateBarcodeImage'
@@ -24,7 +24,7 @@ context('Legal Sender Journey E2E', () => {
 
     // Add a recipient by prison number where the recipient is a new contact
     findRecipientByPrisonNumberPage.submitWithValidPrisonNumber('A1234BC')
-    let createNewContactPage = Page.verifyOnPage(CreateNewContactPage)
+    let createNewContactPage = Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
     let reviewRecipientsPage = createNewContactPage.submitWithValidValues('Gage Hewitt', 'ashfield')
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt')
 
@@ -35,21 +35,21 @@ context('Legal Sender Journey E2E', () => {
     // Click to add another recipient and add Gage Hewitt again
     findRecipientByPrisonNumberPage = reviewRecipientsPage.addAnotherRecipient()
     findRecipientByPrisonNumberPage.submitWithValidPrisonNumber('A1234BC')
-    createNewContactPage = Page.verifyOnPage(CreateNewContactPage)
+    createNewContactPage = Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
     reviewRecipientsPage = createNewContactPage.submitWithValidValues('Gage Hewitt', 'ashfield')
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt')
 
     // Click to add another recipient
     findRecipientByPrisonNumberPage = reviewRecipientsPage.addAnotherRecipient()
     findRecipientByPrisonNumberPage.submitWithValidPrisonNumber('B1234JS')
-    createNewContactPage = Page.verifyOnPage(CreateNewContactPage)
+    createNewContactPage = Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
     reviewRecipientsPage = createNewContactPage.submitWithValidValues('John Smith', 'altcourse')
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt', 'John Smith')
 
     // Click to add a third recipient
     findRecipientByPrisonNumberPage = reviewRecipientsPage.addAnotherRecipient()
     findRecipientByPrisonNumberPage.submitWithValidPrisonNumber('C1234JD')
-    createNewContactPage = Page.verifyOnPage(CreateNewContactPage)
+    createNewContactPage = Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
     reviewRecipientsPage = createNewContactPage.submitWithValidValues('John Doe', 'altcourse')
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt', 'John Smith', 'John Doe')
 
@@ -65,7 +65,7 @@ context('Legal Sender Journey E2E', () => {
     reviewRecipientsPage = Page.verifyOnPage(ReviewRecipientsPage)
     findRecipientByPrisonNumberPage = reviewRecipientsPage.addAnotherRecipient()
     findRecipientByPrisonNumberPage.submitWithValidPrisonNumber('D1234FB')
-    createNewContactPage = Page.verifyOnPage(CreateNewContactPage)
+    createNewContactPage = Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
     reviewRecipientsPage = createNewContactPage.submitWithValidValues('Fred Bloggs', 'ashfi')
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt', 'John Doe', 'Fred Bloggs')
 
