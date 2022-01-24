@@ -70,7 +70,7 @@ export default class PdfController {
       })
     )
 
-    // TODO - will need to work out what to do with this when we support multiple recipients - SLM-83
+    // TODO - will need to work out what to do with this when we support multiple recipients - SLM-79
     const pdfFilename = this.pdfFilename(req.session.recipients[0])
 
     return res.renderPDF(

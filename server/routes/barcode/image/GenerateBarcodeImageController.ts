@@ -21,7 +21,6 @@ export default class GenerateBarcodeImageController {
       const recipient = req.session.recipients[0]
       const barcodeImageDataUrl = await this.createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient)
       const barcodeImageName = this.barcodeFilename(recipient)
-      this.clearForms(req)
 
       const view = new GenerateBarcodeImageView(barcodeImageDataUrl, barcodeImageName)
       return res.render('pages/barcode/generate-barcode-image', { ...view.renderArgs })
@@ -34,12 +33,5 @@ export default class GenerateBarcodeImageController {
 
   private barcodeFilename(recipient: Recipient): string {
     return `${recipient.prisonerName} ${recipient.prisonNumber}.png`.replace(/ /g, '-')
-  }
-
-  // TODO this is to allow us to go back and start again - will need to think hard about the flow on SLM-83 (multiple recipients)
-  private clearForms(req: Request): void {
-    req.session.recipients = null
-    req.session.findRecipientForm = null
-    req.session.createNewContactForm = null
   }
 }

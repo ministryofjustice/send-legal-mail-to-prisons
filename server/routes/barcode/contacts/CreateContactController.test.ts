@@ -140,7 +140,7 @@ describe('CreateContactController', () => {
     })
   })
 
-  describe('submitCreateNewContact', () => {
+  describe('submitCreateNewContactByPrisonNumber', () => {
     let mockNewContactValidator: jest.MockedFunction<typeof newContactValidator>
 
     beforeEach(() => {
@@ -171,6 +171,8 @@ describe('CreateContactController', () => {
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
       expect(req.session.recipients).toStrictEqual(expectedRecipients)
+      expect(req.session.findRecipientForm).toBeUndefined()
+      expect(req.session.createNewContactForm).toBeUndefined()
     })
 
     it('should redirect to create-new-contact given new contact is validated but prison address is not resolved', async () => {

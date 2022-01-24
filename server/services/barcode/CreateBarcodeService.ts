@@ -69,7 +69,7 @@ export default class CreateBarcodeService {
         return recipient
       })
     )
-    // TODO - this will need some error handling to support multiple recipients in SLM-83
+    // TODO - this will need some error handling to support multiple recipients in SLM-78 and SLM-79
     // Specifically does the failure to generate a barcode for 1 recipient fail them all, or just that 1
     // And if it is just the 1, how do we tell the user we generated barcode for n-1 recipients, and the person we couldn't generate for was Fred
   }

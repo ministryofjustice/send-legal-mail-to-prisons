@@ -21,29 +21,41 @@
       <div class="govuk-grid-column-full">
         <h1 class="govuk-heading-xl">Review your recipients</h1>
 
-        {{ govukTable({
-          firstCellIsHeader: false,
-          head: [
-            { text: 'Name' },
-            { text: 'Prisoner number or date of birth' },
-            { text: 'Prison' },
-            { text: '' },
-            { text: '' }
-          ],
-          rows: recipients | recipientTableRows
-        }) }}
+        {% if recipients.length > 0 %}
+          {{ govukTable({
+            firstCellIsHeader: false,
+            head: [
+              { text: 'Name' },
+              { text: 'Prisoner number or date of birth' },
+              { text: 'Prison' },
+              { text: '' },
+              { text: '' }
+            ],
+            rows: recipients | recipientTableRows,
+            attributes: { 'data-qa': 'recipients-table' }
+          }) }}
 
-        <p class="govuk-!-margin-top-6 govuk-!-margin-bottom-6">
-          {# TODO SLM-83 will implement the target page for this link #}
-          <a href="" class="govuk-link">Add another recipient</a>
-        </p>
+          <p class="govuk-!-margin-top-6 govuk-!-margin-bottom-6">
+            <a href="/barcode/find-recipient" class="govuk-link" data-qa="add-another-recipient">Add another recipient</a>
+          </p>
 
-        {{ govukButton({
-          text: 'Prepare barcodes',
-          href: '/barcode/choose-barcode-option',
-          attributes: {'data-qa': 'prepare-barcodes-button' }
-        }) }}
+          {{ govukButton({
+            text: 'Prepare barcodes',
+            href: '/barcode/choose-barcode-option',
+            attributes: { 'data-qa': 'prepare-barcodes-button' }
+          }) }}
 
+        {% else %}
+          <p class="govuk-!-margin-bottom-6">
+            You have removed all recipients. You need to add at least one recipient in order to continue.
+          </p>
+          {{ govukButton({
+            text: 'Add a recipient',
+            href: '/barcode/find-recipient',
+            attributes: { 'data-qa': 'add-another-recipient' }
+          }) }}
+
+        {% endif %}
       </div>
     </div>
 
