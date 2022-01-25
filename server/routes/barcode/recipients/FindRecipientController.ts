@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import FindRecipientByPrisonNumberView from './FindRecipientByPrisonNumberView'
+import FindRecipientByPrisonerNameView from './FindRecipientByPrisonerNameView'
 import validatePrisonNumber from '../validators/prisonNumberValidator'
 import validatePrisonerName from '../validators/prisonerNameValidator'
 import formatErrors from '../../errorFormatter'
@@ -27,7 +28,7 @@ export default class FindRecipientController {
   }
 
   async getFindRecipientByPrisonerNameView(req: Request, res: Response): Promise<void> {
-    const view = new FindRecipientByPrisonNumberView(
+    const view = new FindRecipientByPrisonerNameView(
       req.session?.findRecipientByPrisonerNameForm || {},
       req.flash('errors')
     )
