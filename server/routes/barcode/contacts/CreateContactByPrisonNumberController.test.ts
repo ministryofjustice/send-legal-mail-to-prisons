@@ -3,11 +3,11 @@ import { SessionData } from 'express-session'
 import CreateContactByPrisonNumberController from './CreateContactByPrisonNumberController'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import config from '../../../config'
-import newContactValidator from './newContactValidator'
+import newContactValidator from './newContactByPrisonNumberValidator'
 import { PrisonAddress } from '../../../@types/prisonTypes'
 
 jest.mock('../../../config')
-jest.mock('./newContactValidator')
+jest.mock('./newContactByPrisonNumberValidator')
 
 const req = {
   session: {} as SessionData,

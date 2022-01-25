@@ -1,5 +1,5 @@
 import type { CreateNewContactByPrisonNumberForm } from 'forms'
-import validateNewContact from './newContactValidator'
+import validateNewContact from './newContactByPrisonNumberValidator'
 import validatePrisonerName from '../validators/prisonerNameValidator'
 import validatePrisonId from '../validators/prisonIdValidator'
 
