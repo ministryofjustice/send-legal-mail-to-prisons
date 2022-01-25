@@ -1,8 +1,8 @@
 import {
   BarcodeEntryForm,
   ChooseBarcodeOptionForm,
-  CreateNewContactForm,
-  FindRecipientForm,
+  CreateNewContactByPrisonNumberForm,
+  FindRecipientByPrisonNumberForm,
   PdfForm,
   RequestLinkForm,
 } from '../forms'
@@ -19,8 +19,8 @@ declare module 'express-session' {
     createBarcodeAuthToken: string
     validCreateBarcodeAuthToken: boolean
     barcodeUserEmail: string
-    findRecipientForm: FindRecipientForm
-    createNewContactForm: CreateNewContactForm
+    findRecipientByPrisonNumberForm: FindRecipientByPrisonNumberForm
+    createNewContactByPrisonNumberForm: CreateNewContactByPrisonNumberForm
     barcodeEntryForm: BarcodeEntryForm
     scannedAtLeastOneBarcode: boolean
     recipients: Array<Recipient>

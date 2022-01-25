@@ -1,18 +1,22 @@
 import { Request, Response } from 'express'
-import FindRecipientView from './FindRecipientView'
+import FindRecipientByPrisonNumberView from './FindRecipientByPrisonNumberView'
+import FindRecipientByPrisonerNameView from './FindRecipientByPrisonerNameView'
 import validatePrisonNumber from '../validators/prisonNumberValidator'
 import validatePrisonerName from '../validators/prisonerNameValidator'
 import formatErrors from '../../errorFormatter'
 
 export default class FindRecipientController {
   async getFindRecipientByPrisonNumberView(req: Request, res: Response): Promise<void> {
-    const view = new FindRecipientView(req.session?.findRecipientForm || {}, req.flash('errors'))
+    const view = new FindRecipientByPrisonNumberView(
+      req.session?.findRecipientByPrisonNumberForm || {},
+      req.flash('errors')
+    )
     return res.render('pages/barcode/find-recipient-by-prison-number', { ...view.renderArgs })
   }
 
   async submitFindByPrisonNumber(req: Request, res: Response): Promise<void> {
     req.body.prisonNumber = req.body.prisonNumber.trim().toUpperCase()
-    req.session.findRecipientForm = { ...req.body }
+    req.session.findRecipientByPrisonNumberForm = { ...req.body }
     const errors = validatePrisonNumber(req.body.prisonNumber)
     if (errors.length > 0) {
       req.flash('errors', formatErrors('prisonNumber', errors))
@@ -24,13 +28,16 @@ export default class FindRecipientController {
   }
 
   async getFindRecipientByPrisonerNameView(req: Request, res: Response): Promise<void> {
-    const view = new FindRecipientView(req.session?.findRecipientForm || {}, req.flash('errors'))
+    const view = new FindRecipientByPrisonerNameView(
+      req.session?.findRecipientByPrisonerNameForm || {},
+      req.flash('errors')
+    )
     return res.render('pages/barcode/find-recipient-by-prisoner-name', { ...view.renderArgs })
   }
 
   async submitFindByPrisonerName(req: Request, res: Response): Promise<void> {
     req.body.prisonerName = req.body.prisonerName.trim()
-    req.session.findRecipientForm = { ...req.body }
+    req.session.findRecipientByPrisonerNameForm = { ...req.body }
     const errors = validatePrisonerName(req.body.prisonerName)
     if (errors.length > 0) {
       req.flash('errors', formatErrors('prisonerName', errors))

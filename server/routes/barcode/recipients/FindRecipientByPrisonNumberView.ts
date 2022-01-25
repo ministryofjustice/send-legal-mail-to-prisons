@@ -1,6 +1,6 @@
 import type { FindRecipientByPrisonNumberForm } from 'forms'
 
-export default class FindRecipientView {
+export default class FindRecipientByPrisonNumberView {
   constructor(
     private readonly findRecipientForm: FindRecipientByPrisonNumberForm,
     private readonly errors?: Array<Record<string, string>>

@@ -1,20 +1,23 @@
 import { Request, Response } from 'express'
-import type { CreateNewContactForm } from 'forms'
+import type { CreateNewContactByPrisonNumberForm } from 'forms'
 import { Prison, PrisonAddress, Recipient } from '../../../@types/prisonTypes'
-import validateNewContact from './newContactValidator'
-import config from '../../../config'
+import validateNewContact from './newContactByPrisonNumberValidator'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
-import CreateContactView from './CreateContactView'
+import CreateContactByPrisonNumberView from './CreateContactByPrisonNumberView'
+import filterSupportedPrisons from './filterSupportedPrisons'
 
-export default class CreateContactController {
+export default class CreateContactByPrisonNumberController {
   constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
 
   async getCreateNewContactByPrisonNumberView(req: Request, res: Response): Promise<void> {
-    if (!req.session.findRecipientForm) {
+    if (!req.session.findRecipientByPrisonNumberForm) {
       return res.redirect('/barcode/find-recipient')
     }
 
-    req.session.createNewContactForm = { ...(req.session.createNewContactForm || {}), ...req.session.findRecipientForm }
+    req.session.createNewContactByPrisonNumberForm = {
+      ...(req.session.createNewContactByPrisonNumberForm || {}),
+      ...req.session.findRecipientByPrisonNumberForm,
+    }
 
     let activePrisons: Array<Prison>
     try {
@@ -24,21 +27,21 @@ export default class CreateContactController {
       activePrisons = []
     }
 
-    const view = new CreateContactView(
-      req.session.createNewContactForm || {},
-      this.filterSupportedPrisons(activePrisons),
+    const view = new CreateContactByPrisonNumberView(
+      req.session.createNewContactByPrisonNumberForm || {},
+      filterSupportedPrisons(activePrisons),
       req.flash('errors')
     )
     return res.render('pages/barcode/create-new-contact-by-prison-number', { ...view.renderArgs })
   }
 
   async submitCreateNewContactByPrisonNumber(req: Request, res: Response): Promise<void> {
-    if (!req.session.findRecipientForm) {
+    if (!req.session.findRecipientByPrisonNumberForm) {
       return res.redirect('/barcode/find-recipient')
     }
 
-    req.session.createNewContactForm = { ...req.session.findRecipientForm, ...req.body }
-    const errors = validateNewContact(req.session.createNewContactForm)
+    req.session.createNewContactByPrisonNumberForm = { ...req.session.findRecipientByPrisonNumberForm, ...req.body }
+    const errors = validateNewContact(req.session.createNewContactByPrisonNumberForm)
     if (errors.length > 0) {
       req.flash('errors', errors)
       return res.redirect('/barcode/find-recipient/create-new-contact/by-prison-number')
@@ -46,12 +49,12 @@ export default class CreateContactController {
 
     // TODO SLM-60 - save new contact to database via API
 
-    const newRecipient = req.session.createNewContactForm
+    const newRecipient = req.session.createNewContactByPrisonNumberForm
     try {
       const prisonAddress = await this.prisonRegisterService.getPrisonAddress(newRecipient.prisonId)
       this.addRecipient(req, newRecipient, prisonAddress)
-      req.session.findRecipientForm = undefined
-      req.session.createNewContactForm = undefined
+      req.session.findRecipientByPrisonNumberForm = undefined
+      req.session.createNewContactByPrisonNumberForm = undefined
       return res.redirect('/barcode/review-recipients')
     } catch (error) {
       // An error getting the prison address
@@ -62,18 +65,7 @@ export default class CreateContactController {
     }
   }
 
-  private filterSupportedPrisons(activePrisons: Array<Prison>): Array<Prison> {
-    if (!config.supportedPrisons || config.supportedPrisons === '') {
-      return activePrisons
-    }
-
-    const supportedPrisons: Array<string> = config.supportedPrisons
-      .split(',')
-      .map(prisonId => prisonId.trim().toUpperCase())
-    return activePrisons.filter(prison => supportedPrisons.includes(prison.id.toUpperCase()))
-  }
-
-  private addRecipient(req: Request, newRecipient: CreateNewContactForm, prisonAddress: PrisonAddress) {
+  private addRecipient(req: Request, newRecipient: CreateNewContactByPrisonNumberForm, prisonAddress: PrisonAddress) {
     if (!req.session.recipients) {
       req.session.recipients = []
     }

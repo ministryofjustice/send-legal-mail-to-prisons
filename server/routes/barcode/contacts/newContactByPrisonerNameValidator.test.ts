@@ -1,7 +1,7 @@
 import type { CreateNewContactByPrisonerNameForm } from 'forms'
 import validatePrisonId from '../validators/prisonIdValidator'
 import validatePrisonerDob from '../validators/prisonerDobValidator'
-import validateNewContactByPrisonerName from './newContactByPrisonerNameValidator'
+import validateNewContact from './newContactByPrisonerNameValidator'
 
 jest.mock('../validators/prisonerDobValidator')
 jest.mock('../validators/prisonIdValidator')
@@ -21,28 +21,28 @@ describe('newContactValidator', () => {
     mockValidatePrisonId.mockReturnValue([])
     mockValidatePrisonerDob.mockReturnValue([])
 
-    expect(validateNewContactByPrisonerName(form)).toEqual([])
+    expect(validateNewContact(form)).toEqual([])
   })
 
   it('should return prison id errors', () => {
     mockValidatePrisonId.mockReturnValue(['Select a prison name'])
     mockValidatePrisonerDob.mockReturnValue([])
 
-    expect(validateNewContactByPrisonerName(form)).toEqual([{ href: '#prisonId', text: 'Select a prison name' }])
+    expect(validateNewContact(form)).toEqual([{ href: '#prisonId', text: 'Select a prison name' }])
   })
 
   it('should return prisoner dob errors', () => {
     mockValidatePrisonId.mockReturnValue([])
     mockValidatePrisonerDob.mockReturnValue(['Enter a date of birth'])
 
-    expect(validateNewContactByPrisonerName(form)).toEqual([{ href: '#prisonerDob', text: 'Enter a date of birth' }])
+    expect(validateNewContact(form)).toEqual([{ href: '#prisonerDob', text: 'Enter a date of birth' }])
   })
 
   it('should return all errors', () => {
     mockValidatePrisonId.mockReturnValue(['Select a prison name'])
     mockValidatePrisonerDob.mockReturnValue(['Enter a date of birth'])
 
-    expect(validateNewContactByPrisonerName(form)).toEqual(
+    expect(validateNewContact(form)).toEqual(
       expect.arrayContaining([
         { href: '#prisonId', text: 'Select a prison name' },
         { href: '#prisonerDob', text: 'Enter a date of birth' },

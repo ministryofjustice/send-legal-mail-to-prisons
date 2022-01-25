@@ -1,9 +1,11 @@
-import type { CreateNewContactForm } from 'forms'
+import type { CreateNewContactByPrisonNumberForm } from 'forms'
 import validatePrisonerName from '../validators/prisonerNameValidator'
 import validatePrisonId from '../validators/prisonIdValidator'
 import formatErrors from '../../errorFormatter'
 
-export default function validateNewContact(createNewContactForm: CreateNewContactForm): Array<Record<string, string>> {
+export default function validateNewContact(
+  createNewContactForm: CreateNewContactByPrisonNumberForm
+): Array<Record<string, string>> {
   const errors: Array<Record<string, string>> = []
 
   errors.push(...formatErrors('prisonerName', validatePrisonerName(createNewContactForm.prisonerName)))
