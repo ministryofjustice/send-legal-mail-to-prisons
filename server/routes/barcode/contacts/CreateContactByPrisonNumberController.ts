@@ -2,9 +2,9 @@ import { Request, Response } from 'express'
 import type { CreateNewContactByPrisonNumberForm } from 'forms'
 import { Prison, PrisonAddress, Recipient } from '../../../@types/prisonTypes'
 import validateNewContact from './newContactByPrisonNumberValidator'
-import config from '../../../config'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import CreateContactByPrisonNumberView from './CreateContactByPrisonNumberView'
+import filterSupportedPrisons from './filterSupportedPrisons'
 
 export default class CreateContactByPrisonNumberController {
   constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
@@ -26,7 +26,7 @@ export default class CreateContactByPrisonNumberController {
 
     const view = new CreateContactByPrisonNumberView(
       req.session.createNewContactForm || {},
-      this.filterSupportedPrisons(activePrisons),
+      filterSupportedPrisons(activePrisons),
       req.flash('errors')
     )
     return res.render('pages/barcode/create-new-contact-by-prison-number', { ...view.renderArgs })
@@ -60,17 +60,6 @@ export default class CreateContactByPrisonNumberController {
       ])
       return res.redirect('/barcode/find-recipient/create-new-contact/by-prison-number')
     }
-  }
-
-  private filterSupportedPrisons(activePrisons: Array<Prison>): Array<Prison> {
-    if (!config.supportedPrisons || config.supportedPrisons === '') {
-      return activePrisons
-    }
-
-    const supportedPrisons: Array<string> = config.supportedPrisons
-      .split(',')
-      .map(prisonId => prisonId.trim().toUpperCase())
-    return activePrisons.filter(prison => supportedPrisons.includes(prison.id.toUpperCase()))
   }
 
   private addRecipient(req: Request, newRecipient: CreateNewContactByPrisonNumberForm, prisonAddress: PrisonAddress) {
