@@ -3,7 +3,7 @@ import Page from '../../pages/page'
 import ReviewRecipientsPage from '../../pages/barcode/reviewRecipients'
 import CreateNewContactByPrisonNumberPage from '../../pages/barcode/createNewContactByPrisonNumber'
 
-context('Create New Contact Page', () => {
+context('Create New Contact By Prison Number Page', () => {
   it('should redirect to find-recipient given user navigates to Create New Contact without going via find-recipients first', () => {
     FindRecipientByPrisonNumberPage.goToPage()
     cy.visit('/barcode/find-recipient/create-new-contact')

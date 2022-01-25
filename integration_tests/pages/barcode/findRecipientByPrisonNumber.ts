@@ -1,6 +1,7 @@
 /* eslint-disable import/no-cycle */
 import Page, { PageElement } from '../page'
 import CreateNewContactByPrisonNumberPage from './createNewContactByPrisonNumber'
+import FindRecipientByPrisonerNamePage from './findRecipientByPrisonerName'
 
 export default class FindRecipientByPrisonNumberPage extends Page {
   constructor() {
@@ -24,7 +25,14 @@ export default class FindRecipientByPrisonNumberPage extends Page {
     return Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   }
 
+  goToByPrisonerName = (): FindRecipientByPrisonerNamePage => {
+    this.byPrisonerNameLink().click()
+    return Page.verifyOnPage(FindRecipientByPrisonerNamePage)
+  }
+
   prisonNumberField = (): PageElement => cy.get('#prisonNumber')
+
+  byPrisonerNameLink = (): PageElement => cy.get('a[data-qa=by-prisoner-name-link]')
 
   submitButton = (): PageElement => cy.get('#find-recipient-by-prison-number-form button')
 

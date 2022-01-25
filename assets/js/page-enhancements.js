@@ -18,9 +18,19 @@
     $('#find-recipient-by-prison-number-form #prisonNumber').focus()
   })
 })($, document)
-;(autoFocusPrisonNameField = ($, document) => {
+;(autoFocusPrisonerNameField = ($, document) => {
   $(document).ready(() => {
-    $('#create-new-contact-form #prisonerName').focus()
+    $('#find-recipient-by-prisoner-name-form #prisonerName').focus()
+  })
+})($, document)
+;(autoFocusContactPrisonNameField = ($, document) => {
+  $(document).ready(() => {
+    $('#create-new-contact-by-prison-number-form #prisonerName').focus()
+  })
+})($, document)
+;(autoFocusPrisonerDobField = ($, document) => {
+  $(document).ready(() => {
+    $('#create-new-contact-by-prisoner-name-form #prisonerDob-day').focus()
   })
 })($, document)
 ;(convertPrisonDropdownToAutoComplete = ($, document) => {
