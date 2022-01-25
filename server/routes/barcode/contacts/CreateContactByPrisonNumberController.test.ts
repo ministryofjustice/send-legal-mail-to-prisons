@@ -12,6 +12,7 @@ jest.mock('./newContactByPrisonNumberValidator')
 const req = {
   session: {} as SessionData,
   flash: jest.fn(),
+  body: {},
 }
 const res = {
   render: jest.fn(),
@@ -51,13 +52,13 @@ describe('CreateContactByPrisonNumberController', () => {
         { id: 'ACI', name: 'Altcourse (HMP)' },
       ])
 
-      req.session.findRecipientForm = { prisonNumber: 'A1234BC' }
+      req.session.findRecipientByPrisonNumberForm = { prisonNumber: 'A1234BC' }
 
       const expectedRenderArgs = {
         barcode: undefined as string,
         barcodeImageUrl: undefined as string,
         errors: [] as Array<Record<string, string>>,
-        form: req.session.findRecipientForm,
+        form: req.session.findRecipientByPrisonNumberForm,
         prisonRegister: [
           { value: '', text: '' },
           { value: 'ACI', text: 'Altcourse (HMP)', selected: false },
@@ -84,13 +85,13 @@ describe('CreateContactByPrisonNumberController', () => {
         { id: 'ACI', name: 'Altcourse (HMP)' },
       ])
 
-      req.session.findRecipientForm = { prisonNumber: 'A1234BC' }
+      req.session.findRecipientByPrisonNumberForm = { prisonNumber: 'A1234BC' }
 
       const expectedRenderArgs = {
         barcode: undefined as string,
         barcodeImageUrl: undefined as string,
         errors: [] as Array<Record<string, string>>,
-        form: req.session.findRecipientForm,
+        form: req.session.findRecipientByPrisonNumberForm,
         prisonRegister: [
           { value: '', text: '' },
           { value: 'ASI', text: 'Ashfield (HMP)', selected: false },
@@ -110,13 +111,13 @@ describe('CreateContactByPrisonNumberController', () => {
     it.skip('should create and return view with error given prison register service fails', async () => {
       prisonRegisterService.getActivePrisons.mockRejectedValue('An error retrieving prison register')
 
-      req.session.findRecipientForm = { prisonNumber: 'A1234BC' }
+      req.session.findRecipientByPrisonNumberForm = { prisonNumber: 'A1234BC' }
 
       const expectedRenderArgs = {
         barcode: undefined as string,
         barcodeImageUrl: undefined as string,
         errors: [] as Array<Record<string, string>>,
-        form: req.session.findRecipientForm,
+        form: req.session.findRecipientByPrisonNumberForm,
         prisonRegister: [{ value: '', text: '' }] as Array<Record<string, string>>,
       }
 
@@ -131,7 +132,7 @@ describe('CreateContactByPrisonNumberController', () => {
     })
 
     it('should redirect to main find-recipient page given no findRecipientForm in the session', async () => {
-      req.session.findRecipientForm = undefined
+      req.session.findRecipientByPrisonNumberForm = undefined
 
       await createContactController.getCreateNewContactByPrisonNumberView(
         req as unknown as Request,
@@ -150,7 +151,12 @@ describe('CreateContactByPrisonNumberController', () => {
     })
 
     it('should redirect to review-recipients given new contact is validated and prison address is resolved', async () => {
-      req.session.findRecipientForm = { prisonNumber: 'A1234BC', prisonerName: 'Fred Bloggs', prisonId: 'SKI' }
+      req.body = {
+        prisonNumber: 'A1234BC',
+        prisonerName: 'Fred Bloggs',
+        prisonId: 'SKI',
+      }
+      req.session.findRecipientByPrisonNumberForm = { ...req.body }
       mockNewContactValidator.mockReturnValue([])
       const prisonAddress: PrisonAddress = {
         agencyCode: 'CKI',
@@ -173,12 +179,17 @@ describe('CreateContactByPrisonNumberController', () => {
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
       expect(req.session.recipients).toStrictEqual(expectedRecipients)
-      expect(req.session.findRecipientForm).toBeUndefined()
-      expect(req.session.createNewContactForm).toBeUndefined()
+      expect(req.session.findRecipientByPrisonNumberForm).toBeUndefined()
+      expect(req.session.createNewContactByPrisonNumberForm).toBeUndefined()
     })
 
     it('should redirect to create-new-contact given new contact is validated but prison address is not resolved', async () => {
-      req.session.findRecipientForm = { prisonNumber: 'A1234BC', prisonerName: 'Fred Bloggs', prisonId: 'SKI' }
+      req.body = {
+        prisonNumber: 'A1234BC',
+        prisonerName: 'Fred Bloggs',
+        prisonId: 'SKI',
+      }
+      req.session.findRecipientByPrisonNumberForm = { ...req.body }
       mockNewContactValidator.mockReturnValue([])
       prisonRegisterService.getPrisonAddress.mockRejectedValue(new Error(`PrisonAddress for prison SKI not found`))
 
@@ -194,7 +205,8 @@ describe('CreateContactByPrisonNumberController', () => {
     })
 
     it('should redirect to create-new-contact given new contact is not validated', async () => {
-      req.session.findRecipientForm = { prisonNumber: 'A1234BC', prisonerName: '', prisonId: 'SKI' }
+      req.body = { prisonNumber: 'A1234BC', prisonerName: '', prisonId: 'SKI' }
+      req.session.findRecipientByPrisonNumberForm = { ...req.body }
       mockNewContactValidator.mockReturnValue([{ href: '#prisonId', text: 'Select a prison name' }])
 
       await createContactController.submitCreateNewContactByPrisonNumber(
@@ -207,7 +219,7 @@ describe('CreateContactByPrisonNumberController', () => {
     })
 
     it('should redirect to find-recipient given no findRecipientForm in the session', async () => {
-      req.session.findRecipientForm = undefined
+      req.session.findRecipientByPrisonNumberForm = undefined
 
       await createContactController.submitCreateNewContactByPrisonNumber(
         req as unknown as Request,

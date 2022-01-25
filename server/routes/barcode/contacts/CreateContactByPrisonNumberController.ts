@@ -10,11 +10,14 @@ export default class CreateContactByPrisonNumberController {
   constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
 
   async getCreateNewContactByPrisonNumberView(req: Request, res: Response): Promise<void> {
-    if (!req.session.findRecipientForm) {
+    if (!req.session.findRecipientByPrisonNumberForm) {
       return res.redirect('/barcode/find-recipient')
     }
 
-    req.session.createNewContactForm = { ...(req.session.createNewContactForm || {}), ...req.session.findRecipientForm }
+    req.session.createNewContactByPrisonNumberForm = {
+      ...(req.session.createNewContactByPrisonNumberForm || {}),
+      ...req.session.findRecipientByPrisonNumberForm,
+    }
 
     let activePrisons: Array<Prison>
     try {
@@ -25,7 +28,7 @@ export default class CreateContactByPrisonNumberController {
     }
 
     const view = new CreateContactByPrisonNumberView(
-      req.session.createNewContactForm || {},
+      req.session.createNewContactByPrisonNumberForm || {},
       filterSupportedPrisons(activePrisons),
       req.flash('errors')
     )
@@ -33,12 +36,12 @@ export default class CreateContactByPrisonNumberController {
   }
 
   async submitCreateNewContactByPrisonNumber(req: Request, res: Response): Promise<void> {
-    if (!req.session.findRecipientForm) {
+    if (!req.session.findRecipientByPrisonNumberForm) {
       return res.redirect('/barcode/find-recipient')
     }
 
-    req.session.createNewContactForm = { ...req.session.findRecipientForm, ...req.body }
-    const errors = validateNewContact(req.session.createNewContactForm)
+    req.session.createNewContactByPrisonNumberForm = { ...req.session.findRecipientByPrisonNumberForm, ...req.body }
+    const errors = validateNewContact(req.session.createNewContactByPrisonNumberForm)
     if (errors.length > 0) {
       req.flash('errors', errors)
       return res.redirect('/barcode/find-recipient/create-new-contact/by-prison-number')
@@ -46,12 +49,12 @@ export default class CreateContactByPrisonNumberController {
 
     // TODO SLM-60 - save new contact to database via API
 
-    const newRecipient = req.session.createNewContactForm
+    const newRecipient = req.session.createNewContactByPrisonNumberForm
     try {
       const prisonAddress = await this.prisonRegisterService.getPrisonAddress(newRecipient.prisonId)
       this.addRecipient(req, newRecipient, prisonAddress)
-      req.session.findRecipientForm = undefined
-      req.session.createNewContactForm = undefined
+      req.session.findRecipientByPrisonNumberForm = undefined
+      req.session.createNewContactByPrisonNumberForm = undefined
       return res.redirect('/barcode/review-recipients')
     } catch (error) {
       // An error getting the prison address
