@@ -3,7 +3,7 @@ import FindRecipientController from '../../routes/barcode/recipients/FindRecipie
 import CreateBarcodeService from '../../services/barcode/CreateBarcodeService'
 import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
 import ReviewRecipientsController from '../../routes/barcode/review/ReviewRecipientsController'
-import CreateContactController from '../../routes/barcode/contacts/CreateContactController'
+import CreateContactByPrisonNumberController from '../../routes/barcode/contacts/CreateContactByPrisonNumberController'
 import GenerateBarcodeImageController from '../../routes/barcode/image/GenerateBarcodeImageController'
 import PdfController from '../../routes/barcode/pdf/PdfController'
 import ChooseBarcodeOptionController from '../../routes/barcode/options/ChooseBarcodeOptionController'
@@ -14,7 +14,7 @@ export default function setUpCreateBarcode(
 ): Router {
   const router = express.Router()
   const findRecipientController = new FindRecipientController()
-  const createContactController = new CreateContactController(prisonRegisterService)
+  const createContactController = new CreateContactByPrisonNumberController(prisonRegisterService)
   const reviewRecipientsController = new ReviewRecipientsController()
   const chooseBarcodeOptionController = new ChooseBarcodeOptionController()
   const generateImageController = new GenerateBarcodeImageController(createBarcodeService)

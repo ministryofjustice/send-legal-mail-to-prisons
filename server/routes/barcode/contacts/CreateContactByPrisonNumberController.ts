@@ -6,7 +6,7 @@ import config from '../../../config'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import CreateContactView from './CreateContactView'
 
-export default class CreateContactController {
+export default class CreateContactByPrisonNumberController {
   constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
 
   async getCreateNewContactByPrisonNumberView(req: Request, res: Response): Promise<void> {

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
-import CreateContactController from './CreateContactController'
+import CreateContactByPrisonNumberController from './CreateContactByPrisonNumberController'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import config from '../../../config'
 import newContactValidator from './newContactValidator'
@@ -23,11 +23,13 @@ const prisonRegisterService = {
   getPrisonAddress: jest.fn(),
 }
 
-describe('CreateContactController', () => {
-  let createContactController: CreateContactController
+describe('CreateContactByPrisonNumberController', () => {
+  let createContactController: CreateContactByPrisonNumberController
 
   beforeEach(() => {
-    createContactController = new CreateContactController(prisonRegisterService as unknown as PrisonRegisterService)
+    createContactController = new CreateContactByPrisonNumberController(
+      prisonRegisterService as unknown as PrisonRegisterService
+    )
   })
 
   afterEach(() => {
