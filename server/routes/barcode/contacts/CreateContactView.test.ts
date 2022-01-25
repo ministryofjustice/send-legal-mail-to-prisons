@@ -1,9 +1,9 @@
-import type { CreateNewContactForm } from 'forms'
+import type { CreateNewContactByPrisonNumberForm } from 'forms'
 import CreateContactView from './CreateContactView'
 
 describe('CreateContactView', () => {
   it('should render args with prison register in alphabetical order', () => {
-    const createNewContactForm = {} as CreateNewContactForm
+    const createNewContactForm = {} as CreateNewContactByPrisonNumberForm
     const errors: Record<string, string>[] = []
     const activePrisons = [
       { id: 'KTI', name: 'Kennet (HMP)' },
@@ -24,7 +24,7 @@ describe('CreateContactView', () => {
   })
 
   it('should render args with prison register with selected prison id', () => {
-    const createNewContactForm = { prisonId: 'ASI' } as CreateNewContactForm
+    const createNewContactForm = { prisonId: 'ASI' } as CreateNewContactByPrisonNumberForm
     const errors: Record<string, string>[] = []
     const activePrisons = [
       { id: 'KTI', name: 'Kennet (HMP)' },

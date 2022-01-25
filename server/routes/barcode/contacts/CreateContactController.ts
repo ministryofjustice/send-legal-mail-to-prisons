@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import type { CreateNewContactForm } from 'forms'
+import type { CreateNewContactByPrisonNumberForm } from 'forms'
 import { Prison, PrisonAddress, Recipient } from '../../../@types/prisonTypes'
 import validateNewContact from './newContactValidator'
 import config from '../../../config'
@@ -73,7 +73,7 @@ export default class CreateContactController {
     return activePrisons.filter(prison => supportedPrisons.includes(prison.id.toUpperCase()))
   }
 
-  private addRecipient(req: Request, newRecipient: CreateNewContactForm, prisonAddress: PrisonAddress) {
+  private addRecipient(req: Request, newRecipient: CreateNewContactByPrisonNumberForm, prisonAddress: PrisonAddress) {
     if (!req.session.recipients) {
       req.session.recipients = []
     }

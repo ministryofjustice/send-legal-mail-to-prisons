@@ -1,4 +1,4 @@
-import type { CreateNewContactForm } from 'forms'
+import type { CreateNewContactByPrisonNumberForm } from 'forms'
 import validateNewContact from './newContactValidator'
 import validatePrisonerName from '../validators/prisonerNameValidator'
 import validatePrisonId from '../validators/prisonIdValidator'
@@ -15,7 +15,7 @@ describe('newContactValidator', () => {
     mockValidatePrisonId = validatePrisonId as jest.MockedFunction<typeof validatePrisonId>
   })
 
-  const form = { prisonNumber: 'A1234BC', prisonerName: 'name', prisonId: 'id' } as CreateNewContactForm
+  const form = { prisonNumber: 'A1234BC', prisonerName: 'name', prisonId: 'id' } as CreateNewContactByPrisonNumberForm
 
   it('should return no errors if valid', () => {
     mockValidatePrisonId.mockReturnValue([])

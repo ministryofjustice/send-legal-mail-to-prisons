@@ -13,7 +13,7 @@ declare module 'forms' {
     prisonerName?: string
   }
 
-  export interface CreateNewContactForm {
+  export interface CreateNewContactByPrisonNumberForm {
     prisonNumber: string
     prisonerName?: string
     prisonId?: string
