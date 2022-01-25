@@ -5,6 +5,7 @@ import CreateNewContactByPrisonNumberPage from '../../pages/barcode/createNewCon
 import ReviewRecipientsPage from '../../pages/barcode/reviewRecipients'
 import PrintCoversheetsPage from '../../pages/barcode/printCoversheets'
 import GenerateBarcodeImagePage from '../../pages/barcode/generateBarcodeImage'
+import CreateNewContactByPrisonerNamePage from '../../pages/barcode/createNewContactByPrisonerName'
 
 context('Legal Sender Journey E2E', () => {
   beforeEach(() => {
@@ -47,10 +48,10 @@ context('Legal Sender Journey E2E', () => {
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt', 'John Smith')
 
     // Click to add a third recipient
-    findRecipientByPrisonNumberPage = reviewRecipientsPage.addAnotherRecipient()
-    findRecipientByPrisonNumberPage.submitWithValidPrisonNumber('C1234JD')
-    createNewContactPage = Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
-    reviewRecipientsPage = createNewContactPage.submitWithValidValues('John Doe', 'altcourse')
+    const findRecipientByPrisonerNamePage = reviewRecipientsPage.addAnotherRecipient().goToByPrisonerName()
+    findRecipientByPrisonerNamePage.submitWithValidPrisonerName('John Doe')
+    const createNewContactByPrisonerNamePage = Page.verifyOnPage(CreateNewContactByPrisonerNamePage)
+    reviewRecipientsPage = createNewContactByPrisonerNamePage.submitWithValidValues('1', '1', '1990', 'altcourse')
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt', 'John Smith', 'John Doe')
 
     // Remove the 2nd recipient
