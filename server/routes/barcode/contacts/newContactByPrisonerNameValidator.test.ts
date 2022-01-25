@@ -15,7 +15,11 @@ describe('newContactValidator', () => {
     mockValidatePrisonId = validatePrisonId as jest.MockedFunction<typeof validatePrisonId>
   })
 
-  const form = { prisonerName: 'name', prisonId: 'id', prisonerDob: 'dob' } as CreateNewContactByPrisonerNameForm
+  const form = {
+    prisonerName: 'name',
+    prisonId: 'id',
+    prisonerDob: 'dob',
+  } as unknown as CreateNewContactByPrisonerNameForm
 
   it('should return no errors if valid', () => {
     mockValidatePrisonId.mockReturnValue([])

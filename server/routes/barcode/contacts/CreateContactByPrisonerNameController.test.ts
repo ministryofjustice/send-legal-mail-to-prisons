@@ -67,10 +67,7 @@ describe('CreateContactByPrisonerNameController', () => {
         ] as Array<Record<string, string>>,
       }
 
-      await createContactController.getCreateNewContactByPrisonerNameView(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact-by-prisoner-name', expectedRenderArgs)
       expect(req.flash).toHaveBeenCalledWith('errors')
@@ -98,10 +95,7 @@ describe('CreateContactByPrisonerNameController', () => {
         ] as Array<Record<string, string>>,
       }
 
-      await createContactController.getCreateNewContactByPrisonerNameView(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact-by-prisoner-name', expectedRenderArgs)
       expect(req.flash).toHaveBeenCalledWith('errors')
@@ -121,10 +115,7 @@ describe('CreateContactByPrisonerNameController', () => {
         prisonRegister: [{ value: '', text: '' }] as Array<Record<string, string>>,
       }
 
-      await createContactController.getCreateNewContactByPrisonerNameView(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact-by-prisoner-name', expectedRenderArgs)
       expect(req.flash).toHaveBeenCalledWith('errors', [{ text: 'There was an error retrieving the list of prisons' }])
@@ -134,16 +125,13 @@ describe('CreateContactByPrisonerNameController', () => {
     it('should redirect to main find-recipient page given no findRecipientForm in the session', async () => {
       req.session.findRecipientByPrisonerNameForm = undefined
 
-      await createContactController.getCreateNewContactByPrisonerNameView(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
     })
   })
 
-  describe('submitCreateNewContactByPrisonerName', () => {
+  describe('submitCreateNewContact', () => {
     let mockNewContactValidator: jest.MockedFunction<typeof newContactValidator>
 
     beforeEach(() => {
@@ -153,7 +141,10 @@ describe('CreateContactByPrisonerNameController', () => {
     it('should redirect to review-recipients given new contact is validated and prison address is resolved', async () => {
       req.body = {
         prisonerName: 'Fred Bloggs',
-        prisonerDob: '01-01-1990',
+        prisonerDob: undefined,
+        'prisonerDob-day': '1',
+        'prisonerDob-month': '1',
+        'prisonerDob-year': '1990',
         prisonId: 'SKI',
       }
       req.session.findRecipientByPrisonerNameForm = { ...req.body }
@@ -170,12 +161,9 @@ describe('CreateContactByPrisonerNameController', () => {
         postalCode: 'ME1 3LU',
       }
       prisonRegisterService.getPrisonAddress.mockResolvedValue(prisonAddress)
-      const expectedRecipients = [{ prisonAddress, prisonerDob: '01-01-1990', prisonerName: 'Fred Bloggs' }]
+      const expectedRecipients = [{ prisonAddress, prisonerDob: new Date(1990, 0, 1), prisonerName: 'Fred Bloggs' }]
 
-      await createContactController.submitCreateNewContactByPrisonerName(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
       expect(req.session.recipients).toStrictEqual(expectedRecipients)
@@ -193,10 +181,7 @@ describe('CreateContactByPrisonerNameController', () => {
       mockNewContactValidator.mockReturnValue([])
       prisonRegisterService.getPrisonAddress.mockRejectedValue(new Error(`PrisonAddress for prison SKI not found`))
 
-      await createContactController.submitCreateNewContactByPrisonerName(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact/by-prisoner-name')
       expect(req.flash).toHaveBeenCalledWith('errors', [
@@ -209,10 +194,7 @@ describe('CreateContactByPrisonerNameController', () => {
       req.session.findRecipientByPrisonerNameForm = { ...req.body }
       mockNewContactValidator.mockReturnValue([{ href: '#prisonId', text: 'Select a prison name' }])
 
-      await createContactController.submitCreateNewContactByPrisonerName(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#prisonId', text: 'Select a prison name' }])
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact/by-prisoner-name')
@@ -221,12 +203,59 @@ describe('CreateContactByPrisonerNameController', () => {
     it('should redirect to find-recipient given no findRecipientForm in the session', async () => {
       req.session.findRecipientByPrisonerNameForm = undefined
 
-      await createContactController.submitCreateNewContactByPrisonerName(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
+    })
+  })
+
+  describe('parsePrisonerDob', () => {
+    it('should handle missing values', () => {
+      const dob = createContactController.parsePrisonerDob(req as unknown as Request)
+
+      expect(dob?.getTime()).toStrictEqual(undefined)
+    })
+
+    it('should handle blank values', () => {
+      req.body = { 'prisonerDob-day': '', 'prisonerDob-month': '', 'prisonerDob-year': '' }
+      const dob = createContactController.parsePrisonerDob(req as unknown as Request)
+
+      expect(dob?.getTime()).toStrictEqual(undefined)
+    })
+
+    it('should handle missing day', () => {
+      req.body = { 'prisonerDob-day': '', 'prisonerDob-month': '10', 'prisonerDob-year': '1990' }
+      const dob = createContactController.parsePrisonerDob(req as unknown as Request)
+
+      expect(dob.getTime()).toStrictEqual(NaN)
+    })
+
+    it('should handle missing month', () => {
+      req.body = { 'prisonerDob-day': '10', 'prisonerDob-month': '', 'prisonerDob-year': '1990' }
+      const dob = createContactController.parsePrisonerDob(req as unknown as Request)
+
+      expect(dob.getTime()).toStrictEqual(NaN)
+    })
+
+    it('should handle missing year', () => {
+      req.body = { 'prisonerDob-day': '10', 'prisonerDob-month': '10', 'prisonerDob-year': '' }
+      const dob = createContactController.parsePrisonerDob(req as unknown as Request)
+
+      expect(dob.getTime()).toStrictEqual(NaN)
+    })
+
+    it('should handle invalid date', () => {
+      req.body = { 'prisonerDob-day': '31', 'prisonerDob-month': '02', 'prisonerDob-year': '1990' }
+      const dob = createContactController.parsePrisonerDob(req as unknown as Request)
+
+      expect(dob.getTime()).toStrictEqual(NaN)
+    })
+
+    it('should handle valid date', () => {
+      req.body = { 'prisonerDob-day': '31', 'prisonerDob-month': '01', 'prisonerDob-year': '1990' }
+      const dob = createContactController.parsePrisonerDob(req as unknown as Request)
+
+      expect(dob).toStrictEqual(new Date(1990, 0, 31))
     })
   })
 })

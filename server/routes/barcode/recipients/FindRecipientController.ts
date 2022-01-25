@@ -44,7 +44,6 @@ export default class FindRecipientController {
       return res.redirect('/barcode/find-recipient/by-prisoner-name')
     }
 
-    // TODO SLM-81 redirect to the create new contact by prisoner name form when it is done
-    return res.redirect('/barcode/find-recipient/by-prisoner-name')
+    return res.redirect('/barcode/find-recipient/create-new-contact/by-prisoner-name')
   }
 }
