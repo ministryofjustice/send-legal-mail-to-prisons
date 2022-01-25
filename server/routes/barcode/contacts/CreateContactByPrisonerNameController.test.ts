@@ -141,7 +141,10 @@ describe('CreateContactByPrisonerNameController', () => {
     it('should redirect to review-recipients given new contact is validated and prison address is resolved', async () => {
       req.body = {
         prisonerName: 'Fred Bloggs',
-        prisonerDob: '01-01-1990',
+        prisonerDob: undefined,
+        'prisonerDob-day': '1',
+        'prisonerDob-month': '1',
+        'prisonerDob-year': '1990',
         prisonId: 'SKI',
       }
       req.session.findRecipientByPrisonerNameForm = { ...req.body }
@@ -158,7 +161,7 @@ describe('CreateContactByPrisonerNameController', () => {
         postalCode: 'ME1 3LU',
       }
       prisonRegisterService.getPrisonAddress.mockResolvedValue(prisonAddress)
-      const expectedRecipients = [{ prisonAddress, prisonerDob: '01-01-1990', prisonerName: 'Fred Bloggs' }]
+      const expectedRecipients = [{ prisonAddress, prisonerDob: new Date(1990, 0, 1), prisonerName: 'Fred Bloggs' }]
 
       await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
 
@@ -203,6 +206,56 @@ describe('CreateContactByPrisonerNameController', () => {
       await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
+    })
+  })
+
+  describe('parsePrisonerDob', () => {
+    it('should handle missing values', () => {
+      const dob = createContactController.parsePrisonerDob(req as unknown as Request)
+
+      expect(dob?.getTime()).toStrictEqual(undefined)
+    })
+
+    it('should handle blank values', () => {
+      req.body = { 'prisonerDob-day': '', 'prisonerDob-month': '', 'prisonerDob-year': '' }
+      const dob = createContactController.parsePrisonerDob(req as unknown as Request)
+
+      expect(dob?.getTime()).toStrictEqual(undefined)
+    })
+
+    it('should handle missing day', () => {
+      req.body = { 'prisonerDob-day': '', 'prisonerDob-month': '10', 'prisonerDob-year': '1990' }
+      const dob = createContactController.parsePrisonerDob(req as unknown as Request)
+
+      expect(dob.getTime()).toStrictEqual(NaN)
+    })
+
+    it('should handle missing month', () => {
+      req.body = { 'prisonerDob-day': '10', 'prisonerDob-month': '', 'prisonerDob-year': '1990' }
+      const dob = createContactController.parsePrisonerDob(req as unknown as Request)
+
+      expect(dob.getTime()).toStrictEqual(NaN)
+    })
+
+    it('should handle missing year', () => {
+      req.body = { 'prisonerDob-day': '10', 'prisonerDob-month': '10', 'prisonerDob-year': '' }
+      const dob = createContactController.parsePrisonerDob(req as unknown as Request)
+
+      expect(dob.getTime()).toStrictEqual(NaN)
+    })
+
+    it('should handle invalid date', () => {
+      req.body = { 'prisonerDob-day': '31', 'prisonerDob-month': '02', 'prisonerDob-year': '1990' }
+      const dob = createContactController.parsePrisonerDob(req as unknown as Request)
+
+      expect(dob.getTime()).toStrictEqual(NaN)
+    })
+
+    it('should handle valid date', () => {
+      req.body = { 'prisonerDob-day': '31', 'prisonerDob-month': '01', 'prisonerDob-year': '1990' }
+      const dob = createContactController.parsePrisonerDob(req as unknown as Request)
+
+      expect(dob).toStrictEqual(new Date(1990, 0, 31))
     })
   })
 })

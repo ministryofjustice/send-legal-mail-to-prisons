@@ -1,17 +1,14 @@
 import moment from 'moment'
 
-export default function validatePrisonerDob(prisonerDob?: string): Array<string> {
+export default function validatePrisonerDob(prisonerDob?: Date): Array<string> {
   const errors: Array<string> = []
 
   if (!prisonerDob) {
     errors.push('Enter a date of birth')
-  } else {
-    const dob = moment(prisonerDob, 'DD-MM-YYYY', true)
-    if (!dob.isValid()) {
-      errors.push('Enter a date of birth in the correct format')
-    } else if (moment() < dob) {
-      errors.push('Enter a date of birth in the past')
-    }
+  } else if (Number.isNaN(prisonerDob.getTime())) {
+    errors.push('Enter a date of birth in the correct format')
+  } else if (moment().toDate() < prisonerDob) {
+    errors.push('Enter a date of birth in the past')
   }
 
   return errors

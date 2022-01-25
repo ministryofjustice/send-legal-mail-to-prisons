@@ -22,7 +22,10 @@ declare module 'forms' {
   export interface CreateNewContactByPrisonerNameForm {
     prisonerName: string
     prisonId?: string
-    prisonerDob?: string
+    prisonerDob?: Date
+    'prisonerDob-day'?: string
+    'prisonerDob-month'?: string
+    'prisonerDob-year'?: string
   }
 
   export interface BarcodeEntryForm {

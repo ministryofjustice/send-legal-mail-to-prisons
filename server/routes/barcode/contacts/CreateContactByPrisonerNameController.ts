@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import type { CreateNewContactByPrisonerNameForm } from 'forms'
+import moment from 'moment'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import { Prison, PrisonAddress, Recipient } from '../../../@types/prisonTypes'
 import CreateContactByPrisonerNameView from './CreateContactByPrisonerNameView'
@@ -40,7 +41,12 @@ export default class CreateContactByPrisonerNameController {
       return res.redirect('/barcode/find-recipient')
     }
 
-    req.session.createNewContactByPrisonerNameForm = { ...req.session.findRecipientByPrisonerNameForm, ...req.body }
+    const prisonerDob = this.parsePrisonerDob(req)
+    req.session.createNewContactByPrisonerNameForm = {
+      ...req.session.findRecipientByPrisonerNameForm,
+      ...req.body,
+      prisonerDob,
+    }
     const errors = validateNewContact(req.session.createNewContactByPrisonerNameForm)
     if (errors.length > 0) {
       req.flash('errors', errors)
@@ -77,5 +83,21 @@ export default class CreateContactByPrisonerNameController {
     }
 
     req.session.recipients.push(recipient)
+  }
+
+  parsePrisonerDob(req: Request): Date | undefined {
+    const dobDay: string = req.body['prisonerDob-day'] ? (req.body['prisonerDob-day'] as string).padStart(2, '0') : ''
+    const dobMonth: string = req.body['prisonerDob-month']
+      ? (req.body['prisonerDob-month'] as string).padStart(2, '0')
+      : ''
+    const dobYear: string = req.body['prisonerDob-year'] ? (req.body['prisonerDob-year'] as string) : ''
+    if (dobDay === '' && dobMonth === '' && dobYear === '') {
+      return undefined
+    }
+    try {
+      return moment(`${dobDay}-${dobMonth}-${dobYear}`, 'DD-MM-YYYY', true).toDate()
+    } catch (error) {
+      return undefined
+    }
   }
 }
