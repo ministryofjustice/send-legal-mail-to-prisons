@@ -26,6 +26,8 @@ declare module 'express-session' {
     recipients: Array<Recipient>
     chooseBarcodeOptionForm: ChooseBarcodeOptionForm
     pdfForm: PdfForm
+    findRecipientByPrisonerNameForm: FindRecipientByPrisonerNameForm
+    createNewContactByPrisonerNameForm: CreateNewContactByPrisonerNameForm
   }
 }
 

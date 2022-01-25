@@ -16,8 +16,9 @@ export type PrisonAddress = {
 }
 
 export type Recipient = {
-  prisonNumber: string
+  prisonNumber?: string
   prisonerName: string
+  prisonerDob?: string
   prisonAddress: PrisonAddress
   barcodeValue?: string
 }
