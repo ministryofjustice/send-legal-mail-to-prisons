@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import moment from 'moment'
 import GenerateBarcodeImageView from './GenerateBarcodeImageView'
 import CreateBarcodeService from '../../../services/barcode/CreateBarcodeService'
 import { Recipient } from '../../../@types/prisonTypes'
@@ -18,11 +19,21 @@ export default class GenerateBarcodeImageController {
         req.session.createBarcodeAuthToken
       )
 
-      const recipient = req.session.recipients[0]
-      const barcodeImageDataUrl = await this.createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient)
-      const barcodeImageName = this.barcodeFilename(recipient)
+      const barcodeImages = await Promise.all(
+        req.session.recipients.map(async recipient => {
+          try {
+            return {
+              barcodeImageUrl: await this.createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient),
+              barcodeImageName: this.barcodeFilename(recipient),
+            }
+          } catch (error) {
+            logger.error(`Could not generate a barcode for ${recipient.prisonNumber}, ${error}`)
+            return undefined
+          }
+        })
+      )
 
-      const view = new GenerateBarcodeImageView(barcodeImageDataUrl, barcodeImageName)
+      const view = new GenerateBarcodeImageView(barcodeImages)
       return res.render('pages/barcode/generate-barcode-image', { ...view.renderArgs })
     } catch (error) {
       logger.error(`An error was received when trying to create the barcode image: ${JSON.stringify(error)}`)
@@ -32,6 +43,7 @@ export default class GenerateBarcodeImageController {
   }
 
   private barcodeFilename(recipient: Recipient): string {
-    return `${recipient.prisonerName} ${recipient.prisonNumber}.png`.replace(/ /g, '-')
+    const today = moment().format('DD-MM-YYYY')
+    return `${recipient.prisonerName} ${recipient.prisonNumber} ${today}.png`.replace(/ /g, '-')
   }
 }

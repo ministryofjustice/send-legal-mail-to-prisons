@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
+import moment from 'moment'
 import GenerateBarcodeImageController from './GenerateBarcodeImageController'
 import CreateBarcodeService from '../../../services/barcode/CreateBarcodeService'
 
@@ -46,8 +47,12 @@ describe('GenerateBarcodeImageController', () => {
       createBarcodeService.generateAddressAndBarcodeDataUrlImage.mockReturnValue('barcode-address-image-url')
 
       const expectedRenderArgs = {
-        barcodeImageUrl: 'barcode-address-image-url',
-        barcodeImageName: 'John-Smith-A1234BC.png',
+        barcodeImages: [
+          {
+            barcodeImageUrl: 'barcode-address-image-url',
+            barcodeImageName: `John-Smith-A1234BC-${moment().format('DD-MM-YYYY')}.png`,
+          },
+        ],
       }
 
       await generateBarcodeImageController.getGenerateImageView(req as unknown as Request, res as unknown as Response)

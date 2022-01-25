@@ -9,19 +9,19 @@ export default class GenerateBarcodeImagePage extends Page {
 
   barcodeAddressImageExists = (): GenerateBarcodeImagePage => {
     this.barcodeAddressImage().should('exist')
-    return Page.verifyOnPage(GenerateBarcodeImagePage)
+    return this
   }
 
-  imageDownloadButtonExists = (downloadFileName: string): GenerateBarcodeImagePage => {
+  imageDownloadButtonExists = (downloadFileName: RegExp): GenerateBarcodeImagePage => {
     const button = this.imageDownloadButton()
     button.should('exist')
-    button.invoke('attr', 'download').should('equal', downloadFileName)
-    return Page.verifyOnPage(GenerateBarcodeImagePage)
+    button.invoke('attr', 'download').should('match', downloadFileName)
+    return this
   }
 
   imageCopyButtonExists = (): GenerateBarcodeImagePage => {
     this.imageCopyButton().should('exist')
-    return Page.verifyOnPage(GenerateBarcodeImagePage)
+    return this
   }
 
   barcodeAddressImage = (): PageElement => cy.get('img.barcode-address-image')
