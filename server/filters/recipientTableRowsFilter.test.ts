@@ -46,4 +46,30 @@ describe('recipientTableRowsFilter', () => {
       ],
     ])
   })
+
+  it('should use prisoner DOB if prison number is missing', () => {
+    const recipients: Array<Recipient> = [
+      { prisonNumber: 'A1234BC', prisonerName: 'John Smith', prisonAddress: HMP_BRINSFORD },
+      { prisonerDob: new Date(1990, 0, 1), prisonerName: 'Gage Hewitt', prisonAddress: HMP_BRIXTON },
+    ]
+
+    const tableRows = recipientTableRowsFilter(recipients)
+
+    expect(tableRows).toStrictEqual([
+      [
+        { text: 'John Smith' },
+        { text: 'A1234BC' },
+        { text: 'HMP BRINSFORD' },
+        { html: '<a href="" class="govuk-link">Edit details</a>' },
+        { html: '<a href="/barcode/review-recipients/remove/0" class="govuk-link">Remove</a>' },
+      ],
+      [
+        { text: 'Gage Hewitt' },
+        { text: '01-01-1990' },
+        { text: 'HMP BRIXTON' },
+        { html: '<a href="" class="govuk-link">Edit details</a>' },
+        { html: '<a href="/barcode/review-recipients/remove/1" class="govuk-link">Remove</a>' },
+      ],
+    ])
+  })
 })
