@@ -4,7 +4,7 @@ import { Prison, PrisonAddress, Recipient } from '../../../@types/prisonTypes'
 import validateNewContact from './newContactValidator'
 import config from '../../../config'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
-import CreateContactView from './CreateContactView'
+import CreateContactByPrisonNumberView from './CreateContactByPrisonNumberView'
 
 export default class CreateContactByPrisonNumberController {
   constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
@@ -24,7 +24,7 @@ export default class CreateContactByPrisonNumberController {
       activePrisons = []
     }
 
-    const view = new CreateContactView(
+    const view = new CreateContactByPrisonNumberView(
       req.session.createNewContactForm || {},
       this.filterSupportedPrisons(activePrisons),
       req.flash('errors')

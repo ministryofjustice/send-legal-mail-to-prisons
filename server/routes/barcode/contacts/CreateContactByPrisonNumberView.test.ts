@@ -1,7 +1,7 @@
 import type { CreateNewContactByPrisonNumberForm } from 'forms'
-import CreateContactView from './CreateContactView'
+import CreateContactByPrisonNumberView from './CreateContactByPrisonNumberView'
 
-describe('CreateContactView', () => {
+describe('CreateContactByPrisonNumberView', () => {
   it('should render args with prison register in alphabetical order', () => {
     const createNewContactForm = {} as CreateNewContactByPrisonNumberForm
     const errors: Record<string, string>[] = []
@@ -11,7 +11,7 @@ describe('CreateContactView', () => {
       { id: 'ACI', name: 'Altcourse (HMP)' },
     ]
 
-    const view = new CreateContactView(createNewContactForm, activePrisons, errors)
+    const view = new CreateContactByPrisonNumberView(createNewContactForm, activePrisons, errors)
 
     const renderedArgs = view.renderArgs
 
@@ -32,7 +32,7 @@ describe('CreateContactView', () => {
       { id: 'ACI', name: 'Altcourse (HMP)' },
     ]
 
-    const view = new CreateContactView(createNewContactForm, activePrisons, errors)
+    const view = new CreateContactByPrisonNumberView(createNewContactForm, activePrisons, errors)
 
     const renderedArgs = view.renderArgs
 

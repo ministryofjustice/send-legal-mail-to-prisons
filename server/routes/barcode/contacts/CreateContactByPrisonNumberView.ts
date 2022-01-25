@@ -7,7 +7,7 @@ type DropDownOption = {
   selected?: boolean
 }
 
-export default class CreateContactView {
+export default class CreateContactByPrisonNumberView {
   constructor(
     private readonly createNewContactForm: CreateNewContactByPrisonNumberForm,
     private readonly prisonRegister: Array<Prison>,
