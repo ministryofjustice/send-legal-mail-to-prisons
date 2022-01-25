@@ -5,7 +5,7 @@ generic-service:
   replicaCount: 2
 
   env:
-    INGRESS_URL: "https://check_rule39-mail-preprod.prison.service.justice.gov.uk"
+    INGRESS_URL: "https://check-rule39-mail-preprod.prison.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
     SEND_LEGAL_MAIL_API_URL: "https://send-legal-mail-api-preprod.prison.service.justice.gov.uk"
