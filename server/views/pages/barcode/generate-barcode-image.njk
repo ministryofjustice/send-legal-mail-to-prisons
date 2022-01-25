@@ -10,7 +10,7 @@
 
 {% block content %}
 
-  <section class="app-container govuk-body">
+  <section class="app-container govuk-body" id="generate-barcode-image-container">
     {% if errors.length > 0 %}
       {{ govukErrorSummary({
         titleText: 'There is a problem',
@@ -19,7 +19,7 @@
       }) }}
     {% endif %}
 
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-row govuk-!-margin-bottom-4">
       <div class="govuk-grid-column-full">
         <h1 class="govuk-heading-xl">Copy the address and barcode into your own document</h1>
 
@@ -33,22 +33,21 @@
       </div>
     </div>
 
-    <div class="govuk-grid-row" id="generate-barcode-image-container">
-      <div class="govuk-grid-column-full">
-
+    {% for barcodeImage in barcodeImages %}
+      <div class="govuk-grid-row govuk-!-margin-bottom-6">
         <div class="govuk-grid-column-full barcode-address-container">
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-              <img class="barcode-address-image" alt="The generated barcode image for {{ barcodeImageName }}" src="{{ barcodeImageUrl }}">
+              <img class="barcode-address-image" alt="The generated barcode image for {{ barcodeImage.barcodeImageName }}" src="{{ barcodeImage.barcodeImageUrl }}">
             </div>
           </div>
-          <div class="govuk-button-group">
+          <div class="govuk-button-group govuk-!-margin-top-2">
             {{ govukButton({
               text: "Download",
               classes: "govuk-button--secondary",
               element: "a",
-              href: barcodeImageUrl,
-              attributes: { 'target': '_blank', 'download': barcodeImageName, 'data-qa': 'download-image-button' }
+              href: barcodeImage.barcodeImageUrl,
+              attributes: { 'target': '_blank', 'download': barcodeImage.barcodeImageName, 'data-qa': 'download-image-button' }
             }) }}
             {{ govukButton({
               text: "Copy",
@@ -56,17 +55,21 @@
               attributes: { 'data-qa': 'copy-image-button' }
             }) }}
           </div>
+
+          {% if loop.length > 1 %}
+            <hr class="govuk-section-break govuk-section-break--visible">
+          {% endif %}
+
         </div>
-
       </div>
-    </div>
+    {% endfor %}
 
-    <div class="govuk-grid-row">
-      <hr />
-      <br />
-      <div class="govuk-grid-column-one-third">
-        <!-- TODO SLM-59 Add in the link to the feedback form -->
-        <a href="" target="_blank" class="govuk-link">Help us improve this service</a>
+    <div class="govuk-grid-row govuk-!-margin-top-6">
+      <div class="govuk-grid-column-full">
+        <p class="govuk-!-margin-top-6 govuk-!-margin-bottom-6">
+          <!-- TODO SLM-59 Add in the link to the feedback form -->
+          <a href="" class="govuk-link">Help us improve this service (opens in a new tab)</a>
+        </p>
       </div>
     </div>
 

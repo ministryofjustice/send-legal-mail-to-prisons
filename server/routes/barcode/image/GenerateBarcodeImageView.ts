@@ -1,13 +1,16 @@
+type BarcodeImage = {
+  barcodeImageUrl: string
+  barcodeImageName: string
+}
+
 export default class GenerateBarcodeImageView {
-  constructor(private readonly barcodeImageUrl: string, private readonly barcodeImageName: string) {}
+  constructor(private readonly barcodeImages: Array<BarcodeImage>) {}
 
   get renderArgs(): {
-    barcodeImageUrl: string
-    barcodeImageName: string
+    barcodeImages: Array<BarcodeImage>
   } {
     return {
-      barcodeImageUrl: this.barcodeImageUrl,
-      barcodeImageName: this.barcodeImageName,
+      barcodeImages: this.barcodeImages,
     }
   }
 }
