@@ -1,11 +1,6 @@
 import type { CreateNewContactByPrisonNumberForm } from 'forms'
 import { Prison } from '../../../@types/prisonTypes'
-
-type DropDownOption = {
-  value: string
-  text: string
-  selected?: boolean
-}
+import getPrisonDropdown, { DropDownOption } from './prisonDropdown'
 
 export default class CreateContactByPrisonNumberView {
   constructor(
@@ -22,18 +17,7 @@ export default class CreateContactByPrisonNumberView {
     return {
       form: this.createNewContactForm,
       errors: this.errors || [],
-      prisonRegister: [
-        { value: '', text: '' },
-        ...this.prisonRegister
-          .map(prison => {
-            return {
-              value: prison.id,
-              text: prison.name,
-              selected: prison.id === this.createNewContactForm.prisonId,
-            }
-          })
-          .sort((a, b) => a.text.localeCompare(b.text)),
-      ],
+      prisonRegister: getPrisonDropdown(this.prisonRegister, this.createNewContactForm.prisonId),
     }
   }
 }
