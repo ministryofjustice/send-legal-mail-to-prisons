@@ -240,5 +240,24 @@ describe('CreateBarcodeService', () => {
       expect(address[0]).toStrictEqual('1234567890123456789012345678901')
       expect(address[1]).toStrictEqual('de 6789012345678901234567890')
     })
+
+    it('should use prison number if available', () => {
+      const address = createBarcodeService.formatAddressContent({
+        prisonerName: 'John Smith',
+        ...defaultAddress,
+      })
+
+      expect(address[1]).toStrictEqual('A1234BC')
+    })
+
+    it('should use prisoner DOB if no prison number', () => {
+      const address = createBarcodeService.formatAddressContent({
+        prisonerName: 'John Smith',
+        prisonerDob: new Date(1990, 0, 1),
+        prisonAddress: defaultAddress.prisonAddress,
+      })
+
+      expect(address[1]).toStrictEqual('01-01-1990')
+    })
   })
 })

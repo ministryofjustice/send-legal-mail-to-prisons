@@ -3,6 +3,7 @@
 // @ts-ignore
 import bwipjs from 'bwip-js'
 import { createCanvas, Image, registerFont } from 'canvas'
+import moment from 'moment'
 import RestClient from '../../data/restClient'
 import config from '../../config'
 import { Recipient } from '../../@types/prisonTypes'
@@ -131,7 +132,7 @@ export default class CreateBarcodeService {
     if (name.length <= 30) {
       return Array.of(
         name,
-        recipient.prisonNumber,
+        recipient.prisonNumber ? recipient.prisonNumber : moment(recipient.prisonerDob).format('DD-MM-YYYY'),
         address.premise,
         address.street,
         address.locality,
