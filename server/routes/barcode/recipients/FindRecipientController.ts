@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
-import FindRecipientView from './FindRecipientView'
+import FindRecipientByPrisonNumberView from './FindRecipientByPrisonNumberView'
 import validatePrisonNumber from '../validators/prisonNumberValidator'
 import validatePrisonerName from '../validators/prisonerNameValidator'
 import formatErrors from '../../errorFormatter'
 
 export default class FindRecipientController {
   async getFindRecipientByPrisonNumberView(req: Request, res: Response): Promise<void> {
-    const view = new FindRecipientView(req.session?.findRecipientForm || {}, req.flash('errors'))
+    const view = new FindRecipientByPrisonNumberView(req.session?.findRecipientForm || {}, req.flash('errors'))
     return res.render('pages/barcode/find-recipient-by-prison-number', { ...view.renderArgs })
   }
 
@@ -24,7 +24,7 @@ export default class FindRecipientController {
   }
 
   async getFindRecipientByPrisonerNameView(req: Request, res: Response): Promise<void> {
-    const view = new FindRecipientView(req.session?.findRecipientForm || {}, req.flash('errors'))
+    const view = new FindRecipientByPrisonNumberView(req.session?.findRecipientForm || {}, req.flash('errors'))
     return res.render('pages/barcode/find-recipient-by-prisoner-name', { ...view.renderArgs })
   }
 
