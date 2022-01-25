@@ -21,14 +21,9 @@ export default class GenerateBarcodeImageController {
 
       const barcodeImages = await Promise.all(
         req.session.recipients.map(async recipient => {
-          try {
-            return {
-              barcodeImageUrl: await this.createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient),
-              barcodeImageName: this.barcodeFilename(recipient),
-            }
-          } catch (error) {
-            logger.error(`Could not generate a barcode for ${recipient.prisonNumber}, ${error}`)
-            return undefined
+          return {
+            barcodeImageUrl: await this.createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient),
+            barcodeImageName: this.barcodeFilename(recipient),
           }
         })
       )
@@ -36,7 +31,8 @@ export default class GenerateBarcodeImageController {
       const view = new GenerateBarcodeImageView(barcodeImages)
       return res.render('pages/barcode/generate-barcode-image', { ...view.renderArgs })
     } catch (error) {
-      logger.error(`An error was received when trying to create the barcode image: ${JSON.stringify(error)}`)
+      logger.error('An error was received when trying to create the barcode image', error)
+      // TODO - likely there will be a requirement to redirect user to a service outage page here.
       req.flash('errors', [{ text: 'There was an error generating the barcode, please try again' }])
       return res.redirect('/barcode/choose-barcode-option')
     }

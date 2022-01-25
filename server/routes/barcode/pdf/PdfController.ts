@@ -31,10 +31,17 @@ export default class PdfController {
       return res.redirect('/barcode/pdf/select-envelope-size')
     }
 
-    req.session.recipients = await this.createBarcodeService.addBarcodeValuesToRecipients(
-      req.session.recipients,
-      req.session.createBarcodeAuthToken
-    )
+    try {
+      req.session.recipients = await this.createBarcodeService.addBarcodeValuesToRecipients(
+        req.session.recipients,
+        req.session.createBarcodeAuthToken
+      )
+    } catch (error) {
+      logger.error('An error was received when trying to assign a barcode to ', error)
+      // TODO - likely there will be a requirement to redirect user to a service outage page here.
+      req.flash('errors', [{ text: 'There was an error generating the barcode, please try again' }])
+      return res.redirect('/barcode/pdf/select-envelope-size')
+    }
 
     return res.redirect('/barcode/pdf/print')
   }
@@ -59,36 +66,39 @@ export default class PdfController {
       return res.redirect('/barcode/pdf/select-envelope-size')
     }
 
-    const barcodeImages = await Promise.all(
-      req.session.recipients.map(async recipient => {
-        try {
-          return await this.createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient)
-        } catch (error) {
-          logger.error(`Could not generate a barcode for ${recipient.prisonNumber}, ${error}`)
-          return undefined
-        }
-      })
-    )
+    try {
+      const barcodeImages = await Promise.all(
+        req.session.recipients.map(async recipient => {
+          return this.createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient)
+        })
+      )
 
-    // TODO - will need to work out what to do with this when we support multiple recipients - SLM-79
-    const pdfFilename = this.pdfFilename(req.session.recipients[0])
+      // TODO - will need to work out what to do with this when we support multiple recipients - SLM-79
+      const pdfFilename = this.pdfFilename(req.session.recipients[0])
 
-    return res.renderPDF(
-      'pdf/barcode-cover-sheet',
-      {
-        envelopeSize: req.session.pdfForm.envelopeSize,
-        barcodeImages,
-        printDebugInfo: config.coversheetPdf.printDebugInfo,
-        addressLabelWidth: config.coversheetPdf.addressLabelWidth,
-        xOffsetDl: config.coversheetPdf.xOffsetDl,
-        yOffsetDl: config.coversheetPdf.yOffsetDl,
-        xOffsetC5: config.coversheetPdf.xOffsetC5,
-        yOffsetC5: config.coversheetPdf.yOffsetC5,
-        xOffsetC4: config.coversheetPdf.xOffsetC4,
-        yOffsetC4: config.coversheetPdf.yOffsetC4,
-      },
-      { filename: pdfFilename, contentDisposition: 'attachment' }
-    )
+      return res.renderPDF(
+        'pdf/barcode-cover-sheet',
+        {
+          envelopeSize: req.session.pdfForm.envelopeSize,
+          barcodeImages,
+          printDebugInfo: config.coversheetPdf.printDebugInfo,
+          addressLabelWidth: config.coversheetPdf.addressLabelWidth,
+          xOffsetDl: config.coversheetPdf.xOffsetDl,
+          yOffsetDl: config.coversheetPdf.yOffsetDl,
+          xOffsetC5: config.coversheetPdf.xOffsetC5,
+          yOffsetC5: config.coversheetPdf.yOffsetC5,
+          xOffsetC4: config.coversheetPdf.xOffsetC4,
+          yOffsetC4: config.coversheetPdf.yOffsetC4,
+        },
+        { filename: pdfFilename, contentDisposition: 'attachment' }
+      )
+    } catch (error) {
+      logger.error('There was an error generating the barcode images for the coversheet PDF')
+      // TODO - need to work out what to do here if there was an error - the context in which this request handler method
+      // is called is to download a PDF to the browser. The browser is not expecting to render a webpage, so unclear at
+      // this point what/how we can tell the user anything.
+      throw error
+    }
   }
 
   private pdfFilename(recipient: Recipient): string {

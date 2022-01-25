@@ -15,7 +15,6 @@ const res = {
 }
 
 const createBarcodeService = {
-  generateBarcodeValue: jest.fn(),
   generateAddressAndBarcodeDataUrlImage: jest.fn(),
   addBarcodeValuesToRecipients: jest.fn(),
 }
@@ -33,64 +32,208 @@ describe('GenerateBarcodeImageController', () => {
     res.render.mockReset()
     res.redirect.mockReset()
     req.session = {} as SessionData
-    createBarcodeService.generateBarcodeValue.mockReset()
     createBarcodeService.generateAddressAndBarcodeDataUrlImage.mockReset()
     createBarcodeService.addBarcodeValuesToRecipients.mockReset()
   })
 
   describe('getGenerateImageView', () => {
-    it('should create the image and call the view', async () => {
-      req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
-      createBarcodeService.addBarcodeValuesToRecipients.mockReturnValue([
-        { prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {}, barcodeValue: '123456789012' },
-      ])
-      createBarcodeService.generateAddressAndBarcodeDataUrlImage.mockReturnValue('barcode-address-image-url')
-
-      const expectedRenderArgs = {
-        barcodeImages: [
-          {
-            barcodeImageUrl: 'barcode-address-image-url',
-            barcodeImageName: `John-Smith-A1234BC-${moment().format('DD-MM-YYYY')}.png`,
-          },
-        ],
-      }
-
-      await generateBarcodeImageController.getGenerateImageView(req as unknown as Request, res as unknown as Response)
-
-      expect(res.render).toHaveBeenCalledWith('pages/barcode/generate-barcode-image', expectedRenderArgs)
-    })
-
-    it('should render errors if generating barcode value from the API fails', async () => {
-      req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
-      createBarcodeService.generateBarcodeValue.mockRejectedValue('Any error returned from barcode API')
-
-      await generateBarcodeImageController.getGenerateImageView(req as unknown as Request, res as unknown as Response)
-
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/choose-barcode-option')
-      expect(req.flash).toHaveBeenCalledWith('errors', [
-        { text: 'There was an error generating the barcode, please try again' },
-      ])
-    })
-
-    it('should render errors if generating barcode data url image fails', async () => {
-      req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
-      createBarcodeService.generateBarcodeValue.mockReturnValue('123456789012')
-      createBarcodeService.generateAddressAndBarcodeDataUrlImage.mockRejectedValue('Error generating image')
-
-      await generateBarcodeImageController.getGenerateImageView(req as unknown as Request, res as unknown as Response)
-
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/choose-barcode-option')
-      expect(req.flash).toHaveBeenCalledWith('errors', [
-        { text: 'There was an error generating the barcode, please try again' },
-      ])
-    })
-
     it('should redirect to find-recipient given no recipients in the session', async () => {
       req.session.recipients = undefined
 
       await generateBarcodeImageController.getGenerateImageView(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
+    })
+
+    describe('Single recipient', () => {
+      it('should create the image and call the view', async () => {
+        req.session.recipients = [
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          },
+        ]
+        createBarcodeService.addBarcodeValuesToRecipients.mockResolvedValue([
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            barcodeValue: '123456789012',
+          },
+        ])
+        createBarcodeService.generateAddressAndBarcodeDataUrlImage.mockResolvedValue('barcode-address-image-url')
+
+        const expectedRenderArgs = {
+          barcodeImages: [
+            {
+              barcodeImageUrl: 'barcode-address-image-url',
+              barcodeImageName: `John-Smith-A1234BC-${moment().format('DD-MM-YYYY')}.png`,
+            },
+          ],
+        }
+
+        await generateBarcodeImageController.getGenerateImageView(req as unknown as Request, res as unknown as Response)
+
+        expect(res.render).toHaveBeenCalledWith('pages/barcode/generate-barcode-image', expectedRenderArgs)
+      })
+
+      it('should render errors if generating barcode value from the API fails', async () => {
+        req.session.recipients = [
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          },
+        ]
+        createBarcodeService.addBarcodeValuesToRecipients.mockRejectedValue('An error returned from barcode API')
+
+        await generateBarcodeImageController.getGenerateImageView(req as unknown as Request, res as unknown as Response)
+
+        expect(res.redirect).toHaveBeenCalledWith('/barcode/choose-barcode-option')
+        expect(req.flash).toHaveBeenCalledWith('errors', [
+          { text: 'There was an error generating the barcode, please try again' },
+        ])
+      })
+
+      it('should render errors if generating barcode data url image fails', async () => {
+        req.session.recipients = [
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          },
+        ]
+        createBarcodeService.addBarcodeValuesToRecipients.mockResolvedValue([
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            barcodeValue: '123456789012',
+          },
+        ])
+        createBarcodeService.generateAddressAndBarcodeDataUrlImage.mockRejectedValue('Error generating image')
+
+        await generateBarcodeImageController.getGenerateImageView(req as unknown as Request, res as unknown as Response)
+
+        expect(res.redirect).toHaveBeenCalledWith('/barcode/choose-barcode-option')
+        expect(req.flash).toHaveBeenCalledWith('errors', [
+          { text: 'There was an error generating the barcode, please try again' },
+        ])
+      })
+    })
+
+    describe('Multiple recipients', () => {
+      it('should create the image and call the view', async () => {
+        req.session.recipients = [
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          },
+          {
+            prisonerName: 'John Doe',
+            prisonNumber: 'J3344JD',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          },
+        ]
+        createBarcodeService.addBarcodeValuesToRecipients.mockResolvedValue([
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            barcodeValue: '123456789012',
+          },
+          {
+            prisonerName: 'John Doe',
+            prisonNumber: 'J3344JD',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            barcodeValue: '999988887777',
+          },
+        ])
+        createBarcodeService.generateAddressAndBarcodeDataUrlImage
+          .mockResolvedValueOnce('john-smith-barcode-image-url')
+          .mockResolvedValueOnce('john-doe-barcode-image-url')
+
+        const expectedRenderArgs = {
+          barcodeImages: [
+            {
+              barcodeImageUrl: 'john-smith-barcode-image-url',
+              barcodeImageName: `John-Smith-A1234BC-${moment().format('DD-MM-YYYY')}.png`,
+            },
+            {
+              barcodeImageUrl: 'john-doe-barcode-image-url',
+              barcodeImageName: `John-Doe-J3344JD-${moment().format('DD-MM-YYYY')}.png`,
+            },
+          ],
+        }
+
+        await generateBarcodeImageController.getGenerateImageView(req as unknown as Request, res as unknown as Response)
+
+        expect(res.render).toHaveBeenCalledWith('pages/barcode/generate-barcode-image', expectedRenderArgs)
+      })
+
+      it('should render errors if generating barcode value from the API fails for any recipient', async () => {
+        req.session.recipients = [
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          },
+          {
+            prisonerName: 'John Doe',
+            prisonNumber: 'J3344JD',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          },
+        ]
+        createBarcodeService.addBarcodeValuesToRecipients.mockRejectedValue('An error returned from barcode API')
+
+        await generateBarcodeImageController.getGenerateImageView(req as unknown as Request, res as unknown as Response)
+
+        expect(res.redirect).toHaveBeenCalledWith('/barcode/choose-barcode-option')
+        expect(req.flash).toHaveBeenCalledWith('errors', [
+          { text: 'There was an error generating the barcode, please try again' },
+        ])
+      })
+
+      it('should render errors if generating barcode data url image fails for the 2nd recipient', async () => {
+        req.session.recipients = [
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          },
+          {
+            prisonerName: 'John Doe',
+            prisonNumber: 'J3344JD',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          },
+        ]
+        createBarcodeService.addBarcodeValuesToRecipients.mockResolvedValue([
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            barcodeValue: '123456789012',
+          },
+          {
+            prisonerName: 'John Doe',
+            prisonNumber: 'J3344JD',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            barcodeValue: '999988887777',
+          },
+        ])
+        createBarcodeService.generateAddressAndBarcodeDataUrlImage
+          .mockResolvedValueOnce('john-smith-barcode-image-url')
+          .mockRejectedValueOnce('Error generating image')
+
+        await generateBarcodeImageController.getGenerateImageView(req as unknown as Request, res as unknown as Response)
+
+        expect(res.redirect).toHaveBeenCalledWith('/barcode/choose-barcode-option')
+        expect(req.flash).toHaveBeenCalledWith('errors', [
+          { text: 'There was an error generating the barcode, please try again' },
+        ])
+      })
     })
   })
 })

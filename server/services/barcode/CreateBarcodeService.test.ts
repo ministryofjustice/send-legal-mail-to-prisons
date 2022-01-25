@@ -33,9 +33,12 @@ describe('CreateBarcodeService', () => {
     it('should throw error if calling the API returns error', async () => {
       mockedSendLegalMailApi.post('/barcode').reply(400, 'something bad happened')
 
-      await expect(createBarcodeService.generateBarcodeValue('some-token')).rejects.toStrictEqual(
-        expect.objectContaining({ status: 400, text: 'something bad happened' })
-      )
+      try {
+        await createBarcodeService.generateBarcodeValue('some-token')
+        fail('Was expecting createBarcodeService.generateBarcodeValue to have thrown an error but it did not')
+      } catch (error) {
+        expect(error).toStrictEqual(new Error('Error generating new barcode value'))
+      }
     })
   })
 
@@ -53,7 +56,7 @@ describe('CreateBarcodeService', () => {
         },
         barcodeValue: '123456789012',
       }
-      mockBwipjsToBuffer.mockReturnValue(Buffer.from('barcode-image'))
+      mockBwipjsToBuffer.mockResolvedValue(Buffer.from('barcode-image'))
 
       const barcodeImageDataUrl = await createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient)
 
@@ -61,6 +64,34 @@ describe('CreateBarcodeService', () => {
       expect(mockBwipjsToBuffer).toHaveBeenCalledWith(
         expect.objectContaining({ text: '123456789012', alttext: '1234-5678-9012' })
       )
+    })
+
+    it('should reject the promise given generating the barcode buffer fails', async () => {
+      const recipient = {
+        prisonNumber: 'A1234BC',
+        prisonerName: 'John Smith',
+        prisonAddress: {
+          premise: 'HMP BRINSFORD',
+          street: 'New Road',
+          locality: 'Featherstone',
+          area: 'Featherstone Wolverhampton',
+          postalCode: 'WV10 7PY',
+        },
+        barcodeValue: '123456789012',
+      }
+      mockBwipjsToBuffer.mockRejectedValue('An error generating the barcode image')
+
+      try {
+        await createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient)
+        fail(
+          'Was expecting createBarcodeService.generateAddressAndBarcodeDataUrlImage to have thrown an error but it did not'
+        )
+      } catch (error) {
+        expect(error).toBe('An error generating the barcode image')
+        expect(mockBwipjsToBuffer).toHaveBeenCalledWith(
+          expect.objectContaining({ text: '123456789012', alttext: '1234-5678-9012' })
+        )
+      }
     })
   })
 
@@ -131,6 +162,40 @@ describe('CreateBarcodeService', () => {
           barcodeValue: '098765432109',
         },
       ])
+    })
+
+    it('should fail to add barcode values to recipients given barcode API fails for 2nd recipient', async () => {
+      const recipients = [
+        {
+          prisonNumber: 'A1234BC',
+          prisonerName: 'John Smith',
+          prisonAddress: {
+            premise: 'HMP BRINSFORD',
+            postalCode: 'WV10 7PY',
+          },
+        },
+        {
+          prisonNumber: 'Q9876TY',
+          prisonerName: 'Fred Bloggs',
+          prisonAddress: {
+            premise: 'HMP Bristol',
+            postalCode: 'BS1 1AA',
+          },
+        },
+      ]
+
+      mockedSendLegalMailApi
+        .post('/barcode')
+        .reply(201, { barcode: '123456789012' })
+        .post('/barcode')
+        .reply(400, 'Some API error generating a new barcode number')
+
+      try {
+        await createBarcodeService.addBarcodeValuesToRecipients(recipients, 'some-token')
+        fail('Was expecting createBarcodeService.addBarcodeValuesToRecipients to have thrown an error but it did not')
+      } catch (error) {
+        expect(error).toStrictEqual(new Error('Error generating new barcode value'))
+      }
     })
   })
 
