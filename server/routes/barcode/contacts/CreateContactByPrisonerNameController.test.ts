@@ -67,10 +67,7 @@ describe('CreateContactByPrisonerNameController', () => {
         ] as Array<Record<string, string>>,
       }
 
-      await createContactController.getCreateNewContactByPrisonerNameView(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact-by-prisoner-name', expectedRenderArgs)
       expect(req.flash).toHaveBeenCalledWith('errors')
@@ -98,10 +95,7 @@ describe('CreateContactByPrisonerNameController', () => {
         ] as Array<Record<string, string>>,
       }
 
-      await createContactController.getCreateNewContactByPrisonerNameView(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact-by-prisoner-name', expectedRenderArgs)
       expect(req.flash).toHaveBeenCalledWith('errors')
@@ -121,10 +115,7 @@ describe('CreateContactByPrisonerNameController', () => {
         prisonRegister: [{ value: '', text: '' }] as Array<Record<string, string>>,
       }
 
-      await createContactController.getCreateNewContactByPrisonerNameView(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact-by-prisoner-name', expectedRenderArgs)
       expect(req.flash).toHaveBeenCalledWith('errors', [{ text: 'There was an error retrieving the list of prisons' }])
@@ -134,16 +125,13 @@ describe('CreateContactByPrisonerNameController', () => {
     it('should redirect to main find-recipient page given no findRecipientForm in the session', async () => {
       req.session.findRecipientByPrisonerNameForm = undefined
 
-      await createContactController.getCreateNewContactByPrisonerNameView(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
     })
   })
 
-  describe('submitCreateNewContactByPrisonerName', () => {
+  describe('submitCreateNewContact', () => {
     let mockNewContactValidator: jest.MockedFunction<typeof newContactValidator>
 
     beforeEach(() => {
@@ -172,10 +160,7 @@ describe('CreateContactByPrisonerNameController', () => {
       prisonRegisterService.getPrisonAddress.mockResolvedValue(prisonAddress)
       const expectedRecipients = [{ prisonAddress, prisonerDob: '01-01-1990', prisonerName: 'Fred Bloggs' }]
 
-      await createContactController.submitCreateNewContactByPrisonerName(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
       expect(req.session.recipients).toStrictEqual(expectedRecipients)
@@ -193,10 +178,7 @@ describe('CreateContactByPrisonerNameController', () => {
       mockNewContactValidator.mockReturnValue([])
       prisonRegisterService.getPrisonAddress.mockRejectedValue(new Error(`PrisonAddress for prison SKI not found`))
 
-      await createContactController.submitCreateNewContactByPrisonerName(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact/by-prisoner-name')
       expect(req.flash).toHaveBeenCalledWith('errors', [
@@ -209,10 +191,7 @@ describe('CreateContactByPrisonerNameController', () => {
       req.session.findRecipientByPrisonerNameForm = { ...req.body }
       mockNewContactValidator.mockReturnValue([{ href: '#prisonId', text: 'Select a prison name' }])
 
-      await createContactController.submitCreateNewContactByPrisonerName(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#prisonId', text: 'Select a prison name' }])
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact/by-prisoner-name')
@@ -221,10 +200,7 @@ describe('CreateContactByPrisonerNameController', () => {
     it('should redirect to find-recipient given no findRecipientForm in the session', async () => {
       req.session.findRecipientByPrisonerNameForm = undefined
 
-      await createContactController.submitCreateNewContactByPrisonerName(
-        req as unknown as Request,
-        res as unknown as Response
-      )
+      await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
     })

@@ -7,6 +7,7 @@ import CreateContactByPrisonNumberController from '../../routes/barcode/contacts
 import GenerateBarcodeImageController from '../../routes/barcode/image/GenerateBarcodeImageController'
 import PdfController from '../../routes/barcode/pdf/PdfController'
 import ChooseBarcodeOptionController from '../../routes/barcode/options/ChooseBarcodeOptionController'
+import CreateContactByPrisonerNameController from '../../routes/barcode/contacts/CreateContactByPrisonerNameController'
 
 export default function setUpCreateBarcode(
   createBarcodeService: CreateBarcodeService,
@@ -14,7 +15,8 @@ export default function setUpCreateBarcode(
 ): Router {
   const router = express.Router()
   const findRecipientController = new FindRecipientController()
-  const createContactController = new CreateContactByPrisonNumberController(prisonRegisterService)
+  const createContactByPrisonNumberController = new CreateContactByPrisonNumberController(prisonRegisterService)
+  const createContactByPrisonerNameController = new CreateContactByPrisonerNameController(prisonRegisterService)
   const reviewRecipientsController = new ReviewRecipientsController()
   const chooseBarcodeOptionController = new ChooseBarcodeOptionController()
   const generateImageController = new GenerateBarcodeImageController(createBarcodeService)
@@ -39,10 +41,17 @@ export default function setUpCreateBarcode(
     res.redirect('/barcode/find-recipient/create-new-contact/by-prison-number')
   )
   router.get('/find-recipient/create-new-contact/by-prison-number', (req, res) =>
-    createContactController.getCreateNewContactByPrisonNumberView(req, res)
+    createContactByPrisonNumberController.getCreateNewContact(req, res)
   )
   router.post('/find-recipient/create-new-contact/by-prison-number', (req, res) =>
-    createContactController.submitCreateNewContactByPrisonNumber(req, res)
+    createContactByPrisonNumberController.submitCreateNewContact(req, res)
+  )
+
+  router.get('/find-recipient/create-new-contact/by-prisoner-name', (req, res) =>
+    createContactByPrisonerNameController.getCreateNewContact(req, res)
+  )
+  router.post('/find-recipient/create-new-contact/by-prisoner-name', (req, res) =>
+    createContactByPrisonerNameController.submitCreateNewContact(req, res)
   )
 
   router.get('/review-recipients', (req, res) => reviewRecipientsController.getReviewRecipientsView(req, res))

@@ -9,7 +9,7 @@ import filterSupportedPrisons from './filterSupportedPrisons'
 export default class CreateContactByPrisonNumberController {
   constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
 
-  async getCreateNewContactByPrisonNumberView(req: Request, res: Response): Promise<void> {
+  async getCreateNewContact(req: Request, res: Response): Promise<void> {
     if (!req.session.findRecipientByPrisonNumberForm) {
       return res.redirect('/barcode/find-recipient')
     }
@@ -35,7 +35,7 @@ export default class CreateContactByPrisonNumberController {
     return res.render('pages/barcode/create-new-contact-by-prison-number', { ...view.renderArgs })
   }
 
-  async submitCreateNewContactByPrisonNumber(req: Request, res: Response): Promise<void> {
+  async submitCreateNewContact(req: Request, res: Response): Promise<void> {
     if (!req.session.findRecipientByPrisonNumberForm) {
       return res.redirect('/barcode/find-recipient')
     }

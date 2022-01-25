@@ -67,8 +67,7 @@ describe('FindRecipientController', () => {
       mockPrisonerNameValidator = prisonerNameValidator as jest.MockedFunction<typeof prisonerNameValidator>
     })
 
-    // TODO SLM-81 Reinstate this test when the new screen flow is implemented
-    it.skip('should redirect to create-new-contact given prison number is validated', async () => {
+    it('should redirect to create-new-contact given prison number is validated', async () => {
       mockPrisonerNameValidator.mockReturnValue([])
 
       await findRecipientController.submitFindByPrisonerName(req as unknown as Request, res as unknown as Response)
