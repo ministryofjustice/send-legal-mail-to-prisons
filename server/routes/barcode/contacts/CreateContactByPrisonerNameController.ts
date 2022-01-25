@@ -3,7 +3,7 @@ import type { CreateNewContactByPrisonerNameForm } from 'forms'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import { Prison, PrisonAddress, Recipient } from '../../../@types/prisonTypes'
 import CreateContactByPrisonerNameView from './CreateContactByPrisonerNameView'
-import validateNewContactByPrisonerName from './newContactByPrisonerNameValidator'
+import validateNewContact from './newContactByPrisonerNameValidator'
 import filterSupportedPrisons from './filterSupportedPrisons'
 
 export default class CreateContactByPrisonerNameController {
@@ -41,7 +41,7 @@ export default class CreateContactByPrisonerNameController {
     }
 
     req.session.createNewContactByPrisonerNameForm = { ...req.session.findRecipientByPrisonerNameForm, ...req.body }
-    const errors = validateNewContactByPrisonerName(req.session.createNewContactByPrisonerNameForm)
+    const errors = validateNewContact(req.session.createNewContactByPrisonerNameForm)
     if (errors.length > 0) {
       req.flash('errors', errors)
       return res.redirect('/barcode/find-recipient/create-new-contact/by-prisoner-name')
