@@ -6,7 +6,7 @@ import CreateContactByPrisonerNameView from './CreateContactByPrisonerNameView'
 import validateNewContactByPrisonerName from './newContactByPrisonerNameValidator'
 import filterSupportedPrisons from './filterSupportedPrisons'
 
-export default class CreateContactPrisonerNameController {
+export default class CreateContactByPrisonerNameController {
   constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
 
   async getCreateNewContactByPrisonerNameView(req: Request, res: Response): Promise<void> {

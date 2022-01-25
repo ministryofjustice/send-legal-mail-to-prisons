@@ -4,7 +4,7 @@ import PrisonRegisterService from '../../../services/prison/PrisonRegisterServic
 import config from '../../../config'
 import newContactValidator from './newContactByPrisonerNameValidator'
 import { PrisonAddress } from '../../../@types/prisonTypes'
-import CreateContactPrisonerNameController from './CreateContactPrisonerNameController'
+import CreateContactByPrisonerNameController from './CreateContactByPrisonerNameController'
 
 jest.mock('../../../config')
 jest.mock('./newContactByPrisonerNameValidator')
@@ -24,11 +24,11 @@ const prisonRegisterService = {
   getPrisonAddress: jest.fn(),
 }
 
-describe('CreateContactPrisonerNameController', () => {
-  let createContactController: CreateContactPrisonerNameController
+describe('CreateContactByPrisonerNameController', () => {
+  let createContactController: CreateContactByPrisonerNameController
 
   beforeEach(() => {
-    createContactController = new CreateContactPrisonerNameController(
+    createContactController = new CreateContactByPrisonerNameController(
       prisonRegisterService as unknown as PrisonRegisterService
     )
   })
