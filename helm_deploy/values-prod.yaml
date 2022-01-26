@@ -1,0 +1,22 @@
+---
+# Per environment values which override defaults in send-legal-mail-to-prisons/values.yaml
+
+generic-service:
+  replicaCount: 2
+
+  env:
+    INGRESS_URL: "https://check-rule39-mail.prison.service.justice.gov.uk"
+    HMPPS_AUTH_URL: "https://sign-in.hmpps.service.justice.gov.uk/auth"
+    TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
+    SEND_LEGAL_MAIL_API_URL: "https://send-legal-mail-api.prison.service.justice.gov.uk"
+    PRISON_REGISTER_API_URL: "https://prison-register.hmpps.service.justice.gov.uk"
+    SUPPORTED_PRISONS: "SKI"
+
+generic-prometheus-alerts:
+  alertSeverity: digital-prison-service
+
+ingress:
+  internalHost: check-rule39-mail.prison.service.justice.gov.uk
+  externalHost: send-legal-mail.prison.service.justice.gov.uk
+  internalSetIdentifier: check-rule39-mail-send-legal-mail-to-prisons-green
+  externalSetIdentifier: send-legal-mail-to-prisons-send-legal-mail-to-prisons-green
