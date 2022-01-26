@@ -15,6 +15,7 @@ services:
     networks:
     - hmpps_int
     container_name: wiremock
+    command: "--jetty-acceptor-threads 1 --verbose"
     restart: always
     ports:
       - "9091:8080"
