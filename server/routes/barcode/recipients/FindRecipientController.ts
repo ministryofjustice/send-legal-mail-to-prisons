@@ -28,6 +28,7 @@ export default class FindRecipientController {
   }
 
   async getFindRecipientByPrisonerNameView(req: Request, res: Response): Promise<void> {
+    req.session.findRecipientByPrisonNumberForm = undefined
     const view = new FindRecipientByPrisonerNameView(
       req.session?.findRecipientByPrisonerNameForm || {},
       req.flash('errors')
