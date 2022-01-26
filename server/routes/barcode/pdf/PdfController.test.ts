@@ -40,7 +40,13 @@ describe('PdfController', () => {
 
   describe('getEnvelopeSizeView', () => {
     it('should render view', async () => {
-      req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
+      req.session.recipients = [
+        {
+          prisonerName: 'John Smith',
+          prisonNumber: 'A1234BC',
+          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+        },
+      ]
 
       await pdfController.getEnvelopeSizeView(req as unknown as Request, res as unknown as Response)
 
@@ -64,32 +70,6 @@ describe('PdfController', () => {
       typeof validateEnvelopeSizeOption
     >
 
-    it('should redirect to pdf print given envelope size is valid', async () => {
-      req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
-      req.body = { envelopeSize: 'dl' }
-      mockValidateEnvelopeSizeOption.mockReturnValue([])
-      createBarcodeService.addBarcodeValuesToRecipients.mockReturnValue([
-        {
-          prisonerName: 'John Smith',
-          prisonNumber: 'A1234BC',
-          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
-          barcodeValue: '123456789012',
-        },
-      ])
-
-      await pdfController.submitEnvelopeSize(req as unknown as Request, res as unknown as Response)
-
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/pdf/print')
-      expect(req.session.recipients).toStrictEqual([
-        {
-          prisonerName: 'John Smith',
-          prisonNumber: 'A1234BC',
-          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
-          barcodeValue: '123456789012',
-        },
-      ])
-    })
-
     it('should redirect to find-recipient given no recipients in the session', async () => {
       req.session.recipients = undefined
 
@@ -99,7 +79,13 @@ describe('PdfController', () => {
     })
 
     it('should redirect to select-envelope-size given envelope size is not valid', async () => {
-      req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
+      req.session.recipients = [
+        {
+          prisonerName: 'John Smith',
+          prisonNumber: 'A1234BC',
+          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+        },
+      ]
       req.body = {}
       mockValidateEnvelopeSizeOption.mockReturnValue(['Select an envelope size'])
 
@@ -107,6 +93,134 @@ describe('PdfController', () => {
 
       expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#envelopeSize', text: 'Select an envelope size' }])
       expect(res.redirect).toHaveBeenCalledWith('/barcode/pdf/select-envelope-size')
+    })
+
+    describe('Single recipient', () => {
+      it('should redirect to pdf print given envelope size is valid', async () => {
+        req.session.recipients = [
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          },
+        ]
+        req.body = { envelopeSize: 'dl' }
+        mockValidateEnvelopeSizeOption.mockReturnValue([])
+        createBarcodeService.addBarcodeValuesToRecipients.mockReturnValue([
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            barcodeValue: '123456789012',
+          },
+        ])
+
+        await pdfController.submitEnvelopeSize(req as unknown as Request, res as unknown as Response)
+
+        expect(res.redirect).toHaveBeenCalledWith('/barcode/pdf/print')
+        expect(req.session.recipients).toStrictEqual([
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            barcodeValue: '123456789012',
+          },
+        ])
+      })
+
+      it('should render errors if generating barcode value from the API fails', async () => {
+        req.session.recipients = [
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          },
+        ]
+        req.body = { envelopeSize: 'dl' }
+        mockValidateEnvelopeSizeOption.mockReturnValue([])
+        createBarcodeService.addBarcodeValuesToRecipients.mockRejectedValue('An error returned from barcode API')
+
+        await pdfController.submitEnvelopeSize(req as unknown as Request, res as unknown as Response)
+
+        expect(res.redirect).toHaveBeenCalledWith('/barcode/pdf/select-envelope-size')
+        expect(req.flash).toHaveBeenCalledWith('errors', [
+          { text: 'There was an error generating the barcode, please try again' },
+        ])
+      })
+    })
+
+    describe('Multiple recipients', () => {
+      it('should redirect to pdf print given envelope size is valid', async () => {
+        req.session.recipients = [
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          },
+          {
+            prisonerName: 'John Doe',
+            prisonNumber: 'J3344JD',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          },
+        ]
+        req.body = { envelopeSize: 'dl' }
+        mockValidateEnvelopeSizeOption.mockReturnValue([])
+        createBarcodeService.addBarcodeValuesToRecipients.mockResolvedValue([
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            barcodeValue: '123456789012',
+          },
+          {
+            prisonerName: 'John Doe',
+            prisonNumber: 'J3344JD',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            barcodeValue: '999988887777',
+          },
+        ])
+
+        await pdfController.submitEnvelopeSize(req as unknown as Request, res as unknown as Response)
+
+        expect(res.redirect).toHaveBeenCalledWith('/barcode/pdf/print')
+        expect(req.session.recipients).toStrictEqual([
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            barcodeValue: '123456789012',
+          },
+          {
+            prisonerName: 'John Doe',
+            prisonNumber: 'J3344JD',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            barcodeValue: '999988887777',
+          },
+        ])
+      })
+
+      it('should render errors if generating barcode value from the API fails for any recipient', async () => {
+        req.session.recipients = [
+          {
+            prisonerName: 'John Smith',
+            prisonNumber: 'A1234BC',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          },
+          {
+            prisonerName: 'John Doe',
+            prisonNumber: 'J3344JD',
+            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          },
+        ]
+        createBarcodeService.addBarcodeValuesToRecipients.mockRejectedValue('An error returned from barcode API')
+
+        await pdfController.submitEnvelopeSize(req as unknown as Request, res as unknown as Response)
+
+        expect(res.redirect).toHaveBeenCalledWith('/barcode/pdf/select-envelope-size')
+        expect(req.flash).toHaveBeenCalledWith('errors', [
+          { text: 'There was an error generating the barcode, please try again' },
+        ])
+      })
     })
   })
 
@@ -162,6 +276,7 @@ describe('PdfController', () => {
       createBarcodeService.generateAddressAndBarcodeDataUrlImage.mockImplementation(
         recipient => `${recipient.prisonerName}-barcode-data-url`
       )
+
       await pdfController.downloadPdf(req as unknown as Request, res as unknown as Response)
 
       expect(res.renderPDF).toHaveBeenCalledWith(
@@ -169,6 +284,26 @@ describe('PdfController', () => {
         expect.objectContaining({ barcodeImages: ['John Smith-barcode-data-url'], envelopeSize: 'dl' }),
         { contentDisposition: 'attachment', filename: 'John-Smith-A1234BC.pdf' }
       )
+    })
+
+    it('should throw error if generating barcode data url image fails', async () => {
+      req.session.recipients = [
+        {
+          prisonerName: 'John Smith',
+          prisonNumber: 'A1234BC',
+          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          barcodeValue: '123456789012',
+        },
+      ]
+      req.session.pdfForm = { envelopeSize: 'dl' }
+      createBarcodeService.generateAddressAndBarcodeDataUrlImage.mockRejectedValueOnce('Error generating image')
+
+      try {
+        await pdfController.downloadPdf(req as unknown as Request, res as unknown as Response)
+        fail('Was expecting pdfController.downloadPdf to have thrown an error but it did not')
+      } catch (error) {
+        expect(error).toBe('Error generating image')
+      }
     })
 
     it('should redirect to find-recipient given no recipients in the session', async () => {
