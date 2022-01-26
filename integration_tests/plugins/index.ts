@@ -37,7 +37,6 @@ export default (on: (string, Record) => void): void => {
 
     stubCreateBarcode: sendLegalMail.stubCreateBarcode,
     stubCreateBarcodeFailure: sendLegalMail.stubCreateBarcodeFailure,
-    stubCreateBarcodeSuccessThenCreateBarcodeFailure: sendLegalMail.stubCreateBarcodeSuccessThenCreateBarcodeFailure,
 
     stubGetPrisonRegister: prisonRegister.stubGetPrisonRegister,
   })
