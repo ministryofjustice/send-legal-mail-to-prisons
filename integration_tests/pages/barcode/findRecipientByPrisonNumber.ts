@@ -14,13 +14,13 @@ export default class FindRecipientByPrisonNumberPage extends Page {
   }
 
   submitWithValidPrisonNumber = (prisonNumber = 'A1234BC'): CreateNewContactByPrisonNumberPage => {
-    this.prisonNumberField().type(prisonNumber)
+    this.prisonNumberField().clear().type(prisonNumber)
     this.submitButton().click()
     return Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
   }
 
   submitWithInvalidPrisonNumber = (): FindRecipientByPrisonNumberPage => {
-    this.prisonNumberField().type('A 1234 BC')
+    this.prisonNumberField().clear().type('A 1234 BC')
     this.submitButton().click()
     return Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   }

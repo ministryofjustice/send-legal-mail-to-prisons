@@ -6,11 +6,16 @@ import FindRecipientByPrisonerNamePage from './findRecipientByPrisonerName'
 export default class CreateNewContactByPrisonerNamePage extends Page {
   constructor() {
     super('create-new-contact-by-prisoner-name')
-    this.prisonerDobFieldIsFocussed()
   }
 
   prisonerDobFieldIsFocussed = () => {
     this.prisonerDobDayField().should('be.focused')
+    return this
+  }
+
+  prisonIdFieldIsFocussed = () => {
+    this.prisonIdField().should('be.focused')
+    return this
   }
 
   submitWithValidValues = (
@@ -92,6 +97,8 @@ export default class CreateNewContactByPrisonerNamePage extends Page {
 
   submitButton = (): PageElement => cy.get('#create-new-contact-form button')
 
-  static goToPage = (): CreateNewContactByPrisonerNamePage =>
+  static goToPage = (): CreateNewContactByPrisonerNamePage => {
     FindRecipientByPrisonerNamePage.goToPage().submitWithValidPrisonerName()
+    return Page.verifyOnPage(CreateNewContactByPrisonerNamePage).prisonerDobFieldIsFocussed()
+  }
 }
