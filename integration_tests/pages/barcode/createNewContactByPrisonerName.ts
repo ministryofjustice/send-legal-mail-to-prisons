@@ -99,6 +99,6 @@ export default class CreateNewContactByPrisonerNamePage extends Page {
 
   static goToPage = (): CreateNewContactByPrisonerNamePage => {
     FindRecipientByPrisonerNamePage.goToPage().submitWithValidPrisonerName()
-    return Page.verifyOnPage(CreateNewContactByPrisonerNamePage).prisonerDobFieldIsFocussed()
+    return Page.verifyOnPage(CreateNewContactByPrisonerNamePage)
   }
 }

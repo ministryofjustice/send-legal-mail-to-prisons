@@ -80,33 +80,8 @@
       })
   })
 })($, document)
-;(autoDownloadCoversheetPdf = ($, document) => {
-  $(document).ready(() => {
-    $('#print-coversheets-content #downloadPdf').each((idx, element) => element.click())
-  })
-})($, document)
 ;(autoFocusBarcodeField = ($, document) => {
   $(document).ready(() => {
     $('#scan-barcode-form #barcode').focus()
-  })
-})($, document)
-;(autoFocusPrisonNumberField = ($, document) => {
-  $(document).ready(() => {
-    $('#find-recipient-by-prison-number-form #prisonNumber').focus()
-  })
-})($, document)
-;(autoFocusPrisonerNameField = ($, document) => {
-  $(document).ready(() => {
-    $('#find-recipient-by-prisoner-name-form #prisonerName').focus()
-  })
-})($, document)
-;(autoFocusContactPrisonerNameField = ($, document) => {
-  $(document).ready(() => {
-    $('#create-new-contact-by-prison-number-form #prisonerName').focus()
-  })
-})($, document)
-;(autoFocusPrisonerDobField = ($, document) => {
-  $(document).ready(() => {
-    $('#create-new-contact-by-prisoner-name-form #prisonerDob-day').focus()
   })
 })($, document)

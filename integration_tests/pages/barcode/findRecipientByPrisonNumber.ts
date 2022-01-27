@@ -6,7 +6,6 @@ import FindRecipientByPrisonerNamePage from './findRecipientByPrisonerName'
 export default class FindRecipientByPrisonNumberPage extends Page {
   constructor() {
     super('find-recipient-by-prison-number')
-    this.prisonNumberFieldIsFocussed()
   }
 
   prisonNumberFieldIsFocussed = () => {

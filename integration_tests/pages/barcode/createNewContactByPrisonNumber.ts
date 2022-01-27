@@ -83,6 +83,6 @@ export default class CreateNewContactByPrisonNumberPage extends Page {
 
   static goToPage = (): CreateNewContactByPrisonNumberPage => {
     FindRecipientByPrisonNumberPage.goToPage().submitWithValidPrisonNumber()
-    return Page.verifyOnPage(CreateNewContactByPrisonNumberPage).prisonerNameFieldIsFocussed()
+    return Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
   }
 }
