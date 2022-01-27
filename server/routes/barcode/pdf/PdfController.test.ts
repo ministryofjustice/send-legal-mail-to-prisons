@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
+import moment from 'moment'
 import PdfController from './PdfController'
 import validateEnvelopeSizeOption from './envelopeSizeOptionValidator'
 import CreateBarcodeService from '../../../services/barcode/CreateBarcodeService'
@@ -282,7 +283,7 @@ describe('PdfController', () => {
       expect(res.renderPDF).toHaveBeenCalledWith(
         'pdf/barcode-cover-sheet',
         expect.objectContaining({ barcodeImages: ['John Smith-barcode-data-url'], envelopeSize: 'dl' }),
-        { contentDisposition: 'attachment', filename: 'John-Smith-A1234BC.pdf' }
+        { contentDisposition: 'attachment', filename: `send-legal-mail-${moment().format('YYYY-MM-DD')}.pdf` }
       )
     })
 
