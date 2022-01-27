@@ -61,6 +61,19 @@ describe('FindRecipientController', () => {
   })
 
   describe('submitFindByPrisonerName', () => {
+    it('should clear down the prison number form', async () => {
+      req.session.findRecipientByPrisonNumberForm = { prisonNumber: 'A1234BC' }
+
+      await findRecipientController.getFindRecipientByPrisonerNameView(
+        req as unknown as Request,
+        res as unknown as Response
+      )
+
+      expect(req.session.findRecipientByPrisonNumberForm).toBeUndefined()
+    })
+  })
+
+  describe('submitFindByPrisonerName', () => {
     let mockPrisonerNameValidator: jest.MockedFunction<typeof prisonerNameValidator>
 
     beforeEach(() => {
