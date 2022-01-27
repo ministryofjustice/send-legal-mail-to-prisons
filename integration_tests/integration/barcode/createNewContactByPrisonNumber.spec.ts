@@ -36,9 +36,7 @@ context('Create New Contact By Prison Number Page', () => {
       .typeAheadAnInvalidPrison()
       .submitForm(CreateNewContactByPrisonNumberPage)
 
-    Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
-      .prisonIdFieldIsFocussed()
-      .hasPrisonIdErrorContaining('prison name')
+    Page.verifyOnPage(CreateNewContactByPrisonNumberPage).hasPrisonIdErrorContaining('prison name')
   })
 
   it('should redisplay create-new-contact given form submitted with prison that was previously correctly selected but then blanked out', () => {
