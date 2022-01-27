@@ -29,6 +29,8 @@ export default class GenerateBarcodeImageController {
       )
 
       const view = new GenerateBarcodeImageView(barcodeImages)
+      // Clear down the recipients so that barcodes cannot be created a second time if there are no errors
+      req.session.recipients = undefined
       return res.render('pages/barcode/generate-barcode-image', { ...view.renderArgs })
     } catch (error) {
       logger.error('An error was received when trying to create the barcode image', error)

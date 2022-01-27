@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
+import moment from 'moment'
 import PdfControllerView from './PdfControllerView'
 import validateEnvelopeSizeOption from './envelopeSizeOptionValidator'
 import CreateBarcodeService from '../../../services/barcode/CreateBarcodeService'
 import logger from '../../../../logger'
-import { Recipient } from '../../../@types/prisonTypes'
 import config from '../../../config'
 import formatErrors from '../../errorFormatter'
 
@@ -73,8 +73,10 @@ export default class PdfController {
         })
       )
 
-      // TODO - will need to work out what to do with this when we support multiple recipients - SLM-79
-      const pdfFilename = this.pdfFilename(req.session.recipients[0])
+      const pdfFilename = `send-legal-mail-${moment().format('YYYY-MM-DD')}.pdf`
+
+      // Clear down the recipients so that barcodes cannot be created a second time if there are no errors
+      req.session.recipients = undefined
 
       return res.renderPDF(
         'pdf/barcode-cover-sheet',
@@ -93,15 +95,11 @@ export default class PdfController {
         { filename: pdfFilename, contentDisposition: 'attachment' }
       )
     } catch (error) {
-      logger.error('There was an error generating the barcode images for the coversheet PDF')
+      logger.error('There was an error generating the barcode images for the coversheet PDF', error)
       // TODO - need to work out what to do here if there was an error - the context in which this request handler method
       // is called is to download a PDF to the browser. The browser is not expecting to render a webpage, so unclear at
       // this point what/how we can tell the user anything.
       throw error
     }
-  }
-
-  private pdfFilename(recipient: Recipient): string {
-    return `${recipient.prisonerName} ${recipient.prisonNumber}.pdf`.replace(/ /g, '-')
   }
 }
