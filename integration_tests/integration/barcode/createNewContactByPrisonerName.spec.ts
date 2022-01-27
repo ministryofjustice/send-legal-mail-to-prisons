@@ -31,9 +31,7 @@ context('Create New Contact By Prisoner Name Page', () => {
       .enterAValidPrisonerYear()
       .submitForm(CreateNewContactByPrisonerNamePage)
 
-    Page.verifyOnPage(CreateNewContactByPrisonerNamePage)
-      .prisonerDobFieldIsFocussed()
-      .hasPrisonerDobErrorContaining('correct format')
+    Page.verifyOnPage(CreateNewContactByPrisonerNamePage).hasPrisonerDobErrorContaining('correct format')
   })
 
   it('should show error if invalid prison entered', () => {
@@ -44,8 +42,6 @@ context('Create New Contact By Prisoner Name Page', () => {
       .typeAheadAnInvalidPrison()
       .submitForm(CreateNewContactByPrisonerNamePage)
 
-    Page.verifyOnPage(CreateNewContactByPrisonerNamePage)
-      .prisonIdFieldIsFocussed()
-      .hasPrisonIdErrorContaining('prison name')
+    Page.verifyOnPage(CreateNewContactByPrisonerNamePage).hasPrisonIdErrorContaining('prison name')
   })
 })

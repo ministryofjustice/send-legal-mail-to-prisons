@@ -102,41 +102,11 @@
 })($, document)
 ;(autoFocusContactPrisonerNameField = ($, document) => {
   $(document).ready(() => {
-    // does not apply to this page
-    if ($('#create-new-contact-by-prison-number-form').length === 0) {
-      return
-    }
-    // focus on prisoner name if no errors
-    if (!$('div.govuk-error-summary').is(':visible')) {
-      $('#create-new-contact-by-prison-number-form #prisonerName').focus()
-      return
-    }
-    // find the first error field to focus on
-    let firstErrorField = $('div.govuk-error-summary').find('a:first').attr('href')
-    // hack around the dob component
-    if (firstErrorField === '#prisonerDob') {
-      firstErrorField += '-day'
-    }
-    $(firstErrorField).focus()
+    $('#create-new-contact-by-prison-number-form #prisonerName').focus()
   })
 })($, document)
 ;(autoFocusPrisonerDobField = ($, document) => {
   $(document).ready(() => {
-    // does not apply to this page
-    if ($('#create-new-contact-by-prisoner-name-form').length === 0) {
-      return
-    }
-    // focus on prisoner dob name if no errors
-    if (!$('div.govuk-error-summary').is(':visible')) {
-      $('#create-new-contact-by-prisoner-name-form #prisonerDob-day').focus()
-      return
-    }
-    // find the first error field to focus on
-    let firstErrorField = $('div.govuk-error-summary').find('a:first').attr('href')
-    // hack around the dob component
-    if (firstErrorField === '#prisonerDob') {
-      firstErrorField += '-day'
-    }
-    $(firstErrorField).focus()
+    $('#create-new-contact-by-prisoner-name-form #prisonerDob-day').focus()
   })
 })($, document)
