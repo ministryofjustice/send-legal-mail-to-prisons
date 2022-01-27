@@ -18,5 +18,5 @@ generic-prometheus-alerts:
 ingress:
   internalHost: check-rule39-mail.prison.service.justice.gov.uk
   externalHost: send-legal-mail.prison.service.justice.gov.uk
-  internalSetIdentifier: check-rule39-mail-send-legal-mail-to-prisons-green
-  externalSetIdentifier: send-legal-mail-to-prisons-send-legal-mail-to-prisons-green
+  internalSetIdentifier: check-rule39-mail-send-legal-mail-to-prisons-prod-green
+  externalSetIdentifier: send-legal-mail-to-prisons-send-legal-mail-to-prisons-prod-green
