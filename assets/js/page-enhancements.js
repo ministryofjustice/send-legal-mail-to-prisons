@@ -80,6 +80,11 @@
       })
   })
 })($, document)
+;(autoDownloadCoversheetPdf = ($, document) => {
+  $(document).ready(() => {
+    $('#print-coversheets-content #downloadPdf').each((idx, element) => element.click())
+  })
+})($, document)
 ;(autoFocusBarcodeField = ($, document) => {
   $(document).ready(() => {
     $('#scan-barcode-form #barcode').focus()
