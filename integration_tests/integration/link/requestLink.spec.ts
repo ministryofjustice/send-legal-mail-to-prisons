@@ -12,7 +12,7 @@ context('Request Link Page', () => {
 
   it('should render the correct title in the header', () => {
     cy.visit('/link/request-link')
-    Page.verifyOnPage(RequestLinkPage).hasHeaderTitle('Send Legal Mail To Prisons')
+    Page.verifyOnPage(RequestLinkPage).hasHeaderTitle('Send legal mail to prisons')
   })
 
   it('should render request link page without a sign out link', () => {
