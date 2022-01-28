@@ -11,6 +11,7 @@ export default class CreateContactByPrisonerNameController {
   constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
 
   async getCreateNewContact(req: Request, res: Response): Promise<void> {
+    // TODO SLM-109 check the prisoner on the form exists! Otherwise user can enter on empty prisoner name to create the form then type this URL into the browser
     if (!req.session.findRecipientByPrisonerNameForm) {
       return res.redirect('/barcode/find-recipient')
     }
@@ -94,10 +95,6 @@ export default class CreateContactByPrisonerNameController {
     if (dobDay === '' && dobMonth === '' && dobYear === '') {
       return undefined
     }
-    try {
-      return moment(`${dobDay}-${dobMonth}-${dobYear}`, 'DD-MM-YYYY', true).toDate()
-    } catch (error) {
-      return undefined
-    }
+    return moment(`${dobDay}-${dobMonth}-${dobYear}`, 'DD-MM-YYYY', true).toDate()
   }
 }
