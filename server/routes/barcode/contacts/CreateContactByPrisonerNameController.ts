@@ -11,8 +11,7 @@ export default class CreateContactByPrisonerNameController {
   constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
 
   async getCreateNewContact(req: Request, res: Response): Promise<void> {
-    // TODO SLM-109 check the prisoner on the form exists! Otherwise user can enter on empty prisoner name to create the form then type this URL into the browser
-    if (!req.session.findRecipientByPrisonerNameForm) {
+    if ((req.session.findRecipientByPrisonerNameForm?.prisonerName?.trim() ?? '') === '') {
       return res.redirect('/barcode/find-recipient')
     }
 
