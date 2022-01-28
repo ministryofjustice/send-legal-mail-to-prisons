@@ -12,6 +12,9 @@ export interface paths {
     /** Creates a magic link and send to the email address entered by the user. */
     post: operations['createMagicLink']
   }
+  '/contact': {
+    post: operations['createContact']
+  }
   '/barcode': {
     post: operations['createBarcode']
   }
@@ -25,10 +28,6 @@ export interface components {
     VerifyLinkRequest: {
       /** @description The secret to verify */
       secret: string
-    }
-    VerifyLinkResponse: {
-      /** @description The JWT */
-      token: string
     }
     AuthenticationError: {
       code: string
@@ -177,12 +176,68 @@ export interface components {
         code: unknown
         userMessage: unknown
       }
+    VerifyLinkResponse: {
+      /** @description The JWT */
+      token: string
+    }
     MagicLinkRequest: {
       /**
        * @description The email address to send the magic link to
        * @example andrew.barret@company.com
        */
       email: string
+    }
+    CreateContactRequest: {
+      /**
+       * @description The name of the new contact
+       * @example John Doe
+       */
+      prisonerName: string
+      /**
+       * @description The ID of the prison location of the new contact
+       * @example BXI
+       */
+      prisonId: string
+      /**
+       * Format: date
+       * @description The date of birth of the new contact if known
+       * @example 1965-04-23
+       */
+      dob?: string
+      /**
+       * @description The prison number of the new contact if known
+       * @example A1234BC
+       */
+      prisonNumber?: string
+    }
+    ContactResponse: {
+      /**
+       * Format: int64
+       * @description The ID of contact
+       * @example 1
+       */
+      id: number
+      /**
+       * @description The name of the contact
+       * @example John Doe
+       */
+      prisonerName: string
+      /**
+       * @description The ID of the prison location of the contact
+       * @example BXI
+       */
+      prisonId: string
+      /**
+       * Format: date
+       * @description The date of birth of the contact if known
+       * @example 1965-04-23
+       */
+      dob?: string
+      /**
+       * @description The prison number of the contact if known
+       * @example A1234BC
+       */
+      prisonNumber?: string
     }
     CreateBarcodeResponse: {
       /**
@@ -273,6 +328,39 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['MagicLinkRequest']
+      }
+    }
+  }
+  createContact: {
+    responses: {
+      /** Contact created */
+      201: {
+        content: {
+          'application/json': components['schemas']['ContactResponse']
+        }
+      }
+      /** Bad request */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid magic link token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Conflict, the specified new contact already exists for this user */
+      409: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateContactRequest']
       }
     }
   }

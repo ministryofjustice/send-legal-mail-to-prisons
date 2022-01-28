@@ -10,7 +10,7 @@ export default class CreateContactByPrisonNumberController {
   constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
 
   async getCreateNewContact(req: Request, res: Response): Promise<void> {
-    if (!req.session.findRecipientByPrisonNumberForm) {
+    if ((req.session.findRecipientByPrisonNumberForm?.prisonNumber?.trim() ?? '') === '') {
       return res.redirect('/barcode/find-recipient')
     }
 

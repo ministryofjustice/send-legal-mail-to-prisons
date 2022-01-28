@@ -43,6 +43,20 @@ describe('CreateContactByPrisonerNameController', () => {
   })
 
   describe('getCreateNewRecipientView', () => {
+    it('should redirect to find recipient if prisoner name form does not exist', async () => {
+      await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
+
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
+    })
+
+    it('should redirect to find recipient if prisoner name not in form', async () => {
+      req.session.findRecipientByPrisonerNameForm = {}
+
+      await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
+
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
+    })
+
     it('should create and return view given no active prison filtering', async () => {
       config.supportedPrisons = ''
       // TODO reinstate mockResolvedValue when we switch back to Prison Register - see PrisonRegisterService#getActivePrisons

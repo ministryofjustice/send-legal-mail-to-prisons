@@ -12,3 +12,6 @@ export type MagicLinkRequest = components['schemas']['MagicLinkRequest']
 export type CreateBarcodeResponse = components['schemas']['CreateBarcodeResponse']
 export type CheckBarcodeRequest = components['schemas']['CheckBarcodeRequest']
 export type CheckBarcodeResponse = components['schemas']['CheckBarcodeResponse']
+
+export type CreateContactRequest = components['schemas']['CreateContactRequest']
+export type ContactResponse = components['schemas']['ContactResponse']

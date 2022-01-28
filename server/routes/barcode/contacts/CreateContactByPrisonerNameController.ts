@@ -11,7 +11,7 @@ export default class CreateContactByPrisonerNameController {
   constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
 
   async getCreateNewContact(req: Request, res: Response): Promise<void> {
-    if (!req.session.findRecipientByPrisonerNameForm) {
+    if ((req.session.findRecipientByPrisonerNameForm?.prisonerName?.trim() ?? '') === '') {
       return res.redirect('/barcode/find-recipient')
     }
 
@@ -94,10 +94,6 @@ export default class CreateContactByPrisonerNameController {
     if (dobDay === '' && dobMonth === '' && dobYear === '') {
       return undefined
     }
-    try {
-      return moment(`${dobDay}-${dobMonth}-${dobYear}`, 'DD-MM-YYYY', true).toDate()
-    } catch (error) {
-      return undefined
-    }
+    return moment(`${dobDay}-${dobMonth}-${dobYear}`, 'DD-MM-YYYY', true).toDate()
   }
 }
