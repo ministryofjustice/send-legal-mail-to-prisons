@@ -17,7 +17,10 @@ export default function setUpCreateBarcode(
 ): Router {
   const router = express.Router()
   const findRecipientController = new FindRecipientController()
-  const createContactByPrisonNumberController = new CreateContactByPrisonNumberController(prisonRegisterService)
+  const createContactByPrisonNumberController = new CreateContactByPrisonNumberController(
+    prisonRegisterService,
+    contactService
+  )
   const createContactByPrisonerNameController = new CreateContactByPrisonerNameController(
     prisonRegisterService,
     contactService
