@@ -75,29 +75,5 @@ describe('Contact Service', () => {
         done()
       })
     })
-
-    it('should temporarily ignore 409 conflict errors', done => {
-      const contact = {
-        id: -1,
-        prisonerName: 'some-name',
-        prisonId: 'SKI',
-        prisonNumber: 'A1234BC',
-      }
-      const errorResponse = {
-        status: 409,
-        errorCode: {
-          code: 'CONFLICT',
-          userMessage: 'Failed to create the resource',
-        },
-      }
-      mockedSendLegalMailApi
-        .post('/contact', { prisonerName: 'some-name', prisonId: 'SKI', prisonNumber: 'A1234BC' })
-        .reply(409, errorResponse)
-
-      contactService.createContact('some-user', 'some-name', 'SKI', 'A1234BC', undefined).then(response => {
-        expect(response).toEqual(contact)
-        done()
-      })
-    })
   })
 })
