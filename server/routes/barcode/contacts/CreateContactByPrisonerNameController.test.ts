@@ -170,7 +170,7 @@ describe('CreateContactByPrisonerNameController', () => {
         prisonId: 'SKI',
       }
       req.session.findRecipientByPrisonerNameForm = { ...req.body }
-      req.session.createBarcodeAuthToken = 'some-token'
+      req.session.slmToken = 'some-token'
       mockNewContactValidator.mockReturnValue([])
       const prisonAddress: PrisonAddress = {
         agencyCode: 'CKI',

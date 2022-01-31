@@ -10,13 +10,13 @@ export default class VerifyLinkController {
       return res.redirect('request-link')
     }
 
-    req.session.validCreateBarcodeAuthToken = false
-    req.session.createBarcodeAuthToken = undefined
+    req.session.validSlmToken = false
+    req.session.slmToken = undefined
 
     return this.magicLinkService
       .verifyLink(secret)
       .then(token => {
-        req.session.createBarcodeAuthToken = token
+        req.session.slmToken = token
         res.redirect('/barcode/find-recipient')
       })
       .catch(() => {

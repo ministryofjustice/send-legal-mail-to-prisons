@@ -15,7 +15,7 @@ context('Create New Contact By Prisoner Name Page', () => {
     Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   })
 
-  it.only('should render review-recipients given form submitted with valid data', () => {
+  it('should render review-recipients given form submitted with valid data', () => {
     CreateNewContactByPrisonerNamePage.goToPage().submitWithValidValues()
 
     Page.verifyOnPage(ReviewRecipientsPage)

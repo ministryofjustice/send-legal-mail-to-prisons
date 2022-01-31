@@ -16,8 +16,8 @@ declare module 'express-session' {
     returnTo: string
     nowInMinutes: number
     requestLinkForm: RequestLinkForm
-    createBarcodeAuthToken: string
-    validCreateBarcodeAuthToken: boolean
+    slmToken: string
+    validSlmToken: boolean
     barcodeUserEmail: string
     findRecipientByPrisonNumberForm: FindRecipientByPrisonNumberForm
     createNewContactByPrisonNumberForm: CreateNewContactByPrisonNumberForm

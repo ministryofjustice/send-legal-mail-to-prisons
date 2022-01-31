@@ -6,9 +6,9 @@ export default function requestLinkAuthorised(): RequestHandler {
       return next()
     }
     if (req.originalUrl === '/link/request-link?force=true') {
-      req.session.validCreateBarcodeAuthToken = false
+      req.session.validSlmToken = false
     }
-    if (req.session.validCreateBarcodeAuthToken) {
+    if (req.session.validSlmToken) {
       return res.redirect('/barcode/find-recipient')
     }
     return next()

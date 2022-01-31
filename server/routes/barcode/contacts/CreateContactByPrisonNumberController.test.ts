@@ -5,6 +5,7 @@ import PrisonRegisterService from '../../../services/prison/PrisonRegisterServic
 import config from '../../../config'
 import newContactValidator from './newContactByPrisonNumberValidator'
 import { PrisonAddress } from '../../../@types/prisonTypes'
+import ContactService from '../../../services/contacts/ContactService'
 
 jest.mock('../../../config')
 jest.mock('./newContactByPrisonNumberValidator')
@@ -24,18 +25,24 @@ const prisonRegisterService = {
   getPrisonAddress: jest.fn(),
 }
 
+const contactService = {
+  createContact: jest.fn(),
+}
+
 describe('CreateContactByPrisonNumberController', () => {
   let createContactController: CreateContactByPrisonNumberController
 
   beforeEach(() => {
     createContactController = new CreateContactByPrisonNumberController(
-      prisonRegisterService as unknown as PrisonRegisterService
+      prisonRegisterService as unknown as PrisonRegisterService,
+      contactService as unknown as ContactService
     )
   })
 
   afterEach(() => {
     prisonRegisterService.getActivePrisons.mockReset()
     prisonRegisterService.getPrisonAddress.mockReset()
+    contactService.createContact.mockReset()
     res.render.mockReset()
     res.redirect.mockReset()
     req.session = {} as SessionData
@@ -159,6 +166,7 @@ describe('CreateContactByPrisonNumberController', () => {
         prisonId: 'SKI',
       }
       req.session.findRecipientByPrisonNumberForm = { ...req.body }
+      req.session.slmToken = 'some-token'
       mockNewContactValidator.mockReturnValue([])
       const prisonAddress: PrisonAddress = {
         agencyCode: 'CKI',
@@ -180,6 +188,7 @@ describe('CreateContactByPrisonNumberController', () => {
       expect(req.session.recipients).toStrictEqual(expectedRecipients)
       expect(req.session.findRecipientByPrisonNumberForm).toBeUndefined()
       expect(req.session.createNewContactByPrisonNumberForm).toBeUndefined()
+      expect(contactService.createContact).toHaveBeenCalledWith('some-token', 'Fred Bloggs', 'SKI', 'A1234BC')
     })
 
     it('should redirect to create-new-contact given new contact is validated but prison address is not resolved', async () => {

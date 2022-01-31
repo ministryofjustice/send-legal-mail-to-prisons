@@ -16,7 +16,7 @@ export default class GenerateBarcodeImageController {
     try {
       req.session.recipients = await this.createBarcodeService.addBarcodeValuesToRecipients(
         req.session.recipients,
-        req.session.createBarcodeAuthToken
+        req.session.slmToken
       )
 
       const barcodeImages = await Promise.all(

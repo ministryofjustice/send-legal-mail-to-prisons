@@ -60,13 +60,7 @@ export default class CreateContactByPrisonerNameController {
 
     try {
       const { prisonerName, prisonId, prisonNumber } = req.session.createNewContactByPrisonerNameForm
-      await this.contactService.createContact(
-        req.session.createBarcodeAuthToken,
-        prisonerName,
-        prisonId,
-        prisonNumber,
-        prisonerDob
-      )
+      await this.contactService.createContact(req.session.slmToken, prisonerName, prisonId, prisonNumber, prisonerDob)
     } catch (error) {
       logger.error(
         `Failed to save new contact from form ${JSON.stringify(

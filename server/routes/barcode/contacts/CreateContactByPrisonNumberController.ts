@@ -5,9 +5,14 @@ import validateNewContact from './newContactByPrisonNumberValidator'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import CreateContactByPrisonNumberView from './CreateContactByPrisonNumberView'
 import filterSupportedPrisons from './filterSupportedPrisons'
+import ContactService from '../../../services/contacts/ContactService'
+import logger from '../../../../logger'
 
 export default class CreateContactByPrisonNumberController {
-  constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
+  constructor(
+    private readonly prisonRegisterService: PrisonRegisterService,
+    private readonly contactService: ContactService
+  ) {}
 
   async getCreateNewContact(req: Request, res: Response): Promise<void> {
     if ((req.session.findRecipientByPrisonNumberForm?.prisonNumber?.trim() ?? '') === '') {
@@ -47,7 +52,18 @@ export default class CreateContactByPrisonNumberController {
       return res.redirect('/barcode/find-recipient/create-new-contact/by-prison-number')
     }
 
-    // TODO SLM-60 - save new contact to database via API
+    try {
+      const { prisonNumber, prisonerName, prisonId } = req.session.createNewContactByPrisonNumberForm
+      await this.contactService.createContact(req.session.slmToken, prisonerName, prisonId, prisonNumber)
+    } catch (error) {
+      logger.error(
+        `Failed to save new contact from form ${JSON.stringify(
+          req.session.createNewContactByPrisonNumberForm
+        )} due to error:`,
+        error
+      )
+      req.flash('We were unable to save the recipient to your contacts')
+    }
 
     const newRecipient = req.session.createNewContactByPrisonNumberForm
     try {

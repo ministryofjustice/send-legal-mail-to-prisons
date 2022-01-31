@@ -4,12 +4,12 @@ import config from '../../config'
 import { ContactResponse, CreateContactRequest } from '../../@types/sendLegalMailApiClientTypes'
 
 export default class ContactService {
-  private static restClient(token: string): RestClient {
-    return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, token)
+  private static restClient(slmToken: string): RestClient {
+    return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, undefined, slmToken)
   }
 
   async createContact(
-    token: string,
+    slmToken: string,
     prisonerName: string,
     prisonId: string,
     prisonNumber?: string,
@@ -17,8 +17,8 @@ export default class ContactService {
   ): Promise<ContactResponse> {
     const createContactRequest: CreateContactRequest = { prisonerName, prisonId, prisonNumber }
     createContactRequest.dob = prisonerDob ? moment(prisonerDob).format('YYYY-MM-DD') : undefined
-    return ContactService.restClient(token)
-      .postCreateBarcode({
+    return ContactService.restClient(slmToken)
+      .post({
         path: '/contact',
         data: createContactRequest,
       })

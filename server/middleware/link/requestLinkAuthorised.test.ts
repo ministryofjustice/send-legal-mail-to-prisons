@@ -23,7 +23,7 @@ describe('redirect signed in users to the app if they request /link/request-link
 
   it('should redirect if already signed in', async () => {
     req.originalUrl = '/link/request-link'
-    req.session.validCreateBarcodeAuthToken = true
+    req.session.validSlmToken = true
 
     await middleware(req, res, next)
 
@@ -33,7 +33,7 @@ describe('redirect signed in users to the app if they request /link/request-link
 
   it('should not redirect if not signed in', async () => {
     req.originalUrl = '/link/request-link'
-    req.session.validCreateBarcodeAuthToken = false
+    req.session.validSlmToken = false
 
     await middleware(req, res, next)
 
@@ -43,7 +43,7 @@ describe('redirect signed in users to the app if they request /link/request-link
 
   it('should not redirect if forcing a sign out', async () => {
     req.originalUrl = '/link/request-link?force=true'
-    req.session.validCreateBarcodeAuthToken = true
+    req.session.validSlmToken = true
 
     await middleware(req, res, next)
 
