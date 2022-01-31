@@ -319,7 +319,7 @@ const stubCreateContact = (): SuperAgentRequest =>
       },
     },
     response: {
-      status: 200,
+      status: 201,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },

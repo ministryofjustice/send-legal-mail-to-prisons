@@ -41,15 +41,13 @@ export default class RestClient {
     return this.config.timeout
   }
 
-  private logRequest(method: string, path: string, query?: string) {
+  private logRequest(method: string, path: string, query = '') {
     if (this.hmppsToken) {
-      logger.info(
-        `${method.toUpperCase()} request using HMPPS auth token: calling ${this.name}: ${path} ${query ?? ''}`
-      )
+      logger.info(`${method.toUpperCase()} request using HMPPS auth token: calling ${this.name}: ${path} ${query}`)
     } else if (this.slmToken) {
-      logger.info(`${method.toUpperCase()} request using SLM token: calling ${this.name}: ${path} ${query ?? ''}`)
+      logger.info(`${method.toUpperCase()} request using SLM token: calling ${this.name}: ${path} ${query}`)
     } else {
-      logger.info(`Anonymous ${method.toUpperCase()} request: calling ${this.name}: ${path} ${query ?? ''}`)
+      logger.info(`Anonymous ${method.toUpperCase()} request: calling ${this.name}: ${path} ${query}`)
     }
   }
 
