@@ -6,14 +6,14 @@ import { CheckBarcodeRequest } from '../../@types/sendLegalMailApiClientTypes'
 export default class ScanBarcodeService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
-  private static restClient(token: string): RestClient {
-    return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, token)
+  private static restClient(hmppsToken: string): RestClient {
+    return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, hmppsToken)
   }
 
   async verifyBarcode(barcode: string, user: string): Promise<unknown> {
     const checkBarcodeRequest: CheckBarcodeRequest = { barcode }
-    return this.hmppsAuthClient.getSystemClientToken(user).then(token =>
-      ScanBarcodeService.restClient(token).post({
+    return this.hmppsAuthClient.getSystemClientToken(user).then(hmppsToken =>
+      ScanBarcodeService.restClient(hmppsToken).post({
         path: '/barcode/check',
         data: checkBarcodeRequest,
       })

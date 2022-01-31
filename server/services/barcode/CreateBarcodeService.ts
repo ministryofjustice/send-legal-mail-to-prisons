@@ -16,8 +16,8 @@ export default class CreateBarcodeService {
     registerFont('liberation_sans_bold.ttf', { family: `${this.opts.font} Bold` })
   }
 
-  private static restClient(token: string): RestClient {
-    return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, token)
+  private static restClient(slmToken: string): RestClient {
+    return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, undefined, slmToken)
   }
 
   private opts = {
@@ -42,9 +42,9 @@ export default class CreateBarcodeService {
   /**
    * Returns a string containing a freshly generated barcode value.
    */
-  async generateBarcodeValue(token: string): Promise<string> {
+  async generateBarcodeValue(slmToken: string): Promise<string> {
     try {
-      const response = (await CreateBarcodeService.restClient(token).postCreateBarcode({
+      const response = (await CreateBarcodeService.restClient(slmToken).post({
         path: `/barcode`,
       })) as CreateBarcodeResponse
       return response.barcode

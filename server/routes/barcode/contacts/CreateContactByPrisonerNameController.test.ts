@@ -1,10 +1,12 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
+import moment from 'moment'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import config from '../../../config'
 import newContactValidator from './newContactByPrisonerNameValidator'
 import { PrisonAddress } from '../../../@types/prisonTypes'
 import CreateContactByPrisonerNameController from './CreateContactByPrisonerNameController'
+import ContactService from '../../../services/contacts/ContactService'
 
 jest.mock('../../../config')
 jest.mock('./newContactByPrisonerNameValidator')
@@ -24,22 +26,29 @@ const prisonRegisterService = {
   getPrisonAddress: jest.fn(),
 }
 
+const contactService = {
+  createContact: jest.fn(),
+}
+
 describe('CreateContactByPrisonerNameController', () => {
   let createContactController: CreateContactByPrisonerNameController
 
   beforeEach(() => {
     createContactController = new CreateContactByPrisonerNameController(
-      prisonRegisterService as unknown as PrisonRegisterService
+      prisonRegisterService as unknown as PrisonRegisterService,
+      contactService as unknown as ContactService
     )
   })
 
   afterEach(() => {
     prisonRegisterService.getActivePrisons.mockReset()
     prisonRegisterService.getPrisonAddress.mockReset()
+    contactService.createContact.mockReset()
     res.render.mockReset()
     res.redirect.mockReset()
     req.session = {} as SessionData
     req.flash.mockReset()
+    req.body = {}
   })
 
   describe('getCreateNewRecipientView', () => {
@@ -162,6 +171,7 @@ describe('CreateContactByPrisonerNameController', () => {
         prisonId: 'SKI',
       }
       req.session.findRecipientByPrisonerNameForm = { ...req.body }
+      req.session.slmToken = 'some-token'
       mockNewContactValidator.mockReturnValue([])
       const prisonAddress: PrisonAddress = {
         agencyCode: 'CKI',
@@ -183,6 +193,13 @@ describe('CreateContactByPrisonerNameController', () => {
       expect(req.session.recipients).toStrictEqual(expectedRecipients)
       expect(req.session.findRecipientByPrisonerNameForm).toBeUndefined()
       expect(req.session.createNewContactByPrisonerNameForm).toBeUndefined()
+      expect(contactService.createContact).toHaveBeenCalledWith(
+        'some-token',
+        'Fred Bloggs',
+        'SKI',
+        undefined,
+        moment('1990-01-01').toDate()
+      )
     })
 
     it('should redirect to create-new-contact given new contact is validated but prison address is not resolved', async () => {
@@ -220,6 +237,48 @@ describe('CreateContactByPrisonerNameController', () => {
       await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
+    })
+
+    it(`should ignore if we couldn't create the contact for any reason`, async () => {
+      req.body = {
+        prisonerName: 'Fred Bloggs',
+        prisonerDob: undefined,
+        'prisonerDob-day': '1',
+        'prisonerDob-month': '1',
+        'prisonerDob-year': '1990',
+        prisonId: 'SKI',
+      }
+      req.session.findRecipientByPrisonerNameForm = { ...req.body }
+      req.session.slmToken = 'some-token'
+      mockNewContactValidator.mockReturnValue([])
+      const prisonAddress: PrisonAddress = {
+        agencyCode: 'CKI',
+        agyDescription: 'Cookham Wood (YOI)',
+        flat: null,
+        premise: 'HMP COOKHAM WOOD',
+        street: null,
+        locality: null,
+        countyCode: 'KENT',
+        area: 'Rochester Kent',
+        postalCode: 'ME1 3LU',
+      }
+      prisonRegisterService.getPrisonAddress.mockResolvedValue(prisonAddress)
+      contactService.createContact.mockRejectedValue(new Error('Some error creating the contact'))
+      const expectedRecipients = [{ prisonAddress, prisonerDob: new Date(1990, 0, 1), prisonerName: 'Fred Bloggs' }]
+
+      await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
+
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
+      expect(req.session.recipients).toStrictEqual(expectedRecipients)
+      expect(req.session.findRecipientByPrisonerNameForm).toBeUndefined()
+      expect(req.session.createNewContactByPrisonerNameForm).toBeUndefined()
+      expect(contactService.createContact).toHaveBeenCalledWith(
+        'some-token',
+        'Fred Bloggs',
+        'SKI',
+        undefined,
+        moment('1990-01-01').toDate()
+      )
     })
   })
 

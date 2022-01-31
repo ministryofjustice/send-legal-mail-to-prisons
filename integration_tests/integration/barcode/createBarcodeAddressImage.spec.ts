@@ -5,6 +5,7 @@ import ReviewRecipientsPage from '../../pages/barcode/reviewRecipients'
 
 context('Create Barcode Image', () => {
   beforeEach(() => {
+    cy.task('reset')
     ChooseBarcodeOptionPage.goToPage()
   })
 

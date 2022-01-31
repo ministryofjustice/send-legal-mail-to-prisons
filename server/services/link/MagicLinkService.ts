@@ -6,14 +6,14 @@ import { MagicLinkRequest, VerifyLinkRequest, VerifyLinkResponse } from '../../@
 export default class MagicLinkService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
-  private static restClient(token: string): RestClient {
-    return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, token)
+  private static restClient(hmppsToken: string): RestClient {
+    return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, hmppsToken)
   }
 
   async requestLink(email: string): Promise<unknown> {
     const magicLinkRequest: MagicLinkRequest = { email }
-    return this.hmppsAuthClient.getSystemClientToken().then(token =>
-      MagicLinkService.restClient(token).post({
+    return this.hmppsAuthClient.getSystemClientToken().then(hmppsToken =>
+      MagicLinkService.restClient(hmppsToken).post({
         path: `/link/email`,
         data: magicLinkRequest,
       })
@@ -22,8 +22,8 @@ export default class MagicLinkService {
 
   async verifyLink(secret: string): Promise<string> {
     const verifyLinkRequest: VerifyLinkRequest = { secret }
-    return this.hmppsAuthClient.getSystemClientToken().then(token =>
-      MagicLinkService.restClient(token)
+    return this.hmppsAuthClient.getSystemClientToken().then(hmppsToken =>
+      MagicLinkService.restClient(hmppsToken)
         .post({
           path: `/link/verify`,
           data: verifyLinkRequest,

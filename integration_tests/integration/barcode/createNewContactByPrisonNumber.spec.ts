@@ -4,6 +4,10 @@ import ReviewRecipientsPage from '../../pages/barcode/reviewRecipients'
 import CreateNewContactByPrisonNumberPage from '../../pages/barcode/createNewContactByPrisonNumber'
 
 context('Create New Contact By Prison Number Page', () => {
+  beforeEach(() => {
+    cy.task('reset')
+  })
+
   it('should redirect to find-recipient given user navigates to Create New Contact without going via find-recipients first', () => {
     FindRecipientByPrisonNumberPage.goToPage()
     cy.visit('/barcode/find-recipient/create-new-contact')
