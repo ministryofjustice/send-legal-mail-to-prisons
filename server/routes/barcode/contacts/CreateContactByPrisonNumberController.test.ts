@@ -227,5 +227,38 @@ describe('CreateContactByPrisonNumberController', () => {
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
     })
+
+    it("`should ignore if we couldn't create the contact for any reason", async () => {
+      req.body = {
+        prisonNumber: 'A1234BC',
+        prisonerName: 'Fred Bloggs',
+        prisonId: 'SKI',
+      }
+      req.session.findRecipientByPrisonNumberForm = { ...req.body }
+      req.session.slmToken = 'some-token'
+      mockNewContactValidator.mockReturnValue([])
+      const prisonAddress: PrisonAddress = {
+        agencyCode: 'CKI',
+        agyDescription: 'Cookham Wood (YOI)',
+        flat: null,
+        premise: 'HMP COOKHAM WOOD',
+        street: null,
+        locality: null,
+        countyCode: 'KENT',
+        area: 'Rochester Kent',
+        postalCode: 'ME1 3LU',
+      }
+      prisonRegisterService.getPrisonAddress.mockResolvedValue(prisonAddress)
+      contactService.createContact.mockRejectedValue(new Error('Some error creating the contact'))
+      const expectedRecipients = [{ prisonAddress, prisonNumber: 'A1234BC', prisonerName: 'Fred Bloggs' }]
+
+      await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
+
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
+      expect(req.session.recipients).toStrictEqual(expectedRecipients)
+      expect(req.session.findRecipientByPrisonNumberForm).toBeUndefined()
+      expect(req.session.createNewContactByPrisonNumberForm).toBeUndefined()
+      expect(contactService.createContact).toHaveBeenCalledWith('some-token', 'Fred Bloggs', 'SKI', 'A1234BC')
+    })
   })
 })

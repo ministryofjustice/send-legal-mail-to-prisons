@@ -323,13 +323,13 @@ const stubCreateContact = (): SuperAgentRequest =>
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      // body: `{
-      //   id: 1,
-      //   prisonerName: {{jsonPath request.body '$.prisonerName'}},
-      //   prisonId: {{jsonPath request.body '$.prisonId'}},
-      //   prisonNumber: {{jsonPath request.body '$.prisonNumber'}},
-      //   prisonerDob: {{jsonPath request.body '$.prisonerDob'}},
-      // }`,
+      body: `{
+        id: 1,
+        prisonerName: {{jsonPath request.body '$.prisonerName'}},
+        prisonId: {{jsonPath request.body '$.prisonId'}},
+        prisonNumber: {{jsonPath request.body '$.prisonNumber'}},
+        prisonerDob: {{jsonPath request.body '$.prisonerDob'}},
+      }`,
     },
   })
 

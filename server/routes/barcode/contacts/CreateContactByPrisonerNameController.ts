@@ -68,7 +68,6 @@ export default class CreateContactByPrisonerNameController {
         )} due to error:`,
         error
       )
-      req.flash('We were unable to save the recipient to your contacts')
     }
 
     const newRecipient = req.session.createNewContactByPrisonerNameForm
