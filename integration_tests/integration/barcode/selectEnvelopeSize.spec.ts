@@ -5,6 +5,7 @@ context('Select envelope size', () => {
   let selectEnvelopeSizePage: SelectEnvelopeSizePage
 
   beforeEach(() => {
+    cy.task('reset')
     selectEnvelopeSizePage = SelectEnvelopeSizePage.goToPage()
   })
 

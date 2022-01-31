@@ -58,7 +58,7 @@ export default class RestClient {
     const request = superagent.get(`${this.apiUrl()}${path}`)
     request
       .agent(this.agent)
-      .retry(2, (err, res) => {
+      .retry(2, err => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
         return undefined // retry handler only for logging retries, not to influence retry logic
       })
@@ -93,14 +93,14 @@ export default class RestClient {
         .post(`${this.apiUrl()}${path}`)
         .send(data)
         .agent(this.agent)
-        .retry(2, (err, res) => {
+        .retry(2, err => {
           if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
-        .auth(this.token, { type: 'bearer' })
         .set(headers)
         .responseType(responseType)
         .timeout(this.timeoutConfig())
+        .auth(this.token, { type: 'bearer' })
 
       return raw ? result : result.body
     } catch (error) {
@@ -123,14 +123,14 @@ export default class RestClient {
         .post(`${this.apiUrl()}${path}`)
         .send(data)
         .agent(this.agent)
-        .retry(2, (err, res) => {
+        .retry(2, err => {
           if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .set(headers)
-        .set('Create-Barcode-Token', this.token)
         .responseType(responseType)
         .timeout(this.timeoutConfig())
+        .set('Create-Barcode-Token', this.token)
 
       return raw ? result : result.body
     } catch (error) {
@@ -147,7 +147,7 @@ export default class RestClient {
         .get(`${this.apiUrl()}${path}`)
         .agent(this.agent)
         .auth(this.token, { type: 'bearer' })
-        .retry(2, (err, res) => {
+        .retry(2, err => {
           if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })

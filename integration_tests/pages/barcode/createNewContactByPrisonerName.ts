@@ -98,6 +98,7 @@ export default class CreateNewContactByPrisonerNamePage extends Page {
   submitButton = (): PageElement => cy.get('#create-new-contact-form button')
 
   static goToPage = (): CreateNewContactByPrisonerNamePage => {
+    cy.task('stubCreateContact')
     FindRecipientByPrisonerNamePage.goToPage().submitWithValidPrisonerName()
     return Page.verifyOnPage(CreateNewContactByPrisonerNamePage)
   }

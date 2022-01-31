@@ -4,6 +4,10 @@ import FindRecipientByPrisonerNamePage from '../../pages/barcode/findRecipientBy
 import CreateNewContactByPrisonerNamePage from '../../pages/barcode/createNewContactByPrisonerName'
 
 context('Find Recipient By Prisoner Name Page', () => {
+  beforeEach(() => {
+    cy.task('reset')
+  })
+
   it('should redirect to Request List page if visiting without an auth token in the session', () => {
     cy.visit('/barcode/find-recipient/by-prisoner-name')
 

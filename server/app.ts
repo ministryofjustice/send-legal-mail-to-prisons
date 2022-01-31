@@ -30,6 +30,7 @@ import AppInsightsService from './services/AppInsightsService'
 import PrisonRegisterService from './services/prison/PrisonRegisterService'
 import GotenbergClient from './data/gotenbergClient'
 import setupPdfRenderer from './middleware/setupPdfRenderer'
+import ContactService from './services/contacts/ContactService'
 
 export default function createApp(
   userService: UserService,
@@ -37,7 +38,8 @@ export default function createApp(
   scanBarcodeService: ScanBarcodeService,
   createBarcodeService: CreateBarcodeService,
   prisonRegisterService: PrisonRegisterService,
-  appInsightsClient: AppInsightsService
+  appInsightsClient: AppInsightsService,
+  contactService: ContactService
 ): express.Application {
   const app = express()
 
@@ -62,7 +64,7 @@ export default function createApp(
   // authenticated with createBarcodeToken
   app.use('/barcode', barcodeAuthorisationMiddleware())
   app.use('/barcode', populateBarcodeUser())
-  app.use('/barcode', setUpCreateBarcode(createBarcodeService, prisonRegisterService))
+  app.use('/barcode', setUpCreateBarcode(createBarcodeService, prisonRegisterService, contactService))
 
   // authenticated by passport / HMPPS Auth
   app.use('/', setUpAuthentication())

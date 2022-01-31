@@ -4,6 +4,10 @@ import ReviewRecipientsPage from '../../pages/barcode/reviewRecipients'
 import CreateNewContactByPrisonerNamePage from '../../pages/barcode/createNewContactByPrisonerName'
 
 context('Create New Contact By Prisoner Name Page', () => {
+  beforeEach(() => {
+    cy.task('reset')
+  })
+
   it('should redirect to find-recipient given user navigates to Create New Contact without going via find-recipients first', () => {
     FindRecipientByPrisonNumberPage.goToPage()
     cy.visit('/barcode/find-recipient/create-new-contact/by-prisoner-name')
@@ -11,7 +15,7 @@ context('Create New Contact By Prisoner Name Page', () => {
     Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   })
 
-  it('should render review-recipients given form submitted with valid data', () => {
+  it.only('should render review-recipients given form submitted with valid data', () => {
     CreateNewContactByPrisonerNamePage.goToPage().submitWithValidValues()
 
     Page.verifyOnPage(ReviewRecipientsPage)
