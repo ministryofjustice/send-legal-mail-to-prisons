@@ -21,7 +21,7 @@ describe('Contact Service', () => {
     nock.cleanAll()
   })
 
-  describe('creatContact', () => {
+  describe('createContact', () => {
     it('should include prison number in request', done => {
       const contactResponse: ContactResponse = {
         id: 1,
@@ -71,6 +71,48 @@ describe('Contact Service', () => {
         .reply(400, errorResponse)
 
       contactService.createContact('some-token', 'some-name', 'SKI', 'THIS IS TOO LONG', undefined).catch(error => {
+        expect(JSON.parse(error.text)).toStrictEqual(errorResponse)
+        done()
+      })
+    })
+  })
+
+  describe('searchContacts', () => {
+    it('should search by name', done => {
+      const contactResponse: ContactResponse = {
+        id: 1,
+        prisonerName: 'John Smith',
+        prisonId: 'SKI',
+        prisonNumber: 'A1234BC',
+      }
+      mockedSendLegalMailApi.get('/contacts').query({ name: 'Smith' }).reply(200, [contactResponse])
+
+      contactService.searchContacts('some-token', 'Smith').then(response => {
+        expect(response).toStrictEqual([contactResponse])
+        done()
+      })
+    })
+
+    it('should handle zero results', done => {
+      mockedSendLegalMailApi.get('/contacts').query({ name: 'Smith' }).reply(200, [])
+
+      contactService.searchContacts('some-token', 'Smith').then(response => {
+        expect(response).toStrictEqual([])
+        done()
+      })
+    })
+
+    it('should handle an error response', done => {
+      const errorResponse = {
+        status: 400,
+        errorCode: {
+          code: 'MALFORMED_REQUEST',
+          userMessage: 'Failed to read the payload',
+        },
+      }
+      mockedSendLegalMailApi.get('/contacts').query({ name: '' }).reply(400, errorResponse)
+
+      contactService.searchContacts('some-token', '').catch(error => {
         expect(JSON.parse(error.text)).toStrictEqual(errorResponse)
         done()
       })

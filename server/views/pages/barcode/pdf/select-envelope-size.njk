@@ -21,7 +21,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
 
-        <form id="select-envelope-size-form" action="/barcode/pdf/select-envelope-size" method="POST">
+        <form id="select-envelope-size-form" action="/barcode/pdf/select-envelope-size" method="POST" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
           {% call govukFieldset({ }) %}
