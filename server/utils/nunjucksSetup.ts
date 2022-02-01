@@ -10,6 +10,7 @@ import formatDateTimeForResultsPageFilter from '../filters/formatDateTimeForResu
 import formatDateForResultsPageFilter from '../filters/formatDateForResultsPageFilter'
 import renderEnvelopeSizeRadiosFilter from '../filters/renderEnvelopeSizeRadiosFilter'
 import renderChooseBarcodeOptionRadiosFilter from '../filters/renderChooseBarcodeOptionRadiosFilter'
+import renderChooseContactRadiosFilter from '../filters/renderChooseContactRadiosFilter'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -61,6 +62,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('recipientTableRows', recipientTableRowsFilter)
   njkEnv.addFilter('renderEnvelopeSizeRadios', renderEnvelopeSizeRadiosFilter)
   njkEnv.addFilter('renderChooseBarcodeOptionRadiosFilter', renderChooseBarcodeOptionRadiosFilter)
+  njkEnv.addFilter('renderChooseContactRadiosFilter', renderChooseContactRadiosFilter)
 
   return njkEnv
 }

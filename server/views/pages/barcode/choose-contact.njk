@@ -1,0 +1,52 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% set pageTitle = applicationName + " - Choose contact" %}
+{% set pageId = 'choose-contact' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+    {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: 'There is a problem',
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+
+        <form action="/barcode/find-recipient/choose-contact" method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {{ govukRadios({
+            idPrefix: "contact",
+            name: "contact",
+            fieldset: {
+              legend: {
+                text: "Choose your recipient",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--xl"
+              }
+            },
+            items: searchName | renderChooseContactRadiosFilter(contacts),
+            errorMessage: errors | findError('contact')
+          }) }}
+
+          {{ govukButton({
+            text: "Continue",
+            preventDoubleClick: true,
+            attributes: { 'data-qa': 'continue-button' }
+          }) }}
+
+        </form>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
