@@ -44,7 +44,8 @@ declare module 'forms' {
 
   export type RadioButtonOption = {
     value: string
-    html: string
+    html?: string
+    text?: string
     checked: boolean
   }
 }
