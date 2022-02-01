@@ -24,4 +24,13 @@ export default class ContactService {
       })
       .then(response => response as ContactResponse)
   }
+
+  async searchContacts(slmToken: string, name: string): Promise<Array<ContactResponse>> {
+    return ContactService.restClient(slmToken)
+      .get({
+        path: '/contacts',
+        query: `name=${name}`,
+      })
+      .then(response => response as Array<ContactResponse>)
+  }
 }
