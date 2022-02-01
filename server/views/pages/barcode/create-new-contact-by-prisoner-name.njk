@@ -24,7 +24,7 @@
         <h1 class="govuk-heading-xl">Create new contact</h1>
         <p data-qa="add-details">You need to add details for <strong>{{ form.prisonerName }}</strong>. These will be saved for next time.</p>
 
-        <form id="create-new-contact-by-prisoner-name-form" action="/barcode/find-recipient/create-new-contact/by-prisoner-name" method="post">
+        <form id="create-new-contact-by-prisoner-name-form" action="/barcode/find-recipient/create-new-contact/by-prisoner-name" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
           {% set errorPrisonerDob = errors | findError('prisonerDob') %}
