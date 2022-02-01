@@ -21,6 +21,9 @@ export interface paths {
   '/barcode/check': {
     post: operations['checkBarcode']
   }
+  '/contacts': {
+    get: operations['searchContactsByName']
+  }
 }
 
 export interface components {
@@ -28,6 +31,10 @@ export interface components {
     VerifyLinkRequest: {
       /** @description The secret to verify */
       secret: string
+    }
+    VerifyLinkResponse: {
+      /** @description The JWT */
+      token: string
     }
     AuthenticationError: {
       code: string
@@ -176,10 +183,6 @@ export interface components {
         code: unknown
         userMessage: unknown
       }
-    VerifyLinkResponse: {
-      /** @description The JWT */
-      token: string
-    }
     MagicLinkRequest: {
       /**
        * @description The email address to send the magic link to
@@ -213,7 +216,7 @@ export interface components {
     ContactResponse: {
       /**
        * Format: int64
-       * @description The ID of contact
+       * @description The ID of the contact
        * @example 1
        */
       id: number
@@ -416,6 +419,28 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['CheckBarcodeRequest']
+      }
+    }
+  }
+  searchContactsByName: {
+    parameters: {
+      query: {
+        /** The name or partial name of the Contacts to return. Case insensitive. */
+        name: string
+      }
+    }
+    responses: {
+      /** Matching Contacts */
+      200: {
+        content: {
+          'application/json': components['schemas']['ContactResponse'][]
+        }
+      }
+      /** Unauthorised, requires a valid magic link token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
       }
     }
   }
