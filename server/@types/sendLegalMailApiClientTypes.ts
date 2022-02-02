@@ -14,4 +14,4 @@ export type CheckBarcodeRequest = components['schemas']['CheckBarcodeRequest']
 export type CheckBarcodeResponse = components['schemas']['CheckBarcodeResponse']
 
 export type CreateContactRequest = components['schemas']['CreateContactRequest']
-export type ContactResponse = components['schemas']['ContactResponse']
+export type Contact = components['schemas']['ContactResponse']

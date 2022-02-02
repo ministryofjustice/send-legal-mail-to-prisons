@@ -1,10 +1,10 @@
 import type { RadioButtonOption } from 'forms'
 import moment from 'moment'
-import { ContactResponse } from '../@types/sendLegalMailApiClientTypes'
+import type { Contact } from '../@types/sendLegalMailApiClientTypes'
 
 export default function renderChooseContactRadiosFilter(
   searchName: string,
-  contacts: Array<ContactResponse>
+  contacts: Array<Contact>
 ): Array<RadioButtonOption> {
   const contactOptions = contacts.map(contact => {
     let text = contact.prisonerName

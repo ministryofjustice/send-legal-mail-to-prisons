@@ -3,7 +3,7 @@ import nock from 'nock'
 import moment from 'moment'
 import ContactService from './ContactService'
 import config from '../../config'
-import { ContactResponse } from '../../@types/sendLegalMailApiClientTypes'
+import { Contact } from '../../@types/sendLegalMailApiClientTypes'
 
 jest.mock('../../data/hmppsAuthClient')
 
@@ -23,7 +23,7 @@ describe('Contact Service', () => {
 
   describe('createContact', () => {
     it('should include prison number in request', done => {
-      const contactResponse: ContactResponse = {
+      const contactResponse: Contact = {
         id: 1,
         prisonerName: 'some-name',
         prisonId: 'SKI',
@@ -40,7 +40,7 @@ describe('Contact Service', () => {
     })
 
     it('should include dob in request', done => {
-      const contactResponse: ContactResponse = {
+      const contactResponse: Contact = {
         id: 1,
         prisonerName: 'some-name',
         prisonId: 'SKI',
@@ -79,7 +79,7 @@ describe('Contact Service', () => {
 
   describe('searchContacts', () => {
     it('should search by name', done => {
-      const contactResponse: ContactResponse = {
+      const contactResponse: Contact = {
         id: 1,
         prisonerName: 'John Smith',
         prisonId: 'SKI',

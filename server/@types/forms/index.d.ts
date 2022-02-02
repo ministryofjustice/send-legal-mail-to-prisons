@@ -11,6 +11,7 @@ declare module 'forms' {
 
   export interface FindRecipientByPrisonerNameForm {
     prisonerName?: string
+    contacts?: Array<Contact>
   }
 
   export interface CreateNewContactByPrisonNumberForm {
@@ -47,5 +48,9 @@ declare module 'forms' {
     html?: string
     text?: string
     checked: boolean
+  }
+
+  export interface ChooseContactForm {
+    contactId?: string
   }
 }
