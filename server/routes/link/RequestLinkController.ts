@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
+import type { ErrorResponse } from 'sendLegalMailApiClient'
 import RequestLinkView from './RequestLinkView'
 import validate from './RequestLinkValidator'
 import MagicLinkService from '../../services/link/MagicLinkService'
-import { ErrorResponse } from '../../@types/sendLegalMailApiClientTypes'
 
 export default class RequestLinkController {
   constructor(private readonly magicLinkService: MagicLinkService) {}

@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
+import type { CheckBarcodeResponse } from 'sendLegalMailApiClient'
 import BarcodeEntryView from './BarcodeEntryView'
 import validate from './BarcodeEntryFormValidator'
 import ScanBarcodeService from '../../services/scan/ScanBarcodeService'
-import { CheckBarcodeResponse } from '../../@types/sendLegalMailApiClientTypes'
 import AppInsightsService from '../../services/AppInsightsService'
 import VerifyBarcodeErrorResponseMapper from './VerifyBarcodeErrorResponseMapper'
 

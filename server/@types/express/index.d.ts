@@ -8,7 +8,7 @@ import {
   RequestLinkForm,
 } from '../forms'
 import { Recipient } from '../prisonTypes'
-import { Contact } from '../sendLegalMailApiClientTypes'
+import { Contact } from '../sendLegalMailApiClient'
 
 export default {}
 

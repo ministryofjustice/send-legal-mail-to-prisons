@@ -45,7 +45,7 @@ To update the types from the Open API docs run the following commands:
 
 Note that you will need to run prettier over the generated files and possibly handle other errors before compiling.
 
-The types are inherited for use in `server/@types/sendLegalMailApiClientTypes.ts` and `server/@types/prisonRegisterApiClientTypes.ts` which may also need tweaking for use.
+The types are inherited for use in `server/@types/index.d.ts` and `server/@types/index.d.ts` which may also need tweaking for use.
 
 ## Running the app
 The easiest way to run the app is to use docker compose to create the service and all dependencies. 

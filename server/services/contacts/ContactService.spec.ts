@@ -1,9 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import nock from 'nock'
 import moment from 'moment'
+import type { Contact } from 'sendLegalMailApiClient'
 import ContactService from './ContactService'
 import config from '../../config'
-import { Contact } from '../../@types/sendLegalMailApiClientTypes'
 
 jest.mock('../../data/hmppsAuthClient')
 

@@ -1,6 +1,6 @@
+import type { DuplicateErrorCode, RandomCheckErrorCode } from 'sendLegalMailApiClient'
 import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
 import VerifyBarcodeErrorResponseMapper from './VerifyBarcodeErrorResponseMapper'
-import { DuplicateErrorCode, RandomCheckErrorCode } from '../../@types/sendLegalMailApiClientTypes'
 
 describe('VerifyBarcodeErrorResponseMapper', () => {
   const prisonRegisterService = {

@@ -1,7 +1,7 @@
+import type { CheckBarcodeRequest } from 'sendLegalMailApiClient'
 import RestClient from '../../data/restClient'
 import config from '../../config'
 import HmppsAuthClient from '../../data/hmppsAuthClient'
-import { CheckBarcodeRequest } from '../../@types/sendLegalMailApiClientTypes'
 
 export default class ScanBarcodeService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}

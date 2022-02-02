@@ -1,4 +1,4 @@
-import { DuplicateErrorCode, ErrorCode, ErrorResponse } from '../../@types/sendLegalMailApiClientTypes'
+import type { DuplicateErrorCode, ErrorCode, ErrorResponse } from 'sendLegalMailApiClient'
 import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
 
 export default class VerifyBarcodeErrorResponseMapper {

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import type { CreateNewContactByPrisonNumberForm } from 'forms'
-import { Prison, PrisonAddress, Recipient } from '../../../@types/prisonTypes'
+import type { Prison, PrisonAddress, Recipient } from 'prisonTypes'
 import validateNewContact from './newContactByPrisonNumberValidator'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import CreateContactByPrisonNumberView from './CreateContactByPrisonNumberView'

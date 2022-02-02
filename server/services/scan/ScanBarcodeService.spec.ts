@@ -1,10 +1,10 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import nock from 'nock'
+import type { CheckBarcodeResponse } from 'sendLegalMailApiClient'
 import HmppsAuthClient from '../../data/hmppsAuthClient'
 import TokenStore from '../../data/cache/TokenStore'
 import ScanBarcodeService from './ScanBarcodeService'
 import config from '../../config'
-import { CheckBarcodeResponse } from '../../@types/sendLegalMailApiClientTypes'
 
 jest.mock('../../data/hmppsAuthClient')
 

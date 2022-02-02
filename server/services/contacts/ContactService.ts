@@ -1,7 +1,7 @@
 import moment from 'moment'
+import type { Contact, CreateContactRequest } from 'sendLegalMailApiClient'
 import RestClient from '../../data/restClient'
 import config from '../../config'
-import { Contact, CreateContactRequest } from '../../@types/sendLegalMailApiClientTypes'
 
 export default class ContactService {
   private static restClient(slmToken: string): RestClient {

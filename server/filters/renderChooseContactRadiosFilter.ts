@@ -1,6 +1,6 @@
 import type { RadioButtonOption } from 'forms'
 import moment from 'moment'
-import type { Contact } from '../@types/sendLegalMailApiClientTypes'
+import type { Contact } from 'sendLegalMailApiClient'
 
 export default function renderChooseContactRadiosFilter(
   searchName: string,

@@ -1,5 +1,5 @@
 import type { ChooseContactForm } from 'forms'
-import { Contact } from '../../../@types/sendLegalMailApiClientTypes'
+import type { Contact } from 'sendLegalMailApiClient'
 
 export default class ChooseContactView {
   constructor(
