@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
 import moment from 'moment'
+import type { PrisonAddress } from 'prisonTypes'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import config from '../../../config'
 import newContactValidator from './newContactByPrisonerNameValidator'
-import { PrisonAddress } from '../../../@types/prisonTypes'
 import CreateContactByPrisonerNameController from './CreateContactByPrisonerNameController'
 import ContactService from '../../../services/contacts/ContactService'
 

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
+import type { PrisonAddress } from 'prisonTypes'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
-import { PrisonAddress } from '../../../@types/prisonTypes'
 import ContactService from '../../../services/contacts/ContactService'
 import ChooseContactController from './ChooseContactController'
 import { Contact } from '../../../@types/sendLegalMailApiClientTypes'

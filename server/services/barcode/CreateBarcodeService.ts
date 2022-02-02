@@ -4,9 +4,9 @@
 import bwipjs from 'bwip-js'
 import { createCanvas, Image, registerFont } from 'canvas'
 import moment from 'moment'
+import type { Recipient } from 'prisonTypes'
 import RestClient from '../../data/restClient'
 import config from '../../config'
-import { Recipient } from '../../@types/prisonTypes'
 import { CreateBarcodeResponse } from '../../@types/sendLegalMailApiClientTypes'
 import logger from '../../../logger'
 

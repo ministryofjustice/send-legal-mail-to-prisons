@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
+import type { Recipient } from 'prisonTypes'
 import GenerateBarcodeImageView from './GenerateBarcodeImageView'
 import CreateBarcodeService from '../../../services/barcode/CreateBarcodeService'
-import { Recipient } from '../../../@types/prisonTypes'
 import logger from '../../../../logger'
 
 export default class GenerateBarcodeImageController {
