@@ -1,7 +1,7 @@
 import moment from 'moment'
 import RestClient from '../../data/restClient'
 import config from '../../config'
-import { ContactResponse, CreateContactRequest } from '../../@types/sendLegalMailApiClientTypes'
+import { Contact, CreateContactRequest } from '../../@types/sendLegalMailApiClientTypes'
 
 export default class ContactService {
   private static restClient(slmToken: string): RestClient {
@@ -14,7 +14,7 @@ export default class ContactService {
     prisonId: string,
     prisonNumber?: string,
     prisonerDob?: Date
-  ): Promise<ContactResponse> {
+  ): Promise<Contact> {
     const createContactRequest: CreateContactRequest = { prisonerName, prisonId, prisonNumber }
     createContactRequest.dob = prisonerDob ? moment(prisonerDob).format('YYYY-MM-DD') : undefined
     return ContactService.restClient(slmToken)
@@ -22,15 +22,15 @@ export default class ContactService {
         path: '/contact',
         data: createContactRequest,
       })
-      .then(response => response as ContactResponse)
+      .then(response => response as Contact)
   }
 
-  async searchContacts(slmToken: string, name: string): Promise<Array<ContactResponse>> {
+  async searchContacts(slmToken: string, name: string): Promise<Array<Contact>> {
     return ContactService.restClient(slmToken)
       .get({
         path: '/contacts',
         query: `name=${name}`,
       })
-      .then(response => response as Array<ContactResponse>)
+      .then(response => response as Array<Contact>)
   }
 }

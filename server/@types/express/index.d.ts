@@ -1,12 +1,14 @@
 import {
   BarcodeEntryForm,
   ChooseBarcodeOptionForm,
+  ChooseContactForm,
   CreateNewContactByPrisonNumberForm,
   FindRecipientByPrisonNumberForm,
   PdfForm,
   RequestLinkForm,
 } from '../forms'
 import { Recipient } from '../prisonTypes'
+import { Contact } from '../sendLegalMailApiClientTypes'
 
 export default {}
 
@@ -28,6 +30,8 @@ declare module 'express-session' {
     pdfForm: PdfForm
     findRecipientByPrisonerNameForm: FindRecipientByPrisonerNameForm
     createNewContactByPrisonerNameForm: CreateNewContactByPrisonerNameForm
+    chooseContactForm: ChooseContactForm
+    contactSearchResults: Array<Contact>
   }
 }
 
