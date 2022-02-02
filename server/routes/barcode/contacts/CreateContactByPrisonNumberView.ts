@@ -1,5 +1,5 @@
 import type { CreateNewContactByPrisonNumberForm } from 'forms'
-import { Prison } from '../../../@types/prisonTypes'
+import type { Prison } from 'prisonTypes'
 import getPrisonDropdown, { DropDownOption } from './prisonDropdown'
 
 export default class CreateContactByPrisonNumberView {

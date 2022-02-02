@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { Recipient } from '../@types/prisonTypes'
+import type { Recipient } from 'prisonTypes'
 
 type TableCell = {
   text?: string

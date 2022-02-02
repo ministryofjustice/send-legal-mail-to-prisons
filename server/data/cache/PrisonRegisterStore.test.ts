@@ -1,6 +1,6 @@
 import { RedisClient } from 'redis'
+import type { Prison } from 'prisonTypes'
 import PrisonRegisterStore from './PrisonRegisterStore'
-import { Prison } from '../../@types/prisonTypes'
 
 const redisClient = {
   on: jest.fn(),

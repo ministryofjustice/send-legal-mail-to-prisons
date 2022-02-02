@@ -1,8 +1,8 @@
+import type { Prison, PrisonAddress } from 'prisonTypes'
+import type { PrisonDto } from 'prisonRegisterApiClient'
 import config from '../../config'
 import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
 import RestClient from '../../data/restClient'
-import { PrisonDto } from '../../@types/prisonRegisterApiClientTypes'
-import { Prison, PrisonAddress } from '../../@types/prisonTypes'
 import prisonAddressData from './prisonAddressData.json'
 
 export default class PrisonRegisterService {

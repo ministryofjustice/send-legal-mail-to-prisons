@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
+import type { PrisonAddress, Recipient } from 'prisonTypes'
+import type { Contact } from 'sendLegalMailApiClient'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
-import { PrisonAddress, Recipient } from '../../../@types/prisonTypes'
 import ContactService from '../../../services/contacts/ContactService'
-import type { Contact } from '../../../@types/sendLegalMailApiClientTypes'
 import ChooseContactView from './ChooseContactView'
 
 export default class ChooseContactController {

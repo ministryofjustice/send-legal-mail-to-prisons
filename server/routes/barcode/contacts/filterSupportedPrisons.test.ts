@@ -1,4 +1,4 @@
-import { Prison } from '../../../@types/prisonTypes'
+import type { Prison } from 'prisonTypes'
 import filterSupportedPrisons from './filterSupportedPrisons'
 import config from '../../../config'
 

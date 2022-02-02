@@ -1,4 +1,4 @@
-import { Prison } from '../../../@types/prisonTypes'
+import type { Prison } from 'prisonTypes'
 import config from '../../../config'
 
 export default function filterSupportedPrisons(activePrisons: Array<Prison>): Array<Prison> {

@@ -1,4 +1,4 @@
-import { PrisonAddress, Recipient } from '../@types/prisonTypes'
+import type { PrisonAddress, Recipient } from 'prisonTypes'
 import recipientTableRowsFilter from './recipientTableRowsFilter'
 
 const HMP_BRINSFORD = {

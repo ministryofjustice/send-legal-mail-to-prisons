@@ -1,9 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import nock from 'nock'
+import type { PrisonAddress } from 'prisonTypes'
 import PrisonRegisterService from './PrisonRegisterService'
 import config from '../../config'
 import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
-import { PrisonAddress } from '../../@types/prisonTypes'
 
 const prisonRegisterStore = {
   setActivePrisons: jest.fn(),

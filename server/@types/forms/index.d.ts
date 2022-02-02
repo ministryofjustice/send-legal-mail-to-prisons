@@ -1,5 +1,5 @@
 declare module 'forms' {
-  import type { CheckBarcodeErrorCodes } from '../sendLegalMailApiClientTypes'
+  import type { CheckBarcodeErrorCodes } from '../sendLegalMailApiClient'
 
   export interface RequestLinkForm {
     email?: string

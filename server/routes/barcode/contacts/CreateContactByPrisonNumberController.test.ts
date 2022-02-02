@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
+import type { PrisonAddress } from 'prisonTypes'
 import CreateContactByPrisonNumberController from './CreateContactByPrisonNumberController'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import config from '../../../config'
 import newContactValidator from './newContactByPrisonNumberValidator'
-import { PrisonAddress } from '../../../@types/prisonTypes'
 import ContactService from '../../../services/contacts/ContactService'
 
 jest.mock('../../../config')
