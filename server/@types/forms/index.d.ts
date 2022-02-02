@@ -11,7 +11,7 @@ declare module 'forms' {
 
   export interface FindRecipientByPrisonerNameForm {
     prisonerName?: string
-    contacts?: Array<ContactResponse>
+    contacts?: Array<Contact>
   }
 
   export interface CreateNewContactByPrisonNumberForm {
