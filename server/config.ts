@@ -109,4 +109,6 @@ export default {
     xOffsetC4: get('COVERSHEET_C4_OFFSET_X', '24mm'),
     yOffsetC4: get('COVERSHEET_C4_OFFSET_Y', '67mm'),
   },
+  phaseBannerLink: get('PHASE_BANNER_LINK', 'https://eu.surveymonkey.com/r/SendLegalMail'),
+  exitSurveyLink: get('EXIT_BANNER_LINK', 'https://eu.surveymonkey.com/r/SendLegalMail'),
 }

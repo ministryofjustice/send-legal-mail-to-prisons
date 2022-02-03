@@ -22,9 +22,13 @@ export default function nunjucksSetup(app: express.Express): void {
   app.use((req, res, next) => {
     const externalUser = () => req.url.startsWith('/link') || req.url.startsWith('/barcode')
     app.locals.applicationName = externalUser() ? 'Send legal mail to prisons' : 'Check Rule 39 mail'
-    res.locals.gtmContainerId = externalUser() ? config.slmContainerId : config.checkRule39ContainerId
+    app.locals.gtmContainerId = externalUser() ? config.slmContainerId : config.checkRule39ContainerId
     next()
   })
+
+  // Set the values for the phase banner and exit survey links from config
+  app.locals.phaseBannerLink = config.phaseBannerLink
+  app.locals.exitSurveyLink = config.exitSurveyLink
 
   // Cachebusting version string
   if (production) {
