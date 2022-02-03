@@ -11,6 +11,7 @@ import formatDateForResultsPageFilter from '../filters/formatDateForResultsPageF
 import renderEnvelopeSizeRadiosFilter from '../filters/renderEnvelopeSizeRadiosFilter'
 import renderChooseBarcodeOptionRadiosFilter from '../filters/renderChooseBarcodeOptionRadiosFilter'
 import renderChooseContactRadiosFilter from '../filters/renderChooseContactRadiosFilter'
+import config from '../config'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -21,6 +22,7 @@ export default function nunjucksSetup(app: express.Express): void {
   app.use((req, res, next) => {
     const externalUser = () => req.url.startsWith('/link') || req.url.startsWith('/barcode')
     app.locals.applicationName = externalUser() ? 'Send legal mail to prisons' : 'Check Rule 39 mail'
+    res.locals.gtmContainerId = externalUser() ? config.slmContainerId : config.checkRule39ContainerId
     next()
   })
 
