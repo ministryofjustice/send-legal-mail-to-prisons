@@ -9,21 +9,25 @@ import PdfController from '../../routes/barcode/pdf/PdfController'
 import ChooseBarcodeOptionController from '../../routes/barcode/options/ChooseBarcodeOptionController'
 import CreateContactByPrisonerNameController from '../../routes/barcode/contacts/CreateContactByPrisonerNameController'
 import ContactService from '../../services/contacts/ContactService'
+import RecipientFormService from '../../routes/barcode/recipients/RecipientFormService'
 
 export default function setUpCreateBarcode(
   createBarcodeService: CreateBarcodeService,
   prisonRegisterService: PrisonRegisterService,
-  contactService: ContactService
+  contactService: ContactService,
+  recipientFormService: RecipientFormService
 ): Router {
   const router = express.Router()
-  const findRecipientController = new FindRecipientController()
+  const findRecipientController = new FindRecipientController(recipientFormService)
   const createContactByPrisonNumberController = new CreateContactByPrisonNumberController(
     prisonRegisterService,
-    contactService
+    contactService,
+    recipientFormService
   )
   const createContactByPrisonerNameController = new CreateContactByPrisonerNameController(
     prisonRegisterService,
-    contactService
+    contactService,
+    recipientFormService
   )
   const reviewRecipientsController = new ReviewRecipientsController()
   const chooseBarcodeOptionController = new ChooseBarcodeOptionController()

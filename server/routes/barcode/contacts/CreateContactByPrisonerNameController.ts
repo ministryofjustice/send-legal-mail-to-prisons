@@ -1,23 +1,25 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
-import type { Prison, Recipient } from 'prisonTypes'
-import type { RecipientForm } from 'forms'
+import type { Prison } from 'prisonTypes'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import CreateContactByPrisonerNameView from './CreateContactByPrisonerNameView'
 import validateNewContact from './newContactByPrisonerNameValidator'
 import filterSupportedPrisons from './filterSupportedPrisons'
 import ContactService from '../../../services/contacts/ContactService'
 import logger from '../../../../logger'
+import RecipientFormService from '../recipients/RecipientFormService'
 
 export default class CreateContactByPrisonerNameController {
   constructor(
     private readonly prisonRegisterService: PrisonRegisterService,
-    private readonly contactService: ContactService
+    private readonly contactService: ContactService,
+    private readonly recipientFormService: RecipientFormService
   ) {}
 
   async getCreateNewContact(req: Request, res: Response): Promise<void> {
-    if ((req.session.recipientForm?.prisonerName?.trim() ?? '') === '') {
-      return res.redirect('/barcode/find-recipient')
+    const redirect = this.recipientFormService.requiresName(req)
+    if (redirect) {
+      return res.redirect(redirect)
     }
 
     let activePrisons: Array<Prison>
@@ -37,8 +39,9 @@ export default class CreateContactByPrisonerNameController {
   }
 
   async submitCreateNewContact(req: Request, res: Response): Promise<void> {
-    if ((req.session.recipientForm?.prisonerName?.trim() ?? '') === '') {
-      return res.redirect('/barcode/find-recipient')
+    const redirect = this.recipientFormService.requiresName(req)
+    if (redirect) {
+      return res.redirect(redirect)
     }
 
     const prisonerDob = this.parsePrisonerDob(req)
@@ -49,8 +52,9 @@ export default class CreateContactByPrisonerNameController {
       return res.redirect('/barcode/find-recipient/create-new-contact/by-prisoner-name')
     }
 
-    req.session.recipientForm.prisonerDob = req.session.createNewContactByPrisonerNameForm.prisonerDob
-    req.session.recipientForm.prisonId = req.session.createNewContactByPrisonerNameForm.prisonId
+    const { recipientForm, createNewContactByPrisonerNameForm } = req.session
+    recipientForm.prisonerDob = createNewContactByPrisonerNameForm.prisonerDob
+    recipientForm.prisonId = createNewContactByPrisonerNameForm.prisonId
     try {
       const { prisonerName, prisonId, prisonNumber } = req.session.recipientForm
       await this.contactService.createContact(req.session.slmToken, prisonerName, prisonId, prisonNumber, prisonerDob)
@@ -64,34 +68,16 @@ export default class CreateContactByPrisonerNameController {
     }
 
     try {
-      req.session.recipientForm.prisonAddress = await this.prisonRegisterService.getPrisonAddress(
-        req.session.recipientForm.prisonId
-      )
-      this.addRecipient(req, req.session.recipientForm)
+      await this.recipientFormService.addRecipient(req)
       req.session.createNewContactByPrisonerNameForm = undefined
-      req.session.recipientForm = undefined
       return res.redirect('/barcode/review-recipients')
     } catch (error) {
+      logger.error(`Failed to add recipient ${JSON.stringify(req.session.recipientForm)} due to error:`, error)
       req.flash('errors', [
-        { href: 'prisonId', text: 'There was a problem getting the address for the selected prison' },
+        { href: 'prisonId', text: 'There was a problem adding your new recipient. Please try again.' },
       ])
       return res.redirect('/barcode/find-recipient/create-new-contact/by-prisoner-name')
     }
-  }
-
-  private addRecipient(req: Request, recipientForm: RecipientForm) {
-    if (!req.session.recipients) {
-      req.session.recipients = []
-    }
-
-    const newRecipient: Recipient = {
-      prisonerName: recipientForm.prisonerName || '',
-      prisonNumber: recipientForm.prisonNumber,
-      prisonerDob: recipientForm.prisonerDob,
-      prisonAddress: recipientForm.prisonAddress,
-    }
-
-    req.session.recipients.push(newRecipient)
   }
 
   parsePrisonerDob(req: Request): Date | undefined {

@@ -4,10 +4,13 @@ import FindRecipientByPrisonerNameView from './FindRecipientByPrisonerNameView'
 import validatePrisonNumber from '../validators/prisonNumberValidator'
 import validatePrisonerName from '../validators/prisonerNameValidator'
 import formatErrors from '../../errorFormatter'
+import RecipientFormService from './RecipientFormService'
 
 export default class FindRecipientController {
+  constructor(private readonly recipientFormService: RecipientFormService) {}
+
   async getFindRecipientByPrisonNumberView(req: Request, res: Response): Promise<void> {
-    req.session.recipientForm = {}
+    this.recipientFormService.resetForm(req)
     const view = new FindRecipientByPrisonNumberView(
       req.session?.findRecipientByPrisonNumberForm || {},
       req.flash('errors')
@@ -31,7 +34,7 @@ export default class FindRecipientController {
   }
 
   async getFindRecipientByPrisonerNameView(req: Request, res: Response): Promise<void> {
-    req.session.recipientForm = {}
+    this.recipientFormService.resetForm(req)
     const view = new FindRecipientByPrisonerNameView(
       req.session?.findRecipientByPrisonerNameForm || {},
       req.flash('errors')

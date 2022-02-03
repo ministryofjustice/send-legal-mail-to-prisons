@@ -3,6 +3,7 @@ import { SessionData } from 'express-session'
 import FindRecipientController from './FindRecipientController'
 import prisonNumberValidator from '../validators/prisonNumberValidator'
 import prisonerNameValidator from '../validators/prisonerNameValidator'
+import RecipientFormService from './RecipientFormService'
 
 jest.mock('../validators/prisonNumberValidator')
 jest.mock('../validators/prisonerNameValidator')
@@ -17,10 +18,15 @@ const res = {
   redirect: jest.fn(),
 }
 
+const recipientFormService = {
+  resetForm: jest.fn(),
+}
+
 describe('FindRecipientController', () => {
-  const findRecipientController = new FindRecipientController()
+  const findRecipientController = new FindRecipientController(recipientFormService as unknown as RecipientFormService)
 
   afterEach(() => {
+    recipientFormService.resetForm.mockReset()
     res.render.mockReset()
     res.redirect.mockReset()
     req.session = {} as SessionData
@@ -61,19 +67,6 @@ describe('FindRecipientController', () => {
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
 
       expect(req.session.recipientForm.prisonNumber).toEqual('A1234BC')
-    })
-  })
-
-  describe('getFindByPrisonerName', () => {
-    it('should clear down the recipient form', async () => {
-      req.session.recipientForm = { prisonNumber: 'A1234BC' }
-
-      await findRecipientController.getFindRecipientByPrisonerNameView(
-        req as unknown as Request,
-        res as unknown as Response
-      )
-
-      expect(req.session.recipientForm).toEqual({})
     })
   })
 
