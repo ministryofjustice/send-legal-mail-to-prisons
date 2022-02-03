@@ -47,6 +47,6 @@ export default class ChooseContactController {
   }
 
   private findContact(req: Request, contactId: string): Contact | undefined {
-    return req.session.contactSearchResults.find((contact: Contact) => contact.id.toString() === contactId)
+    return req.session.recipientForm.contacts.find((contact: Contact) => contact.id.toString() === contactId)
   }
 }

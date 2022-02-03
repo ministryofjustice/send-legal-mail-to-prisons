@@ -112,7 +112,6 @@ describe('ChooseContactController', () => {
     it(`should show error from adding the contact`, async () => {
       req.session.recipientForm = { prisonerName: 'John Smith', contacts: [aContact()] }
       req.session.chooseContactForm = { contactId: '1' }
-      req.session.contactSearchResults = [aContact()]
       recipientFormService.addContact.mockRejectedValue('some-error')
 
       await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
@@ -136,7 +135,6 @@ describe('ChooseContactController', () => {
     it('should add recipient if existing contact selected', async () => {
       req.session.recipientForm = { prisonerName: 'John Smith', contacts: [aContact()] }
       req.session.chooseContactForm = { contactId: '1' }
-      req.session.contactSearchResults = [aContact()]
 
       await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
 
