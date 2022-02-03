@@ -1,12 +1,8 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
-import type { PrisonAddress } from 'prisonTypes'
 import type { Contact } from 'sendLegalMailApiClient'
-import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
-import ContactService from '../../../services/contacts/ContactService'
 import ChooseContactController from './ChooseContactController'
-
-jest.mock('../../../config')
+import RecipientFormService from '../recipients/RecipientFormService'
 
 const req = {
   session: {} as SessionData,
@@ -18,12 +14,14 @@ const res = {
   redirect: jest.fn(),
 }
 
-const prisonRegisterService = {
-  getPrisonAddress: jest.fn(),
-}
-
 const contactService = {
   searchContacts: jest.fn(),
+}
+
+const recipientFormService = {
+  requiresName: jest.fn(),
+  requiresContacts: jest.fn(),
+  addContact: jest.fn(),
 }
 
 const aContact = (): Contact => {
@@ -34,24 +32,17 @@ const aContact = (): Contact => {
   }
 }
 
-const aPrisonAddress = (): PrisonAddress => {
-  return {
-    premise: 'HMP Leeds',
-  }
-}
-
 describe('ChooseContactController', () => {
   let chooseContactController: ChooseContactController
 
   beforeEach(() => {
-    chooseContactController = new ChooseContactController(
-      contactService as unknown as ContactService,
-      prisonRegisterService as unknown as PrisonRegisterService
-    )
+    chooseContactController = new ChooseContactController(recipientFormService as unknown as RecipientFormService)
   })
 
   afterEach(() => {
-    prisonRegisterService.getPrisonAddress.mockReset()
+    recipientFormService.requiresName.mockReset()
+    recipientFormService.requiresContacts.mockReset()
+    recipientFormService.addContact.mockReset()
     contactService.searchContacts.mockReset()
     res.render.mockReset()
     res.redirect.mockReset()
@@ -61,38 +52,24 @@ describe('ChooseContactController', () => {
   })
 
   describe('getChooseContact', () => {
-    it('should redirect to find recipient if prisoner name form does not exist', async () => {
+    it('should redirect if requires name', async () => {
+      recipientFormService.requiresName.mockReturnValue('some-redirect')
+
       await chooseContactController.getChooseContact(req as unknown as Request, res as unknown as Response)
 
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
+      expect(res.redirect).toHaveBeenCalledWith('some-redirect')
     })
 
-    it('should redirect to find recipient if prisoner name not in form', async () => {
-      req.session.findRecipientByPrisonerNameForm = {}
+    it('should redirect if requires contacts', async () => {
+      recipientFormService.requiresContacts.mockReturnValue('some-redirect')
 
       await chooseContactController.getChooseContact(req as unknown as Request, res as unknown as Response)
 
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
-    })
-
-    it('should redirect to find recipient if there are no contacts in session', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith' }
-
-      await chooseContactController.getChooseContact(req as unknown as Request, res as unknown as Response)
-
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/by-prisoner-name')
-    })
-
-    it('should redirect to find recipient if the contact list is empty', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith', contacts: [] }
-
-      await chooseContactController.getChooseContact(req as unknown as Request, res as unknown as Response)
-
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/by-prisoner-name')
+      expect(res.redirect).toHaveBeenCalledWith('some-redirect')
     })
 
     it('should display the view', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith', contacts: [aContact()] }
+      req.session.recipientForm = { prisonerName: 'John Smith', searchName: 'John Smith', contacts: [aContact()] }
       const expectedRenderArgs = {
         form: {},
         searchName: 'John Smith',
@@ -107,30 +84,24 @@ describe('ChooseContactController', () => {
   })
 
   describe('submitChooseContact', () => {
-    it('should redirect to find recipient if prisoner name form does not exist', async () => {
+    it('should redirect if requires name', async () => {
+      recipientFormService.requiresName.mockReturnValue('some-redirect')
+
       await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
 
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
+      expect(res.redirect).toHaveBeenCalledWith('some-redirect')
     })
 
-    it('should redirect to find recipient if there are no contacts to choose from', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith' }
+    it('should redirect if requires contacts', async () => {
+      recipientFormService.requiresContacts.mockReturnValue('some-redirect')
 
       await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
 
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/by-prisoner-name')
-    })
-
-    it('should redirect to find recipient if the contact list is empty', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith', contacts: [] }
-
-      await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
-
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/by-prisoner-name')
+      expect(res.redirect).toHaveBeenCalledWith('some-redirect')
     })
 
     it('should show errors if contact not selected', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith', contacts: [aContact()] }
+      req.session.recipientForm = { prisonerName: 'John Smith', contacts: [aContact()] }
 
       await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
 
@@ -138,23 +109,22 @@ describe('ChooseContactController', () => {
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/choose-contact')
     })
 
-    it(`should show error if we can't find the prison address`, async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith', contacts: [aContact()] }
+    it(`should show error from adding the contact`, async () => {
+      req.session.recipientForm = { prisonerName: 'John Smith', contacts: [aContact()] }
       req.session.chooseContactForm = { contactId: '1' }
-      req.session.contactSearchResults = [aContact()]
-      prisonRegisterService.getPrisonAddress.mockRejectedValue('some error')
+      recipientFormService.addContact.mockRejectedValue('some-error')
 
       await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
 
-      expect(prisonRegisterService.getPrisonAddress).toHaveBeenCalledWith('LEI')
+      expect(recipientFormService.addContact).toHaveBeenCalledWith(req, aContact())
       expect(req.flash).toHaveBeenCalledWith('errors', [
-        { text: 'There was a problem getting the address for the selected prison. Please try again.' },
+        { text: 'There was a problem adding your contact. Please try again.' },
       ])
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/choose-contact')
     })
 
     it('should redirect to create new contact if selected', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith', contacts: [aContact()] }
+      req.session.recipientForm = { prisonerName: 'John Smith', contacts: [aContact()] }
       req.session.chooseContactForm = { contactId: '-1' }
 
       await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
@@ -163,20 +133,14 @@ describe('ChooseContactController', () => {
     })
 
     it('should add recipient if existing contact selected', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith', contacts: [aContact()] }
+      req.session.recipientForm = { prisonerName: 'John Smith', contacts: [aContact()] }
       req.session.chooseContactForm = { contactId: '1' }
-      req.session.contactSearchResults = [aContact()]
-      prisonRegisterService.getPrisonAddress.mockReturnValue(aPrisonAddress())
 
       await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
 
-      const recipient = req.session.recipients.find(rec => rec.prisonerName === 'John Smith')
-
-      expect(recipient).toBeTruthy()
-      expect(prisonRegisterService.getPrisonAddress).toHaveBeenCalledWith('LEI')
+      expect(recipientFormService.addContact).toHaveBeenCalledWith(expect.anything(), aContact())
       expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
-      expect(req.session.findRecipientByPrisonerNameForm).toBeUndefined()
-      expect(req.session.createNewContactByPrisonerNameForm).toBeUndefined()
+      expect(req.session.chooseContactForm).toBeUndefined()
     })
   })
 })

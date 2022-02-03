@@ -1,5 +1,7 @@
 declare module 'forms' {
   import type { CheckBarcodeErrorCodes } from '../sendLegalMailApiClient'
+  import { PrisonAddress } from '../prisonTypes'
+  import { Contact } from '../sendLegalMailApiClient'
 
   export interface RequestLinkForm {
     email?: string
@@ -11,17 +13,14 @@ declare module 'forms' {
 
   export interface FindRecipientByPrisonerNameForm {
     prisonerName?: string
-    contacts?: Array<Contact>
   }
 
   export interface CreateNewContactByPrisonNumberForm {
-    prisonNumber: string
     prisonerName?: string
     prisonId?: string
   }
 
   export interface CreateNewContactByPrisonerNameForm {
-    prisonerName: string
     prisonId?: string
     prisonerDob?: Date
     'prisonerDob-day'?: string
@@ -51,6 +50,18 @@ declare module 'forms' {
   }
 
   export interface ChooseContactForm {
+    contactId?: string
+  }
+
+  export interface RecipientForm {
+    prisonNumber?: string
+    prisonerName?: string
+    prisonerDob?: Date
+    prisonId?: string
+    prisonAddress?: PrisonAddress
+    barcodeValue?: string
+    searchName?: string
+    contacts?: Array<Contact>
     contactId?: string
   }
 }

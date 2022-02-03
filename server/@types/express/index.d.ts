@@ -1,3 +1,4 @@
+import type { RecipientForm } from 'forms'
 import {
   BarcodeEntryForm,
   ChooseBarcodeOptionForm,
@@ -8,7 +9,6 @@ import {
   RequestLinkForm,
 } from '../forms'
 import { Recipient } from '../prisonTypes'
-import { Contact } from '../sendLegalMailApiClient'
 
 export default {}
 
@@ -31,7 +31,7 @@ declare module 'express-session' {
     findRecipientByPrisonerNameForm: FindRecipientByPrisonerNameForm
     createNewContactByPrisonerNameForm: CreateNewContactByPrisonerNameForm
     chooseContactForm: ChooseContactForm
-    contactSearchResults: Array<Contact>
+    recipientForm: RecipientForm
   }
 }
 

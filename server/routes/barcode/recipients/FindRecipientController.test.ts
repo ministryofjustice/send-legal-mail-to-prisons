@@ -3,6 +3,7 @@ import { SessionData } from 'express-session'
 import FindRecipientController from './FindRecipientController'
 import prisonNumberValidator from '../validators/prisonNumberValidator'
 import prisonerNameValidator from '../validators/prisonerNameValidator'
+import RecipientFormService from './RecipientFormService'
 
 jest.mock('../validators/prisonNumberValidator')
 jest.mock('../validators/prisonerNameValidator')
@@ -10,17 +11,22 @@ jest.mock('../validators/prisonerNameValidator')
 const req = {
   session: {} as SessionData,
   flash: jest.fn(),
-  body: { prisonNumber: '', prisonerName: '' },
+  body: {},
 }
 const res = {
   render: jest.fn(),
   redirect: jest.fn(),
 }
 
+const recipientFormService = {
+  resetForm: jest.fn(),
+}
+
 describe('FindRecipientController', () => {
-  const findRecipientController = new FindRecipientController()
+  const findRecipientController = new FindRecipientController(recipientFormService as unknown as RecipientFormService)
 
   afterEach(() => {
+    recipientFormService.resetForm.mockReset()
     res.render.mockReset()
     res.redirect.mockReset()
     req.session = {} as SessionData
@@ -34,6 +40,8 @@ describe('FindRecipientController', () => {
     })
 
     it('should redirect to create-new-contact given prison number is validated', async () => {
+      req.session.recipientForm = {}
+      req.body = { prisonNumber: 'A1234BC' }
       mockPrisonNumberValidator.mockReturnValue([])
 
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
@@ -42,6 +50,7 @@ describe('FindRecipientController', () => {
     })
 
     it('should redirect to find-recipient/by-prison-number given prison number is validated', async () => {
+      req.session.recipientForm = {}
       mockPrisonNumberValidator.mockReturnValue(['Enter a prison number'])
 
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
@@ -51,25 +60,13 @@ describe('FindRecipientController', () => {
     })
 
     it('should uppercase and trim the prison number', async () => {
-      req.body.prisonNumber = ' a1234bc '
+      req.session.recipientForm = {}
+      req.body = { prisonNumber: ' a1234bc ' }
       mockPrisonNumberValidator.mockReturnValue([])
 
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
 
-      expect(req.body.prisonNumber).toEqual('A1234BC')
-    })
-  })
-
-  describe('submitFindByPrisonerName', () => {
-    it('should clear down the prison number form', async () => {
-      req.session.findRecipientByPrisonNumberForm = { prisonNumber: 'A1234BC' }
-
-      await findRecipientController.getFindRecipientByPrisonerNameView(
-        req as unknown as Request,
-        res as unknown as Response
-      )
-
-      expect(req.session.findRecipientByPrisonNumberForm).toBeUndefined()
+      expect(req.session.recipientForm.prisonNumber).toEqual('A1234BC')
     })
   })
 
@@ -80,7 +77,9 @@ describe('FindRecipientController', () => {
       mockPrisonerNameValidator = prisonerNameValidator as jest.MockedFunction<typeof prisonerNameValidator>
     })
 
-    it('should redirect to create-new-contact given prison number is validated', async () => {
+    it('should redirect to create-new-contact given prisoner name is validated', async () => {
+      req.session.recipientForm = {}
+      req.body = { prisonerName: 'John Smith' }
       mockPrisonerNameValidator.mockReturnValue([])
 
       await findRecipientController.submitFindByPrisonerName(req as unknown as Request, res as unknown as Response)
@@ -89,6 +88,7 @@ describe('FindRecipientController', () => {
     })
 
     it('should redirect to find-recipient/by-prisoner-name given prisoner name is validated', async () => {
+      req.session.recipientForm = {}
       mockPrisonerNameValidator.mockReturnValue(['Enter a prisoner name'])
 
       await findRecipientController.submitFindByPrisonerName(req as unknown as Request, res as unknown as Response)
@@ -98,12 +98,13 @@ describe('FindRecipientController', () => {
     })
 
     it('should trim the prisoner name', async () => {
-      req.body.prisonerName = ' John Smith '
+      req.session.recipientForm = {}
+      req.body = { prisonerName: ' John Smith ' }
       mockPrisonerNameValidator.mockReturnValue([])
 
       await findRecipientController.submitFindByPrisonerName(req as unknown as Request, res as unknown as Response)
 
-      expect(req.body.prisonerName).toEqual('John Smith')
+      expect(req.session.recipientForm.prisonerName).toEqual('John Smith')
     })
   })
 })
