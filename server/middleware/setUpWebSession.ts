@@ -36,12 +36,6 @@ export default function setUpWebSession(): Router {
     next()
   })
 
-  // Add the Google Tag manager id to the response data model
-  router.use((req, res, next) => {
-    res.locals.gtmContainerId = config.gtmContainerId
-    next()
-  })
-
   router.use(addRequestId())
   router.use(flash())
 
