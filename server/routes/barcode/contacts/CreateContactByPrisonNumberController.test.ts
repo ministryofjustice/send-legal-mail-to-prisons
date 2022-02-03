@@ -50,14 +50,14 @@ describe('CreateContactByPrisonNumberController', () => {
   })
 
   describe('getCreateNewRecipientView', () => {
-    it('should redirect to find recipient if prison number form does not exist', async () => {
+    it('should redirect to find recipient if prison number does not exist', async () => {
       await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
     })
 
     it('should redirect to find recipient if prison number not in form', async () => {
-      req.session.findRecipientByPrisonNumberForm = {}
+      req.session.recipientForm = {}
 
       await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
 
@@ -73,13 +73,13 @@ describe('CreateContactByPrisonNumberController', () => {
         { id: 'ACI', name: 'Altcourse (HMP)' },
       ])
 
-      req.session.findRecipientByPrisonNumberForm = { prisonNumber: 'A1234BC' }
+      req.session.recipientForm = { prisonNumber: 'A1234BC' }
 
       const expectedRenderArgs = {
         barcode: undefined as string,
         barcodeImageUrl: undefined as string,
         errors: [] as Array<Record<string, string>>,
-        form: req.session.findRecipientByPrisonNumberForm,
+        form: {},
         prisonRegister: [
           { value: '', text: '' },
           { value: 'ACI', text: 'Altcourse (HMP)', selected: false },
@@ -103,13 +103,13 @@ describe('CreateContactByPrisonNumberController', () => {
         { id: 'ACI', name: 'Altcourse (HMP)' },
       ])
 
-      req.session.findRecipientByPrisonNumberForm = { prisonNumber: 'A1234BC' }
+      req.session.recipientForm = { prisonNumber: 'A1234BC' }
 
       const expectedRenderArgs = {
         barcode: undefined as string,
         barcodeImageUrl: undefined as string,
         errors: [] as Array<Record<string, string>>,
-        form: req.session.findRecipientByPrisonNumberForm,
+        form: {},
         prisonRegister: [
           { value: '', text: '' },
           { value: 'ASI', text: 'Ashfield (HMP)', selected: false },
@@ -126,13 +126,13 @@ describe('CreateContactByPrisonNumberController', () => {
     it.skip('should create and return view with error given prison register service fails', async () => {
       prisonRegisterService.getActivePrisons.mockRejectedValue('An error retrieving prison register')
 
-      req.session.findRecipientByPrisonNumberForm = { prisonNumber: 'A1234BC' }
+      req.session.recipientForm = { prisonNumber: 'A1234BC' }
 
       const expectedRenderArgs = {
         barcode: undefined as string,
         barcodeImageUrl: undefined as string,
         errors: [] as Array<Record<string, string>>,
-        form: req.session.findRecipientByPrisonNumberForm,
+        form: {},
         prisonRegister: [{ value: '', text: '' }] as Array<Record<string, string>>,
       }
 
@@ -141,14 +141,6 @@ describe('CreateContactByPrisonNumberController', () => {
       expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact-by-prison-number', expectedRenderArgs)
       expect(req.flash).toHaveBeenCalledWith('errors', [{ text: 'There was an error retrieving the list of prisons' }])
       expect(req.flash).toHaveBeenCalledWith('errors')
-    })
-
-    it('should redirect to main find-recipient page given no findRecipientForm in the session', async () => {
-      req.session.findRecipientByPrisonNumberForm = undefined
-
-      await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
-
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
     })
   })
 
@@ -161,11 +153,10 @@ describe('CreateContactByPrisonNumberController', () => {
 
     it('should redirect to review-recipients given new contact is validated and prison address is resolved', async () => {
       req.body = {
-        prisonNumber: 'A1234BC',
         prisonerName: 'Fred Bloggs',
         prisonId: 'SKI',
       }
-      req.session.findRecipientByPrisonNumberForm = { ...req.body }
+      req.session.recipientForm = { prisonNumber: 'A1234BC' }
       req.session.slmToken = 'some-token'
       mockNewContactValidator.mockReturnValue([])
       const prisonAddress: PrisonAddress = {
@@ -185,7 +176,7 @@ describe('CreateContactByPrisonNumberController', () => {
       await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
-      expect(req.session.recipients).toStrictEqual(expectedRecipients)
+      expect(req.session.recipients).toEqual(expectedRecipients)
       expect(req.session.findRecipientByPrisonNumberForm).toBeUndefined()
       expect(req.session.createNewContactByPrisonNumberForm).toBeUndefined()
       expect(contactService.createContact).toHaveBeenCalledWith('some-token', 'Fred Bloggs', 'SKI', 'A1234BC')
@@ -193,11 +184,10 @@ describe('CreateContactByPrisonNumberController', () => {
 
     it('should redirect to create-new-contact given new contact is validated but prison address is not resolved', async () => {
       req.body = {
-        prisonNumber: 'A1234BC',
         prisonerName: 'Fred Bloggs',
         prisonId: 'SKI',
       }
-      req.session.findRecipientByPrisonNumberForm = { ...req.body }
+      req.session.recipientForm = { prisonNumber: 'A1234BC' }
       mockNewContactValidator.mockReturnValue([])
       prisonRegisterService.getPrisonAddress.mockRejectedValue(new Error(`PrisonAddress for prison SKI not found`))
 
@@ -210,8 +200,8 @@ describe('CreateContactByPrisonNumberController', () => {
     })
 
     it('should redirect to create-new-contact given new contact is not validated', async () => {
-      req.body = { prisonNumber: 'A1234BC', prisonerName: '', prisonId: 'SKI' }
-      req.session.findRecipientByPrisonNumberForm = { ...req.body }
+      req.body = { prisonerName: '', prisonId: 'SKI' }
+      req.session.recipientForm = { prisonNumber: 'A1234BC' }
       mockNewContactValidator.mockReturnValue([{ href: '#prisonId', text: 'Select a prison name' }])
 
       await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
@@ -220,8 +210,8 @@ describe('CreateContactByPrisonNumberController', () => {
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact/by-prison-number')
     })
 
-    it('should redirect to find-recipient given no findRecipientForm in the session', async () => {
-      req.session.findRecipientByPrisonNumberForm = undefined
+    it('should redirect to find-recipient given no recipientForm in the session', async () => {
+      req.session.recipientForm = undefined
 
       await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
 
@@ -230,11 +220,10 @@ describe('CreateContactByPrisonNumberController', () => {
 
     it("`should ignore if we couldn't create the contact for any reason", async () => {
       req.body = {
-        prisonNumber: 'A1234BC',
         prisonerName: 'Fred Bloggs',
         prisonId: 'SKI',
       }
-      req.session.findRecipientByPrisonNumberForm = { ...req.body }
+      req.session.recipientForm = { prisonNumber: 'A1234BC' }
       req.session.slmToken = 'some-token'
       mockNewContactValidator.mockReturnValue([])
       const prisonAddress: PrisonAddress = {
@@ -255,7 +244,7 @@ describe('CreateContactByPrisonNumberController', () => {
       await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
-      expect(req.session.recipients).toStrictEqual(expectedRecipients)
+      expect(req.session.recipients).toEqual(expectedRecipients)
       expect(req.session.findRecipientByPrisonNumberForm).toBeUndefined()
       expect(req.session.createNewContactByPrisonNumberForm).toBeUndefined()
       expect(contactService.createContact).toHaveBeenCalledWith('some-token', 'Fred Bloggs', 'SKI', 'A1234BC')

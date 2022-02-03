@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
-import type { PrisonAddress, Recipient } from 'prisonTypes'
+import type { Recipient } from 'prisonTypes'
 import type { Contact } from 'sendLegalMailApiClient'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import ContactService from '../../../services/contacts/ContactService'
@@ -13,29 +13,26 @@ export default class ChooseContactController {
   ) {}
 
   async getChooseContact(req: Request, res: Response): Promise<void> {
-    if ((req.session.findRecipientByPrisonerNameForm?.prisonerName?.trim() ?? '') === '') {
+    if ((req.session.recipientForm?.prisonerName?.trim() ?? '') === '') {
       return res.redirect('/barcode/find-recipient')
     }
 
-    const contacts = req.session.findRecipientByPrisonerNameForm.contacts || []
-    if (contacts.length === 0) {
+    if ((req.session.recipientForm?.contacts ?? []).length === 0) {
       res.redirect('/barcode/find-recipient/by-prisoner-name')
     }
 
-    req.session.chooseContactForm = {}
-    const searchName = req.session.findRecipientByPrisonerNameForm.prisonerName
-    const view = new ChooseContactView(req.session.chooseContactForm, searchName, contacts, req.flash('errors'))
+    const { searchName, contacts } = req.session.recipientForm
+    const view = new ChooseContactView(req.session.chooseContactForm || {}, searchName, contacts, req.flash('errors'))
     return res.render('pages/barcode/choose-contact', { ...view.renderArgs })
   }
 
   async submitChooseContact(req: Request, res: Response): Promise<void> {
-    if (!req.session.findRecipientByPrisonerNameForm) {
+    if ((req.session.recipientForm?.prisonerName?.trim() ?? '') === '') {
       return res.redirect('/barcode/find-recipient')
     }
 
-    const contacts = req.session.findRecipientByPrisonerNameForm?.contacts || []
-    if (contacts.length === 0) {
-      return res.redirect('/barcode/find-recipient/by-prisoner-name')
+    if ((req.session.recipientForm?.contacts ?? []).length === 0) {
+      res.redirect('/barcode/find-recipient/by-prisoner-name')
     }
 
     const contactId = req.session.chooseContactForm?.contactId || ''
@@ -48,9 +45,15 @@ export default class ChooseContactController {
       const contact = this.findContact(req, contactId)
       try {
         const prisonAddress = await this.prisonRegisterService.getPrisonAddress(contact.prisonId)
-        this.addRecipient(req, contact, prisonAddress)
-        req.session.findRecipientByPrisonerNameForm = undefined
-        req.session.createNewContactByPrisonerNameForm = undefined
+        const newRecipient: Recipient = {
+          prisonNumber: contact.prisonNumber,
+          prisonerName: contact.prisonerName,
+          prisonerDob: moment(contact.dob, 'YYY-MM-DD').toDate(),
+          prisonAddress,
+        }
+        this.addRecipient(req, newRecipient)
+        req.session.chooseContactForm = undefined
+        req.session.recipientForm = undefined
         return res.redirect('/barcode/review-recipients')
       } catch (error) {
         req.flash('errors', [
@@ -61,6 +64,7 @@ export default class ChooseContactController {
     }
 
     // The user must have selected to create a new contact
+    req.session.chooseContactForm = undefined
     return res.redirect('/barcode/find-recipient/create-new-contact/by-prisoner-name')
   }
 
@@ -68,17 +72,11 @@ export default class ChooseContactController {
     return req.session.contactSearchResults.find((contact: Contact) => contact.id.toString() === contactId)
   }
 
-  private addRecipient(req: Request, contact: Contact, prisonAddress: PrisonAddress) {
+  private addRecipient(req: Request, newRecipient: Recipient) {
     if (!req.session.recipients) {
       req.session.recipients = []
     }
 
-    const recipient: Recipient = {
-      prisonerName: contact.prisonerName,
-      prisonerDob: moment(contact.dob, 'YYYY-MM-DD').toDate(),
-      prisonAddress,
-    }
-
-    req.session.recipients.push(recipient)
+    req.session.recipients.push(newRecipient)
   }
 }

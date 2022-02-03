@@ -7,6 +7,7 @@ import formatErrors from '../../errorFormatter'
 
 export default class FindRecipientController {
   async getFindRecipientByPrisonNumberView(req: Request, res: Response): Promise<void> {
+    req.session.recipientForm = {}
     const view = new FindRecipientByPrisonNumberView(
       req.session?.findRecipientByPrisonNumberForm || {},
       req.flash('errors')
@@ -23,12 +24,14 @@ export default class FindRecipientController {
       return res.redirect('/barcode/find-recipient/by-prison-number')
     }
 
-    // TODO - lookup contact by prison number and redirect to appropriate endpoint
+    // TODO SLM-121 - lookup contact by prison number and redirect to either create new contact by prison number or review recipients
+    req.session.recipientForm.prisonNumber = req.session.findRecipientByPrisonNumberForm.prisonNumber
+    req.session.findRecipientByPrisonNumberForm = undefined
     return res.redirect('/barcode/find-recipient/create-new-contact/by-prison-number')
   }
 
   async getFindRecipientByPrisonerNameView(req: Request, res: Response): Promise<void> {
-    req.session.findRecipientByPrisonNumberForm = undefined
+    req.session.recipientForm = {}
     const view = new FindRecipientByPrisonerNameView(
       req.session?.findRecipientByPrisonerNameForm || {},
       req.flash('errors')
@@ -45,6 +48,9 @@ export default class FindRecipientController {
       return res.redirect('/barcode/find-recipient/by-prisoner-name')
     }
 
+    // TODO SLM-62 - find contacts by name and redirect to either choose contact or review recipients (save contacts on recipientForm if found!)
+    req.session.recipientForm.prisonerName = req.session.findRecipientByPrisonerNameForm.prisonerName
+    req.session.findRecipientByPrisonerNameForm = undefined
     return res.redirect('/barcode/find-recipient/create-new-contact/by-prisoner-name')
   }
 }

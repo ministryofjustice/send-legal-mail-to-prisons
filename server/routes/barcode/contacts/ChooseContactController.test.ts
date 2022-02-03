@@ -68,7 +68,7 @@ describe('ChooseContactController', () => {
     })
 
     it('should redirect to find recipient if prisoner name not in form', async () => {
-      req.session.findRecipientByPrisonerNameForm = {}
+      req.session.recipientForm = {}
 
       await chooseContactController.getChooseContact(req as unknown as Request, res as unknown as Response)
 
@@ -76,7 +76,7 @@ describe('ChooseContactController', () => {
     })
 
     it('should redirect to find recipient if there are no contacts in session', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith' }
+      req.session.recipientForm = { prisonerName: 'John Smith' }
 
       await chooseContactController.getChooseContact(req as unknown as Request, res as unknown as Response)
 
@@ -84,7 +84,7 @@ describe('ChooseContactController', () => {
     })
 
     it('should redirect to find recipient if the contact list is empty', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith', contacts: [] }
+      req.session.recipientForm = { prisonerName: 'John Smith', contacts: [] }
 
       await chooseContactController.getChooseContact(req as unknown as Request, res as unknown as Response)
 
@@ -92,7 +92,7 @@ describe('ChooseContactController', () => {
     })
 
     it('should display the view', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith', contacts: [aContact()] }
+      req.session.recipientForm = { prisonerName: 'John Smith', searchName: 'John Smith', contacts: [aContact()] }
       const expectedRenderArgs = {
         form: {},
         searchName: 'John Smith',
@@ -114,7 +114,7 @@ describe('ChooseContactController', () => {
     })
 
     it('should redirect to find recipient if there are no contacts to choose from', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith' }
+      req.session.recipientForm = { prisonerName: 'John Smith' }
 
       await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
 
@@ -122,7 +122,7 @@ describe('ChooseContactController', () => {
     })
 
     it('should redirect to find recipient if the contact list is empty', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith', contacts: [] }
+      req.session.recipientForm = { prisonerName: 'John Smith', contacts: [] }
 
       await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
 
@@ -130,7 +130,7 @@ describe('ChooseContactController', () => {
     })
 
     it('should show errors if contact not selected', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith', contacts: [aContact()] }
+      req.session.recipientForm = { prisonerName: 'John Smith', contacts: [aContact()] }
 
       await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
 
@@ -139,7 +139,7 @@ describe('ChooseContactController', () => {
     })
 
     it(`should show error if we can't find the prison address`, async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith', contacts: [aContact()] }
+      req.session.recipientForm = { prisonerName: 'John Smith', contacts: [aContact()] }
       req.session.chooseContactForm = { contactId: '1' }
       req.session.contactSearchResults = [aContact()]
       prisonRegisterService.getPrisonAddress.mockRejectedValue('some error')
@@ -154,7 +154,7 @@ describe('ChooseContactController', () => {
     })
 
     it('should redirect to create new contact if selected', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith', contacts: [aContact()] }
+      req.session.recipientForm = { prisonerName: 'John Smith', contacts: [aContact()] }
       req.session.chooseContactForm = { contactId: '-1' }
 
       await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
@@ -163,7 +163,7 @@ describe('ChooseContactController', () => {
     })
 
     it('should add recipient if existing contact selected', async () => {
-      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'John Smith', contacts: [aContact()] }
+      req.session.recipientForm = { prisonerName: 'John Smith', contacts: [aContact()] }
       req.session.chooseContactForm = { contactId: '1' }
       req.session.contactSearchResults = [aContact()]
       prisonRegisterService.getPrisonAddress.mockReturnValue(aPrisonAddress())

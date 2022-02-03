@@ -1,3 +1,4 @@
+import type { RecipientForm } from 'forms'
 import {
   BarcodeEntryForm,
   ChooseBarcodeOptionForm,
@@ -32,6 +33,7 @@ declare module 'express-session' {
     createNewContactByPrisonerNameForm: CreateNewContactByPrisonerNameForm
     chooseContactForm: ChooseContactForm
     contactSearchResults: Array<Contact>
+    recipientForm: RecipientForm
   }
 }
 

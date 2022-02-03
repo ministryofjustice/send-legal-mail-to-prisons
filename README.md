@@ -133,28 +133,21 @@ Integration tests use the [cypress test runner](https://www.cypress.io/).
 
 #### Accessibility
 
-To test a page rendering for accessibility issues, write a test that uses [cypress-axe](https://github.com/component-driven/cypress-axe).
-For example:
-```
-  it('The page is accessible', () => {
-    cy.visit('/the-page-url')
-
-    cy.injectAxe()
-    cy.checkA11y(null, {
-      includedImpacts: ['critical', 'serious'],
-    })
-  })
-```
+Please use the Page superclass for all page models. By default, this will run an accessibility test every time the page 
+is loaded. For further details see `integration_tests/pages/page.ts`
 
 ### Dependency Checks
 
-The template project has implemented some scheduled checks to ensure that key dependencies are kept up to date.
-If these are not desired in the cloned project, remove references to `check_outdated` job from `.circleci/config.yml`
+Dependency checks are run in a nightly job on CircleCI. See job `check_outdated` in `.circleci/config.yml`
 
 ### Vulnerable dependencies
 To find any dependencies with vulnerabilities run command:
 
 `npm audit`
+
+#### Automated vulnerability checks
+
+Various security checks are run in a nightly job on CircleCI. See jobs `hmpps/npm_security_audit`, `hmpps/trivy_latest_scan` and `hmpps/veracode_pipeline_scan` in `.circleci/config.yml`.
 
 ### Update dependencies
 To update all dependencies to their latest stable versions run command:
