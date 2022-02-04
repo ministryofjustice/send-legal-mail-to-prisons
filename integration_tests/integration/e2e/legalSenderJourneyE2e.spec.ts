@@ -5,7 +5,7 @@ import CreateNewContactByPrisonNumberPage from '../../pages/barcode/createNewCon
 import ReviewRecipientsPage from '../../pages/barcode/reviewRecipients'
 import GenerateBarcodeImagePage from '../../pages/barcode/generateBarcodeImage'
 
-context('Legal Sender Journey E2E', () => {
+context.only('Legal Sender Journey E2E', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubAuthToken')
@@ -23,7 +23,7 @@ context('Legal Sender Journey E2E', () => {
     let findRecipientByPrisonNumberPage = Page.verifyOnPage(FindRecipientByPrisonNumberPage)
 
     // Add a recipient by prison number where the recipient is a new contact
-    findRecipientByPrisonNumberPage.submitWithValidPrisonNumber('A1234BC')
+    findRecipientByPrisonNumberPage.submitWithUnknownPrisonNumber('A1234BC')
     let createNewContactPage = Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
     let reviewRecipientsPage = createNewContactPage.submitWithValidValues('Gage Hewitt', 'ashfield')
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt')
@@ -32,11 +32,9 @@ context('Legal Sender Journey E2E', () => {
     reviewRecipientsPage.removeRecipient(1)
     reviewRecipientsPage.hasNoRecipients()
 
-    // Add Gage Hewitt again
+    // Add a recipient by prison number where the recipient is a contact
     findRecipientByPrisonNumberPage = reviewRecipientsPage.addAnotherRecipient()
-    findRecipientByPrisonNumberPage.submitWithValidPrisonNumber('A1234BC')
-    createNewContactPage = Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
-    reviewRecipientsPage = createNewContactPage.submitWithValidValues('Gage Hewitt', 'ashfield')
+    reviewRecipientsPage = findRecipientByPrisonNumberPage.submitWithKnownPrisonNumber() // H4567IJ
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt')
 
     // Add an unknown recipient by name
@@ -70,7 +68,7 @@ context('Legal Sender Journey E2E', () => {
     cy.go(-1)
     reviewRecipientsPage = Page.verifyOnPage(ReviewRecipientsPage)
     findRecipientByPrisonNumberPage = reviewRecipientsPage.addAnotherRecipient()
-    findRecipientByPrisonNumberPage.submitWithValidPrisonNumber('D1234FB')
+    findRecipientByPrisonNumberPage.submitWithUnknownPrisonNumber('D1234FB')
     createNewContactPage = Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
     reviewRecipientsPage = createNewContactPage.submitWithValidValues('Fred Bloggs', 'ashfi')
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt', 'John Doe', 'Fred Bloggs')

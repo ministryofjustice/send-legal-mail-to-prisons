@@ -2,6 +2,7 @@
 import Page, { PageElement } from '../page'
 import CreateNewContactByPrisonNumberPage from './createNewContactByPrisonNumber'
 import FindRecipientByPrisonerNamePage from './findRecipientByPrisonerName'
+import ReviewRecipientsPage from './reviewRecipients'
 
 export default class FindRecipientByPrisonNumberPage extends Page {
   constructor() {
@@ -12,10 +13,18 @@ export default class FindRecipientByPrisonNumberPage extends Page {
     this.prisonNumberField().should('be.focused')
   }
 
-  submitWithValidPrisonNumber = (prisonNumber = 'A1234BC'): CreateNewContactByPrisonNumberPage => {
+  submitWithUnknownPrisonNumber = (prisonNumber = 'A1234BC'): CreateNewContactByPrisonNumberPage => {
     this.prisonNumberField().clear().type(prisonNumber)
+    cy.task('stubGetContactNone')
     this.submitButton().click()
     return Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
+  }
+
+  submitWithKnownPrisonNumber = (): ReviewRecipientsPage => {
+    this.prisonNumberField().clear().type('H4567IJ')
+    cy.task('stubGetContactOne')
+    this.submitButton().click()
+    return Page.verifyOnPage(ReviewRecipientsPage)
   }
 
   submitWithInvalidPrisonNumber = (): FindRecipientByPrisonNumberPage => {

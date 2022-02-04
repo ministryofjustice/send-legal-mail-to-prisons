@@ -29,7 +29,7 @@ context('Create Barcode Image', () => {
   it.skip('should show an error if creating the first barcode succeeds but subsequent barcodes fail', () => {
     cy.go(-1) // back to Review Recipients in order to add a 2nd recipient
     const reviewRecipientsPage = Page.verifyOnPage(ReviewRecipientsPage)
-    reviewRecipientsPage.addAnotherRecipient().submitWithValidPrisonNumber().submitWithValidValues().prepareBarcodes()
+    reviewRecipientsPage.addAnotherRecipient().submitWithUnknownPrisonNumber().submitWithValidValues().prepareBarcodes()
 
     const page = Page.verifyOnPage(ChooseBarcodeOptionPage)
     page.continueToImageErrors().hasErrorContaining('error generating the barcode')
