@@ -333,14 +333,14 @@ const stubCreateContact = (): SuperAgentRequest =>
     },
   })
 
-const stubSearchContactsNone = (name = 'John Smith'): SuperAgentRequest =>
+const stubSearchContactsNone = (): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
       urlPath: '/send-legal-mail/contacts',
       queryParameters: {
         name: {
-          equalTo: name,
+          doesNotMatch: 'John Doe',
         },
       },
       headers: {
