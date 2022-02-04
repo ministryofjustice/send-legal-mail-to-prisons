@@ -24,6 +24,9 @@ export interface paths {
   '/contacts': {
     get: operations['searchContactsByName']
   }
+  '/contact/{prisonNumber}': {
+    get: operations['getContactByPrisonNumber']
+  }
 }
 
 export interface components {
@@ -31,10 +34,6 @@ export interface components {
     VerifyLinkRequest: {
       /** @description The secret to verify */
       secret: string
-    }
-    VerifyLinkResponse: {
-      /** @description The JWT */
-      token: string
     }
     AuthenticationError: {
       code: string
@@ -183,6 +182,10 @@ export interface components {
         code: unknown
         userMessage: unknown
       }
+    VerifyLinkResponse: {
+      /** @description The JWT */
+      token: string
+    }
     MagicLinkRequest: {
       /**
        * @description The email address to send the magic link to
@@ -436,8 +439,42 @@ export interface operations {
           'application/json': components['schemas']['ContactResponse'][]
         }
       }
+      /** Bad request */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
       /** Unauthorised, requires a valid magic link token */
       401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getContactByPrisonNumber: {
+    parameters: {
+      path: {
+        /** The prison number of the Contact to return. */
+        prisonNumber: string
+      }
+    }
+    responses: {
+      /** Contact returned */
+      200: {
+        content: {
+          'application/json': components['schemas']['ContactResponse']
+        }
+      }
+      /** Unauthorised, requires a valid magic link token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Contact not found */
+      404: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }

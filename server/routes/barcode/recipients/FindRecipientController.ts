@@ -32,9 +32,20 @@ export default class FindRecipientController {
       return res.redirect('/barcode/find-recipient/by-prison-number')
     }
 
-    // TODO SLM-121 - lookup contact by prison number and redirect to either create new contact by prison number or review recipients
     req.session.recipientForm.prisonNumber = req.session.findRecipientByPrisonNumberForm.prisonNumber
     req.session.findRecipientByPrisonNumberForm = undefined
+    try {
+      const contact = await this.contactService.getContact(req.session.slmToken, req.session.recipientForm.prisonNumber)
+      if (contact) {
+        await this.recipientFormService.addContact(req, contact)
+        req.session.chooseContactForm = undefined
+        return res.redirect('/barcode/review-recipients')
+      }
+    } catch (error) {
+      logger.error(`Failed to look for an existing contact due to error:`, error)
+      req.flash('errors', [{ text: 'There was a problem searching your saved contacts - please create again.' }])
+      return res.redirect('/barcode/find-recipient/create-new-contact/by-prison-number')
+    }
     return res.redirect('/barcode/find-recipient/create-new-contact/by-prison-number')
   }
 

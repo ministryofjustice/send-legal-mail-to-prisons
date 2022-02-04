@@ -33,4 +33,18 @@ export default class ContactService {
       })
       .then(response => response as Array<Contact>)
   }
+
+  async getContact(slmToken: string, prisonNumber: string): Promise<Contact | undefined> {
+    return ContactService.restClient(slmToken)
+      .get({
+        path: `/contact/${prisonNumber}`,
+      })
+      .then(response => response as Contact)
+      .catch(error => {
+        if (error.status === 404) {
+          return undefined
+        }
+        throw error
+      })
+  }
 }
