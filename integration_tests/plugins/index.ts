@@ -35,6 +35,8 @@ export default (on: (string, Record) => void): void => {
     stubVerifyExpiredBarcode: sendLegalMail.stubVerifyExpiredBarcode,
     stubVerifyNotFoundBarcode: sendLegalMail.stubVerifyNotFoundBarcode,
     stubCreateContact: sendLegalMail.stubCreateContact,
+    stubSearchContactsNone: sendLegalMail.stubSearchContactsNone,
+    stubSearchContactsOneDob: sendLegalMail.stubSearchContactsOneDob,
 
     stubCreateBarcode: sendLegalMail.stubCreateBarcode,
     stubCreateBarcodeFailure: sendLegalMail.stubCreateBarcodeFailure,

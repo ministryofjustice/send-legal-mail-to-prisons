@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import Page, { PageElement } from '../page'
 import ReviewRecipientsPage from './reviewRecipients'
-import FindRecipientByPrisonerNamePage from './findRecipientByPrisonerName'
+import ChooseContactPage from './chooseContact'
 
 export default class CreateNewContactByPrisonerNamePage extends Page {
   constructor() {
@@ -99,7 +99,7 @@ export default class CreateNewContactByPrisonerNamePage extends Page {
   submitButton = (): PageElement => cy.get('#create-new-contact-form button')
 
   static goToPage = (): CreateNewContactByPrisonerNamePage => {
-    FindRecipientByPrisonerNamePage.goToPage().submitWithValidPrisonerName()
+    ChooseContactPage.goToPage().submitForNewContact()
     return Page.verifyOnPage(CreateNewContactByPrisonerNamePage)
   }
 }
