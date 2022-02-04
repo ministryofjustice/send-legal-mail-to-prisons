@@ -1,6 +1,5 @@
 {% extends "govuk/template.njk" %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
-{% from "components/banner/contact-helpdesk.njk" import contactHelpdeskBanner %}
 
 {% block head %}
 
@@ -62,7 +61,10 @@
 {% block bodyStart %}
 {% endblock %}
 
-{% block beforeContent %}
+{# Override the `main` block from the govuk template so that we can add the Contact The Helpdesk banner #}
+{% block main %}
+  <div class="govuk-width-container {{ containerClasses }}">
+
     {{ govukPhaseBanner({
       attributes: {
         role: "complementary"
@@ -72,7 +74,16 @@
       },
       html: 'This is a new service – your <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="'+ phaseBannerLink +'">feedback</a> will help us to improve it.'
     }) }}
-  <span class="govuk-visually-hidden" id="{{ pageId }}"></span>
+
+    <span class="govuk-visually-hidden" id="{{ pageId }}"></span>
+    <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main"{% if mainLang %} lang="{{ mainLang }}"{% endif %}>
+      {% block content %}{% endblock %}
+    </main>
+
+    <section class="contact-helpdesk" role="complementary">
+      <a href="" target="_blank" class="govuk-link govuk-link--inverse" data-qa="contact-helpdesk">Contact helpdesk (opens in new tab)</a>
+    </section>
+  </div>
 {% endblock %}
 
 {% block bodyEnd %}
