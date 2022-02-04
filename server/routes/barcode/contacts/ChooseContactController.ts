@@ -23,7 +23,8 @@ export default class ChooseContactController {
       return res.redirect(redirect)
     }
 
-    const contactId = req.session.chooseContactForm?.contactId || ''
+    req.session.chooseContactForm = { ...req.body }
+    const contactId = +req.session.chooseContactForm?.contactId || 0
     if (!contactId) {
       req.flash('errors', [{ href: '#contactOption', text: 'Select an option' }])
       return res.redirect('/barcode/find-recipient/choose-contact')
@@ -46,7 +47,7 @@ export default class ChooseContactController {
     return res.redirect('/barcode/find-recipient/create-new-contact/by-prisoner-name')
   }
 
-  private findContact(req: Request, contactId: string): Contact | undefined {
-    return req.session.recipientForm.contacts.find((contact: Contact) => contact.id.toString() === contactId)
+  private findContact(req: Request, contactId: number): Contact | undefined {
+    return req.session.recipientForm.contacts.find((contact: Contact) => contact.id === contactId)
   }
 }

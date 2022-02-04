@@ -111,12 +111,12 @@ describe('ChooseContactController', () => {
 
     it(`should show error from adding the contact`, async () => {
       req.session.recipientForm = { prisonerName: 'John Smith', contacts: [aContact()] }
-      req.session.chooseContactForm = { contactId: '1' }
+      req.body = { contactId: '1' }
       recipientFormService.addContact.mockRejectedValue('some-error')
 
       await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
 
-      expect(recipientFormService.addContact).toHaveBeenCalledWith(req, aContact())
+      expect(recipientFormService.addContact).toHaveBeenCalledWith(expect.anything(), aContact())
       expect(req.flash).toHaveBeenCalledWith('errors', [
         { text: 'There was a problem adding your contact. Please try again.' },
       ])
@@ -125,7 +125,7 @@ describe('ChooseContactController', () => {
 
     it('should redirect to create new contact if selected', async () => {
       req.session.recipientForm = { prisonerName: 'John Smith', contacts: [aContact()] }
-      req.session.chooseContactForm = { contactId: '-1' }
+      req.body = { contactId: '-1' }
 
       await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
 
@@ -134,7 +134,7 @@ describe('ChooseContactController', () => {
 
     it('should add recipient if existing contact selected', async () => {
       req.session.recipientForm = { prisonerName: 'John Smith', contacts: [aContact()] }
-      req.session.chooseContactForm = { contactId: '1' }
+      req.body = { contactId: '1' }
 
       await chooseContactController.submitChooseContact(req as unknown as Request, res as unknown as Response)
 

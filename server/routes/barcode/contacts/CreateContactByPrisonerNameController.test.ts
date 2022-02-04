@@ -197,7 +197,7 @@ describe('CreateContactByPrisonerNameController', () => {
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact/by-prisoner-name')
       expect(req.flash).toHaveBeenCalledWith('errors', [
-        { href: 'prisonId', text: 'There was a problem adding your new recipient. Please try again.' },
+        { href: '#prisonId', text: 'There was a problem adding your new recipient. Please try again.' },
       ])
     })
 

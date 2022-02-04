@@ -10,6 +10,7 @@ import ChooseBarcodeOptionController from '../../routes/barcode/options/ChooseBa
 import CreateContactByPrisonerNameController from '../../routes/barcode/contacts/CreateContactByPrisonerNameController'
 import ContactService from '../../services/contacts/ContactService'
 import RecipientFormService from '../../routes/barcode/recipients/RecipientFormService'
+import ChooseContactController from '../../routes/barcode/contacts/ChooseContactController'
 
 export default function setUpCreateBarcode(
   createBarcodeService: CreateBarcodeService,
@@ -18,7 +19,8 @@ export default function setUpCreateBarcode(
   recipientFormService: RecipientFormService
 ): Router {
   const router = express.Router()
-  const findRecipientController = new FindRecipientController(recipientFormService)
+  const findRecipientController = new FindRecipientController(recipientFormService, contactService)
+  const chooseContactController = new ChooseContactController(recipientFormService)
   const createContactByPrisonNumberController = new CreateContactByPrisonNumberController(
     prisonRegisterService,
     contactService,
@@ -48,6 +50,9 @@ export default function setUpCreateBarcode(
   router.post('/find-recipient/by-prisoner-name', (req, res) =>
     findRecipientController.submitFindByPrisonerName(req, res)
   )
+
+  router.get('/find-recipient/choose-contact', (req, res) => chooseContactController.getChooseContact(req, res))
+  router.post('/find-recipient/choose-contact', (req, res) => chooseContactController.submitChooseContact(req, res))
 
   router.get('/find-recipient/create-new-contact', (req, res) =>
     res.redirect('/barcode/find-recipient/create-new-contact/by-prison-number')

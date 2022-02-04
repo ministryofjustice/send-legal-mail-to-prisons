@@ -1,9 +1,11 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
+import type { Contact } from 'sendLegalMailApiClient'
 import FindRecipientController from './FindRecipientController'
 import prisonNumberValidator from '../validators/prisonNumberValidator'
 import prisonerNameValidator from '../validators/prisonerNameValidator'
 import RecipientFormService from './RecipientFormService'
+import ContactService from '../../../services/contacts/ContactService'
 
 jest.mock('../validators/prisonNumberValidator')
 jest.mock('../validators/prisonerNameValidator')
@@ -22,8 +24,24 @@ const recipientFormService = {
   resetForm: jest.fn(),
 }
 
+const contactService = {
+  searchContacts: jest.fn(),
+}
+
+const aContact = (): Contact => {
+  return {
+    id: 1,
+    prisonerName: 'John Smith',
+    prisonId: 'LEI',
+    prisonNumber: 'A1234BC',
+  }
+}
+
 describe('FindRecipientController', () => {
-  const findRecipientController = new FindRecipientController(recipientFormService as unknown as RecipientFormService)
+  const findRecipientController = new FindRecipientController(
+    recipientFormService as unknown as RecipientFormService,
+    contactService as unknown as ContactService
+  )
 
   afterEach(() => {
     recipientFormService.resetForm.mockReset()
@@ -77,24 +95,55 @@ describe('FindRecipientController', () => {
       mockPrisonerNameValidator = prisonerNameValidator as jest.MockedFunction<typeof prisonerNameValidator>
     })
 
-    it('should redirect to create-new-contact given prisoner name is validated', async () => {
+    it('should show errors given prisoner name is invalid', async () => {
+      req.session.recipientForm = {}
+      req.body = { prisonerName: '' }
+      mockPrisonerNameValidator.mockReturnValue(['some-error'])
+
+      await findRecipientController.submitFindByPrisonerName(req as unknown as Request, res as unknown as Response)
+
+      expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#prisonerName', text: 'some-error' }])
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/by-prisoner-name')
+    })
+
+    it('should redirect to create-new-contact if no contacts found', async () => {
       req.session.recipientForm = {}
       req.body = { prisonerName: 'John Smith' }
       mockPrisonerNameValidator.mockReturnValue([])
+      contactService.searchContacts.mockReturnValue([])
 
       await findRecipientController.submitFindByPrisonerName(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact/by-prisoner-name')
     })
 
-    it('should redirect to find-recipient/by-prisoner-name given prisoner name is validated', async () => {
+    it('should redirect to choose contact if some contacts found', async () => {
       req.session.recipientForm = {}
-      mockPrisonerNameValidator.mockReturnValue(['Enter a prisoner name'])
+      req.body = { prisonerName: 'John Smith' }
+      mockPrisonerNameValidator.mockReturnValue([])
+      contactService.searchContacts.mockReturnValue([aContact()])
 
       await findRecipientController.submitFindByPrisonerName(req as unknown as Request, res as unknown as Response)
 
-      expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#prisonerName', text: 'Enter a prisoner name' }])
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/by-prisoner-name')
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/choose-contact')
+      expect(req.session.recipientForm.contacts).toEqual([aContact()])
+      expect(req.session.recipientForm.prisonerName).toEqual('John Smith')
+      expect(req.session.recipientForm.searchName).toEqual('John Smith')
+    })
+
+    it('should redirect to choose contact if contact search errors', async () => {
+      req.session.recipientForm = {}
+      req.body = { prisonerName: 'John Smith' }
+      mockPrisonerNameValidator.mockReturnValue([])
+      contactService.searchContacts.mockRejectedValue('some-error')
+
+      await findRecipientController.submitFindByPrisonerName(req as unknown as Request, res as unknown as Response)
+
+      expect(req.flash).toHaveBeenCalledWith('errors', [
+        { text: 'There was a problem searching your saved contacts - please create again.' },
+      ])
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact/by-prisoner-name')
+      expect(req.session.recipientForm.contacts).toBeUndefined()
     })
 
     it('should trim the prisoner name', async () => {
