@@ -4,7 +4,7 @@ import SelectEnvelopeSizePage from './selectEnvelopeSize'
 
 export default class PrintCoversheetsPage extends Page {
   constructor() {
-    super('print-coversheets', false)
+    super('print-coversheets', { axeTest: false })
     /*
      axeTest (2nd constructor arg) must be false because axe relies on the browser tab being the active tab so that it can
      interrogate the DOM. This page however auto-downloads the coversheet PDF as part of page load, so by the time axe runs
