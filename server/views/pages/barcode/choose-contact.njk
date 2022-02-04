@@ -25,8 +25,8 @@
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
           {{ govukRadios({
-            idPrefix: "contact",
-            name: "contact",
+            idPrefix: "contactId",
+            name: "contactId",
             fieldset: {
               legend: {
                 text: "Choose your recipient",
@@ -35,7 +35,7 @@
               }
             },
             items: searchName | renderChooseContactRadiosFilter(contacts),
-            errorMessage: errors | findError('contact')
+            errorMessage: errors | findError('contactId')
           }) }}
 
           {{ govukButton({

@@ -4,7 +4,6 @@ import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientBy
 import CreateNewContactByPrisonNumberPage from '../../pages/barcode/createNewContactByPrisonNumber'
 import ReviewRecipientsPage from '../../pages/barcode/reviewRecipients'
 import GenerateBarcodeImagePage from '../../pages/barcode/generateBarcodeImage'
-import CreateNewContactByPrisonerNamePage from '../../pages/barcode/createNewContactByPrisonerName'
 
 context('Legal Sender Journey E2E', () => {
   beforeEach(() => {
@@ -33,29 +32,35 @@ context('Legal Sender Journey E2E', () => {
     reviewRecipientsPage.removeRecipient(1)
     reviewRecipientsPage.hasNoRecipients()
 
-    // Click to add another recipient and add Gage Hewitt again
+    // Add Gage Hewitt again
     findRecipientByPrisonNumberPage = reviewRecipientsPage.addAnotherRecipient()
     findRecipientByPrisonNumberPage.submitWithValidPrisonNumber('A1234BC')
     createNewContactPage = Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
     reviewRecipientsPage = createNewContactPage.submitWithValidValues('Gage Hewitt', 'ashfield')
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt')
 
-    // Click to add another recipient
-    findRecipientByPrisonNumberPage = reviewRecipientsPage.addAnotherRecipient()
-    findRecipientByPrisonNumberPage.submitWithValidPrisonNumber('B1234JS')
-    createNewContactPage = Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
-    reviewRecipientsPage = createNewContactPage.submitWithValidValues('John Smith', 'altcourse')
+    // Add an unknown recipient by name
+    let findRecipientByPrisonerNamePage = reviewRecipientsPage.addAnotherRecipient().goToByPrisonerName()
+    let createNewContactByPrisonerNamePage = findRecipientByPrisonerNamePage.submitWithUnknownPrisonerName('John Smith')
+    reviewRecipientsPage = createNewContactByPrisonerNamePage.submitWithValidValues('1', '1', '1990', 'altcourse')
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt', 'John Smith')
 
-    // Click to add a third recipient
-    const findRecipientByPrisonerNamePage = reviewRecipientsPage.addAnotherRecipient().goToByPrisonerName()
-    findRecipientByPrisonerNamePage.submitWithValidPrisonerName('John Doe')
-    const createNewContactByPrisonerNamePage = Page.verifyOnPage(CreateNewContactByPrisonerNamePage)
-    reviewRecipientsPage = createNewContactByPrisonerNamePage.submitWithValidValues('1', '1', '1990', 'altcourse')
+    // Add a known recipient by name
+    findRecipientByPrisonerNamePage = reviewRecipientsPage.addAnotherRecipient().goToByPrisonerName()
+    let chooseContactPage = findRecipientByPrisonerNamePage.submitWithKnownPrisonerName() // the only known contact is John Doe
+    reviewRecipientsPage = chooseContactPage.submitForFirstContact()
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt', 'John Smith', 'John Doe')
 
-    // Remove the 2nd recipient
+    // Add a different John Doe by name
+    findRecipientByPrisonerNamePage = reviewRecipientsPage.addAnotherRecipient().goToByPrisonerName()
+    chooseContactPage = findRecipientByPrisonerNamePage.submitWithKnownPrisonerName() // the only known contact is John Doe
+    createNewContactByPrisonerNamePage = chooseContactPage.submitForNewContact()
+    reviewRecipientsPage = createNewContactByPrisonerNamePage.submitWithValidValues('12', '12', '1979', 'leeds')
+    reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt', 'John Smith', 'John Doe', 'John Doe')
+
+    // Remove some recipients
     reviewRecipientsPage.removeRecipient(2)
+    reviewRecipientsPage.removeRecipient(3)
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt', 'John Doe')
 
     // Move forwards to choose how to prepare the barcodes

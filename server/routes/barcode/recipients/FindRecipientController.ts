@@ -5,9 +5,14 @@ import validatePrisonNumber from '../validators/prisonNumberValidator'
 import validatePrisonerName from '../validators/prisonerNameValidator'
 import formatErrors from '../../errorFormatter'
 import RecipientFormService from './RecipientFormService'
+import ContactService from '../../../services/contacts/ContactService'
+import logger from '../../../../logger'
 
 export default class FindRecipientController {
-  constructor(private readonly recipientFormService: RecipientFormService) {}
+  constructor(
+    private readonly recipientFormService: RecipientFormService,
+    private readonly contactService: ContactService
+  ) {}
 
   async getFindRecipientByPrisonNumberView(req: Request, res: Response): Promise<void> {
     this.recipientFormService.resetForm(req)
@@ -51,9 +56,23 @@ export default class FindRecipientController {
       return res.redirect('/barcode/find-recipient/by-prisoner-name')
     }
 
-    // TODO SLM-62 - find contacts by name and redirect to either choose contact or review recipients (save contacts on recipientForm if found!)
     req.session.recipientForm.prisonerName = req.session.findRecipientByPrisonerNameForm.prisonerName
+    req.session.recipientForm.searchName = req.session.findRecipientByPrisonerNameForm.prisonerName
     req.session.findRecipientByPrisonerNameForm = undefined
+    try {
+      const contacts = await this.contactService.searchContacts(
+        req.session.slmToken,
+        req.session.recipientForm.prisonerName
+      )
+      if (contacts.length > 0) {
+        req.session.recipientForm.contacts = contacts
+        return res.redirect('/barcode/find-recipient/choose-contact')
+      }
+    } catch (error) {
+      logger.error(`Failed to search for existing contacts due to error:`, error)
+      req.flash('errors', [{ text: 'There was a problem searching your saved contacts - please create again.' }])
+      return res.redirect('/barcode/find-recipient/create-new-contact/by-prisoner-name')
+    }
     return res.redirect('/barcode/find-recipient/create-new-contact/by-prisoner-name')
   }
 }

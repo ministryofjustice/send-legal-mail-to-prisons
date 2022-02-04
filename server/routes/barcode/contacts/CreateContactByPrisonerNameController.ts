@@ -74,7 +74,7 @@ export default class CreateContactByPrisonerNameController {
     } catch (error) {
       logger.error(`Failed to add recipient ${JSON.stringify(req.session.recipientForm)} due to error:`, error)
       req.flash('errors', [
-        { href: 'prisonId', text: 'There was a problem adding your new recipient. Please try again.' },
+        { href: '#prisonId', text: 'There was a problem adding your new recipient. Please try again.' },
       ])
       return res.redirect('/barcode/find-recipient/create-new-contact/by-prisoner-name')
     }

@@ -37,12 +37,12 @@ describe('Choose Contact View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#contact').val()).toEqual('1')
-    expect($('#contact').next('label').text().trim()).toEqual('John Smith 01-01-1990')
-    expect($('#contact-2').val()).toEqual('2')
-    expect($('#contact-2').next('label').text().trim()).toEqual('John Smith A1234BC')
-    expect($('#contact-3').val()).toEqual('-1')
-    expect($('#contact-3').next('label').text().trim()).toEqual('I want to send mail to a different "John Smith"')
+    expect($('#contactId').val()).toEqual('1')
+    expect($('#contactId').next('label').text().trim()).toEqual('John Smith 01-01-1990')
+    expect($('#contactId-2').val()).toEqual('2')
+    expect($('#contactId-2').next('label').text().trim()).toEqual('John Smith A1234BC')
+    expect($('#contactId-3').val()).toEqual('-1')
+    expect($('#contactId-3').next('label').text().trim()).toEqual('I want to send mail to a different "John Smith"')
   })
 
   it('should show continue button', () => {
@@ -54,11 +54,11 @@ describe('Choose Contact View', () => {
   })
 
   it('should show errors', () => {
-    viewContext = { errors: [{ href: '#contact', text: 'some-error' }], searchName: '', contacts: [] }
+    viewContext = { errors: [{ href: '#contactId', text: 'some-error' }], searchName: '', contacts: [] }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('div.govuk-error-summary').find('a[href="#contact"]').text()).toEqual('some-error')
-    expect($('#contact-error').text()).toContain('some-error')
+    expect($('div.govuk-error-summary').find('a[href="#contactId"]').text()).toEqual('some-error')
+    expect($('#contactId-error').text()).toContain('some-error')
   })
 })
