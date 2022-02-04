@@ -22,10 +22,12 @@ const res = {
 
 const recipientFormService = {
   resetForm: jest.fn(),
+  addContact: jest.fn(),
 }
 
 const contactService = {
   searchContacts: jest.fn(),
+  getContact: jest.fn(),
 }
 
 const aContact = (): Contact => {
@@ -57,24 +59,54 @@ describe('FindRecipientController', () => {
       mockPrisonNumberValidator = prisonNumberValidator as jest.MockedFunction<typeof prisonNumberValidator>
     })
 
-    it('should redirect to create-new-contact given prison number is validated', async () => {
-      req.session.recipientForm = {}
+    it('should show errors given prison number is invalid', async () => {
       req.body = { prisonNumber: 'A1234BC' }
-      mockPrisonNumberValidator.mockReturnValue([])
+      req.session.recipientForm = {}
+      mockPrisonNumberValidator.mockReturnValue(['some-error'])
 
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
 
+      expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#prisonNumber', text: 'some-error' }])
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/by-prison-number')
+    })
+
+    it('should redirect to create-new-contact if no contact found', async () => {
+      req.session.recipientForm = {}
+      req.body = { prisonNumber: 'A1234BC' }
+      req.session.slmToken = 'some-token'
+      mockPrisonNumberValidator.mockReturnValue([])
+      contactService.getContact.mockReturnValue(undefined)
+
+      await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
+
+      expect(contactService.getContact).toHaveBeenCalledWith('some-token', 'A1234BC')
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact/by-prison-number')
     })
 
-    it('should redirect to find-recipient/by-prison-number given prison number is validated', async () => {
+    it('should redirect to review-recipients if contact is found', async () => {
       req.session.recipientForm = {}
-      mockPrisonNumberValidator.mockReturnValue(['Enter a prison number'])
+      req.body = { prisonNumber: 'A1234BC' }
+      mockPrisonNumberValidator.mockReturnValue([])
+      contactService.getContact.mockReturnValue(aContact())
 
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
 
-      expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#prisonNumber', text: 'Enter a prison number' }])
-      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/by-prison-number')
+      expect(recipientFormService.addContact).toHaveBeenCalledWith(expect.anything(), aContact())
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
+    })
+
+    it('should redirect to create contact if get contact errors', async () => {
+      req.session.recipientForm = {}
+      req.body = { prisonNumber: 'A1234BC' }
+      mockPrisonNumberValidator.mockReturnValue([])
+      contactService.getContact.mockRejectedValue('some-error')
+
+      await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
+
+      expect(req.flash).toHaveBeenCalledWith('errors', [
+        { text: 'There was a problem searching your saved contacts - please create again.' },
+      ])
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact/by-prison-number')
     })
 
     it('should uppercase and trim the prison number', async () => {
@@ -131,7 +163,7 @@ describe('FindRecipientController', () => {
       expect(req.session.recipientForm.searchName).toEqual('John Smith')
     })
 
-    it('should redirect to choose contact if contact search errors', async () => {
+    it('should redirect to create contact if contact search errors', async () => {
       req.session.recipientForm = {}
       req.body = { prisonerName: 'John Smith' }
       mockPrisonerNameValidator.mockReturnValue([])

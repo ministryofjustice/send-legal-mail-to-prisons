@@ -23,7 +23,7 @@ context('Find Recipient By Prisoner Name Page', () => {
     findRecipientByPrisonerNamePage.hasErrorContaining('full name')
   })
 
-  it('should render choose-contact form given prisoner name not a contact', () => {
+  it('should render create-contact form given prisoner name not a contact', () => {
     const findRecipientByPrisonerNamePage = FindRecipientByPrisonerNamePage.goToPage()
 
     findRecipientByPrisonerNamePage.submitWithUnknownPrisonerName()

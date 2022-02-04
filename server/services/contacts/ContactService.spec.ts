@@ -7,6 +7,13 @@ import config from '../../config'
 
 jest.mock('../../data/hmppsAuthClient')
 
+const aContact: Contact = {
+  id: 1,
+  prisonerName: 'John Smith',
+  prisonId: 'SKI',
+  prisonNumber: 'A1234BC',
+}
+
 describe('Contact Service', () => {
   let contactService: ContactService
   let mockedSendLegalMailApi: nock.Scope
@@ -79,16 +86,10 @@ describe('Contact Service', () => {
 
   describe('searchContacts', () => {
     it('should search by name', done => {
-      const contactResponse: Contact = {
-        id: 1,
-        prisonerName: 'John Smith',
-        prisonId: 'SKI',
-        prisonNumber: 'A1234BC',
-      }
-      mockedSendLegalMailApi.get('/contacts').query({ name: 'Smith' }).reply(200, [contactResponse])
+      mockedSendLegalMailApi.get('/contacts').query({ name: 'Smith' }).reply(200, [aContact])
 
       contactService.searchContacts('some-token', 'Smith').then(response => {
-        expect(response).toStrictEqual([contactResponse])
+        expect(response).toStrictEqual([aContact])
         done()
       })
     })
@@ -113,6 +114,42 @@ describe('Contact Service', () => {
       mockedSendLegalMailApi.get('/contacts').query({ name: '' }).reply(400, errorResponse)
 
       contactService.searchContacts('some-token', '').catch(error => {
+        expect(JSON.parse(error.text)).toStrictEqual(errorResponse)
+        done()
+      })
+    })
+  })
+
+  describe('getContact', () => {
+    it('should return a contact if found', done => {
+      mockedSendLegalMailApi.get('/contact/A1234BC').reply(200, aContact)
+
+      contactService.getContact('some-token', 'A1234BC').then(response => {
+        expect(response).toStrictEqual(aContact)
+        done()
+      })
+    })
+
+    it('should return undefined if not found', done => {
+      mockedSendLegalMailApi.get('/contact/A1234BC').reply(404)
+
+      contactService.getContact('some-token', 'A1234BC').then(response => {
+        expect(response).toBeUndefined()
+        done()
+      })
+    })
+
+    it('should handle an error response', done => {
+      const errorResponse = {
+        status: 400,
+        errorCode: {
+          code: 'MALFORMED_REQUEST',
+          userMessage: 'Failed to read the payload',
+        },
+      }
+      mockedSendLegalMailApi.get('/contact/A1234BC').reply(400, errorResponse)
+
+      contactService.getContact('some-token', 'A1234BC').catch(error => {
         expect(JSON.parse(error.text)).toStrictEqual(errorResponse)
         done()
       })
