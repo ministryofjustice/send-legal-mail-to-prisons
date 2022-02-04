@@ -1,0 +1,106 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% set pageTitle = applicationName + " - Contact helpdesk" %}
+{% set pageId = 'contact-helpdesk' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+    {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: 'There is a problem',
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl">Contact the helpdesk</h1>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        {{ govukWarningText({
+          text: 'Do not include any confidential client information.',
+          iconFallbackText: 'Warning'
+        }) }}
+
+        <form id="contact-helpdesk-form" action="/contact-helpdesk" method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {% call govukFieldset({ }) %}
+
+            {{ govukCharacterCount({
+              name: 'problemDetail',
+              id: 'problemDetail',
+              value: form.problemDetail',
+              label: {
+                text: 'Tell us what you were trying to do and what happened'
+              },
+              maxlength: 500,
+              errorMessage: errors | findError('problemDetail')
+            }) }}
+
+            {{ govukFileUpload({
+              id: 'screenshot',
+              name: 'screenshot',
+              value: form.screenshot,
+              label: {
+                text: 'Attach a screenshot (optional)'
+              },
+              errorMessage: errors | findError('screenshot')
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: "Full name"
+              },
+              attributes: {
+                autocomplete: 'off'
+              },
+              id: "name",
+              name: "name",
+              value: form.name,
+              errorMessage: errors | findError('name')
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: 'Email'
+              },
+              id: "email",
+              name: "email",
+              value: form.email,
+              type: 'email',
+              errorMessage: errors | findError('email')
+            }) }}
+
+            {{ govukInsetText({
+              text: "We'll only contact you if it's the best way to deal with your issue."
+            }) }}
+
+            <div class="govuk-button-group">
+              {{ govukButton({
+                text: "Submit",
+                attributes: { 'data-qa': 'contact-helpdesk-button' }
+              }) }}
+            </div>
+          {% endcall %}
+
+        </form>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

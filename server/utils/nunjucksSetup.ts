@@ -20,9 +20,11 @@ export default function nunjucksSetup(app: express.Express): void {
 
   app.locals.asset_path = '/assets/'
   app.use((req, res, next) => {
-    const externalUser = () => req.url.startsWith('/link') || req.url.startsWith('/barcode')
-    app.locals.applicationName = externalUser() ? 'Send legal mail to prisons' : 'Check Rule 39 mail'
-    app.locals.gtmContainerId = externalUser() ? config.slmContainerId : config.checkRule39ContainerId
+    const externalUser =
+      req.url.startsWith('/link') || req.url.startsWith('/barcode') || req.url.startsWith('/contact-helpdesk')
+    app.locals.externalUser = externalUser
+    app.locals.applicationName = externalUser ? 'Send legal mail to prisons' : 'Check Rule 39 mail'
+    app.locals.gtmContainerId = externalUser ? config.slmContainerId : config.checkRule39ContainerId
     next()
   })
 
@@ -69,6 +71,8 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('renderEnvelopeSizeRadios', renderEnvelopeSizeRadiosFilter)
   njkEnv.addFilter('renderChooseBarcodeOptionRadiosFilter', renderChooseBarcodeOptionRadiosFilter)
   njkEnv.addFilter('renderChooseContactRadiosFilter', renderChooseContactRadiosFilter)
+
+  njkEnv.addGlobal('contactHelpdeskBannerExcludedOnPages', ['contact-helpdesk'])
 
   return njkEnv
 }
