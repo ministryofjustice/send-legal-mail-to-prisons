@@ -396,7 +396,7 @@ const stubGetContactNone = (): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '^/send-legal-mail/contact/(?!H4567IJ)$',
+      urlPattern: '^/send-legal-mail/contact/.{7}(?<!H4567IJ)$',
       headers: {
         'Create-Barcode-Token': {
           equalTo:

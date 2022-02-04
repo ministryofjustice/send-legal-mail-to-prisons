@@ -5,7 +5,7 @@ import CreateNewContactByPrisonNumberPage from '../../pages/barcode/createNewCon
 import ReviewRecipientsPage from '../../pages/barcode/reviewRecipients'
 import GenerateBarcodeImagePage from '../../pages/barcode/generateBarcodeImage'
 
-context.only('Legal Sender Journey E2E', () => {
+context('Legal Sender Journey E2E', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubAuthToken')
