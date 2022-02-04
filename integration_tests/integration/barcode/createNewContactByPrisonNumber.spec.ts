@@ -16,7 +16,7 @@ context('Create New Contact By Prison Number Page', () => {
   })
 
   it('should render review-recipients given form submitted with valid data', () => {
-    const createNewContactPage = FindRecipientByPrisonNumberPage.goToPage().submitWithValidPrisonNumber()
+    const createNewContactPage = FindRecipientByPrisonNumberPage.goToPage().submitWithUnknownPrisonNumber()
 
     createNewContactPage.submitWithValidValues()
 
@@ -24,7 +24,7 @@ context('Create New Contact By Prison Number Page', () => {
   })
 
   it('should find a prison when searching with HMP prefix', () => {
-    const createNewContactPage = FindRecipientByPrisonNumberPage.goToPage().submitWithValidPrisonNumber()
+    const createNewContactPage = FindRecipientByPrisonNumberPage.goToPage().submitWithUnknownPrisonNumber()
 
     createNewContactPage.enterAValidPrisonerName().typeAheadHMPValidPrison().submitForm(ReviewRecipientsPage)
 
@@ -32,7 +32,7 @@ context('Create New Contact By Prison Number Page', () => {
   })
 
   it('should redisplay create-new-contact given form submitted with prison that was previously correctly selected but an invalid prison typed in', () => {
-    const createNewContactPage = FindRecipientByPrisonNumberPage.goToPage().submitWithValidPrisonNumber()
+    const createNewContactPage = FindRecipientByPrisonNumberPage.goToPage().submitWithUnknownPrisonNumber()
 
     createNewContactPage
       .enterAValidPrisonerName()
@@ -44,7 +44,7 @@ context('Create New Contact By Prison Number Page', () => {
   })
 
   it('should redisplay create-new-contact given form submitted with prison that was previously correctly selected but then blanked out', () => {
-    const createNewContactPage = FindRecipientByPrisonNumberPage.goToPage().submitWithValidPrisonNumber()
+    const createNewContactPage = FindRecipientByPrisonNumberPage.goToPage().submitWithUnknownPrisonNumber()
 
     createNewContactPage
       .enterAValidPrisonerName()

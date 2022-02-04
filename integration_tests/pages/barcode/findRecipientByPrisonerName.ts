@@ -22,7 +22,7 @@ export default class FindRecipientByPrisonerNamePage extends Page {
 
   submitWithKnownPrisonerName = (): ChooseContactPage => {
     this.prisonerNameField().clear().type('John Doe')
-    cy.task('stubSearchContactsOneDob')
+    cy.task('stubSearchContactsOne')
     this.submitButton().click()
     return Page.verifyOnPage(ChooseContactPage)
   }

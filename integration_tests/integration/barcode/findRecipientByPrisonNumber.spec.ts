@@ -2,6 +2,7 @@ import Page from '../../pages/page'
 import RequestLinkPage from '../../pages/link/requestLink'
 import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientByPrisonNumber'
 import CreateNewContactByPrisonNumberPage from '../../pages/barcode/createNewContactByPrisonNumber'
+import ReviewRecipientsPage from '../../pages/barcode/reviewRecipients'
 
 context('Find Recipient By Prison Number Page', () => {
   beforeEach(() => {
@@ -22,11 +23,19 @@ context('Find Recipient By Prison Number Page', () => {
     findRecipientByPrisonNumberPage.hasErrorContaining('correct format')
   })
 
-  it('should render create-contact form given valid prison number', () => {
+  it('should render create-contact form given prison number not a contact', () => {
     const findRecipientByPrisonNumberPage = FindRecipientByPrisonNumberPage.goToPage()
 
-    findRecipientByPrisonNumberPage.submitWithValidPrisonNumber()
+    findRecipientByPrisonNumberPage.submitWithUnknownPrisonNumber()
 
     Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
+  })
+
+  it('should render review recipients page given prison number is a contact', () => {
+    const findRecipientByPrisonNumberPage = FindRecipientByPrisonNumberPage.goToPage()
+
+    findRecipientByPrisonNumberPage.submitWithKnownPrisonNumber()
+
+    Page.verifyOnPage(ReviewRecipientsPage)
   })
 })
