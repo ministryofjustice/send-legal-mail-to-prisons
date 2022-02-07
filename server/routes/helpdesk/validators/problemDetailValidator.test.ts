@@ -1,12 +1,10 @@
 import validateProblemDetail from './problemDetailValidator'
 
 describe('problemDetailValidator', () => {
-  Array.of(`Something bad happened which meant I couldn't continue with ...`).forEach(name => {
-    it(`should validate given a valid name - ${name}`, () => {
-      const errors = validateProblemDetail(name)
+  it(`should validate given a valid problem detail`, () => {
+    const errors = validateProblemDetail(`Something bad happened which meant I couldn't continue with ...`)
 
-      expect(errors).toStrictEqual([])
-    })
+    expect(errors).toStrictEqual([])
   })
 
   Array.of(null, undefined, '').forEach(problemDetail => {
