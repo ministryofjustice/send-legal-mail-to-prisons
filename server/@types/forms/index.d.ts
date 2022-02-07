@@ -64,4 +64,11 @@ declare module 'forms' {
     contacts?: Array<Contact>
     contactId?: string
   }
+
+  export interface ContactHelpdeskForm {
+    pageId: string
+    problemDetail?: string
+    name?: string
+    email?: string
+  }
 }

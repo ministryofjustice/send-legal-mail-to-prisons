@@ -38,6 +38,7 @@
 
         <form id="contact-helpdesk-form" action="/contact-helpdesk" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          <input type="hidden" name="pageId" value="{{ form.pageId }}" />
 
           {% call govukFieldset({ }) %}
 

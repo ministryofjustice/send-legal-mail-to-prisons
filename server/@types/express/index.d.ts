@@ -3,6 +3,7 @@ import {
   BarcodeEntryForm,
   ChooseBarcodeOptionForm,
   ChooseContactForm,
+  ContactHelpdeskForm,
   CreateNewContactByPrisonNumberForm,
   FindRecipientByPrisonNumberForm,
   PdfForm,
@@ -32,6 +33,7 @@ declare module 'express-session' {
     createNewContactByPrisonerNameForm: CreateNewContactByPrisonerNameForm
     chooseContactForm: ChooseContactForm
     recipientForm: RecipientForm
+    contactHelpdeskForm: ContactHelpdeskForm
   }
 }
 
