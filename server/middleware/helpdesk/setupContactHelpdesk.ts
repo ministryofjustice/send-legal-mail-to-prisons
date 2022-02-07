@@ -6,6 +6,8 @@ export default function setupContactHelpdesk(): Router {
   const contactHelpdeskController = new ContactHelpdeskController()
 
   router.get('/', (req, res) => contactHelpdeskController.getContactHelpdeskView(req, res))
+  router.post('/', (req, res) => contactHelpdeskController.submitContactHelpdesk(req, res))
+  router.get('/submitted', (req, res) => contactHelpdeskController.getContactHelpdeskSubmittedView(req, res))
 
   return router
 }

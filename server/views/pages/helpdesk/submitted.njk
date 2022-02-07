@@ -1,0 +1,23 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% set pageTitle = applicationName + " - Contact helpdesk" %}
+{% set pageId = 'contact-helpdesk-submitted' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+        {{ govukPanel({
+          titleText: 'Contact form submitted',
+          text: 'Thank you for telling us about this problem'
+        }) }}
+
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

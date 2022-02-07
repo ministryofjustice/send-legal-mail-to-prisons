@@ -1,11 +1,16 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
 import ContactHelpdeskController from './ContactHelpdeskController'
+import validate from './contactHelpdeskFormValidator'
+
+jest.mock('./contactHelpdeskFormValidator')
 
 const req = {
   session: {} as SessionData,
   flash: jest.fn(),
   query: {},
+  baseUrl: '',
+  originalUrl: '',
   body: {},
 }
 const res = {
@@ -22,6 +27,8 @@ describe('ContactHelpdeskController', () => {
     req.session = {} as SessionData
     req.flash.mockReset()
     req.query = {}
+    req.baseUrl = ''
+    req.originalUrl = ''
     req.body = {}
   })
 
@@ -50,6 +57,47 @@ describe('ContactHelpdeskController', () => {
       await contactHelpdeskController.getContactHelpdeskView(req as unknown as Request, res as unknown as Response)
 
       expect(res.render).toHaveBeenCalledWith('pages/helpdesk/contact-helpdesk', expectedRenderArgs)
+    })
+  })
+
+  describe('submitContactHelpdesk', () => {
+    let mockContactHelpdeskFormValidator: jest.MockedFunction<typeof validate>
+
+    beforeEach(() => {
+      mockContactHelpdeskFormValidator = validate as jest.MockedFunction<typeof validate>
+    })
+
+    it('should redirect to contact-helpdesk/submitted given no validation errors', async () => {
+      req.baseUrl = '/scan-barcode/contact-helpdesk'
+      req.originalUrl = '/scan-barcode/contact-helpdesk?pageId=scan-barcode'
+      mockContactHelpdeskFormValidator.mockReturnValue([])
+
+      await contactHelpdeskController.submitContactHelpdesk(req as unknown as Request, res as unknown as Response)
+
+      expect(req.flash).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/scan-barcode/contact-helpdesk/submitted')
+    })
+
+    it('should redirect to contact-helpdesk given validation errors', async () => {
+      req.baseUrl = '/scan-barcode/contact-helpdesk'
+      req.originalUrl = '/scan-barcode/contact-helpdesk?pageId=scan-barcode'
+      mockContactHelpdeskFormValidator.mockReturnValue([{ href: '#name', text: 'Enter a name' }])
+
+      await contactHelpdeskController.submitContactHelpdesk(req as unknown as Request, res as unknown as Response)
+
+      expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#name', text: 'Enter a name' }])
+      expect(res.redirect).toHaveBeenCalledWith('/scan-barcode/contact-helpdesk?pageId=scan-barcode')
+    })
+  })
+
+  describe('getContactHelpdeskSubmittedView', () => {
+    it('should render the view given a pageId query string parameter', async () => {
+      await contactHelpdeskController.getContactHelpdeskSubmittedView(
+        req as unknown as Request,
+        res as unknown as Response
+      )
+
+      expect(res.render).toHaveBeenCalledWith('pages/helpdesk/submitted', {})
     })
   })
 })
