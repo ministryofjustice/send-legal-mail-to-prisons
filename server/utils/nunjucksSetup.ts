@@ -72,7 +72,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('renderChooseBarcodeOptionRadiosFilter', renderChooseBarcodeOptionRadiosFilter)
   njkEnv.addFilter('renderChooseContactRadiosFilter', renderChooseContactRadiosFilter)
 
-  njkEnv.addGlobal('contactHelpdeskBannerExcludedOnPages', ['contact-helpdesk'])
+  njkEnv.addGlobal('contactHelpdeskBannerExcludedOnPages', ['contact-helpdesk', 'contact-helpdesk-submitted'])
 
   return njkEnv
 }
