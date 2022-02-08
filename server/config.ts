@@ -109,7 +109,13 @@ export default {
     xOffsetC4: get('COVERSHEET_C4_OFFSET_X', '24mm'),
     yOffsetC4: get('COVERSHEET_C4_OFFSET_Y', '67mm'),
   },
-  phaseBannerLink: get('PHASE_BANNER_LINK', 'https://eu.surveymonkey.com/r/SendLegalMail'),
-  exitSurveyLink: get('EXIT_BANNER_LINK', 'https://eu.surveymonkey.com/r/SendLegalMail'),
+  phaseBannerLink: {
+    legalSenderJourney: get('LEGAL_SENDER_PHASE_BANNER_LINK', 'https://eu.surveymonkey.com/r/SendLegalMail'),
+    mailRoomJourney: get('MAIL_ROOM_PHASE_BANNER_LINK', 'https://eu.surveymonkey.com/r/CheckRule39Mail'),
+  },
+  exitSurveyLink: {
+    legalSenderJourney: get('LEGAL_SENDER_EXIT_BANNER_LINK', 'https://eu.surveymonkey.com/r/SendLegalMail'),
+    mailRoomJourney: get('MAIL_ROOM_EXIT_BANNER_LINK', 'https://eu.surveymonkey.com/r/CheckRule39Mail'),
+  },
   fileUploadsEnabled: get('FILE_UPLOADS_ENABLED', false),
 }
