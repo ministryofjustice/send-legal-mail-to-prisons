@@ -37,7 +37,7 @@
         }) }}
 
         {# form action deliberately empty to POST to the same url as the GET request, because we have 2 routes (legal sender and mail room) for the same page that we need to maintain #}
-        <form id="contact-helpdesk-form" action="" method="post" novalidate>
+        <form id="contact-helpdesk-form" action="" method="post" enctype="multipart/form-data" novalidate autocomplete="off">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
           <input type="hidden" name="pageId" value="{{ form.pageId }}" />
 
@@ -46,7 +46,7 @@
             {{ govukCharacterCount({
               name: 'problemDetail',
               id: 'problemDetail',
-              value: form.problemDetail',
+              value: form.problemDetail,
               label: {
                 text: 'Tell us what you were trying to do and what happened'
               },
@@ -57,19 +57,16 @@
             {{ govukFileUpload({
               id: 'screenshot',
               name: 'screenshot',
-              value: form.screenshot,
               label: {
                 text: 'Attach a screenshot (optional)'
               },
+              attributes: { 'accept':'.jpg, .jpeg, .bmp, .png, .tif, .pdf' },
               errorMessage: errors | findError('screenshot')
             }) }}
 
             {{ govukInput({
               label: {
                 text: "Full name"
-              },
-              attributes: {
-                autocomplete: 'off'
               },
               id: "name",
               name: "name",
@@ -81,8 +78,8 @@
               label: {
                 text: 'Email'
               },
-              id: "email",
-              name: "email",
+              id: 'email',
+              name: 'email',
               value: form.email,
               type: 'email',
               errorMessage: errors | findError('email')
