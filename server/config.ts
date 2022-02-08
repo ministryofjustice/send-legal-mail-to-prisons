@@ -111,4 +111,5 @@ export default {
   },
   phaseBannerLink: get('PHASE_BANNER_LINK', 'https://eu.surveymonkey.com/r/SendLegalMail'),
   exitSurveyLink: get('EXIT_BANNER_LINK', 'https://eu.surveymonkey.com/r/SendLegalMail'),
+  fileUploadsEnabled: get('FILE_UPLOADS_ENABLED', false),
 }

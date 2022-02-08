@@ -20,7 +20,7 @@ describe('uploadValidator', () => {
     expect(errors).toStrictEqual([])
   })
 
-  it(`should not validate given an empty uploaded file`, () => {
+  it(`should validate given an empty uploaded file`, () => {
     const upload = {
       size: 0,
       mimetype: 'image/jpg',
@@ -31,7 +31,7 @@ describe('uploadValidator', () => {
     expect(errors).toStrictEqual(['The selected file cannot be empty'])
   })
 
-  it(`should not validate given an uploaded file that is too big`, () => {
+  it(`should validate given an uploaded file that is too big`, () => {
     const upload = {
       size: 20 * 1024 * 1024 + 1,
       mimetype: 'image/jpg',
@@ -42,7 +42,7 @@ describe('uploadValidator', () => {
     expect(errors).toStrictEqual(['The selected file must be smaller than 20MB'])
   })
 
-  it(`should not validate given an unsupported file type`, () => {
+  it(`should validate given an unsupported file type`, () => {
     const upload = {
       size: 20,
       mimetype: 'application/octet-stream',
@@ -53,7 +53,7 @@ describe('uploadValidator', () => {
     expect(errors).toStrictEqual(['The selected file must be a JPG, JPEG, BMP, PNG, TIF, or PDF'])
   })
 
-  it(`should not validate given an unsupported file type that is also too large`, () => {
+  it(`should validate given an unsupported file type that is also too large`, () => {
     const upload = {
       size: 20 * 1024 * 1024 + 1,
       mimetype: 'application/octet-stream',

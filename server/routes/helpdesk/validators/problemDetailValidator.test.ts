@@ -8,14 +8,14 @@ describe('problemDetailValidator', () => {
   })
 
   Array.of(null, undefined, '').forEach(problemDetail => {
-    it(`should not validate given null/empty problem detail - '${problemDetail}'`, () => {
+    it(`should validate given null/empty problem detail - '${problemDetail}'`, () => {
       const errors = validateProblemDetail(problemDetail)
 
       expect(errors).toStrictEqual(['Enter details of the problem you experienced'])
     })
   })
 
-  it(`should not validate a problem detail that is too long'`, () => {
+  it(`should validate given a problem detail that is too long'`, () => {
     const errors = validateProblemDetail('a'.repeat(501))
 
     expect(errors).toStrictEqual(['Details must be 500 characters or less'])

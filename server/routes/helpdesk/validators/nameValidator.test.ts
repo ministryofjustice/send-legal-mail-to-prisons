@@ -10,14 +10,14 @@ describe('nameValidator', () => {
   })
 
   Array.of(null, undefined, '').forEach(name => {
-    it(`should not validate given null/empty name - '${name}'`, () => {
+    it(`should validate given null/empty name - '${name}'`, () => {
       const errors = validateName(name)
 
       expect(errors).toStrictEqual(['Enter a full name'])
     })
   })
 
-  it(`should not validate a name that is too long'`, () => {
+  it(`should validate given a name that is too long'`, () => {
     const errors = validateName('ABCDEFGEH ABCDEFGEH ABCDEFGEH ABCDEFGEH ABCDEFGEH ABCDEFGEH A')
 
     expect(errors).toStrictEqual(['Name can have a maximum length of 60 characters.'])
