@@ -84,9 +84,9 @@
       <section class="contact-helpdesk" role="complementary">
         {% set contactHelpdeskUrl %}
           {% if externalUser %}
-            /contact-helpdesk
+            /contact-helpdesk?pageId={{ pageId }}
           {% else %}
-            /scan-barcode/contact-helpdesk
+            /scan-barcode/contact-helpdesk?pageId={{ pageId }}
           {% endif %}
         {% endset %}
         <a href="{{ contactHelpdeskUrl }}" target="_blank" class="govuk-link govuk-link--inverse" data-qa="contact-helpdesk">Contact helpdesk (opens in new tab)</a>

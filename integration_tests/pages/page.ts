@@ -6,7 +6,7 @@ export default abstract class Page {
   }
 
   protected constructor(
-    private readonly pageId: string,
+    readonly pageId: string,
     private readonly options: { axeTest?: boolean; expectHelpdeskLink?: boolean } = {
       axeTest: true,
       expectHelpdeskLink: true,
@@ -34,9 +34,9 @@ export default abstract class Page {
     this.contactHelpdeskLink().should('exist').and('be.visible')
   }
 
-  contactHelpdesk = (): void => {
-    this.contactHelpdeskLink().click()
-    // TODO SLM-106 return next page once developed
+  contactHelpdesk<T>(T): T {
+    this.contactHelpdeskLink().invoke('removeAttr', 'target').click()
+    return Page.verifyOnPage(T)
   }
 
   signOut = (): PageElement => cy.get('[data-qa=signOut]')
