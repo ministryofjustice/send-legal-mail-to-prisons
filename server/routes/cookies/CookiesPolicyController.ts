@@ -42,12 +42,12 @@ export default class CookiesPolicyController {
       }
       return res
         .cookie('cookies_policy', req.body.cookies, { maxAge: 365 * 24 * 60 * 60 * 1000 })
-        .redirect(302, `${redirectUrl}?showCookieConfirmation=true`)
+        .redirect(`${redirectUrl}?showCookieConfirmation=true`)
     }
-    return res.redirect(302, redirectUrl)
+    return res.redirect(redirectUrl)
   }
 
   async submitConfirmCookiesPolicy(req: Request, res: Response): Promise<void> {
-    return res.redirect(302, req.session.cookiesPolicy.lastPage)
+    return res.redirect(req.session.cookiesPolicy.lastPage)
   }
 }

@@ -127,7 +127,7 @@ describe('CookiesPolicyController', () => {
         res as unknown as Response
       )
 
-      expect(res.redirect).toHaveBeenCalledWith(302, '/lastPage')
+      expect(res.redirect).toHaveBeenCalledWith('/lastPage')
     })
 
     it('should redirect to the cookies policy page if we came from there', async () => {
@@ -138,7 +138,7 @@ describe('CookiesPolicyController', () => {
         res as unknown as Response
       )
 
-      expect(res.redirect).toHaveBeenCalledWith(302, '/cookies-policy')
+      expect(res.redirect).toHaveBeenCalledWith('/cookies-policy')
     })
 
     it('should set a cookie with cookie preference', async () => {
@@ -162,7 +162,7 @@ describe('CookiesPolicyController', () => {
         res as unknown as Response
       )
 
-      expect(res.redirect).toHaveBeenCalledWith(302, '/lastPage?showCookieConfirmation=true')
+      expect(res.redirect).toHaveBeenCalledWith('/lastPage?showCookieConfirmation=true')
     })
 
     it('should reject any google analytics cookies', async () => {
