@@ -34,17 +34,21 @@ export default class CookiesPolicyController {
     }
     if (req.body.cookies) {
       if (req.body.cookies === 'reject') {
-        Object.entries(req.cookies).forEach(cookie => {
-          if (typeof cookie[0] === 'string' && /^_g/.test(cookie[0])) {
-            res.clearCookie(cookie[0])
-          }
-        })
+        this.clearGoogleAnalyticsCookies(req, res)
       }
       return res
         .cookie('cookies_policy', req.body.cookies, { maxAge: 365 * 24 * 60 * 60 * 1000 })
         .redirect(`${redirectUrl}?showCookieConfirmation=true`)
     }
     return res.redirect(redirectUrl)
+  }
+
+  private clearGoogleAnalyticsCookies(req: Request, res: Response) {
+    Object.entries(req.cookies).forEach(cookie => {
+      if (typeof cookie[0] === 'string' && /^_g/.test(cookie[0])) {
+        res.clearCookie(cookie[0])
+      }
+    })
   }
 
   async submitConfirmCookiesPolicy(req: Request, res: Response): Promise<void> {
