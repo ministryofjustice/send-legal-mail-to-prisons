@@ -33,7 +33,14 @@ declare module 'express-session' {
     createNewContactByPrisonerNameForm: CreateNewContactByPrisonerNameForm
     chooseContactForm: ChooseContactForm
     recipientForm: RecipientForm
+    cookiesPolicy: CookiesPolicy
     contactHelpdeskForm: ContactHelpdeskForm
+  }
+
+  export interface CookiesPolicy {
+    policy: 'accept' | 'reject' | 'n/a' | undefined
+    showConfirmation: boolean
+    lastPage: string
   }
 }
 

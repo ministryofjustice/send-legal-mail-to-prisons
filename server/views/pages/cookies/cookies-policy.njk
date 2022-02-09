@@ -1,0 +1,155 @@
+{% extends "layout.njk" %}
+
+{% set pageTitle = applicationName + " - Cookies Policy" %}
+{% set pageId = 'cookies-policy' %}
+
+{% block navigation %}{% endblock %}
+{% block cookieBanner %}{% endblock %}
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if cookiesPolicy.showConfirmation %}
+        {%- from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner -%}
+        {{ govukNotificationBanner({
+          type: 'success',
+          html: 'You’ve set your cookie preferences. <a href="' + cookiesPolicy.lastPage + '">Go back to the page you were looking at.</a>',
+          iconFallbackText: 'Success',
+          attributes: { 'data-qa': 'success-banner' }
+        }) }}
+      {% endif %}
+
+      <h1 class="govuk-heading-l">Cookies</h1>
+      <p class="govuk-body">We put small files known as ‘cookies’ onto your computer or mobile device when you use this service so we can:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>measure how you use the service</li>
+        <li>remember your progress through the service</li>
+        <li>remember the settings you’ve chosen</li>
+      </ul>
+      <p class="govuk-body">Cookies on ‘Send legal mail to prisons’ are not used for advertising or marketing.</p>
+
+      <h2 class="govuk-heading-m">Analytics cookies to help improve this service</h2>
+      <p class="govuk-body">If you give permission, we use Google Analytics to measure how you use this service. This means we can update and improve it more effectively. We do not allow Google to use or share the data about how you use it.</p>
+      <p class="govuk-body">Google Analytics stores information about:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>the pages you visit in this service</li>
+        <li>how long you spend on each page</li>
+        <li>how you got to the service</li>
+        <li>what you click on while you’re using the service</li>
+      </ul>
+      <p class="govuk-body">Google Analytics does not store:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>any of your personal details, for example, your name</li>
+        <li>what you enter into pages on this site</li>
+      </ul>
+
+      {% from "govuk/components/radios/macro.njk" import govukRadios %}
+      {% from "govuk/components/button/macro.njk" import govukButton %}
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <form action="/cookies-policy" method="post" novalidate>
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+            {{ govukRadios({
+              idPrefix: "cookies-policy-options",
+              name: "cookies",
+              fieldset: {
+                legend: {
+                  text: "Do you agree to the Ministry of Justice using Google Analytics to help improve the ‘Send legal mail to prisons’ service?",
+                  classes: "govuk-fieldset__legend--s"
+                }
+              },
+              items: [
+                {
+                  value: "accept",
+                  text: "Yes",
+                  checked: cookies === 'accept',
+                  attributes: { 'data-qa': 'accept' }
+                },
+                {
+                  value: "reject",
+                  text: "No",
+                  checked: cookies === 'reject' or not cookies,
+                  attributes: { 'data-qa': 'reject' }
+                }
+              ]
+            }) }}
+
+            {{ govukButton({
+              text: "Save cookie settings",
+              type: "submit",
+              attributes: { 'data-qa': 'save-cookies' }
+            }) }}
+          </form>
+        </div>
+      </div>
+
+      <p class="govuk-body">Google Analytics sets the following cookies:</p>
+      {% from "govuk/components/table/macro.njk" import govukTable %}
+      {{ govukTable({
+        firstCellIsHeader: true,
+        head: [
+          {
+            text: "Name",
+            classes: 'app-custom-class'
+          },
+          {
+            text: "Purpose",
+            classes: 'app-custom-class'
+          },
+          {
+            text: "Expires",
+            classes: 'app-custom-class'
+          }
+        ],
+        rows: [
+          [
+            { text: "_ga" },
+            { text: "Checks if you’ve signed in to the service before. This helps us count how many people use the service." },
+            { text: "2 years" }
+          ],
+          [
+            { text: "_gid" },
+            { text: "Checks if you’ve signed in to the service before. This helps us count how many people use the service." },
+            { text: "24 hours" }
+          ]
+        ]
+      }) }}
+
+      <h2 class="govuk-heading-m">Essential cookies</h2>
+      <p class="govuk-body">These cookies need to be on to allow you to use this service. They don’t store your personal data. For more information read our privacy policy.</p>
+      {% from "govuk/components/table/macro.njk" import govukTable %}
+      {{ govukTable({
+        firstCellIsHeader: true,
+        head: [
+          {
+            text: "Name",
+            classes: 'app-custom-class'
+          },
+          {
+            text: "Purpose",
+            classes: 'app-custom-class'
+          },
+          {
+            text: "Expires",
+            classes: 'app-custom-class'
+          }
+        ],
+        rows: [
+          [
+            { text: "connect.sid" },
+            { text: "Allows you to stay signed in to the service" },
+            { text: "At midnight in 7 days’ time" }
+          ],
+          [
+            { text: "cookie_policy" },
+            { text: "Saves your cookie consent setting" },
+            { text: "1 year" }
+          ]
+        ]
+      }) }}
+
+    </div>
+  </div>
+{% endblock %}
