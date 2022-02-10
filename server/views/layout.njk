@@ -3,7 +3,7 @@
 
 {% block head %}
 
-  {% if gtmContainerId != null %}
+  {% if gtmContainerId != null and (cookiesPolicy.policy === 'accept' or cookiesPolicy.policy === 'n/a') %}
   {# Google Tag Manager #}
   <script nonce="{{ cspNonce }}" data-qa="gtm">
     ;
@@ -55,6 +55,7 @@
 {% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
 
 {% block header %}
+  {% include "partials/cookie-banner.njk" %}
   {% include "partials/header.njk" %}
 {% endblock %}
 
@@ -94,6 +95,20 @@
     {% endif %}
 
   </div>
+{% endblock %}
+
+{% block footer %}
+  {%- from "govuk/components/footer/macro.njk" import govukFooter -%}
+  {{ govukFooter({
+    meta: {
+      items: [
+        {
+          href: "/cookies-policy",
+          text: "Cookies"
+         }
+      ]
+    }
+  }) }}
 {% endblock %}
 
 {% block bodyEnd %}
