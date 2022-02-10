@@ -47,6 +47,12 @@ export default function setUpStaticResources(): Router {
   Array.of('/node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js').forEach(dir => {
     router.use('/assets/js/accessible-autocomplete.min.js', express.static(path.join(process.cwd(), dir), cacheControl))
   })
+  Array.of('/node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js.map').forEach(dir => {
+    router.use(
+      '/assets/js/accessible-autocomplete.min.js.map',
+      express.static(path.join(process.cwd(), dir), cacheControl)
+    )
+  })
   Array.of('/node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.css').forEach(dir => {
     router.use(
       '/assets/stylesheets/accessible-autocomplete.min.css',
