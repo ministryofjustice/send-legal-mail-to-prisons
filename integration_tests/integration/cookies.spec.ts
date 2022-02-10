@@ -1,0 +1,126 @@
+import Page from '../pages/page'
+import RequestLinkPage from '../pages/link/requestLink'
+import CookiesPolicyPage from '../pages/cookiesPolicy'
+import FindRecipientByPrisonNumberPage from '../pages/barcode/findRecipientByPrisonNumber'
+import ScanBarcodePage from '../pages/scan/scanBarcode'
+
+context('Cookies', () => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubAuthToken')
+  })
+
+  describe('Request Link Page', () => {
+    it('should remove cookie banner once accepted and acknowledged', () => {
+      cy.visit('/link/request-link')
+      let requestLinkPage: RequestLinkPage = Page.verifyOnPage(RequestLinkPage).clickCookieAction(
+        RequestLinkPage,
+        'reject'
+      )
+      requestLinkPage
+        .hasCookieBannerContaining('rejected')
+        .doesntHaveCookieAction('accept')
+        .doesntHaveCookieAction('reject')
+
+      requestLinkPage = requestLinkPage.clickCookieAction(RequestLinkPage, 'hide')
+
+      requestLinkPage.doesntHaveCookieBanner()
+    })
+  })
+
+  describe('Cookies Policy Page', () => {
+    it('should remove cookie banner once accepted and acknowledged on the cookie policy page', () => {
+      cy.visit('/link/request-link')
+      const cookiesPolicyPage: CookiesPolicyPage = Page.verifyOnPage(RequestLinkPage).clickCookieAction(
+        CookiesPolicyPage,
+        'view'
+      )
+
+      // Check the cookies-policy page looks ok and defaults to reject
+      cookiesPolicyPage.doesntHaveCookieBanner()
+      cookiesPolicyPage.acceptCookiePolicyRadioIs(false)
+      cookiesPolicyPage.rejectCookiePolicyRadioIs(true)
+
+      // Accept cookies and check the success banner is displayed
+      cookiesPolicyPage.acceptCookiePolicy()
+      Page.verifyOnPage(CookiesPolicyPage)
+      cookiesPolicyPage.successBanner().should('exist')
+
+      // Click the link to go back and the cookie banner should have gone
+      cookiesPolicyPage.successBannerLink().click()
+      Page.verifyOnPage(RequestLinkPage).doesntHaveCookieBanner()
+    })
+
+    it('should remove cookie banner once acknowledged on the cookie policy page', () => {
+      cy.visit('/link/request-link')
+
+      // Accept cookies form the banner and go to the cookies page
+      const requestLinkPage: RequestLinkPage = Page.verifyOnPage(RequestLinkPage).clickCookieAction(
+        RequestLinkPage,
+        'accept'
+      )
+      const cookiesPolicyPage: CookiesPolicyPage = requestLinkPage.clickCookieAction(CookiesPolicyPage, 'view')
+
+      // The cookie policy page is now defaulted to accept
+      cookiesPolicyPage.acceptCookiePolicyRadioIs(true)
+      cookiesPolicyPage.rejectCookiePolicyRadioIs(false)
+
+      // Accept cookies and check the success banner is displayed
+      cookiesPolicyPage.saveCookiePolicy()
+      Page.verifyOnPage(CookiesPolicyPage)
+      cookiesPolicyPage.successBanner().should('exist')
+
+      // Click the link to go back and the cookie banner should have gone
+      cookiesPolicyPage.successBannerLink().click()
+      Page.verifyOnPage(RequestLinkPage).doesntHaveCookieBanner()
+    })
+
+    it('should show cookie banner with hide button when visiting the cookie policy page but not acknowledging', () => {
+      cy.visit('/link/request-link')
+
+      // Accept cookies form the banner and go to the cookies page
+      const requestLinkPage: RequestLinkPage = Page.verifyOnPage(RequestLinkPage).clickCookieAction(
+        RequestLinkPage,
+        'accept'
+      )
+      requestLinkPage.clickCookieAction(CookiesPolicyPage, 'view')
+
+      // Go back to the previous page and the hide button should still be there
+      cy.go(-1)
+      Page.verifyOnPage(RequestLinkPage).hasCookieBannerContaining('accepted').hasCookieAction('hide')
+    })
+  })
+
+  describe('Find Recipient Page', () => {
+    it('should show cookie banner on subsequent pages and accept cookies', () => {
+      cy.visit('/link/request-link')
+      Page.verifyOnPage(RequestLinkPage)
+
+      cy.task('stubVerifyLink')
+      cy.visit('/link/verify-link?secret=a-valid-secret')
+      const page: FindRecipientByPrisonNumberPage = Page.verifyOnPage(FindRecipientByPrisonNumberPage)
+
+      // The cookie banner is available
+      page.hasCookieAction('accept')
+      page.hasCookieAction('reject')
+      page.hasCookieAction('view')
+
+      // Accept and acknowledge cookies in the banner
+      page.clickCookieAction(FindRecipientByPrisonNumberPage, 'accept')
+      page.clickCookieAction(FindRecipientByPrisonNumberPage, 'hide')
+      page.doesntHaveCookieBanner()
+    })
+  })
+
+  describe('Scan barcode', () => {
+    it('should not show cookie banner on internal pages', () => {
+      cy.task('stubAuthUser')
+      cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+      cy.signIn()
+      cy.visit('/scan-barcode')
+
+      const page = Page.verifyOnPage(ScanBarcodePage)
+      page.doesntHaveCookieBanner()
+    })
+  })
+})

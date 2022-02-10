@@ -47,6 +47,36 @@ export default abstract class Page {
 
   contactHelpdeskLink = (): PageElement => cy.get('[data-qa=contact-helpdesk]')
 
+  cookieAction = (type: string): PageElement | undefined => {
+    const linkType = type === 'view' ? 'a' : 'button'
+    return cy.get('div.govuk-cookie-banner').find(`${linkType}[data-qa="${type}"]`)
+  }
+
+  hasCookieBannerContaining = (expectedWord: string) => {
+    cy.get('div.govuk-cookie-banner').should('contain.text', expectedWord)
+    return this
+  }
+
+  doesntHaveCookieBanner = () => {
+    cy.get('div.govuk-cookie-banner').should('not.exist')
+    return this
+  }
+
+  hasCookieAction = (type: string) => {
+    this.cookieAction(type).should('exist')
+    return this
+  }
+
+  doesntHaveCookieAction = (type: string) => {
+    this.cookieAction(type).should('not.exist')
+    return this
+  }
+
+  clickCookieAction<T>(T, type: string): T {
+    this.cookieAction(type).click()
+    return Page.verifyOnPage(T)
+  }
+
   hasNoErrors = (): void => {
     cy.get('.govuk-error-summary__list').should('not.exist')
   }

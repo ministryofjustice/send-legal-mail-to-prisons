@@ -32,7 +32,7 @@ For example in the dev environment:
 3. List the charts deployed by helm with command `helm list`
 4. List the deployments for this application with command `helm history send-legal-mail-to-prisons`
 5. Given the application version you wish to rollback to, find the related revision number
-6. Rollback to that version with command `helm rollback <revision-number>` replacing `<revision-number>` as appropriate
+6. Rollback to that version with command `helm rollback send-legal-mail-to-prisons <revision-number>` replacing `<revision-number>` as appropriate
 
 ## Imported Types
 Some types are imported from the Open API docs for send-legal-mail-to-prisons-api and prison-register.

@@ -2,6 +2,7 @@ import express from 'express'
 
 import createError from 'http-errors'
 
+import cookieParser from 'cookie-parser'
 import indexRoutes from './routes'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
@@ -33,6 +34,7 @@ import setupPdfRenderer from './middleware/setupPdfRenderer'
 import ContactService from './services/contacts/ContactService'
 import RecipientFormService from './routes/barcode/recipients/RecipientFormService'
 import setupContactHelpdesk from './middleware/helpdesk/setupContactHelpdesk'
+import setupCookiesPolicy from './middleware/cookies/setupCookiesPolicy'
 
 export default function createApp(
   userService: UserService,
@@ -50,6 +52,7 @@ export default function createApp(
   app.set('trust proxy', true)
   app.set('port', process.env.PORT || 3000)
 
+  app.use(cookieParser())
   app.use(setUpHealthChecks())
   app.use(setUpWebSecurity())
   app.use(setUpWebSession())
@@ -57,6 +60,7 @@ export default function createApp(
   app.use(setUpStaticResources())
   app.use(setupPdfRenderer(new GotenbergClient()))
   nunjucksSetup(app)
+  app.use(setupCookiesPolicy())
 
   // no authentication
   app.use('/link', requestLinkAuthorised())
