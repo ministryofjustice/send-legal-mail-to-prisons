@@ -37,7 +37,11 @@ export default class CookiesPolicyController {
         this.clearGoogleAnalyticsCookies(req, res)
       }
       return res
-        .cookie('cookies_policy', req.body.cookies, { maxAge: 365 * 24 * 60 * 60 * 1000 })
+        .cookie('cookies_policy', req.body.cookies, {
+          maxAge: 365 * 24 * 60 * 60 * 1000,
+          sameSite: 'strict',
+          secure: true,
+        })
         .redirect(`${redirectUrl}?showCookieConfirmation=true`)
     }
     return res.redirect(redirectUrl)
