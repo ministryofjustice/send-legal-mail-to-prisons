@@ -150,7 +150,11 @@ describe('CookiesPolicyController', () => {
         res as unknown as Response
       )
 
-      expect(res.cookie).toHaveBeenCalledWith('cookies_policy', 'accept', expect.anything())
+      expect(res.cookie).toHaveBeenCalledWith(
+        'cookies_policy',
+        'accept',
+        expect.objectContaining({ sameSite: 'strict', secure: true })
+      )
     })
 
     it('should set cookie confirmation parameter on redirect url', async () => {
