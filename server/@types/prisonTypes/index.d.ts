@@ -22,5 +22,6 @@ declare module 'prisonTypes' {
     prisonerDob?: Date
     prisonAddress: PrisonAddress
     barcodeValue?: string
+    contactId?: number
   }
 }

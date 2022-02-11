@@ -68,6 +68,7 @@ export default class PrisonRegisterService {
   }
 
   private strictCastToPrisonAddress(source: {
+    agencyCode?: string
     flat?: string
     premise?: string
     street?: string
@@ -77,6 +78,7 @@ export default class PrisonRegisterService {
     postalCode?: string
   }): PrisonAddress {
     return {
+      agencyCode: source.agencyCode,
       flat: source.flat,
       premise: source.premise,
       street: source.street,

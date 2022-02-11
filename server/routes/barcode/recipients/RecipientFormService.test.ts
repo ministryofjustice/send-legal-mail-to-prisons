@@ -203,6 +203,7 @@ describe('Recipient Form Service', () => {
         prisonNumber: 'A1234BC',
         prisonerName: 'John Smith',
         prisonAddress: aPrisonAddress(),
+        contactId: 1,
       })
       expect(req.session.recipientForm).toStrictEqual({})
       expect(prisonRegisterService.getPrisonAddress).toHaveBeenCalledWith('LEI')
@@ -217,6 +218,7 @@ describe('Recipient Form Service', () => {
         prisonerDob: moment('1990-01-01', 'YYYY-MM-DD').toDate(),
         prisonerName: 'John Smith',
         prisonAddress: aPrisonAddress(),
+        contactId: 1,
       })
       expect(req.session.recipientForm).toStrictEqual({})
       expect(prisonRegisterService.getPrisonAddress).toHaveBeenCalledWith('LEI')

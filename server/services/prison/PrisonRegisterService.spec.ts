@@ -127,6 +127,7 @@ describe('Prison Register Service', () => {
       const prisonId = 'ASI'
 
       const expectedPrisonAddress: PrisonAddress = {
+        agencyCode: 'ASI',
         flat: '',
         premise: 'HMP Ashfield',
         street: 'Shortwood Road',

@@ -5,7 +5,7 @@ import bwipjs from 'bwip-js'
 import { createCanvas, Image, registerFont } from 'canvas'
 import moment from 'moment'
 import type { Recipient } from 'prisonTypes'
-import type { CreateBarcodeResponse } from 'sendLegalMailApiClient'
+import type { CreateBarcodeRequest, CreateBarcodeResponse } from 'sendLegalMailApiClient'
 import RestClient from '../../data/restClient'
 import config from '../../config'
 import logger from '../../../logger'
@@ -42,10 +42,18 @@ export default class CreateBarcodeService {
   /**
    * Returns a string containing a freshly generated barcode value.
    */
-  async generateBarcodeValue(slmToken: string): Promise<string> {
+  async generateBarcodeValue(slmToken: string, recipient: Recipient): Promise<string> {
     try {
+      const requestBody: CreateBarcodeRequest = {
+        prisonerName: recipient.prisonerName,
+        prisonId: recipient.prisonAddress.agencyCode,
+        prisonNumber: recipient.prisonNumber,
+        dob: recipient.prisonerDob ? moment(recipient.prisonerDob).format('YYYY-MM-DD') : undefined,
+        contactId: recipient.contactId,
+      }
       const response = (await CreateBarcodeService.restClient(slmToken).post({
         path: `/barcode`,
+        data: requestBody,
       })) as CreateBarcodeResponse
       return response.barcode
     } catch (error) {
@@ -69,7 +77,7 @@ export default class CreateBarcodeService {
     return Promise.all(
       recipients.map(async recipient => {
         if (!recipient.barcodeValue) {
-          const barcodeValue = await this.generateBarcodeValue(token)
+          const barcodeValue = await this.generateBarcodeValue(token, recipient)
           return { ...recipient, barcodeValue }
         }
         return recipient

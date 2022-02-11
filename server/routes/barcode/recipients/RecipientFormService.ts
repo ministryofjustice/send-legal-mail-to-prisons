@@ -43,8 +43,8 @@ export default class RecipientFormService {
       prisonNumber: recipientForm.prisonNumber,
       prisonerDob: recipientForm.prisonerDob,
       prisonAddress,
+      contactId: +recipientForm.contactId || undefined,
     }
-
     req.session.recipients.push(newRecipient)
     req.session.recipientForm = {}
   }
@@ -60,6 +60,7 @@ export default class RecipientFormService {
       prisonerName: contact.prisonerName,
       prisonerDob: contact.dob ? moment(contact.dob, 'YYYY-MM-DD').toDate() : undefined,
       prisonId: contact.prisonId,
+      contactId: contact.id,
     } as RecipientForm
   }
 }

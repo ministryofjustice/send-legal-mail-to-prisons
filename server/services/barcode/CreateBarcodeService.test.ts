@@ -2,6 +2,8 @@
 // @ts-ignore
 import { toBuffer } from 'bwip-js'
 import nock from 'nock'
+import moment from 'moment'
+import type { Recipient } from 'prisonTypes'
 import CreateBarcodeService from './CreateBarcodeService'
 import config from '../../config'
 
@@ -23,18 +25,52 @@ describe('CreateBarcodeService', () => {
 
   describe('generateBarcodeValue', () => {
     it('should generate a new barcode value', async () => {
-      mockedSendLegalMailApi.post('/barcode').reply(201, { barcode: '123456789012' })
+      const recipient: Recipient = {
+        prisonNumber: 'A1234BC',
+        prisonerName: 'John Smith',
+        prisonAddress: {
+          agencyCode: 'BSI',
+          premise: 'HMP BRINSFORD',
+          postalCode: 'WV10 7PY',
+        },
+        contactId: 123,
+      }
+      mockedSendLegalMailApi
+        .post('/barcode', {
+          prisonerName: 'John Smith',
+          prisonId: 'BSI',
+          prisonNumber: 'A1234BC',
+          contactId: 123,
+        })
+        .reply(201, { barcode: '123456789012' })
 
-      const barcodeValue = await createBarcodeService.generateBarcodeValue('some-token')
+      const barcodeValue = await createBarcodeService.generateBarcodeValue('some-token', recipient)
 
       expect(barcodeValue).toBe('123456789012')
     })
 
     it('should throw error if calling the API returns error', async () => {
-      mockedSendLegalMailApi.post('/barcode').reply(400, 'something bad happened')
+      const recipient: Recipient = {
+        prisonNumber: 'A1234BC',
+        prisonerName: 'John Smith',
+        prisonAddress: {
+          agencyCode: 'BSI',
+          premise: 'HMP BRINSFORD',
+          postalCode: 'WV10 7PY',
+        },
+        contactId: 123,
+      }
+      mockedSendLegalMailApi
+        .post('/barcode', {
+          prisonerName: 'John Smith',
+          prisonId: 'BSI',
+          prisonNumber: 'A1234BC',
+          contactId: 123,
+        })
+        .reply(400, 'something bad happened')
 
       try {
-        await createBarcodeService.generateBarcodeValue('some-token')
+        await createBarcodeService.generateBarcodeValue('some-token', recipient)
         fail('Was expecting createBarcodeService.generateBarcodeValue to have thrown an error but it did not')
       } catch (error) {
         expect(error).toStrictEqual(new Error('Error generating new barcode value'))
@@ -55,6 +91,7 @@ describe('CreateBarcodeService', () => {
           postalCode: 'WV10 7PY',
         },
         barcodeValue: '123456789012',
+        contactId: 1,
       }
       mockBwipjsToBuffer.mockResolvedValue(Buffer.from('barcode-image'))
 
@@ -78,6 +115,7 @@ describe('CreateBarcodeService', () => {
           postalCode: 'WV10 7PY',
         },
         barcodeValue: '123456789012',
+        contactId: 1,
       }
       mockBwipjsToBuffer.mockRejectedValue('An error generating the barcode image')
 
@@ -102,33 +140,49 @@ describe('CreateBarcodeService', () => {
           prisonNumber: 'A1234BC',
           prisonerName: 'John Smith',
           prisonAddress: {
+            agencyCode: 'BSI',
             premise: 'HMP BRINSFORD',
             postalCode: 'WV10 7PY',
           },
+          contactId: 1,
         },
         {
           prisonNumber: 'A5566JD',
           prisonerName: 'Jane Doe',
           prisonAddress: {
+            agencyCode: 'BLI',
             premise: 'HMP Bristol',
             postalCode: 'BS1 1AA',
           },
           barcodeValue: '121212121212',
+          contactId: 2,
         },
         {
-          prisonNumber: 'Q9876TY',
           prisonerName: 'Fred Bloggs',
+          prisonerDob: moment('1980-03-15').toDate(),
           prisonAddress: {
+            agencyCode: 'BLI',
             premise: 'HMP Bristol',
             postalCode: 'BS1 1AA',
           },
+          contactId: 3,
         },
       ]
 
       mockedSendLegalMailApi
-        .post('/barcode')
+        .post('/barcode', {
+          prisonerName: 'John Smith',
+          prisonId: 'BSI',
+          prisonNumber: 'A1234BC',
+          contactId: 1,
+        })
         .reply(201, { barcode: '123456789012' })
-        .post('/barcode')
+        .post('/barcode', {
+          prisonerName: 'Fred Bloggs',
+          prisonId: 'BLI',
+          dob: '1980-03-15',
+          contactId: 3,
+        })
         .reply(201, { barcode: '098765432109' })
 
       const recipientsWithBarcodes = await createBarcodeService.addBarcodeValuesToRecipients(recipients, 'some-token')
@@ -138,28 +192,34 @@ describe('CreateBarcodeService', () => {
           prisonNumber: 'A1234BC',
           prisonerName: 'John Smith',
           prisonAddress: {
+            agencyCode: 'BSI',
             premise: 'HMP BRINSFORD',
             postalCode: 'WV10 7PY',
           },
           barcodeValue: '123456789012',
+          contactId: 1,
         },
         {
           prisonNumber: 'A5566JD',
           prisonerName: 'Jane Doe',
           prisonAddress: {
+            agencyCode: 'BLI',
             premise: 'HMP Bristol',
             postalCode: 'BS1 1AA',
           },
           barcodeValue: '121212121212',
+          contactId: 2,
         },
         {
-          prisonNumber: 'Q9876TY',
           prisonerName: 'Fred Bloggs',
+          prisonerDob: moment('1980-03-15').toDate(),
           prisonAddress: {
+            agencyCode: 'BLI',
             premise: 'HMP Bristol',
             postalCode: 'BS1 1AA',
           },
           barcodeValue: '098765432109',
+          contactId: 3,
         },
       ])
     })
@@ -170,24 +230,38 @@ describe('CreateBarcodeService', () => {
           prisonNumber: 'A1234BC',
           prisonerName: 'John Smith',
           prisonAddress: {
+            agencyCode: 'BSI',
             premise: 'HMP BRINSFORD',
             postalCode: 'WV10 7PY',
           },
+          contactId: 1,
         },
         {
           prisonNumber: 'Q9876TY',
           prisonerName: 'Fred Bloggs',
           prisonAddress: {
+            agencyCode: 'BLI',
             premise: 'HMP Bristol',
             postalCode: 'BS1 1AA',
           },
+          contactId: 2,
         },
       ]
 
       mockedSendLegalMailApi
-        .post('/barcode')
+        .post('/barcode', {
+          prisonerName: 'John Smith',
+          prisonId: 'BSI',
+          prisonNumber: 'A1234BC',
+          contactId: 1,
+        })
         .reply(201, { barcode: '123456789012' })
-        .post('/barcode')
+        .post('/barcode', {
+          prisonerName: 'Fred Bloggs',
+          prisonId: 'BLI',
+          prisonNumber: 'Q9876TY',
+          contactId: 2,
+        })
         .reply(400, 'Some API error generating a new barcode number')
 
       try {
