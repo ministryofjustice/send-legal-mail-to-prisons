@@ -270,6 +270,9 @@ const stubCreateBarcode = (): SuperAgentRequest =>
     request: {
       method: 'POST',
       urlPattern: '/send-legal-mail/barcode',
+      bodyPatterns: [
+        { matchesJsonPath: '$[?(@.prisonerName =~ /.+/i && @.prisonId =~ /.+/i && @.contactId =~ /.+/i)]' },
+      ],
       headers: {
         'Create-Barcode-Token': {
           equalTo:
@@ -291,6 +294,9 @@ const stubCreateBarcodeFailure = (): SuperAgentRequest =>
     request: {
       method: 'POST',
       urlPattern: '/send-legal-mail/barcode',
+      bodyPatterns: [
+        { matchesJsonPath: '$[?(@.prisonerName =~ /.+/i && @.prisonId =~ /.+/i && @.contactId =~ /.+/i)]' },
+      ],
       headers: {
         'Create-Barcode-Token': {
           equalTo:

@@ -245,6 +245,34 @@ export interface components {
        */
       prisonNumber?: string
     }
+    CreateBarcodeRequest: {
+      /**
+       * @description The recipient name
+       * @example John Doe
+       */
+      prisonerName: string
+      /**
+       * @description The ID of the prison where the recipient is located
+       * @example BXI
+       */
+      prisonId: string
+      /**
+       * Format: date
+       * @description The date of birth of the recipient if known
+       * @example 1965-04-23
+       */
+      dob?: string
+      /**
+       * @description The prison number of the recipient if known
+       * @example A1234BC
+       */
+      prisonNumber?: string
+      /**
+       * @description The ID of the contact if known
+       * @example 1234
+       */
+      contactId?: number
+    }
     CreateBarcodeResponse: {
       /**
        * @description The generated barcode
@@ -389,6 +417,11 @@ export interface operations {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateBarcodeRequest']
       }
     }
   }
