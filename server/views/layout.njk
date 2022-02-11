@@ -2,8 +2,13 @@
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
 {% block head %}
+  {% if gtmContainerId and (cookiesPolicy.policy === '' or cookiesPolicy.policy === 'reject') %}
+  <script>
+    window["ga-disable-{{ gtmContainerId }}"] = true
+  </script>
+  {% endif %}
 
-  {% if gtmContainerId != null and (cookiesPolicy.policy === 'accept' or cookiesPolicy.policy === 'n/a') %}
+  {% if gtmContainerId != null %}
   {# Google Tag Manager #}
   <script nonce="{{ cspNonce }}" data-qa="gtm">
     ;
@@ -58,6 +63,13 @@
 {% endblock %}
 
 {% block bodyStart %}
+  {% if gtmContainerId %}
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id={{gtmContainerId}}" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+  {% endif %}
 {% endblock %}
 
 {# Override the `main` block from the govuk template so that we can add the Contact The Helpdesk banner #}
