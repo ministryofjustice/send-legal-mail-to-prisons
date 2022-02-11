@@ -168,19 +168,5 @@ describe('CookiesPolicyController', () => {
 
       expect(res.redirect).toHaveBeenCalledWith('/lastPage?showCookieConfirmation=true')
     })
-
-    it('should reject any google analytics cookies', async () => {
-      req.body = { cookies: 'reject' }
-      req.cookies = { cookies_policy: 'reject', _ga: 'some ga stuff' }
-      res.cookie.mockReturnValue(res)
-
-      await cookiesPolicyController.submitCookiesPolicyPreferences(
-        req as unknown as Request,
-        res as unknown as Response
-      )
-
-      expect(res.clearCookie).not.toHaveBeenCalledWith('reject')
-      expect(res.clearCookie).toHaveBeenCalledWith('_ga')
-    })
   })
 })
