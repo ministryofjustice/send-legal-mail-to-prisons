@@ -153,7 +153,7 @@ describe('CookiesPolicyController', () => {
       expect(res.cookie).toHaveBeenCalledWith(
         'cookies_policy',
         'accept',
-        expect.objectContaining({ sameSite: 'strict', secure: true })
+        expect.objectContaining({ sameSite: 'lax', secure: true })
       )
     })
 
