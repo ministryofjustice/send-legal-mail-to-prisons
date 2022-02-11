@@ -39,7 +39,7 @@ export default class CookiesPolicyController {
       return res
         .cookie('cookies_policy', req.body.cookies, {
           maxAge: 365 * 24 * 60 * 60 * 1000,
-          sameSite: 'strict',
+          sameSite: 'lax',
           secure: true,
         })
         .redirect(`${redirectUrl}?showCookieConfirmation=true`)
