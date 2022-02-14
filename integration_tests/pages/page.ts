@@ -13,6 +13,7 @@ export default abstract class Page {
     }
   ) {
     this.checkOnPage()
+    this.checkCsfrTokenForFormBasedPages()
     if (options.expectHelpdeskLink) {
       this.checkContactHelpdeskLink()
     }
@@ -23,6 +24,14 @@ export default abstract class Page {
 
   checkOnPage = (): void => {
     cy.get(`#${this.pageId}`).should('exist')
+  }
+
+  checkCsfrTokenForFormBasedPages = (): void => {
+    cy.get('body').then(body => {
+      body.find('form').each((idx, form) => {
+        cy.wrap(form).find('input[name=_csrf]').should('not.have.value', '')
+      })
+    })
   }
 
   runAxe = (): void => {

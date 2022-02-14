@@ -35,6 +35,7 @@ import ContactService from './services/contacts/ContactService'
 import RecipientFormService from './routes/barcode/recipients/RecipientFormService'
 import setupContactHelpdesk from './middleware/helpdesk/setupContactHelpdesk'
 import setupCookiesPolicy from './middleware/cookies/setupCookiesPolicy'
+import setupCsrf from './middleware/setupCsrf'
 
 export default function createApp(
   userService: UserService,
@@ -60,6 +61,7 @@ export default function createApp(
   app.use(setUpStaticResources())
   app.use(setupPdfRenderer(new GotenbergClient()))
   nunjucksSetup(app)
+  app.use(setupCsrf())
   app.use(setupCookiesPolicy())
 
   // no authentication

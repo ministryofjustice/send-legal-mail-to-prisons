@@ -9,6 +9,7 @@
             improvements.</p>
       {% endset %}
       <form action="/cookies-policy/preferences" method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {{ govukCookieBanner({
             ariaLabel: "Cookies on Send legal mail",
             messages: [
@@ -50,6 +51,7 @@
       {% endset %}
 
       <form action="/cookies-policy/confirm" method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {{ govukCookieBanner({
           ariaLabel: "Cookies on Send legal mail",
           messages: [
