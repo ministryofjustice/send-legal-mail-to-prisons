@@ -2,12 +2,19 @@ import 'dotenv/config'
 
 const production = process.env.NODE_ENV === 'production'
 
-function get<T>(name: string, fallback: T, options = { requireInProduction: false }): T | string {
+const toBoolean = (value: unknown): boolean => {
+  return value === 'true'
+}
+
+function get(name: string, fallback: unknown, options = { requireInProduction: false }): string | null {
   if (process.env[name]) {
     return process.env[name]
   }
+  if (fallback === null) {
+    return null
+  }
   if (fallback !== undefined && (!production || !options.requireInProduction)) {
-    return fallback
+    return fallback.toString()
   }
   throw new Error(`Missing env var ${name}`)
 }
@@ -72,10 +79,10 @@ export default {
         deadline: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)),
       },
       agent: new AgentConfig(),
-      enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
+      enabled: toBoolean(get('TOKEN_VERIFICATION_ENABLED', 'false')),
     },
     sendLegalMail: {
-      url: get('SEND_LEGAL_MAIL_API_URL', 'http://localhost:8101', requiredInProduction) as string,
+      url: get('SEND_LEGAL_MAIL_API_URL', 'http://localhost:8101', requiredInProduction),
       timeout: {
         response: Number(get('SEND_LEGAL_MAIL_API_TIMEOUT_RESPONSE', 30000)),
         deadline: Number(get('SEND_LEGAL_MAIL_API_TIMEOUT_DEADLINE', 30000)),
@@ -83,7 +90,7 @@ export default {
       agent: new AgentConfig(),
     },
     prisonRegister: {
-      url: get('PRISON_REGISTER_API_URL', 'http://localhost:8101', requiredInProduction) as string,
+      url: get('PRISON_REGISTER_API_URL', 'http://localhost:8101', requiredInProduction),
       timeout: {
         response: Number(get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 30000)),
         deadline: Number(get('PRISON_REGISTER_API_TIMEOUT_DEADLINE', 30000)),
@@ -100,7 +107,7 @@ export default {
   magicLinkValidityDuration: Number(get('MAGIC_LINK_VALIDITY_DURATION_IN_MINUTES', 60)),
   supportedPrisons: get('SUPPORTED_PRISONS', ''),
   coversheetPdf: {
-    printDebugInfo: get('COVERSHEET_PRINT_DEBUG', false),
+    printDebugInfo: toBoolean(get('COVERSHEET_PRINT_DEBUG', false)),
     addressLabelWidth: get('COVERSHEET_ADDRESS_LABEL_WIDTH', '90mm'),
     xOffsetDl: get('COVERSHEET_DL_OFFSET_X', '20mm'),
     yOffsetDl: get('COVERSHEET_DL_OFFSET_Y', '55mm'),
@@ -117,5 +124,5 @@ export default {
     legalSenderJourney: get('LEGAL_SENDER_EXIT_BANNER_LINK', 'https://eu.surveymonkey.com/r/SendLegalMail'),
     mailRoomJourney: get('MAIL_ROOM_EXIT_BANNER_LINK', 'https://eu.surveymonkey.com/r/CheckRule39Mail'),
   },
-  fileUploadsEnabled: get('FILE_UPLOADS_ENABLED', false),
+  fileUploadsEnabled: toBoolean(get('FILE_UPLOADS_ENABLED', false)),
 }
