@@ -103,9 +103,7 @@ export default {
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   slmContainerId: get('SLM_TAG_MANAGER_CONTAINER_ID', null),
-  slmGa4MeasurementId: get('SLM_GA4_MEASUREMENT_ID', null),
   checkRule39ContainerId: get('CHECK_RULE39_MAIL_TAG_MANAGER_CONTAINER_ID', null),
-  checkRule39Ga4MeasurementId: get('CHECK_RULE39_MAIL_GA4_MEASUREMENT_ID', null),
   magicLinkValidityDuration: Number(get('MAGIC_LINK_VALIDITY_DURATION_IN_MINUTES', 60)),
   supportedPrisons: get('SUPPORTED_PRISONS', ''),
   coversheetPdf: {
