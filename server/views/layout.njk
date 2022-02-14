@@ -2,14 +2,24 @@
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
 {% block head %}
-  {% set gaConsent = 'denied' %}
-  {% if gtmContainerId and (cookiesPolicy.policy === 'accept' or cookiesPolicy.policy === 'n/a') %}
-    {% set gaConsent = 'granted' %}
-  {% endif %}
   <script nonce="{{ cspNonce }}">
+    // Define dataLayer and the gtag function.
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push(['consent', 'update', { 'analytics_storage': '{{ gaConsent }}' }]);
+    function gtag(){dataLayer.push(arguments);}
+
+    // Default analytics_storage to 'denied'.
+    gtag('consent', 'default', {
+      'analytics_storage': 'denied'
+    });
   </script>
+
+  {% if gtmContainerId and (cookiesPolicy.policy === 'accept' or cookiesPolicy.policy === 'n/a') %}
+    <script nonce="{{ cspNonce }}">
+    gtag('consent', 'update', {
+      'analytics_storage': 'granted'
+    });
+    </script>
+  {% endif %}
 
   {% if gtmContainerId != null %}
   {# Google Tag Manager #}
