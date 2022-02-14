@@ -2,9 +2,9 @@
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
 {% block head %}
-  {% if gtmContainerId and (cookiesPolicy.policy === '' or cookiesPolicy.policy === 'reject') %}
+  {% if gtmContainerId and ga4MeasurementId and (cookiesPolicy.policy === '' or cookiesPolicy.policy === 'reject') %}
   <script>
-    window["ga-disable-{{ gtmContainerId }}"] = true
+    window["ga-disable-G-{{ ga4MeasurementId }}"] = true
   </script>
   {% endif %}
 
