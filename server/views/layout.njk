@@ -13,7 +13,7 @@
     });
   </script>
 
-  // Update analytics_storage to 'granted' if the user has accepted analytics cookies
+  <! Update analytics_storage to 'granted' if the user has accepted analytics cookies -->
   {% if gtmContainerId and (cookiesPolicy.policy === 'accept' or cookiesPolicy.policy === 'n/a') %}
     <script nonce="{{ cspNonce }}">
       gtag('consent', 'update', {
