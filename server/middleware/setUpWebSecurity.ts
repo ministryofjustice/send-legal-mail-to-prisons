@@ -34,7 +34,6 @@ export default function setUpWebSecurity(): Router {
           mediaSrc: ["'none'"],
           baseUri: ["'none'"],
           formAction: ["'self'"],
-          requireTrustedTypesFor: ["'script'"],
         },
       },
     })
