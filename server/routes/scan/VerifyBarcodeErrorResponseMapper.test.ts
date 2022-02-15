@@ -21,6 +21,9 @@ describe('VerifyBarcodeErrorResponseMapper', () => {
         code: 'DUPLICATE',
         userMessage: 'Barcode scanned at ACI',
         scannedLocation: 'ACI',
+        recipientName: 'Joe Spice',
+        recipientPrisonNumber: 'A1234BC',
+        recipientDob: '1990-01-31',
       } as DuplicateErrorCode
       const apiErrorResponse = {
         status: 400,
@@ -37,6 +40,9 @@ describe('VerifyBarcodeErrorResponseMapper', () => {
         code: 'DUPLICATE',
         userMessage: 'Barcode scanned at ACI',
         scannedLocation: 'HMP Altcourse',
+        recipientName: 'Joe Spice',
+        recipientPrisonNumber: 'A1234BC',
+        recipientDob: '1990-01-31',
       })
       expect(prisonRegisterService.getPrisonNameOrId).toHaveBeenCalledWith('ACI')
     })
