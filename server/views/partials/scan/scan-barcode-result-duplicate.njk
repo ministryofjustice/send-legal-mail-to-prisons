@@ -7,7 +7,7 @@
 
     {% set html %}
       <p>
-        Someone scanned this barcode at <strong>{{ form.errorCode.scannedDate | formatDateTimeForResultsPage }} at {{ form.errorCode.scannedLocation }}</strong>.
+        Someone scanned this barcode at <strong data-qa='original-scan'>{{ form.errorCode.scannedDate | formatDateTimeForResultsPage }} at {{ form.errorCode.scannedLocation }}</strong>.
         It may be an illegal copy.
       </p>
     {% endset %}
@@ -21,8 +21,8 @@
     <h2 class="govuk-heading-l">How to investigate</h2>
     <p>Follow your usual procedures to make sure:</p>
     <ul>
-        <li>the mail is addressed to <strong>prisoner name TBC, prison number TBC</strong></li>
-        <li>the sender, <strong>{{ form.errorCode.createdBy }}</strong>, has a record of sending this item</li>
+        <li>the mail is addressed to <strong data-qa='barcode-recipient'>{{ form.errorCode.recipientName }}, {{ form.errorCode.recipientPrisonNumber if form.errorCode.recipientPrisonNumber else form.errorCode.recipientDob }}</strong></li>
+        <li>the sender, <strong data-qa='barcode-created-by'>{{ form.errorCode.createdBy }}</strong>, has a record of sending this item</li>
         <li>the item hasn't been tampered with</li>
         <li>there are no drugs or other contraband concealed in the item</li>
     </ul>
