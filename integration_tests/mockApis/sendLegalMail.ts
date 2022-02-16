@@ -197,6 +197,8 @@ const stubVerifyDuplicateBarcode = (): SuperAgentRequest =>
           scannedDate: '2021-12-08T09:11:23Z',
           scannedLocation: 'ACI',
           createdBy: 'Aardvark Lawyers',
+          recipientName: 'Joe Spice',
+          recipientPrisonNumber: 'A1234BC',
         },
       },
     },

@@ -35,6 +35,10 @@ export interface components {
       /** @description The secret to verify */
       secret: string
     }
+    VerifyLinkResponse: {
+      /** @description The JWT */
+      token: string
+    }
     AuthenticationError: {
       code: string
       userMessage: string
@@ -72,6 +76,22 @@ export interface components {
        * @example Aardvark Solicitors
        */
       createdBy: string
+      /**
+       * @description The original barcode recipient name
+       * @example John Smith
+       */
+      recipientName: string
+      /**
+       * @description The original barcode recipient prison number
+       * @example A1234BC
+       */
+      recipientPrisonNumber?: string
+      /**
+       * Format: date
+       * @description The original barcode recipient date of birth
+       * @example 1990-01-02
+       */
+      recipientDob?: string
       code: string
       userMessage: string
     }
@@ -182,10 +202,6 @@ export interface components {
         code: unknown
         userMessage: unknown
       }
-    VerifyLinkResponse: {
-      /** @description The JWT */
-      token: string
-    }
     MagicLinkRequest: {
       /**
        * @description The email address to send the magic link to
@@ -268,6 +284,7 @@ export interface components {
        */
       prisonNumber?: string
       /**
+       * Format: int64
        * @description The ID of the contact if known
        * @example 1234
        */
