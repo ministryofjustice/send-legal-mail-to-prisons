@@ -74,4 +74,33 @@ describe('Scan Barcode Service', () => {
       })
     })
   })
+
+  describe('notifyMoreChecksRequested', () => {
+    it('should notify that more checks are required for a barcode', done => {
+      mockedSendLegalMailApi.post('/barcode/event/more-checks-requested', { barcode: '123456789012' }).reply(201)
+
+      scanBarcodeService.notifyMoreChecksRequested('123456789012', 'a-user-id').then(() => {
+        expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalledWith('a-user-id')
+        done()
+      })
+    })
+
+    it('should fail to notify that more checks are required for a barcode given getSystemClientToken fails', done => {
+      hmppsAuthClient.getSystemClientToken.mockRejectedValue('an error getting user client token')
+
+      scanBarcodeService.notifyMoreChecksRequested('123456789012', 'a-user-id').catch(error => {
+        expect(error).toBe('an error getting user client token')
+        done()
+      })
+    })
+
+    it('should fail to notify that more checks are required for a barcode given API returns an error without an ErrorResponse body', done => {
+      mockedSendLegalMailApi.post('/barcode/event/more-checks-requested', { barcode: '123456789012' }).reply(404)
+
+      scanBarcodeService.notifyMoreChecksRequested('123456789012', 'a-user-id').catch(error => {
+        expect(error.status).toBe(404)
+        done()
+      })
+    })
+  })
 })

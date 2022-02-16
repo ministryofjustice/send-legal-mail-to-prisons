@@ -19,4 +19,14 @@ export default class ScanBarcodeService {
       })
     )
   }
+
+  async notifyMoreChecksRequested(barcode: string, user: string): Promise<unknown> {
+    const checkBarcodeRequest: CheckBarcodeRequest = { barcode }
+    return this.hmppsAuthClient.getSystemClientToken(user).then(hmppsToken =>
+      ScanBarcodeService.restClient(hmppsToken).post({
+        path: '/barcode/event/more-checks-requested',
+        data: checkBarcodeRequest,
+      })
+    )
+  }
 }

@@ -29,8 +29,12 @@ export default class CreateContactByPrisonNumberController {
       activePrisons = []
     }
 
+    const createNewContactByPrisonNumberForm = {
+      ...(req.session.createNewContactByPrisonNumberForm || {}),
+      prisonNumber: req.session.recipientForm.prisonNumber,
+    }
     const view = new CreateContactByPrisonNumberView(
-      req.session.createNewContactByPrisonNumberForm || {},
+      createNewContactByPrisonNumberForm,
       filterSupportedPrisons(activePrisons),
       req.flash('errors')
     )
