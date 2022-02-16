@@ -16,22 +16,25 @@ declare module 'forms' {
   }
 
   export interface CreateNewContactByPrisonNumberForm {
+    readonly prisonNumber: string
     prisonerName?: string
     prisonId?: string
   }
 
   export interface CreateNewContactByPrisonerNameForm {
-    prisonId?: string
+    readonly prisonerName: string
     prisonerDob?: Date
     'prisonerDob-day'?: string
     'prisonerDob-month'?: string
     'prisonerDob-year'?: string
+    prisonId?: string
   }
 
   export interface BarcodeEntryForm {
     barcode?: string
     createdBy?: string
     errorCode?: CheckBarcodeErrorCodes
+    lastScannedBarcode?: string
   }
 
   export interface ChooseBarcodeOptionForm {

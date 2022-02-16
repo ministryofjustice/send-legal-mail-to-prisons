@@ -79,7 +79,7 @@ describe('CreateContactByPrisonNumberController', () => {
         barcode: undefined as string,
         barcodeImageUrl: undefined as string,
         errors: [] as Array<Record<string, string>>,
-        form: {},
+        form: { prisonNumber: 'A1234BC' },
         prisonRegister: [
           { value: '', text: '' },
           { value: 'ACI', text: 'Altcourse (HMP)', selected: false },
@@ -109,7 +109,7 @@ describe('CreateContactByPrisonNumberController', () => {
         barcode: undefined as string,
         barcodeImageUrl: undefined as string,
         errors: [] as Array<Record<string, string>>,
-        form: {},
+        form: { prisonNumber: 'A1234BC' },
         prisonRegister: [
           { value: '', text: '' },
           { value: 'ASI', text: 'Ashfield (HMP)', selected: false },
