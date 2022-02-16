@@ -15,6 +15,6 @@ declare module 'sendLegalMailApiClient' {
   export type CheckBarcodeRequest = components['schemas']['CheckBarcodeRequest']
   export type CheckBarcodeResponse = components['schemas']['CheckBarcodeResponse']
 
-  export type CreateContactRequest = components['schemas']['CreateContactRequest']
+  export type ContactRequest = components['schemas']['ContactRequest']
   export type Contact = components['schemas']['ContactResponse']
 }
