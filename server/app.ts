@@ -36,6 +36,7 @@ import RecipientFormService from './routes/barcode/recipients/RecipientFormServi
 import setupContactHelpdesk from './middleware/helpdesk/setupContactHelpdesk'
 import setupCookiesPolicy from './middleware/cookies/setupCookiesPolicy'
 import setupCsrf from './middleware/setupCsrf'
+import setupLegalSenderStartPage from './middleware/start/setupLegalSenderStartPage'
 
 export default function createApp(
   userService: UserService,
@@ -65,6 +66,7 @@ export default function createApp(
   app.use(setupCookiesPolicy())
 
   // no authentication
+  app.use('/start', setupLegalSenderStartPage())
   app.use('/link', requestLinkAuthorised())
   app.use('/link', setUpRequestLink(magicLinkService))
   app.use('/link', setupLinkEmailSent())
