@@ -1,5 +1,5 @@
 import moment from 'moment'
-import type { Contact, CreateContactRequest } from 'sendLegalMailApiClient'
+import type { Contact, ContactRequest } from 'sendLegalMailApiClient'
 import RestClient from '../../data/restClient'
 import config from '../../config'
 
@@ -15,7 +15,7 @@ export default class ContactService {
     prisonNumber?: string,
     prisonerDob?: Date
   ): Promise<Contact> {
-    const createContactRequest: CreateContactRequest = { prisonerName, prisonId, prisonNumber }
+    const createContactRequest: ContactRequest = { prisonerName, prisonId, prisonNumber }
     createContactRequest.dob = prisonerDob ? moment(prisonerDob).format('YYYY-MM-DD') : undefined
     return ContactService.restClient(slmToken)
       .post({

@@ -18,6 +18,9 @@ export interface paths {
   '/barcode': {
     post: operations['createBarcode']
   }
+  '/barcode/event/more-checks-requested': {
+    post: operations['createBarcodeMoreChecksRequestedEvent']
+  }
   '/barcode/check': {
     post: operations['checkBarcode']
   }
@@ -34,10 +37,6 @@ export interface components {
     VerifyLinkRequest: {
       /** @description The secret to verify */
       secret: string
-    }
-    VerifyLinkResponse: {
-      /** @description The JWT */
-      token: string
     }
     AuthenticationError: {
       code: string
@@ -202,6 +201,10 @@ export interface components {
         code: unknown
         userMessage: unknown
       }
+    VerifyLinkResponse: {
+      /** @description The JWT */
+      token: string
+    }
     MagicLinkRequest: {
       /**
        * @description The email address to send the magic link to
@@ -209,7 +212,7 @@ export interface components {
        */
       email: string
     }
-    CreateContactRequest: {
+    ContactRequest: {
       /**
        * @description The name of the new contact
        * @example John Doe
@@ -411,7 +414,7 @@ export interface operations {
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateContactRequest']
+        'application/json': components['schemas']['ContactRequest']
       }
     }
   }
@@ -442,6 +445,45 @@ export interface operations {
       }
     }
   }
+  createBarcodeMoreChecksRequestedEvent: {
+    responses: {
+      /** Barcode flagged as needing more checks */
+      201: {
+        content: {
+          'application/json': components['schemas']['CheckBarcodeResponse']
+        }
+      }
+      /** Bad request. For specific errors see the Schema for CheckBarcodeErrorCodes */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires a valid token with role ROLE_SLM_SCAN_BARCODE */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CheckBarcodeRequest']
+      }
+    }
+  }
   checkBarcode: {
     responses: {
       /** Barcode is OK and no further checks are required */
@@ -456,8 +498,14 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
-      /** Unauthorised, requires a valid magic link token */
+      /** Unauthorised, requires a valid token */
       401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires a valid token with role ROLE_SLM_SCAN_BARCODE */
+      403: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
