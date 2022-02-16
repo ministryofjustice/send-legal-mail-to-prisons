@@ -30,6 +30,7 @@ context('Scan Barcode Result Page', () => {
   it('should navigate to further checks result screen from OK result screen', () => {
     cy.task('stubVerifyValidBarcode')
     cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+    cy.task('stubMoreChecksRequestedForBarcode')
     cy.signIn()
     cy.visit('/scan-barcode')
     const resultPage: ScanBarcodeResultPage = Page.verifyOnPage(ScanBarcodePage).submitFormWithValidBarcode()

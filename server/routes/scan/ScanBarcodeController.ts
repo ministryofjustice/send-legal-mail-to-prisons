@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import type { CheckBarcodeResponse } from 'sendLegalMailApiClient'
+import type { BarcodeEntryForm } from 'forms'
 import BarcodeEntryView from './BarcodeEntryView'
 import validate from './BarcodeEntryFormValidator'
 import ScanBarcodeService from '../../services/scan/ScanBarcodeService'
@@ -39,7 +40,6 @@ export default class ScanBarcodeController {
       return res.redirect('/scan-barcode')
     }
 
-    req.session.scannedAtLeastOneBarcode = true
     return this.verifyBarcode(req.session.barcodeEntryForm.barcode, req.user.username, req).then(() =>
       res.redirect('/scan-barcode/result')
     )
@@ -78,8 +78,10 @@ export default class ScanBarcodeController {
 
   async getFurtherChecksNeededView(req: Request, res: Response): Promise<void> {
     this.trackEvent('furtherChecksNeeded', res)
+    const form: BarcodeEntryForm = req.session.barcodeEntryForm
+    await this.scanBarcodeService.notifyMoreChecksRequested(form.lastScannedBarcode, req.user.username)
 
-    req.session.barcodeEntryForm.errorCode = { code: 'FURTHER_CHECKS_NEEDED' }
+    form.errorCode = { code: 'FURTHER_CHECKS_NEEDED' }
     return res.redirect('/scan-barcode/result')
   }
 
@@ -88,12 +90,13 @@ export default class ScanBarcodeController {
       return res.redirect('/scan-barcode')
     }
 
+    req.session.scannedAtLeastOneBarcode = true
     const view = new BarcodeEntryView(req.session.barcodeEntryForm || {}, req.flash('errors'))
     return res.render('pages/scan/scan-barcode-result', { ...view.renderArgs })
   }
 
   private async verifyBarcode(barcode: string, user: string, req: Request): Promise<void> {
-    req.session.barcodeEntryForm = {}
+    req.session.barcodeEntryForm = { lastScannedBarcode: barcode }
     return this.scanBarcodeService
       .verifyBarcode(barcode, user)
       .then(apiResponse => {

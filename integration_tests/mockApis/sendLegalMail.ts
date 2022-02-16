@@ -267,6 +267,21 @@ const stubVerifyNotFoundBarcode = (): SuperAgentRequest =>
     },
   })
 
+const stubMoreChecksRequestedForBarcode = (): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      urlPattern: '/send-legal-mail/barcode/event/more-checks-requested',
+      bodyPatterns: [{ matchesJsonPath: `$[?(@.barcode =~ /\\d{12}/)]` }],
+    },
+    response: {
+      status: 201,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    },
+  })
+
 const stubCreateBarcode = (): SuperAgentRequest =>
   stubFor({
     request: {
@@ -467,6 +482,7 @@ export default {
   stubVerifyRandomCheckBarcode,
   stubVerifyExpiredBarcode,
   stubVerifyNotFoundBarcode,
+  stubMoreChecksRequestedForBarcode,
   stubCreateBarcode,
   stubCreateBarcodeFailure,
   stubCreateContact,

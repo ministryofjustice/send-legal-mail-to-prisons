@@ -11,6 +11,7 @@ context('Mailroom Journey E2E', () => {
     cy.task('stubVerifyValidBarcode')
     cy.task('stubVerifyNotFoundBarcode')
     cy.task('stubVerifyRandomCheckBarcode')
+    cy.task('stubMoreChecksRequestedForBarcode')
   })
 
   it('should allow mailroom staff to perform all actions as part of their workflow', () => {
