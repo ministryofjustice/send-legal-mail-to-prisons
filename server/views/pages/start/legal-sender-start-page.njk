@@ -1,0 +1,62 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/header/macro.njk" import govukHeader %}
+
+{% set pageTitle = applicationName %}
+{% set pageId = 'legal-sender-start' %}
+
+{% block header %}
+  {% include "partials/cookie-banner.njk" %}
+  {{ govukHeader({
+    homepageUrl: "#"
+  }) }}
+{% endblock %}
+
+{% block main %}
+  <div class="govuk-width-container {{ containerClasses }}">
+    <span class="govuk-visually-hidden" id="{{ pageId }}"></span>
+    <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main"{% if mainLang %} lang="{{ mainLang }}"{% endif %}>
+
+      <section class="app-container govuk-body">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l">Send legal mail to prisons</h1>
+            <p class="govuk-body">Use this service to create barcodes and addresses to display in your:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>legal correspondence (Rule 39 mail) if you're the legal adviser of the recipient</li>
+              <li>confidential access mail if your organisation or role is listed in the
+                <a href="https://www.gov.uk/government/publications/monitoring-and-managing-prisoner-communications-psi-042016" target="_blank" class="govuk-link">guidance on monitoring and managing prisoner communications (PSI 04/2016)</a>
+              </li>
+            </ul>
+            <p class="govuk-body">Each barcode is unique and confirms to prison mailroom staff that you're an approved sender.</p>
+
+            <h2 class="govuk-heading-m">What you'll need</h2>
+            <p class="govuk-body">To access this service you'll need a Criminal Justice Secure Mail (CJSM) email address which ends 'cjsm.net'.</p>
+            <p class="govuk-body">You can
+              <a href="https://www.cjsm.net/" target="_blank" class="govuk_link">check if your organisation has already joined CJSM, or apply to join.</a>
+            </p>
+
+            <p class="govuk-body">You'll also need:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>the names of your recipients</li>
+              <li>the prison numbers or date of births of your recipients</li>
+              <li>a printer, A4 paper and envelopes with windows</li>
+            </ul>
+
+          </div>
+
+          <div class="govuk-grid-column-two-thirds govuk-!-margin-top-8">
+            {{ govukButton({
+              text: "Start now",
+              href: "/link/request-link",
+              isStartButton: true
+            }) }}
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+{% endblock %}
+
