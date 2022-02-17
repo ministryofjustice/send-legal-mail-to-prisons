@@ -3,10 +3,11 @@ import multer from 'multer'
 import ContactHelpdeskController from '../../routes/helpdesk/ContactHelpdeskController'
 import { MAX_FILE_SIZE } from '../../routes/helpdesk/validators/uploadValidator'
 import config from '../../config'
+import ZendeskService from '../../services/helpdesk/ZendeskService'
 
-export default function setupContactHelpdesk(): Router {
+export default function setupContactHelpdesk(zendeskService: ZendeskService): Router {
   const router = express.Router()
-  const contactHelpdeskController = new ContactHelpdeskController()
+  const contactHelpdeskController = new ContactHelpdeskController(zendeskService)
 
   router.get('/', (req, res) => contactHelpdeskController.getContactHelpdeskView(req, res))
 

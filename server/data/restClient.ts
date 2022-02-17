@@ -46,6 +46,8 @@ export default class RestClient {
       logger.info(`${method.toUpperCase()} request using HMPPS auth token: calling ${this.name}: ${path} ${query}`)
     } else if (this.slmToken) {
       logger.info(`${method.toUpperCase()} request using SLM token: calling ${this.name}: ${path} ${query}`)
+    } else if (/https?:\/\/.+:.+@.+/.test(this.apiUrl())) {
+      logger.info(`${method.toUpperCase()} request using basic auth: calling ${this.name}: ${path} ${query}`)
     } else {
       logger.info(`Anonymous ${method.toUpperCase()} request: calling ${this.name}: ${path} ${query}`)
     }
