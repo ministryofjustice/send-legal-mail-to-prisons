@@ -1,7 +1,9 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
+import type { ContactHelpdeskForm } from 'forms'
 import ContactHelpdeskController from './ContactHelpdeskController'
 import validate from './contactHelpdeskFormValidator'
+import ZendeskService from '../../services/helpdesk/ZendeskService'
 
 jest.mock('./contactHelpdeskFormValidator')
 
@@ -16,14 +18,21 @@ const req = {
 const res = {
   render: jest.fn(),
   redirect: jest.fn(),
+  locals: {},
+}
+
+const zendeskService = {
+  createSupportTicket: jest.fn(),
 }
 
 describe('ContactHelpdeskController', () => {
-  const contactHelpdeskController = new ContactHelpdeskController()
+  const contactHelpdeskController = new ContactHelpdeskController(zendeskService as unknown as ZendeskService)
 
   afterEach(() => {
+    zendeskService.createSupportTicket.mockReset()
     res.render.mockReset()
     res.redirect.mockReset()
+    res.locals = { externalUser: true, user: undefined }
     req.session = {} as SessionData
     req.flash.mockReset()
     req.query = {}
@@ -67,15 +76,51 @@ describe('ContactHelpdeskController', () => {
       mockContactHelpdeskFormValidator = validate as jest.MockedFunction<typeof validate>
     })
 
-    it('should redirect to contact-helpdesk/submitted given no validation errors', async () => {
+    it('should redirect to contact-helpdesk/submitted given DPS authenticated user and no validation errors', async () => {
       req.baseUrl = '/scan-barcode/contact-helpdesk'
       req.originalUrl = '/scan-barcode/contact-helpdesk?pageId=scan-barcode'
+      const contactHelpdeskForm: ContactHelpdeskForm = {
+        pageId: 'scan-barcode',
+        problemDetail: 'It doesnt scan',
+        name: 'Mr Mail Room User',
+        email: 'mailroom@brixton.prison.gov.uk',
+      }
+      req.body = contactHelpdeskForm
       mockContactHelpdeskFormValidator.mockReturnValue([])
+      res.locals = { externalUser: false, user: { username: 'DPS_USER' } }
 
       await contactHelpdeskController.submitContactHelpdesk(req as unknown as Request, res as unknown as Response)
 
+      expect(req.session.contactHelpdeskForm).toBeUndefined()
+      expect(zendeskService.createSupportTicket).toHaveBeenCalledWith(contactHelpdeskForm, false, 'DPS_USER')
       expect(req.flash).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/scan-barcode/contact-helpdesk/submitted')
+    })
+
+    it('should redirect to contact-helpdesk/submitted given external user and no validation errors', async () => {
+      req.baseUrl = '/contact-helpdesk'
+      req.originalUrl = '/contact-helpdesk?pageId=review-recipients'
+      const contactHelpdeskForm: ContactHelpdeskForm = {
+        pageId: 'review-recipients',
+        problemDetail: 'I cant add a recipient',
+        name: 'Mrs Legal Sender User',
+        email: 'user@legal-sender.co.uk.cjsm.net',
+      }
+      req.body = contactHelpdeskForm
+      mockContactHelpdeskFormValidator.mockReturnValue([])
+      res.locals = { externalUser: true }
+      req.session.barcodeUserEmail = 'user@legal-sender.co.uk.cjsm.net'
+
+      await contactHelpdeskController.submitContactHelpdesk(req as unknown as Request, res as unknown as Response)
+
+      expect(req.session.contactHelpdeskForm).toBeUndefined()
+      expect(zendeskService.createSupportTicket).toHaveBeenCalledWith(
+        contactHelpdeskForm,
+        true,
+        'user@legal-sender.co.uk.cjsm.net'
+      )
+      expect(req.flash).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/contact-helpdesk/submitted')
     })
 
     it('should redirect to contact-helpdesk given validation errors', async () => {
@@ -85,6 +130,7 @@ describe('ContactHelpdeskController', () => {
 
       await contactHelpdeskController.submitContactHelpdesk(req as unknown as Request, res as unknown as Response)
 
+      expect(zendeskService.createSupportTicket).not.toHaveBeenCalled()
       expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#name', text: 'Enter a name' }])
       expect(res.redirect).toHaveBeenCalledWith('/scan-barcode/contact-helpdesk?pageId=scan-barcode')
     })

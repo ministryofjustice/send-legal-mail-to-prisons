@@ -100,6 +100,23 @@ export default {
     gotenberg: {
       url: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
     },
+    zendesk: {
+      url: (() => {
+        // Zendesk API uses basic auth (https://user:token@hostname...) so we need to inject the user:token@ into the URL
+        const apiUrl = get('ZENDESK_API_URL', 'http://localhost:8101', requiredInProduction)
+        const apiUser = get('ZENDESK_USER', requiredInProduction)
+        const apiToken = get('ZENDESK_TOKEN', requiredInProduction)
+        return apiUrl.replace(
+          '{basic-auth-credentials}',
+          `${encodeURIComponent(apiUser)}:${encodeURIComponent(apiToken)}@`
+        )
+      })(),
+      timeout: {
+        response: Number(get('ZENDESK_API_TIMEOUT_RESPONSE', 30000)),
+        deadline: Number(get('ZENDESK_API_TIMEOUT_DEADLINE', 30000)),
+      },
+      agent: new AgentConfig(),
+    },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   slmContainerId: get('SLM_TAG_MANAGER_CONTAINER_ID', null),

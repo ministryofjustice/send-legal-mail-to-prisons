@@ -4,8 +4,11 @@ import type { ContactHelpdeskForm } from 'forms'
 import ContactHelpdeskView from './ContactHelpdeskView'
 import validate from './contactHelpdeskFormValidator'
 import logger from '../../../logger'
+import ZendeskService from '../../services/helpdesk/ZendeskService'
 
 export default class ContactHelpdeskController {
+  constructor(private readonly zendeskService: ZendeskService) {}
+
   async getContactHelpdeskView(req: Request, res: Response): Promise<void> {
     const form: ContactHelpdeskForm = {
       ...(req.session?.contactHelpdeskForm || {}),
@@ -24,7 +27,15 @@ export default class ContactHelpdeskController {
       return res.redirect(req.originalUrl)
     }
 
-    // TODO - SLM-126 - call service to send data to zendesk
+    const { externalUser } = res.locals
+    const username = externalUser ? req.session.barcodeUserEmail : res.locals.user.username
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const zendeskTicketId = await this.zendeskService.createSupportTicket(
+      req.session.contactHelpdeskForm,
+      externalUser,
+      username
+    )
+
     // Uploaded file properties are available in req.file; remember to delete req.file.path
     if (req.file) {
       logger.info(`Uploaded file: ${JSON.stringify(req.file)}`)

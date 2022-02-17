@@ -37,6 +37,7 @@ import setupContactHelpdesk from './middleware/helpdesk/setupContactHelpdesk'
 import setupCookiesPolicy from './middleware/cookies/setupCookiesPolicy'
 import setupCsrf from './middleware/setupCsrf'
 import setupLegalSenderStartPage from './middleware/start/setupLegalSenderStartPage'
+import ZendeskService from './services/helpdesk/ZendeskService'
 
 export default function createApp(
   userService: UserService,
@@ -46,7 +47,8 @@ export default function createApp(
   prisonRegisterService: PrisonRegisterService,
   appInsightsClient: AppInsightsService,
   contactService: ContactService,
-  recipientFormService: RecipientFormService
+  recipientFormService: RecipientFormService,
+  zendeskService: ZendeskService
 ): express.Application {
   const app = express()
 
@@ -71,7 +73,7 @@ export default function createApp(
   app.use('/link', setUpRequestLink(magicLinkService))
   app.use('/link', setupLinkEmailSent())
   app.use('/link', setUpVerifyLink(magicLinkService))
-  app.use('/contact-helpdesk', setupContactHelpdesk())
+  app.use('/contact-helpdesk', setupContactHelpdesk(zendeskService))
 
   // authenticated with createBarcodeToken
   app.use('/barcode', barcodeAuthorisationMiddleware())
@@ -87,7 +89,7 @@ export default function createApp(
   app.use('/', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_SECURITY_ANALYST']))
 
   app.use('/', setupScanBarcode(scanBarcodeService, prisonRegisterService, appInsightsClient))
-  app.use('/scan-barcode/contact-helpdesk', setupContactHelpdesk())
+  app.use('/scan-barcode/contact-helpdesk', setupContactHelpdesk(zendeskService))
 
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler(process.env.NODE_ENV === 'production'))
