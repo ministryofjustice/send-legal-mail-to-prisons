@@ -84,6 +84,62 @@ describe('Contact Service', () => {
     })
   })
 
+  describe('updateContact', () => {
+    it('should include prison number in request', done => {
+      const contactResponse: Contact = {
+        id: 1,
+        prisonerName: 'some-name',
+        prisonId: 'SKI',
+        prisonNumber: 'A1234BC',
+      }
+      mockedSendLegalMailApi
+        .put('/contact/1', { prisonerName: 'some-name', prisonId: 'SKI', prisonNumber: 'A1234BC' })
+        .reply(201, contactResponse)
+
+      contactService.updateContact('some-token', 'some-name', 'SKI', 1, 'A1234BC', undefined).then(response => {
+        expect(response).toStrictEqual(contactResponse)
+        done()
+      })
+    })
+
+    it('should include dob in request', done => {
+      const contactResponse: Contact = {
+        id: 1,
+        prisonerName: 'some-name',
+        prisonId: 'SKI',
+        dob: '1990-02-27',
+      }
+      mockedSendLegalMailApi
+        .put('/contact/1', { prisonerName: 'some-name', prisonId: 'SKI', dob: '1990-02-27' })
+        .reply(201, contactResponse)
+
+      contactService
+        .updateContact('some-token', 'some-name', 'SKI', 1, undefined, moment('1990-02-27').toDate())
+        .then(response => {
+          expect(response).toStrictEqual(contactResponse)
+          done()
+        })
+    })
+
+    it('should handle error response', done => {
+      const errorResponse = {
+        status: 400,
+        errorCode: {
+          code: 'MALFORMED_REQUEST',
+          userMessage: 'Failed to read the payload',
+        },
+      }
+      mockedSendLegalMailApi
+        .put('/contact/1', { prisonerName: 'some-name', prisonId: 'SKI', prisonNumber: 'THIS IS TOO LONG' })
+        .reply(400, errorResponse)
+
+      contactService.updateContact('some-token', 'some-name', 'SKI', 1, 'THIS IS TOO LONG', undefined).catch(error => {
+        expect(JSON.parse(error.text)).toStrictEqual(errorResponse)
+        done()
+      })
+    })
+  })
+
   describe('searchContacts', () => {
     it('should search by name', done => {
       mockedSendLegalMailApi.get('/contacts').query({ name: 'Smith' }).reply(200, [aContact])

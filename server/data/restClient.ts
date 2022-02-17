@@ -13,12 +13,13 @@ interface GetRequest {
   raw?: boolean
 }
 
-interface PostRequest {
+interface UpdateRequest {
   path?: string
   headers?: Record<string, string>
   responseType?: string
   data?: Record<string, unknown>
   raw?: boolean
+  method?: 'put' | 'post'
 }
 
 export default class RestClient {
@@ -83,16 +84,17 @@ export default class RestClient {
       })
   }
 
-  async post({
+  async update({
     path = null,
     headers = {},
     responseType = '',
     data = {},
     raw = false,
-  }: PostRequest = {}): Promise<unknown> {
+    method = 'post',
+  }: UpdateRequest = {}): Promise<unknown> {
     this.logRequest('POST', path)
 
-    const request = superagent.post(`${this.apiUrl()}${path}`)
+    const request = superagent[method](`${this.apiUrl()}${path}`)
     request
       .send(data)
       .agent(this.agent)
@@ -114,7 +116,7 @@ export default class RestClient {
       .then(result => (raw ? result : result.body))
       .catch(error => {
         const sanitisedError = sanitiseError(error)
-        logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'POST'`)
+        logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: ${method.toUpperCase()}`)
         throw sanitisedError
       })
   }
