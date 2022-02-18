@@ -29,11 +29,13 @@ export default class ContactHelpdeskController {
 
     const { externalUser } = res.locals
     const username = externalUser ? req.session.barcodeUserEmail : res.locals.user.username
+    const organisation = externalUser ? req.session.barcodeUserOrganisation : null
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const zendeskTicketId = await this.zendeskService.createSupportTicket(
       req.session.contactHelpdeskForm,
       externalUser,
-      username
+      username,
+      organisation
     )
 
     // Uploaded file properties are available in req.file; remember to delete req.file.path
