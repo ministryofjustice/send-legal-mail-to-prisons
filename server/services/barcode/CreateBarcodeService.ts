@@ -51,7 +51,7 @@ export default class CreateBarcodeService {
         dob: recipient.prisonerDob ? moment(recipient.prisonerDob).format('YYYY-MM-DD') : undefined,
         contactId: recipient.contactId,
       }
-      const response = (await CreateBarcodeService.restClient(slmToken).update({
+      const response = (await CreateBarcodeService.restClient(slmToken).post({
         path: `/barcode`,
         data: requestBody,
       })) as CreateBarcodeResponse

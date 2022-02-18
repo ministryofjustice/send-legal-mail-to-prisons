@@ -44,7 +44,7 @@ Email: ${contactHelpdeskForm.email}
           tags: externalUser ? 'slm_legal_sender' : 'slm_mailroom',
         },
       }
-      const response = (await ZendeskService.restClient().update({
+      const response = (await ZendeskService.restClient().post({
         path: `/api/v2/tickets`,
         data: requestBody,
       })) as ZendeskTicket

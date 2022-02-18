@@ -18,7 +18,7 @@ export default class ContactService {
     const createContactRequest: ContactRequest = { prisonerName, prisonId, prisonNumber }
     createContactRequest.dob = prisonerDob ? moment(prisonerDob).format('YYYY-MM-DD') : undefined
     return ContactService.restClient(slmToken)
-      .update({
+      .post({
         path: '/contact',
         data: createContactRequest,
       })
@@ -36,10 +36,9 @@ export default class ContactService {
     const updateContactRequest: ContactRequest = { prisonerName, prisonId, prisonNumber }
     updateContactRequest.dob = prisonerDob ? moment(prisonerDob).format('YYYY-MM-DD') : undefined
     return ContactService.restClient(slmToken)
-      .update({
+      .put({
         path: `/contact/${contactId}`,
         data: updateContactRequest,
-        method: 'put',
       })
       .then(response => response as Contact)
   }

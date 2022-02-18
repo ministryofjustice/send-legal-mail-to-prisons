@@ -1,4 +1,5 @@
 import superagent from 'superagent'
+import type { Response, ResponseError } from 'superagent'
 import Agent, { HttpsAgent } from 'agentkeepalive'
 
 import logger from '../../logger'
@@ -13,13 +14,20 @@ interface GetRequest {
   raw?: boolean
 }
 
-interface UpdateRequest {
+interface PostRequest {
   path?: string
   headers?: Record<string, string>
   responseType?: string
   data?: Record<string, unknown>
   raw?: boolean
-  method?: 'put' | 'post'
+}
+
+interface PutRequest {
+  path?: string
+  headers?: Record<string, string>
+  responseType?: string
+  data?: Record<string, unknown>
+  raw?: boolean
 }
 
 export default class RestClient {
@@ -55,56 +63,57 @@ export default class RestClient {
   }
 
   async get({ path = null, query = '', headers = {}, responseType = '', raw = false }: GetRequest): Promise<unknown> {
-    this.logRequest('GET', path, query)
-
-    const request = superagent.get(`${this.apiUrl()}${path}`)
-    request
-      .agent(this.agent)
-      .retry(2, err => {
-        if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
-        return undefined // retry handler only for logging retries, not to influence retry logic
-      })
-      .query(query)
-      .set(headers)
-      .responseType(responseType)
-      .timeout(this.timeoutConfig())
-
-    if (this.hmppsToken) {
-      request.auth(this.hmppsToken, { type: 'bearer' })
-    } else if (this.slmToken) {
-      request.set('Create-Barcode-Token', this.slmToken)
-    }
-
-    return request
-      .then(result => (raw ? result : result.body))
-      .catch(error => {
-        const sanitisedError = sanitiseError(error)
-        logger.warn({ ...sanitisedError, query }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
-        throw sanitisedError
-      })
+    return this.processRequest({ path, headers, responseType, query, raw, method: 'get' })
   }
 
-  async update({
+  async post({
     path = null,
     headers = {},
     responseType = '',
     data = {},
     raw = false,
-    method = 'post',
-  }: UpdateRequest = {}): Promise<unknown> {
-    this.logRequest('POST', path)
+  }: PostRequest = {}): Promise<unknown> {
+    return this.processRequest({ path, headers, responseType, data, raw, method: 'post' })
+  }
+
+  async put({
+    path = null,
+    headers = {},
+    responseType = '',
+    data = {},
+    raw = false,
+  }: PutRequest = {}): Promise<unknown> {
+    return this.processRequest({ path, headers, responseType, data, raw, method: 'put' })
+  }
+
+  private async processRequest({
+    path = null,
+    headers = {},
+    responseType = '',
+    query = undefined,
+    data = undefined,
+    raw = false,
+    method = undefined,
+  } = {}): Promise<unknown> {
+    this.logRequest(method.toUpperCase(), path)
 
     const request = superagent[method](`${this.apiUrl()}${path}`)
     request
-      .send(data)
       .agent(this.agent)
-      .retry(2, err => {
-        if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+      .retry(2, (err: ResponseError): void => {
+        if (err) logger.info(`Retry handler found API error with ${err.status} ${err.message}`)
         return undefined // retry handler only for logging retries, not to influence retry logic
       })
       .set(headers)
       .responseType(responseType)
       .timeout(this.timeoutConfig())
+
+    if (data) {
+      request.send(data)
+    }
+    if (query) {
+      request.query(query)
+    }
 
     if (this.hmppsToken) {
       request.auth(this.hmppsToken, { type: 'bearer' })
@@ -113,8 +122,8 @@ export default class RestClient {
     }
 
     return request
-      .then(result => (raw ? result : result.body))
-      .catch(error => {
+      .then((result: Response) => (raw ? result : result.body))
+      .catch((error: ResponseError): void => {
         const sanitisedError = sanitiseError(error)
         logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: ${method.toUpperCase()}`)
         throw sanitisedError
