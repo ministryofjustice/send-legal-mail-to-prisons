@@ -25,6 +25,24 @@ export default class ContactService {
       .then(response => response as Contact)
   }
 
+  async updateContact(
+    slmToken: string,
+    prisonerName: string,
+    prisonId: string,
+    contactId: number,
+    prisonNumber?: string,
+    prisonerDob?: Date
+  ): Promise<Contact> {
+    const updateContactRequest: ContactRequest = { prisonerName, prisonId, prisonNumber }
+    updateContactRequest.dob = prisonerDob ? moment(prisonerDob).format('YYYY-MM-DD') : undefined
+    return ContactService.restClient(slmToken)
+      .put({
+        path: `/contact/${contactId}`,
+        data: updateContactRequest,
+      })
+      .then(response => response as Contact)
+  }
+
   async searchContacts(slmToken: string, name: string): Promise<Array<Contact>> {
     return ContactService.restClient(slmToken)
       .get({

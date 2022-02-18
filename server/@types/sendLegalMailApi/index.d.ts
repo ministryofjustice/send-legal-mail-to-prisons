@@ -4,12 +4,15 @@
  */
 
 export interface paths {
+  '/contact/{id}': {
+    put: operations['updateContact']
+  }
   '/link/verify': {
-    /** Verifies a magic link secret and swaps it for an authentication token if valid. */
+    /** Verifies a CJSM email link secret and swaps it for an authentication token if valid. */
     post: operations['verifyMagicLink']
   }
   '/link/email': {
-    /** Creates a magic link and send to the email address entered by the user. */
+    /** Creates a CJSM email link and send to the email address entered by the user. */
     post: operations['createMagicLink']
   }
   '/contact': {
@@ -34,9 +37,28 @@ export interface paths {
 
 export interface components {
   schemas: {
-    VerifyLinkRequest: {
-      /** @description The secret to verify */
-      secret: string
+    ContactRequest: {
+      /**
+       * @description The name of the new contact
+       * @example John Doe
+       */
+      prisonerName: string
+      /**
+       * @description The ID of the prison location of the new contact
+       * @example BXI
+       */
+      prisonId: string
+      /**
+       * Format: date
+       * @description The date of birth of the new contact if known
+       * @example 1965-04-23
+       */
+      dob?: string
+      /**
+       * @description The prison number of the new contact if known
+       * @example A1234BC
+       */
+      prisonNumber?: string
     }
     AuthenticationError: {
       code: string
@@ -201,40 +223,6 @@ export interface components {
         code: unknown
         userMessage: unknown
       }
-    VerifyLinkResponse: {
-      /** @description The JWT */
-      token: string
-    }
-    MagicLinkRequest: {
-      /**
-       * @description The email address to send the magic link to
-       * @example andrew.barret@company.com
-       */
-      email: string
-    }
-    ContactRequest: {
-      /**
-       * @description The name of the new contact
-       * @example John Doe
-       */
-      prisonerName: string
-      /**
-       * @description The ID of the prison location of the new contact
-       * @example BXI
-       */
-      prisonId: string
-      /**
-       * Format: date
-       * @description The date of birth of the new contact if known
-       * @example 1965-04-23
-       */
-      dob?: string
-      /**
-       * @description The prison number of the new contact if known
-       * @example A1234BC
-       */
-      prisonNumber?: string
-    }
     ContactResponse: {
       /**
        * Format: int64
@@ -263,6 +251,21 @@ export interface components {
        * @example A1234BC
        */
       prisonNumber?: string
+    }
+    VerifyLinkRequest: {
+      /** @description The secret to verify */
+      secret: string
+    }
+    VerifyLinkResponse: {
+      /** @description The JWT */
+      token: string
+    }
+    MagicLinkRequest: {
+      /**
+       * @description The email address to send the CJSM email link to
+       * @example andrew.barret@company.com
+       */
+      email: string
     }
     CreateBarcodeRequest: {
       /**
@@ -329,7 +332,51 @@ export interface components {
 }
 
 export interface operations {
-  /** Verifies a magic link secret and swaps it for an authentication token if valid. */
+  updateContact: {
+    parameters: {
+      path: {
+        id: number
+      }
+    }
+    responses: {
+      /** Contact udpated */
+      200: {
+        content: {
+          'application/json': components['schemas']['ContactResponse']
+        }
+      }
+      /** Bad request */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid CJSM email link token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires a valid token with role ROLE_SLM_CREATE_BARCODE */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Contact not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ContactRequest']
+      }
+    }
+  }
+  /** Verifies a CJSM email link secret and swaps it for an authentication token if valid. */
   verifyMagicLink: {
     responses: {
       /** Authentication token created */
@@ -344,7 +391,7 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
-      /** Not found, unable to verify the magic link */
+      /** Not found, unable to verify the CJSM email link */
       404: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
@@ -357,10 +404,10 @@ export interface operations {
       }
     }
   }
-  /** Creates a magic link and send to the email address entered by the user. */
+  /** Creates a CJSM email link and send to the email address entered by the user. */
   createMagicLink: {
     responses: {
-      /** Magic link created */
+      /** CJSM email link created */
       201: {
         content: {
           'application/json': unknown
@@ -399,8 +446,14 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
-      /** Unauthorised, requires a valid magic link token */
+      /** Unauthorised, requires a valid CJSM email link token */
       401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires a valid token with role ROLE_SLM_CREATE_BARCODE */
+      403: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
@@ -543,8 +596,14 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
-      /** Unauthorised, requires a valid magic link token */
+      /** Unauthorised, requires a valid CJSM email link token */
       401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires a valid token with role ROLE_SLM_CREATE_BARCODE */
+      403: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
@@ -567,6 +626,12 @@ export interface operations {
       }
       /** Unauthorised, requires a valid magic link token */
       401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires a valid token with role ROLE_SLM_CREATE_BARCODE */
+      403: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
