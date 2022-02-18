@@ -11,6 +11,7 @@ import CreateContactByPrisonerNameController from '../../routes/barcode/contacts
 import ContactService from '../../services/contacts/ContactService'
 import RecipientFormService from '../../routes/barcode/recipients/RecipientFormService'
 import ChooseContactController from '../../routes/barcode/contacts/ChooseContactController'
+import EditContactController from '../../routes/barcode/contacts/EditContactController'
 
 export default function setUpCreateBarcode(
   createBarcodeService: CreateBarcodeService,
@@ -35,6 +36,7 @@ export default function setUpCreateBarcode(
   const chooseBarcodeOptionController = new ChooseBarcodeOptionController()
   const generateImageController = new GenerateBarcodeImageController(createBarcodeService)
   const pdfController = new PdfController(createBarcodeService)
+  const editContactController = new EditContactController(prisonRegisterService)
 
   router.get('/find-recipient', (req, res) => res.redirect('/barcode/find-recipient/by-prison-number'))
   router.get('/find-recipient/by-prison-number', (req, res) =>
@@ -85,6 +87,9 @@ export default function setUpCreateBarcode(
   router.get('/pdf/download', (req, res) => pdfController.downloadPdf(req, res))
 
   router.get('/generate-barcode-image', (req, res) => generateImageController.getGenerateImageView(req, res))
+
+  // TODO SLM-147 Add the contact id to the URL
+  router.get('/edit-contact', (req, res) => editContactController.getEditContact(req, res))
 
   return router
 }

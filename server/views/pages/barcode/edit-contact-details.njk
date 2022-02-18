@@ -1,0 +1,126 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% set pageTitle = applicationName + " - Edit contact" %}
+{% set pageId = 'edit-contact' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+    {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: 'There is a problem',
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row" id="create-new-contact-form">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Edit details</h1>
+        <p data-qa="add-details">Any changes you make will affect only your own records.</p>
+
+        <form id="edit-contact-form" action="/barcode/find-recipient/edit-contact" method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {% set errorDob = errors | findError('dob') %}
+          {% set dobErrorClass = " govuk-input--error" if errorDob %}
+
+          {% call govukFieldset({ }) %}
+
+            {{ govukInput({
+              label: {
+                text: "Full name",
+                isPageHeading: false
+              },
+              hint: {
+                text: "Use their first name and last name"
+              },
+              id: "name",
+              name: "name",
+              value: form.name,
+              attributes: {
+                autofocus: '',
+                autocomplete: 'off'
+              },
+              errorMessage: errors | findError('name')
+            }) }}
+
+            {{ govukSelect({
+              id: 'prisonId',
+              name: 'prisonId',
+              label: {
+                text: 'Name of prison'
+              },
+              items: prisonRegister,
+              errorMessage: errors | findError('prisonId')
+            }) }}
+
+            {{ govukInput({
+              label: {
+                text: "Prison number",
+                isPageHeading: false
+              },
+              hint: {
+                text: "Example, A1234BC"
+              },
+              attributes: {
+                autofocus: '',
+                autocomplete: 'off'
+              },
+              id: "prisonNumber",
+              name: "prisonNumber",
+              value: form.prisonNumber,
+              errorMessage: errors | findError('prisonNumber')
+            }) }}
+
+            {{ govukInsetText({
+              text: "If there's a prison number for your recipient you don't need to enter their date of birth."
+            }) }}
+
+            {{ govukDateInput({
+              id: "dob",
+              namePrefix: "dob",
+              fieldset: {
+                legend: {
+                  text: "Date of birth",
+                  isPageHeading: false
+                }
+              },
+              hint: {
+                text: "For example, 27 03 1996"
+              },
+              errorMessage: errorDob,
+              items: [
+                {
+                  name: "day",
+                  classes: "govuk-input--width-2" + dobErrorClass,
+                  value: form['dob-day']
+                },
+                {
+                  name: "month",
+                  classes: "govuk-input--width-2" + dobErrorClass,
+                  value: form['dob-month']
+                },
+                {
+                  name: "year",
+                  classes: "govuk-input--width-4" + dobErrorClass,
+                  value: form['dob-year']
+                }
+              ]
+            }) }}
+
+          {% endcall %}
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+{% endblock %}
