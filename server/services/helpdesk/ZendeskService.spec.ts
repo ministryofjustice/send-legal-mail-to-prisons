@@ -9,7 +9,9 @@ describe(`Zendesk Service`, () => {
   let mockedZendeskApi: nock.Scope
 
   beforeEach(() => {
-    mockedZendeskApi = nock(config.apis.zendesk.url)
+    mockedZendeskApi = nock(config.apis.zendesk.url, {
+      reqheaders: { authorization: /Basic .+/ }, // asserts that all requests to the Zendesk API have a basic auth header
+    })
     zendeskService = new ZendeskService()
   })
 
