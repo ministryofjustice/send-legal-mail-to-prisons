@@ -74,4 +74,14 @@ declare module 'forms' {
     name?: string
     email?: string
   }
+
+  export interface EditContactForm {
+    name?: string
+    prisonId?: string
+    prisonNumber?: string
+    dob?: Date
+    'dob-day'?: string
+    'dob-month'?: string
+    'dob-year'?: string
+  }
 }
