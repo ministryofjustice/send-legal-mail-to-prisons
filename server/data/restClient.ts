@@ -46,6 +46,10 @@ export default class RestClient {
     return this.config.url
   }
 
+  private basicAuth() {
+    return this.config.basicAuth
+  }
+
   private timeoutConfig() {
     return this.config.timeout
   }
@@ -55,7 +59,7 @@ export default class RestClient {
       logger.info(`${method.toUpperCase()} request using HMPPS auth token: calling ${this.name}: ${path} ${query}`)
     } else if (this.slmToken) {
       logger.info(`${method.toUpperCase()} request using SLM token: calling ${this.name}: ${path} ${query}`)
-    } else if (/https?:\/\/.+:.+@.+/.test(this.apiUrl())) {
+    } else if (this.basicAuth()) {
       logger.info(`${method.toUpperCase()} request using basic auth: calling ${this.name}: ${path} ${query}`)
     } else {
       logger.info(`Anonymous ${method.toUpperCase()} request: calling ${this.name}: ${path} ${query}`)
@@ -119,6 +123,8 @@ export default class RestClient {
       request.auth(this.hmppsToken, { type: 'bearer' })
     } else if (this.slmToken) {
       request.set('Create-Barcode-Token', this.slmToken)
+    } else if (this.basicAuth()) {
+      request.auth(this.basicAuth().user, this.basicAuth().pass, { type: 'basic' })
     }
 
     return request
