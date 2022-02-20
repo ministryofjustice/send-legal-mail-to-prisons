@@ -92,7 +92,7 @@ describe('ContactHelpdeskController', () => {
       await contactHelpdeskController.submitContactHelpdesk(req as unknown as Request, res as unknown as Response)
 
       expect(req.session.contactHelpdeskForm).toBeUndefined()
-      expect(zendeskService.createSupportTicket).toHaveBeenCalledWith(contactHelpdeskForm, false, 'DPS_USER')
+      expect(zendeskService.createSupportTicket).toHaveBeenCalledWith(contactHelpdeskForm, false, 'DPS_USER', null)
       expect(req.flash).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/scan-barcode/contact-helpdesk/submitted')
     })
@@ -110,6 +110,7 @@ describe('ContactHelpdeskController', () => {
       mockContactHelpdeskFormValidator.mockReturnValue([])
       res.locals = { externalUser: true }
       req.session.barcodeUserEmail = 'user@legal-sender.co.uk.cjsm.net'
+      req.session.barcodeUserOrganisation = 'Legal Senders R Us'
 
       await contactHelpdeskController.submitContactHelpdesk(req as unknown as Request, res as unknown as Response)
 
@@ -117,7 +118,8 @@ describe('ContactHelpdeskController', () => {
       expect(zendeskService.createSupportTicket).toHaveBeenCalledWith(
         contactHelpdeskForm,
         true,
-        'user@legal-sender.co.uk.cjsm.net'
+        'user@legal-sender.co.uk.cjsm.net',
+        'Legal Senders R Us'
       )
       expect(req.flash).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/contact-helpdesk/submitted')

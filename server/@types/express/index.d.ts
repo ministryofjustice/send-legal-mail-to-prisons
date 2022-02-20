@@ -22,6 +22,7 @@ declare module 'express-session' {
     slmToken: string
     validSlmToken: boolean
     barcodeUserEmail: string
+    barcodeUserOrganisation: string
     findRecipientByPrisonNumberForm: FindRecipientByPrisonNumberForm
     createNewContactByPrisonNumberForm: CreateNewContactByPrisonNumberForm
     barcodeEntryForm: BarcodeEntryForm

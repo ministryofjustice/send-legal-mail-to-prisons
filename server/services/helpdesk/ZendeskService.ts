@@ -22,7 +22,8 @@ export default class ZendeskService {
   async createSupportTicket(
     contactHelpdeskForm: ContactHelpdeskForm,
     externalUser: boolean,
-    username: string
+    username: string,
+    organisation?: string
   ): Promise<number> {
     try {
       const messageBody = `
@@ -30,7 +31,7 @@ Page ID: ${contactHelpdeskForm.pageId}
 
 Description of issue: ${contactHelpdeskForm.problemDetail}
 
-${externalUser ? 'CJSM email' : 'User ID'}: ${username}
+${externalUser ? `CJSM email: ${username}\nCJSM organisation: ${organisation ?? 'N/A'}` : `User ID: ${username}`}
 
 Name: ${contactHelpdeskForm.name}
 Email: ${contactHelpdeskForm.email}
