@@ -11,6 +11,11 @@ context('Print PDF coversheet', () => {
     printCoversheetsPage = PrintCoversheetsPage.goToPage()
   })
 
+  it('should allow the PDF to be downloaded again', () => {
+    printCoversheetsPage.downloadThePdfAgain()
+    Page.verifyOnPage(PrintCoversheetsPage)
+  })
+
   it('should restart the journey if the user clicks the browser Back button', () => {
     printCoversheetsPage.clickBrowserBackButton()
     Page.verifyOnPage(FindRecipientByPrisonNumberPage)
