@@ -45,7 +45,7 @@ Name: Mr Mail Room User
 Email: mailroom@brixton.prison.gov.uk
 `,
           },
-          tags: 'slm_mailroom',
+          tags: ['SendLegalMail', 'slm_mailroom'],
         },
       }
       mockedZendeskApi.post('/api/v2/tickets', expectedRequestBody).reply(201, { ticket: { id: 1234 } })
@@ -83,7 +83,7 @@ Name: Mrs Legal Sender User
 Email: user@legal-sender.co.uk.cjsm.net
 `,
           },
-          tags: 'slm_legal_sender',
+          tags: ['SendLegalMail', 'slm_legal_sender'],
         },
       }
       mockedZendeskApi.post('/api/v2/tickets', expectedRequestBody).reply(201, { ticket: { id: 1234 } })
@@ -120,7 +120,7 @@ Name: Mrs Legal Sender User
 Email: user@legal-sender.co.uk.cjsm.net
 `,
           },
-          tags: 'slm_legal_sender',
+          tags: ['SendLegalMail', 'slm_legal_sender'],
         },
       }
       mockedZendeskApi.post('/api/v2/tickets', expectedRequestBody).reply(201, { ticket: { id: 1234 } })

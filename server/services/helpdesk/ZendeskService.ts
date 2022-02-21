@@ -10,7 +10,7 @@ export type ZendeskTicket = {
     comment: {
       body: string
     }
-    tags: 'slm_legal_sender' | 'slm_mailroom'
+    tags: ['SendLegalMail', 'slm_legal_sender' | 'slm_mailroom']
   }
 }
 
@@ -42,7 +42,7 @@ Email: ${contactHelpdeskForm.email}
           comment: {
             body: messageBody,
           },
-          tags: externalUser ? 'slm_legal_sender' : 'slm_mailroom',
+          tags: ['SendLegalMail', externalUser ? 'slm_legal_sender' : 'slm_mailroom'],
         },
       }
       const response = (await ZendeskService.restClient().post({
