@@ -54,12 +54,15 @@ export default class PdfController {
       return res.redirect('/barcode/pdf/select-envelope-size')
     }
 
+    req.session.pdfRecipients = [...req.session.recipients]
+    req.session.recipients = undefined
+
     const view = new PdfControllerView(req.session.pdfForm, req.flash('errors'))
     return res.render('pages/barcode/pdf/print-coversheets', { ...view.renderArgs })
   }
 
   async downloadPdf(req: Request, res: Response): Promise<void> {
-    if (!req.session.recipients) {
+    if (!req.session.pdfRecipients) {
       return res.redirect('/barcode/find-recipient')
     }
     if (!req.session.pdfForm) {
@@ -68,15 +71,12 @@ export default class PdfController {
 
     try {
       const barcodeImages = await Promise.all(
-        req.session.recipients.map(async recipient => {
+        req.session.pdfRecipients.map(async recipient => {
           return this.createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient)
         })
       )
 
       const pdfFilename = `send-legal-mail-${moment().format('YYYY-MM-DD')}.pdf`
-
-      // Clear down the recipients so that barcodes cannot be created a second time if there are no errors
-      req.session.recipients = undefined
 
       return res.renderPDF(
         'pdf/barcode-cover-sheet',

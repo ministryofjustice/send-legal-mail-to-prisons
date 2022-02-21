@@ -28,6 +28,7 @@ declare module 'express-session' {
     barcodeEntryForm: BarcodeEntryForm
     scannedAtLeastOneBarcode: boolean
     recipients: Array<Recipient>
+    pdfRecipients: Array<Recipient>
     chooseBarcodeOptionForm: ChooseBarcodeOptionForm
     pdfForm: PdfForm
     findRecipientByPrisonerNameForm: FindRecipientByPrisonerNameForm
