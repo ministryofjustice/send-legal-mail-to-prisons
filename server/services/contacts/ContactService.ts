@@ -52,10 +52,10 @@ export default class ContactService {
       .then(response => response as Array<Contact>)
   }
 
-  async getContact(slmToken: string, prisonNumber: string): Promise<Contact | undefined> {
+  async getContactByPrisonNumber(slmToken: string, prisonNumber: string): Promise<Contact | undefined> {
     return ContactService.restClient(slmToken)
       .get({
-        path: `/contact/${prisonNumber}`,
+        path: `/contact/prisonNumber/${prisonNumber}`,
       })
       .then(response => response as Contact)
       .catch(error => {
@@ -64,5 +64,14 @@ export default class ContactService {
         }
         throw error
       })
+  }
+
+  async getContactById(slmToken: string, id: number): Promise<Contact | undefined> {
+    return ContactService.restClient(slmToken)
+      .get({
+        // TODO SLM-63 switch to /contact/${id} once the API has been sorted
+        path: `/contact/id/${id}`,
+      })
+      .then(response => response as Contact)
   }
 }

@@ -419,7 +419,7 @@ const stubGetContactNone = (): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '^/send-legal-mail/contact/.{7}(?<!H4567IJ)$',
+      urlPattern: '^/send-legal-mail/contact/prisonNumber/.{7}(?<!H4567IJ)$',
       headers: {
         'Create-Barcode-Token': {
           equalTo:
@@ -446,7 +446,7 @@ const stubGetContactOne = (): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      urlPath: '/send-legal-mail/contact/H4567IJ',
+      urlPath: '/send-legal-mail/contact/prisonNumber/H4567IJ',
       headers: {
         'Create-Barcode-Token': {
           equalTo:

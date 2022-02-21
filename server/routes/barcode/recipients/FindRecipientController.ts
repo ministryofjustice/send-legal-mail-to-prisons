@@ -35,7 +35,10 @@ export default class FindRecipientController {
     req.session.recipientForm.prisonNumber = req.session.findRecipientByPrisonNumberForm.prisonNumber
     req.session.findRecipientByPrisonNumberForm = undefined
     try {
-      const contact = await this.contactService.getContact(req.session.slmToken, req.session.recipientForm.prisonNumber)
+      const contact = await this.contactService.getContactByPrisonNumber(
+        req.session.slmToken,
+        req.session.recipientForm.prisonNumber
+      )
       if (contact) {
         await this.recipientFormService.addContact(req, contact)
         req.session.chooseContactForm = undefined

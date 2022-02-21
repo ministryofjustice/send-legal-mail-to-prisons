@@ -88,7 +88,7 @@ export default function setUpCreateBarcode(
 
   router.get('/generate-barcode-image', (req, res) => generateImageController.getGenerateImageView(req, res))
 
-  // TODO SLM-147 Add the contact id to the URL
+  // TODO SLM-63 Add the contact id to the URL
   router.get('/edit-contact', (req, res) => editContactController.getEditContact(req, res))
 
   return router
