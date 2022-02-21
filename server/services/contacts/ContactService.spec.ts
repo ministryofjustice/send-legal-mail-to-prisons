@@ -176,20 +176,20 @@ describe('Contact Service', () => {
     })
   })
 
-  describe('getContact', () => {
+  describe('getContactByPrisonNumber', () => {
     it('should return a contact if found', done => {
-      mockedSendLegalMailApi.get('/contact/A1234BC').reply(200, aContact)
+      mockedSendLegalMailApi.get('/contact/prisonNumber/A1234BC').reply(200, aContact)
 
-      contactService.getContact('some-token', 'A1234BC').then(response => {
+      contactService.getContactByPrisonNumber('some-token', 'A1234BC').then(response => {
         expect(response).toStrictEqual(aContact)
         done()
       })
     })
 
     it('should return undefined if not found', done => {
-      mockedSendLegalMailApi.get('/contact/A1234BC').reply(404)
+      mockedSendLegalMailApi.get('/contact/prisonNumber/A1234BC').reply(404)
 
-      contactService.getContact('some-token', 'A1234BC').then(response => {
+      contactService.getContactByPrisonNumber('some-token', 'A1234BC').then(response => {
         expect(response).toBeUndefined()
         done()
       })
@@ -203,9 +203,36 @@ describe('Contact Service', () => {
           userMessage: 'Failed to read the payload',
         },
       }
-      mockedSendLegalMailApi.get('/contact/A1234BC').reply(400, errorResponse)
+      mockedSendLegalMailApi.get('/contact/prisonNumber/A1234BC').reply(400, errorResponse)
 
-      contactService.getContact('some-token', 'A1234BC').catch(error => {
+      contactService.getContactByPrisonNumber('some-token', 'A1234BC').catch(error => {
+        expect(JSON.parse(error.text)).toStrictEqual(errorResponse)
+        done()
+      })
+    })
+  })
+
+  describe('getContactById', () => {
+    it('should return a contact if found', done => {
+      mockedSendLegalMailApi.get('/contact/id/1').reply(200, aContact)
+
+      contactService.getContactById('some-token', 1).then(response => {
+        expect(response).toStrictEqual(aContact)
+        done()
+      })
+    })
+
+    it('should handle an error response', done => {
+      const errorResponse = {
+        status: 404,
+        errorCode: {
+          code: 'NOT_FOUND',
+          userMessage: 'Contact not found',
+        },
+      }
+      mockedSendLegalMailApi.get('/contact/id/1').reply(404, errorResponse)
+
+      contactService.getContactById('some-token', 1).catch(error => {
         expect(JSON.parse(error.text)).toStrictEqual(errorResponse)
         done()
       })

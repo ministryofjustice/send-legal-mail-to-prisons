@@ -27,7 +27,7 @@ const recipientFormService = {
 
 const contactService = {
   searchContacts: jest.fn(),
-  getContact: jest.fn(),
+  getContactByPrisonNumber: jest.fn(),
 }
 
 const aContact = (): Contact => {
@@ -75,11 +75,11 @@ describe('FindRecipientController', () => {
       req.body = { prisonNumber: 'A1234BC' }
       req.session.slmToken = 'some-token'
       mockPrisonNumberValidator.mockReturnValue([])
-      contactService.getContact.mockReturnValue(undefined)
+      contactService.getContactByPrisonNumber.mockReturnValue(undefined)
 
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
 
-      expect(contactService.getContact).toHaveBeenCalledWith('some-token', 'A1234BC')
+      expect(contactService.getContactByPrisonNumber).toHaveBeenCalledWith('some-token', 'A1234BC')
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact/by-prison-number')
     })
 
@@ -87,7 +87,7 @@ describe('FindRecipientController', () => {
       req.session.recipientForm = {}
       req.body = { prisonNumber: 'A1234BC' }
       mockPrisonNumberValidator.mockReturnValue([])
-      contactService.getContact.mockReturnValue(aContact())
+      contactService.getContactByPrisonNumber.mockReturnValue(aContact())
 
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
 
@@ -99,7 +99,7 @@ describe('FindRecipientController', () => {
       req.session.recipientForm = {}
       req.body = { prisonNumber: 'A1234BC' }
       mockPrisonNumberValidator.mockReturnValue([])
-      contactService.getContact.mockRejectedValue('some-error')
+      contactService.getContactByPrisonNumber.mockRejectedValue('some-error')
 
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
 

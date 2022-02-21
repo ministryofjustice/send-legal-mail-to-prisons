@@ -31,7 +31,13 @@ export interface paths {
     get: operations['searchContactsByName']
   }
   '/contact/{prisonNumber}': {
+    get: operations['getContactByPrisonNumberOld']
+  }
+  '/contact/prisonNumber/{prisonNumber}': {
     get: operations['getContactByPrisonNumber']
+  }
+  '/contact/id/{id}': {
+    get: operations['getContact']
   }
 }
 
@@ -56,6 +62,35 @@ export interface components {
       dob?: string
       /**
        * @description The prison number of the new contact if known
+       * @example A1234BC
+       */
+      prisonNumber?: string
+    }
+    ContactResponse: {
+      /**
+       * Format: int64
+       * @description The ID of the contact
+       * @example 1
+       */
+      id: number
+      /**
+       * @description The name of the contact
+       * @example John Doe
+       */
+      prisonerName: string
+      /**
+       * @description The ID of the prison location of the contact
+       * @example BXI
+       */
+      prisonId: string
+      /**
+       * Format: date
+       * @description The date of birth of the contact if known
+       * @example 1965-04-23
+       */
+      dob?: string
+      /**
+       * @description The prison number of the contact if known
        * @example A1234BC
        */
       prisonNumber?: string
@@ -223,35 +258,6 @@ export interface components {
         code: unknown
         userMessage: unknown
       }
-    ContactResponse: {
-      /**
-       * Format: int64
-       * @description The ID of the contact
-       * @example 1
-       */
-      id: number
-      /**
-       * @description The name of the contact
-       * @example John Doe
-       */
-      prisonerName: string
-      /**
-       * @description The ID of the prison location of the contact
-       * @example BXI
-       */
-      prisonId: string
-      /**
-       * Format: date
-       * @description The date of birth of the contact if known
-       * @example 1965-04-23
-       */
-      dob?: string
-      /**
-       * @description The prison number of the contact if known
-       * @example A1234BC
-       */
-      prisonNumber?: string
-    }
     VerifyLinkRequest: {
       /** @description The secret to verify */
       secret: string
@@ -369,6 +375,12 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** Conflict, the specified new contact already exists for this user. See ContactErrorCodes. */
+      409: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
     }
     requestBody: {
       content: {
@@ -458,7 +470,7 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
-      /** Conflict, the specified new contact already exists for this user */
+      /** Conflict, the specified new contact already exists for this user. See ContactErrorCodes. */
       409: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
@@ -610,6 +622,40 @@ export interface operations {
       }
     }
   }
+  getContactByPrisonNumberOld: {
+    parameters: {
+      path: {
+        /** The prison number of the Contact to return. */
+        prisonNumber: string
+      }
+    }
+    responses: {
+      /** Contact returned */
+      200: {
+        content: {
+          'application/json': components['schemas']['ContactResponse']
+        }
+      }
+      /** Unauthorised, requires a valid magic link token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires a valid token with role ROLE_SLM_CREATE_BARCODE */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Contact not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getContactByPrisonNumber: {
     parameters: {
       path: {
@@ -625,6 +671,45 @@ export interface operations {
         }
       }
       /** Unauthorised, requires a valid magic link token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires a valid token with role ROLE_SLM_CREATE_BARCODE */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Contact not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getContact: {
+    parameters: {
+      path: {
+        id: number
+      }
+    }
+    responses: {
+      /** Contact udpated */
+      200: {
+        content: {
+          'application/json': components['schemas']['ContactResponse']
+        }
+      }
+      /** Bad request */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid CJSM email link token */
       401: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
