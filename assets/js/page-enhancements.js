@@ -82,7 +82,9 @@
 })($, document)
 ;(autoDownloadCoversheetPdf = ($, document) => {
   $(document).ready(() => {
-    $('#print-coversheets-content #downloadPdf').each((idx, element) => element.click())
+    setTimeout(() => {
+      $('#print-coversheets-content #downloadPdf').each((idx, element) => element.click())
+    }, 1000)
   })
 })($, document)
 ;(autoFocusBarcodeField = ($, document) => {

@@ -243,6 +243,7 @@ describe('PdfController', () => {
         'pages/barcode/pdf/print-coversheets',
         expect.objectContaining({ errors: [], form: { envelopeSize: 'dl' } })
       )
+      expect(req.session.recipients).toBeUndefined()
     })
 
     it('should redirect to find-recipient given no recipients in the session', async () => {
@@ -265,7 +266,7 @@ describe('PdfController', () => {
 
   describe('downloadPdf', () => {
     it('should download pdf', async () => {
-      req.session.recipients = [
+      req.session.pdfRecipients = [
         {
           prisonerName: 'John Smith',
           prisonNumber: 'A1234BC',
@@ -288,7 +289,7 @@ describe('PdfController', () => {
     })
 
     it('should throw error if generating barcode data url image fails', async () => {
-      req.session.recipients = [
+      req.session.pdfRecipients = [
         {
           prisonerName: 'John Smith',
           prisonNumber: 'A1234BC',
@@ -316,7 +317,7 @@ describe('PdfController', () => {
     })
 
     it('should redirect to select-envelope-size given no pdfForm in the session', async () => {
-      req.session.recipients = [
+      req.session.pdfRecipients = [
         {
           prisonerName: 'John Smith',
           prisonNumber: 'A1234BC',

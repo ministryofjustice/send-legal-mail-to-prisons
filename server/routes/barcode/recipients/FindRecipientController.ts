@@ -15,6 +15,7 @@ export default class FindRecipientController {
   ) {}
 
   async getFindRecipientByPrisonNumberView(req: Request, res: Response): Promise<void> {
+    req.session.pdfRecipients = undefined
     this.recipientFormService.resetForm(req)
     const view = new FindRecipientByPrisonNumberView(
       req.session?.findRecipientByPrisonNumberForm || {},
@@ -53,6 +54,7 @@ export default class FindRecipientController {
   }
 
   async getFindRecipientByPrisonerNameView(req: Request, res: Response): Promise<void> {
+    req.session.pdfRecipients = undefined
     this.recipientFormService.resetForm(req)
     const view = new FindRecipientByPrisonerNameView(
       req.session?.findRecipientByPrisonerNameForm || {},
