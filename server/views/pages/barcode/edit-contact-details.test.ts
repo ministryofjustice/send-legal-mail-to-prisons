@@ -15,6 +15,19 @@ describe('Edit contact details', () => {
     compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
   })
 
+  describe('id', () => {
+    it('should include id in form', () => {
+      viewContext = {
+        errors: [],
+        form: { id: 1 },
+      }
+
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+      expect($('#id').val()).toContain('1')
+    })
+  })
+
   describe('Name', () => {
     it('should display name', () => {
       viewContext = {

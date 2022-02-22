@@ -214,7 +214,7 @@ describe('Contact Service', () => {
 
   describe('getContactById', () => {
     it('should return a contact if found', done => {
-      mockedSendLegalMailApi.get('/contact/id/1').reply(200, aContact)
+      mockedSendLegalMailApi.get('/contact/1').reply(200, aContact)
 
       contactService.getContactById('some-token', 1).then(response => {
         expect(response).toStrictEqual(aContact)
@@ -230,7 +230,7 @@ describe('Contact Service', () => {
           userMessage: 'Contact not found',
         },
       }
-      mockedSendLegalMailApi.get('/contact/id/1').reply(404, errorResponse)
+      mockedSendLegalMailApi.get('/contact/1').reply(404, errorResponse)
 
       contactService.getContactById('some-token', 1).catch(error => {
         expect(JSON.parse(error.text)).toStrictEqual(errorResponse)

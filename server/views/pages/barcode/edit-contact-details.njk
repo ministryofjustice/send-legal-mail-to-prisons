@@ -28,6 +28,7 @@
 
         <form id="edit-contact-form" action="/barcode/find-recipient/edit-contact" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          <input type="hidden" id="id" name="id" value="{{ form.id }}" />
 
           {% set errorDob = errors | findError('dob') %}
           {% set dobErrorClass = " govuk-input--error" if errorDob %}
