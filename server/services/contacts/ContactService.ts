@@ -69,8 +69,7 @@ export default class ContactService {
   async getContactById(slmToken: string, id: number): Promise<Contact | undefined> {
     return ContactService.restClient(slmToken)
       .get({
-        // TODO SLM-63 switch to /contact/${id} once the API has been sorted
-        path: `/contact/id/${id}`,
+        path: `/contact/${id}`,
       })
       .then(response => response as Contact)
   }
