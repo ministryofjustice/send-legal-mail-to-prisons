@@ -282,14 +282,15 @@ const stubMoreChecksRequestedForBarcode = (): SuperAgentRequest =>
     },
   })
 
-const stubCreateBarcode = (): SuperAgentRequest =>
-  stubFor({
+const stubCreateBarcode = (prisonerName?: string): SuperAgentRequest => {
+  const bodyMatcher = prisonerName
+    ? `$[?(@.prisonerName == '${prisonerName}' && @.prisonId =~ /.+/i && @.contactId =~ /.+/i)]`
+    : '$[?(@.prisonerName =~ /.+/i && @.prisonId =~ /.+/i && @.contactId =~ /.+/i)]'
+  return stubFor({
     request: {
       method: 'POST',
       urlPattern: '/send-legal-mail/barcode',
-      bodyPatterns: [
-        { matchesJsonPath: '$[?(@.prisonerName =~ /.+/i && @.prisonId =~ /.+/i && @.contactId =~ /.+/i)]' },
-      ],
+      bodyPatterns: [{ matchesJsonPath: bodyMatcher }],
       headers: {
         'Create-Barcode-Token': {
           equalTo:
@@ -305,15 +306,17 @@ const stubCreateBarcode = (): SuperAgentRequest =>
       jsonBody: { barcode: '123456789012' },
     },
   })
+}
 
-const stubCreateBarcodeFailure = (): SuperAgentRequest =>
-  stubFor({
+const stubCreateBarcodeFailure = (prisonerName?: string): SuperAgentRequest => {
+  const bodyMatcher = prisonerName
+    ? `$[?(@.prisonerName == '${prisonerName}' && @.prisonId =~ /.+/i && @.contactId =~ /.+/i)]`
+    : '$[?(@.prisonerName =~ /.+/i && @.prisonId =~ /.+/i && @.contactId =~ /.+/i)]'
+  return stubFor({
     request: {
       method: 'POST',
       urlPattern: '/send-legal-mail/barcode',
-      bodyPatterns: [
-        { matchesJsonPath: '$[?(@.prisonerName =~ /.+/i && @.prisonId =~ /.+/i && @.contactId =~ /.+/i)]' },
-      ],
+      bodyPatterns: [{ matchesJsonPath: bodyMatcher }],
       headers: {
         'Create-Barcode-Token': {
           equalTo:
@@ -328,6 +331,7 @@ const stubCreateBarcodeFailure = (): SuperAgentRequest =>
       },
     },
   })
+}
 
 const stubCreateContact = (): SuperAgentRequest =>
   stubFor({
