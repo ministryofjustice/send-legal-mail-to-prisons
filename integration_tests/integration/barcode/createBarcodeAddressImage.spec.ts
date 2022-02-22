@@ -43,9 +43,14 @@ context('Create Barcode Image', () => {
   it('should restart the journey if the user chooses to send more legal mail on the barcodes screen', () => {
     cy.task('stubCreateBarcode')
     const generateBarcodeImagePage = Page.verifyOnPage(ChooseBarcodeOptionPage).continueToImage()
-
     generateBarcodeImagePage.sendMoreLegalMail()
+    Page.verifyOnPage(FindRecipientByPrisonNumberPage)
+  })
 
+  it('should restart the journey if the user clicks the browser Back button', () => {
+    cy.task('stubCreateBarcode')
+    const generateBarcodeImagePage = Page.verifyOnPage(ChooseBarcodeOptionPage).continueToImage()
+    generateBarcodeImagePage.clickBrowserBackButton()
     Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   })
 })

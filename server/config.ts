@@ -136,9 +136,5 @@ export default {
     legalSenderJourney: get('LEGAL_SENDER_PHASE_BANNER_LINK', 'https://eu.surveymonkey.com/r/SendLegalMail'),
     mailRoomJourney: get('MAIL_ROOM_PHASE_BANNER_LINK', 'https://eu.surveymonkey.com/r/CheckRule39Mail'),
   },
-  exitSurveyLink: {
-    legalSenderJourney: get('LEGAL_SENDER_EXIT_BANNER_LINK', 'https://eu.surveymonkey.com/r/SendLegalMail'),
-    mailRoomJourney: get('MAIL_ROOM_EXIT_BANNER_LINK', 'https://eu.surveymonkey.com/r/CheckRule39Mail'),
-  },
   fileUploadsEnabled: toBoolean(get('FILE_UPLOADS_ENABLED', false)),
 }
