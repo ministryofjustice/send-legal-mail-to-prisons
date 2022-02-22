@@ -10,7 +10,7 @@ export default function renderEnvelopeSizeRadiosFilter(
       html: `<div class='${envelopeSize.key}'>
   <span class='label'>${envelopeSize.label}</span>
   <span class='description'>(${envelopeSize.description})</span>
-  <span class='specification'>Width: ${envelopeSize.width}mm, height: ${envelopeSize.height}mm</span>
+  <span class='specification'>Width: ${envelopeSize.width}mm; height: ${envelopeSize.height}mm</span>
 </div>`,
       checked: false,
     }

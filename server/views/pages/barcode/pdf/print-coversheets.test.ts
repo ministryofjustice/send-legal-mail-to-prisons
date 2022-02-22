@@ -16,7 +16,7 @@ describe('Print Coversheets View', () => {
   })
 
   it('should render view', () => {
-    viewContext = { errors: [], form: { envelopeSize: 'dl' } }
+    viewContext = { envelopeSize: 'dl', numberOfCoversheets: 1, filename: 'SendLegalMail-2022-02-22-1-DL.pdf' }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
@@ -24,26 +24,42 @@ describe('Print Coversheets View', () => {
   })
 
   it('should show correct text given dl envelope was selected', () => {
-    viewContext = { errors: [], form: { envelopeSize: 'dl' } }
+    viewContext = { envelopeSize: 'dl', numberOfCoversheets: 1, filename: 'SendLegalMail-2022-02-22-1-DL.pdf' }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('div.envelope.dl p').text()).toContain('Fold each sheet in thirds')
+    expect($('div.envelope.dl li').text()).toContain('Fold each sheet in thirds')
   })
 
   it('should show correct text given c5 envelope was selected', () => {
-    viewContext = { errors: [], form: { envelopeSize: 'c5' } }
+    viewContext = { envelopeSize: 'c5', numberOfCoversheets: 1, filename: 'SendLegalMail-2022-02-22-1-DL.pdf' }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('div.envelope.c5 p').text()).toContain('Fold each sheet in half')
+    expect($('div.envelope.c5 li').text()).toContain('Fold each sheet in half')
   })
 
   it('should show correct text given c4 envelope was selected', () => {
-    viewContext = { errors: [], form: { envelopeSize: 'c4' } }
+    viewContext = { envelopeSize: 'c4', numberOfCoversheets: 1, filename: 'SendLegalMail-2022-02-22-1-DL.pdf' }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('div.envelope.c4 p').text()).not.toContain('Fold each sheet')
+  })
+
+  it('should show correct filename and number of coversheets given 1 coversheet', () => {
+    viewContext = { envelopeSize: 'c4', numberOfCoversheets: 1, filename: 'SendLegalMail-2022-02-22-1-DL.pdf' }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('p').text()).toContain('file SendLegalMail-2022-02-22-1-DL.pdf with 1 coversheet ')
+  })
+
+  it('should show correct filename and number of coversheets given multiple coversheets', () => {
+    viewContext = { envelopeSize: 'c4', numberOfCoversheets: 2, filename: 'SendLegalMail-2022-02-22-2-DL.pdf' }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('p').text()).toContain('file SendLegalMail-2022-02-22-2-DL.pdf with 2 coversheets ')
   })
 })

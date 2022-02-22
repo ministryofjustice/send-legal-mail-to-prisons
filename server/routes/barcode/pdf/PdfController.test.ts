@@ -239,10 +239,11 @@ describe('PdfController', () => {
 
       await pdfController.getPrintCoverSheetView(req as unknown as Request, res as unknown as Response)
 
-      expect(res.render).toHaveBeenCalledWith(
-        'pages/barcode/pdf/print-coversheets',
-        expect.objectContaining({ errors: [], form: { envelopeSize: 'dl' } })
-      )
+      expect(res.render).toHaveBeenCalledWith('pages/barcode/pdf/print-coversheets', {
+        envelopeSize: 'dl',
+        filename: `SendLegalMail-${moment().format('YYYY-MM-DD')}-1-DL.pdf`,
+        numberOfCoversheets: 1,
+      })
       expect(req.session.recipients).toBeUndefined()
     })
 
@@ -284,7 +285,7 @@ describe('PdfController', () => {
       expect(res.renderPDF).toHaveBeenCalledWith(
         'pdf/barcode-cover-sheet',
         expect.objectContaining({ barcodeImages: ['John Smith-barcode-data-url'], envelopeSize: 'dl' }),
-        { contentDisposition: 'attachment', filename: `send-legal-mail-${moment().format('YYYY-MM-DD')}.pdf` }
+        { contentDisposition: 'attachment', filename: `SendLegalMail-${moment().format('YYYY-MM-DD')}-1-DL.pdf` }
       )
     })
 

@@ -1,8 +1,10 @@
 #print-coversheets-content {
 
   .envelope span {
-    display: inline-block;
-    padding: 0 10px;
+    display: block;
+    box-sizing: border-box;
+    width: fit-content;
+    padding: 20px 10px;
     position: relative;
   }
   .envelope.dl span::after {
@@ -10,9 +12,9 @@
     content: ' ';
     border-top: 1px dashed grey;
     border-bottom: 1px dashed grey;
-    height: 33%;
+    height: 45px;
     width: 100%;
-    top: 35%;
+    top: 65px;
     left: 0;
   }
   .envelope.c5 span::after {
