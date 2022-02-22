@@ -68,7 +68,7 @@ describe('GenerateBarcodeImageController', () => {
           barcodeImages: [
             {
               barcodeImageUrl: 'barcode-address-image-url',
-              barcodeImageName: `John-Smith-A1234BC-${moment().format('DD-MM-YYYY')}.png`,
+              barcodeImageName: `SendLegalMail-John-Smith-${moment().format('YYYY-MM-DD')}.png`,
             },
           ],
         }
@@ -159,11 +159,11 @@ describe('GenerateBarcodeImageController', () => {
           barcodeImages: [
             {
               barcodeImageUrl: 'john-smith-barcode-image-url',
-              barcodeImageName: `John-Smith-A1234BC-${moment().format('DD-MM-YYYY')}.png`,
+              barcodeImageName: `SendLegalMail-John-Smith-${moment().format('YYYY-MM-DD')}.png`,
             },
             {
               barcodeImageUrl: 'john-doe-barcode-image-url',
-              barcodeImageName: `John-Doe-J3344JD-${moment().format('DD-MM-YYYY')}.png`,
+              barcodeImageName: `SendLegalMail-John-Doe-${moment().format('YYYY-MM-DD')}.png`,
             },
           ],
         }

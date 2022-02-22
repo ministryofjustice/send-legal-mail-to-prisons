@@ -41,7 +41,7 @@ export default class GenerateBarcodeImageController {
   }
 
   private barcodeFilename(recipient: Recipient): string {
-    const today = moment().format('DD-MM-YYYY')
-    return `${recipient.prisonerName} ${recipient.prisonNumber} ${today}.png`.replace(/ /g, '-')
+    const today = moment().format('YYYY-MM-DD')
+    return `SendLegalMail-${recipient.prisonerName}-${today}.png`.replace(/ /g, '-')
   }
 }
