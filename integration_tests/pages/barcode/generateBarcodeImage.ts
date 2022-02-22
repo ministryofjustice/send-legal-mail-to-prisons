@@ -1,6 +1,7 @@
 /* eslint-disable import/no-cycle */
 import Page, { PageElement } from '../page'
 import ChooseBarcodeOptionPage from './chooseBarcodeOption'
+import FindRecipientByPrisonNumberPage from './findRecipientByPrisonNumber'
 
 export default class GenerateBarcodeImagePage extends Page {
   constructor() {
@@ -24,11 +25,18 @@ export default class GenerateBarcodeImagePage extends Page {
     return this
   }
 
+  sendMoreLegalMail = (): FindRecipientByPrisonNumberPage => {
+    this.sendMoreLegalMailLink().click()
+    return Page.verifyOnPage(FindRecipientByPrisonNumberPage)
+  }
+
   barcodeAddressImage = (): PageElement => cy.get('img.barcode-address-image')
 
   imageDownloadButton = (): PageElement => cy.get('[data-qa=download-image-button]')
 
   imageCopyButton = (): PageElement => cy.get('[data-qa=copy-image-button]')
+
+  sendMoreLegalMailLink = (): PageElement => cy.get('[data-qa=send-more-legal-mail]')
 
   hasErrorContaining = (partialMessage: string): void => {
     cy.get('.govuk-error-summary__list').should('contain', partialMessage)

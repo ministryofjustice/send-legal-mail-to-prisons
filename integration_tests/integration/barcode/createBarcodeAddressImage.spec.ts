@@ -2,6 +2,7 @@ import Page from '../../pages/page'
 import GenerateBarcodeImagePage from '../../pages/barcode/generateBarcodeImage'
 import ChooseBarcodeOptionPage from '../../pages/barcode/chooseBarcodeOption'
 import ReviewRecipientsPage from '../../pages/barcode/reviewRecipients'
+import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientByPrisonNumber'
 
 context('Create Barcode Image', () => {
   beforeEach(() => {
@@ -24,14 +25,27 @@ context('Create Barcode Image', () => {
     page.continueToImageErrors().hasErrorContaining('error')
   })
 
-  // TODO - the intent of the test is correct, but wiremock stubs will need creating once the barcode API is called with recipient details (SLM-99)
-  // At the moment we cannot reliably tell wiremock to fail for the 2nd call
-  it.skip('should show an error if creating the first barcode succeeds but subsequent barcodes fail', () => {
+  it('should show an error if creating the first barcode succeeds but subsequent barcodes fail', () => {
+    cy.task('stubCreateBarcode', 'Gage Hewitt')
+    cy.task('stubCreateBarcodeFailure', 'Arry Ardnut')
     cy.go(-1) // back to Review Recipients in order to add a 2nd recipient
     const reviewRecipientsPage = Page.verifyOnPage(ReviewRecipientsPage)
-    reviewRecipientsPage.addAnotherRecipient().submitWithUnknownPrisonNumber().submitWithValidValues().prepareBarcodes()
+    reviewRecipientsPage
+      .addAnotherRecipient()
+      .submitWithUnknownPrisonNumber()
+      .submitWithValidValues('Arry Ardnut')
+      .prepareBarcodes()
 
     const page = Page.verifyOnPage(ChooseBarcodeOptionPage)
     page.continueToImageErrors().hasErrorContaining('error generating the barcode')
+  })
+
+  it('should restart the journey if the user chooses to send more legal mail on the barcodes screen', () => {
+    cy.task('stubCreateBarcode')
+    const generateBarcodeImagePage = Page.verifyOnPage(ChooseBarcodeOptionPage).continueToImage()
+
+    generateBarcodeImagePage.sendMoreLegalMail()
+
+    Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   })
 })

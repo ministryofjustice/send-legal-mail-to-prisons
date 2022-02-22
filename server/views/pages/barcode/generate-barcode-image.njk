@@ -26,7 +26,7 @@
         <ol>
           <li>Copy or download a barcode and address image.</li>
           <li>Paste or insert the image into your document.</li>
-          <li>Check the barcode will be visible in the window of your envelope and adjust if necessary.</li>
+          <li>Position the image so it will be fully visible in the window when you've printed your document and put it in the envelope.</li>
           <li>Repeat for each image.</li>
         </ol>
 
@@ -43,16 +43,16 @@
           </div>
           <div class="govuk-button-group govuk-!-margin-top-2">
             {{ govukButton({
+              text: "Copy",
+              classes: "govuk-button--secondary barcode-address-copy-button",
+              attributes: { 'data-qa': 'copy-image-button' }
+            }) }}
+            {{ govukButton({
               text: "Download",
               classes: "govuk-button--secondary",
               element: "a",
               href: barcodeImage.barcodeImageUrl,
               attributes: { 'target': '_blank', 'download': barcodeImage.barcodeImageName, 'data-qa': 'download-image-button' }
-            }) }}
-            {{ govukButton({
-              text: "Copy",
-              classes: "govuk-button--secondary barcode-address-copy-button",
-              attributes: { 'data-qa': 'copy-image-button' }
             }) }}
           </div>
 
@@ -64,11 +64,10 @@
       </div>
     {% endfor %}
 
-    <div class="govuk-grid-row govuk-!-margin-top-6">
+    <div class="govuk-grid-row govuk-!-margin-bottom-6">
       <div class="govuk-grid-column-full">
-        <p class="govuk-!-margin-top-6 govuk-!-margin-bottom-6">
-          <a href="{{ exitSurveyLink }}" class="govuk-link" rel="noreferrer noopener" target="_blank">Help us improve this service (opens in a new tab)</a>
-        </p>
+        <h2 class="govuk-heading-m row govuk-!-margin-bottom-2">If you want to send more legal mail</h1>
+        <a href="/barcode/find-recipient" data-qa="send-more-legal-mail" class="govuk-link">Enter another prison number</a>
       </div>
     </div>
 
