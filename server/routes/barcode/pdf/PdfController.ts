@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
-import PdfControllerView from './PdfControllerView'
+import type { PdfForm } from 'forms'
+import PdfControllerView, { ENVELOPE_SIZES } from './PdfControllerView'
 import validateEnvelopeSizeOption from './envelopeSizeOptionValidator'
 import CreateBarcodeService from '../../../services/barcode/CreateBarcodeService'
 import logger from '../../../../logger'
@@ -57,8 +58,15 @@ export default class PdfController {
     req.session.pdfRecipients = [...req.session.recipients]
     req.session.recipients = undefined
 
-    const view = new PdfControllerView(req.session.pdfForm, req.flash('errors'))
-    return res.render('pages/barcode/pdf/print-coversheets', { ...view.renderArgs })
+    const numberOfCoversheets = req.session.pdfRecipients.length
+    const filename = this.pdfFilename(numberOfCoversheets, this.envelopeSize(req.session.pdfForm))
+    const { envelopeSize } = req.session.pdfForm
+
+    return res.render('pages/barcode/pdf/print-coversheets', {
+      envelopeSize,
+      numberOfCoversheets,
+      filename,
+    })
   }
 
   async downloadPdf(req: Request, res: Response): Promise<void> {
@@ -76,7 +84,9 @@ export default class PdfController {
         })
       )
 
-      const pdfFilename = `send-legal-mail-${moment().format('YYYY-MM-DD')}.pdf`
+      const numberOfCoversheets = req.session.pdfRecipients.length
+      const envelopeSize = this.envelopeSize(req.session.pdfForm)
+      const filename = this.pdfFilename(numberOfCoversheets, envelopeSize)
 
       return res.renderPDF(
         'pdf/barcode-cover-sheet',
@@ -92,7 +102,7 @@ export default class PdfController {
           xOffsetC4: config.coversheetPdf.xOffsetC4,
           yOffsetC4: config.coversheetPdf.yOffsetC4,
         },
-        { filename: pdfFilename, contentDisposition: 'attachment' }
+        { filename, contentDisposition: 'attachment' }
       )
     } catch (error) {
       logger.error('There was an error generating the barcode images for the coversheet PDF', error)
@@ -101,5 +111,14 @@ export default class PdfController {
       // this point what/how we can tell the user anything.
       throw error
     }
+  }
+
+  private pdfFilename(numberOfCoversheets: number, envelopeSize: string): string {
+    const today = moment().format('YYYY-MM-DD')
+    return `SendLegalMail-${today}-${numberOfCoversheets}-${envelopeSize}.pdf`
+  }
+
+  private envelopeSize(pdfForm: PdfForm): string {
+    return ENVELOPE_SIZES.find(envelopeSpec => envelopeSpec.key === pdfForm.envelopeSize).label
   }
 }
