@@ -20,4 +20,9 @@ context('Print PDF coversheet', () => {
     printCoversheetsPage.clickBrowserBackButton()
     Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   })
+
+  it('should restart the journey if the user chooses to send more legal mail on the PDF screen', () => {
+    printCoversheetsPage.sendMoreLegalMail()
+    Page.verifyOnPage(FindRecipientByPrisonNumberPage)
+  })
 })

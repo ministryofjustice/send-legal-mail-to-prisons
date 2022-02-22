@@ -28,13 +28,10 @@ export default function nunjucksSetup(app: express.Express): void {
     app.locals.applicationName = externalUser ? 'Send legal mail to prisons' : 'Check Rule 39 mail'
     app.locals.gtmContainerId = externalUser ? config.slmContainerId : config.checkRule39ContainerId
 
-    // Set the values for the phase banner and exit survey links from config
+    // Set the values for the phase banner links from config
     app.locals.phaseBannerLink = externalUser
       ? config.phaseBannerLink.legalSenderJourney
       : config.phaseBannerLink.mailRoomJourney
-    app.locals.exitSurveyLink = externalUser
-      ? config.exitSurveyLink.legalSenderJourney
-      : config.exitSurveyLink.mailRoomJourney
     next()
   })
 

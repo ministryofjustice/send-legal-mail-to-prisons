@@ -25,6 +25,11 @@ export default class GenerateBarcodeImagePage extends Page {
     return this
   }
 
+  clickBrowserBackButton = (): FindRecipientByPrisonNumberPage => {
+    cy.go(-1)
+    return Page.verifyOnPage(FindRecipientByPrisonNumberPage)
+  }
+
   sendMoreLegalMail = (): FindRecipientByPrisonNumberPage => {
     this.sendMoreLegalMailLink().click()
     return Page.verifyOnPage(FindRecipientByPrisonNumberPage)
