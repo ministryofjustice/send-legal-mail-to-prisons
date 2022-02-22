@@ -14,7 +14,7 @@ context('Create Barcode Image', () => {
     Page.verifyOnPage(ChooseBarcodeOptionPage).continueToImage()
     Page.verifyOnPage(GenerateBarcodeImagePage)
       .barcodeAddressImageExists()
-      .imageDownloadButtonExists(/Gage-Hewitt-A1234BC-\d{2}-\d{2}-\d{4}\.png/)
+      .imageDownloadButtonExists(/SendLegalMail-Gage-Hewitt-\d{4}-\d{2}-\d{2}\.png/)
       .imageCopyButtonExists()
   })
 
