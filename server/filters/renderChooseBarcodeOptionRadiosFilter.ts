@@ -4,7 +4,7 @@ export default function renderChooseBarcodeOptionRadiosFilter(values: Array<stri
   return [
     {
       value: 'image',
-      html: `<p>Print as part of your document</p>
+      html: `<p>Print as part of your own document.</p>
 <div>
   <img src="/assets/images/print-barcodes-image.png" alt="An example of a letter containing the copied image"/>
 </div>
@@ -31,7 +31,7 @@ export default function renderChooseBarcodeOptionRadiosFilter(values: Array<stri
     },
     {
       value: 'coversheet',
-      html: `<p>Print on a separate piece of paper</p>
+      html: `<p>Print on a separate piece of paper.</p>
 <div>
   <img src='/assets/images/print-barcodes-coversheet.png' alt='An example of a separate printed sheet'/>
 </div>
@@ -45,7 +45,7 @@ export default function renderChooseBarcodeOptionRadiosFilter(values: Array<stri
       </span>
       <span class='govuk-grid-column-one-third'>
         <img src='/assets/images/coversheet-how-it-works-2.png' alt='An example of the second coversheet instruction'/>
-        <p>2. You’ll get a coversheet with the barcode and address positioned correctly.</p>
+        <p>2. Download the coversheet with the barcode and address positioned correctly.</p>
       </span>
       <span class='govuk-grid-column-one-third'>
         <img src='/assets/images/coversheet-how-it-works-3.png' alt='An example of the third coversheet instruction'/>
