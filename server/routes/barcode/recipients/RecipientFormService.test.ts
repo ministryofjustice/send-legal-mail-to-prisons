@@ -15,12 +15,12 @@ const prisonRegisterService = {
   getPrisonAddress: jest.fn(),
 }
 
-const aContact = (): Contact => {
+const aContact = (id = 1, prisonNumber = 'A1234BC'): Contact => {
   return {
-    id: 1,
+    id,
     prisonerName: 'John Smith',
     prisonId: 'LEI',
-    prisonNumber: 'A1234BC',
+    prisonNumber,
   }
 }
 
@@ -222,6 +222,74 @@ describe('Recipient Form Service', () => {
       })
       expect(req.session.recipientForm).toStrictEqual({})
       expect(prisonRegisterService.getPrisonAddress).toHaveBeenCalledWith('LEI')
+    })
+  })
+
+  describe('updateContact', () => {
+    it('should do nothing if contact not in recipient list', async () => {
+      prisonRegisterService.getPrisonAddress.mockReturnValue(aPrisonAddress())
+      await recipientFormService.addContact(req as unknown as Request, aContact())
+      expect(req.session.recipients.length).toEqual(1)
+
+      await recipientFormService.updateContact(req as unknown as Request, aContact(2, 'A5555FF'))
+
+      expect(req.session.recipients).toEqual([
+        {
+          prisonNumber: 'A1234BC',
+          prisonerName: 'John Smith',
+          prisonAddress: aPrisonAddress(),
+          contactId: 1,
+        },
+      ])
+      expect(prisonRegisterService.getPrisonAddress).toHaveBeenCalledWith('LEI')
+    })
+
+    it('should update recipient list with new contact details', async () => {
+      prisonRegisterService.getPrisonAddress.mockReturnValue(aPrisonAddress())
+      await recipientFormService.addContact(req as unknown as Request, aContact())
+      expect(req.session.recipients.length).toEqual(1)
+
+      await recipientFormService.updateContact(req as unknown as Request, aContact(1, 'A5555FF'))
+
+      expect(req.session.recipients).toEqual([
+        {
+          prisonNumber: 'A5555FF',
+          prisonerName: 'John Smith',
+          prisonAddress: aPrisonAddress(),
+          contactId: 1,
+        },
+      ])
+    })
+
+    it('should update all occurrences of recipient with new contact details', async () => {
+      prisonRegisterService.getPrisonAddress.mockReturnValue(aPrisonAddress())
+      await recipientFormService.addContact(req as unknown as Request, aContact())
+      await recipientFormService.addContact(req as unknown as Request, aContact(2))
+      await recipientFormService.addContact(req as unknown as Request, aContact())
+      expect(req.session.recipients.length).toEqual(3)
+
+      await recipientFormService.updateContact(req as unknown as Request, aContact(1, 'A5555FF'))
+
+      expect(req.session.recipients).toEqual([
+        {
+          prisonNumber: 'A5555FF',
+          prisonerName: 'John Smith',
+          prisonAddress: aPrisonAddress(),
+          contactId: 1,
+        },
+        {
+          prisonNumber: 'A1234BC',
+          prisonerName: 'John Smith',
+          prisonAddress: aPrisonAddress(),
+          contactId: 2,
+        },
+        {
+          prisonNumber: 'A5555FF',
+          prisonerName: 'John Smith',
+          prisonAddress: aPrisonAddress(),
+          contactId: 1,
+        },
+      ])
     })
   })
 })

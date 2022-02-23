@@ -26,9 +26,9 @@
         <h1 class="govuk-heading-xl">Edit details</h1>
         <p data-qa="add-details">Any changes you make will affect only your own records.</p>
 
-        <form id="edit-contact-form" action="/barcode/find-recipient/edit-contact" method="post" novalidate>
+        <form id="edit-contact-form" action="/barcode/edit-contact" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-          <input type="hidden" id="id" name="id" value="{{ form.id }}" />
+          <input type="hidden" id="contactId" name="contactId" value="{{ form.contactId }}" />
 
           {% set errorDob = errors | findError('dob') %}
           {% set dobErrorClass = " govuk-input--error" if errorDob %}
@@ -43,14 +43,14 @@
               hint: {
                 text: "Use their first name and last name"
               },
-              id: "name",
-              name: "name",
-              value: form.name,
+              id: "prisonerName",
+              name: "prisonerName",
+              value: form.prisonerName,
               attributes: {
                 autofocus: '',
                 autocomplete: 'off'
               },
-              errorMessage: errors | findError('name')
+              errorMessage: errors | findError('prisonerName')
             }) }}
 
             {{ govukSelect({
@@ -115,6 +115,11 @@
                   value: form['dob-year']
                 }
               ]
+            }) }}
+
+            {{ govukButton({
+              text: "Save",
+              preventDoubleClick: true
             }) }}
 
           {% endcall %}

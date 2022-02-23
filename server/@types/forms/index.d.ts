@@ -76,7 +76,8 @@ declare module 'forms' {
   }
 
   export interface EditContactForm {
-    name?: string
+    contactId: number
+    prisonerName?: string
     prisonId?: string
     prisonNumber?: string
     dob?: Date

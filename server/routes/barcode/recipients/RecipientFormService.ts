@@ -37,24 +37,47 @@ export default class RecipientFormService {
     if (!req.session.recipients) {
       req.session.recipients = []
     }
+    const newRecipient = await this.toRecipient(recipientForm)
+
+    req.session.recipients.push(newRecipient)
+
+    req.session.recipientForm = {}
+  }
+
+  private async updateRecipient(req: Request, recipientForm: RecipientForm) {
+    if (!req.session.recipients) {
+      req.session.recipients = []
+    }
+
+    const newRecipient = await this.toRecipient(recipientForm)
+
+    req.session.recipients = req.session.recipients.map(recipient =>
+      recipient.contactId !== newRecipient.contactId ? recipient : newRecipient
+    )
+  }
+
+  async addContact(req: Request, contact: Contact) {
+    const recipientForm = await this.toRecipientForm(contact)
+    await this.addRecipient(req, recipientForm)
+  }
+
+  async updateContact(req: Request, contact: Contact) {
+    const recipientForm = await this.toRecipientForm(contact)
+    await this.updateRecipient(req, recipientForm)
+  }
+
+  private async toRecipient(recipientForm: RecipientForm): Promise<Recipient> {
     const prisonAddress = await this.prisonRegisterService.getPrisonAddress(recipientForm.prisonId)
-    const newRecipient: Recipient = {
+    return {
       prisonerName: recipientForm.prisonerName || '',
       prisonNumber: recipientForm.prisonNumber,
       prisonerDob: recipientForm.prisonerDob,
       prisonAddress,
       contactId: +recipientForm.contactId || undefined,
     }
-    req.session.recipients.push(newRecipient)
-    req.session.recipientForm = {}
   }
 
-  async addContact(req: Request, contact: Contact) {
-    const recipientForm = await this.createRecipientForm(contact)
-    await this.addRecipient(req, recipientForm)
-  }
-
-  private async createRecipientForm(contact: Contact): Promise<RecipientForm> {
+  private async toRecipientForm(contact: Contact): Promise<RecipientForm> {
     return {
       prisonNumber: contact.prisonNumber,
       prisonerName: contact.prisonerName,

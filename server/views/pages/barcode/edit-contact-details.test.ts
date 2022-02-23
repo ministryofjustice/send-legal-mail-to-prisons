@@ -15,16 +15,16 @@ describe('Edit contact details', () => {
     compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
   })
 
-  describe('id', () => {
+  describe('contact id', () => {
     it('should include id in form', () => {
       viewContext = {
         errors: [],
-        form: { id: 1 },
+        form: { contactId: 1 },
       }
 
       const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-      expect($('#id').val()).toContain('1')
+      expect($('#contactId').val()).toContain('1')
     })
   })
 
@@ -32,24 +32,24 @@ describe('Edit contact details', () => {
     it('should display name', () => {
       viewContext = {
         errors: [],
-        form: { name: 'some-name' },
+        form: { prisonerName: 'some-name' },
       }
 
       const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-      expect($('#name').val()).toContain('some-name')
+      expect($('#prisonerName').val()).toContain('some-name')
     })
 
     it('should display name errors', () => {
       viewContext = {
-        errors: [{ href: '#name', text: 'some-error' }],
-        form: { name: 'some-name' },
+        errors: [{ href: '#prisonerName', text: 'some-error' }],
+        form: { prisonerName: 'some-name' },
       }
 
       const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-      expect($('div.govuk-error-summary').find('a[href="#name"]').text()).toEqual('some-error')
-      expect($('#name-error').text()).toContain('some-error')
+      expect($('div.govuk-error-summary').find('a[href="#prisonerName"]').text()).toEqual('some-error')
+      expect($('#prisonerName-error').text()).toContain('some-error')
     })
   })
 

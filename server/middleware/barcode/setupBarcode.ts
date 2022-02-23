@@ -36,7 +36,7 @@ export default function setUpCreateBarcode(
   const chooseBarcodeOptionController = new ChooseBarcodeOptionController()
   const generateImageController = new GenerateBarcodeImageController(createBarcodeService)
   const pdfController = new PdfController(createBarcodeService)
-  const editContactController = new EditContactController(prisonRegisterService, contactService)
+  const editContactController = new EditContactController(prisonRegisterService, contactService, recipientFormService)
 
   router.get('/find-recipient', (req, res) => res.redirect('/barcode/find-recipient/by-prison-number'))
   router.get('/find-recipient/by-prison-number', (req, res) =>
@@ -89,6 +89,7 @@ export default function setUpCreateBarcode(
   router.get('/generate-barcode-image', (req, res) => generateImageController.getGenerateImageView(req, res))
 
   router.get('/edit-contact/:contactId', (req, res) => editContactController.getEditContact(req, res))
+  router.post('/edit-contact', (req, res) => editContactController.submitUpdateContact(req, res))
 
   return router
 }

@@ -1,4 +1,4 @@
-import type { RecipientForm } from 'forms'
+import type { EditContactForm, RecipientForm } from 'forms'
 import {
   BarcodeEntryForm,
   ChooseBarcodeOptionForm,
@@ -37,6 +37,7 @@ declare module 'express-session' {
     recipientForm: RecipientForm
     cookiesPolicy: CookiesPolicy
     contactHelpdeskForm: ContactHelpdeskForm
+    editContactForm: EditContactForm
   }
 
   export interface CookiesPolicy {
