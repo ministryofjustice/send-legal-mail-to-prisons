@@ -68,6 +68,15 @@ services:
     healthcheck:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/ping' ]
 
+  clamav:
+    image: ghcr.io/ministryofjustice/hmpps-clamav-freshclam-daily:latest
+    restart: always
+    container_name: clamav
+    networks:
+      - hmpps
+    ports:
+      - "3310:3310"
+
   app:
     build: .
     networks:
