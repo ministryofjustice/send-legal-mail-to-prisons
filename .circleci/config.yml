@@ -17,6 +17,14 @@ parameters:
     type: string
     default: 14.17-browsers
 
+executors:
+  integration-test:
+    docker:
+      - image: cimg/node:<< pipeline.parameters.node-version >>
+      - image: circleci/redis:buster
+      - image: ghcr.io/ministryofjustice/hmpps-clamav-freshclam-daily:latest
+    working_directory: ~/app
+
 jobs:
   build:
     executor:
@@ -98,10 +106,7 @@ jobs:
           path: test_results/jest/coverage
 
   integration_test:
-    executor:
-      name: hmpps/node_redis
-      node_tag: << pipeline.parameters.node-version >>
-      redis_tag: buster
+    executor: integration-test
     steps:
       - checkout
       - attach_workspace:
