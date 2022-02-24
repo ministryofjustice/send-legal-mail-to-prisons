@@ -22,7 +22,6 @@ executors:
     docker:
       - image: cimg/node:<< pipeline.parameters.node-version >>
       - image: circleci/redis:buster
-      - image: ghcr.io/ministryofjustice/hmpps-clamav-freshclam-daily:latest
     working_directory: ~/app
 
 jobs:
