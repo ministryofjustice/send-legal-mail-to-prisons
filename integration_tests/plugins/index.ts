@@ -4,6 +4,7 @@ import auth from '../mockApis/auth'
 import tokenVerification from '../mockApis/tokenVerification'
 import sendLegalMail from '../mockApis/sendLegalMail'
 import prisonRegister from '../mockApis/prisonRegister'
+import zendesk from '../mockApis/zendesk'
 
 export default (on: (string, Record) => void): void => {
   on('task', {
@@ -45,5 +46,7 @@ export default (on: (string, Record) => void): void => {
     stubCreateBarcodeFailure: sendLegalMail.stubCreateBarcodeFailure,
 
     stubGetPrisonRegister: prisonRegister.stubGetPrisonRegister,
+
+    stubCreateZendeskTicket: zendesk.stubCreateZendeskTicket,
   })
 }
