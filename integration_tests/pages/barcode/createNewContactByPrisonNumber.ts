@@ -18,8 +18,12 @@ export default class CreateNewContactByPrisonNumberPage extends Page {
     return this
   }
 
-  submitWithValidValues = (prisonerName = 'Gage Hewitt', prisonName = 'ashfield'): ReviewRecipientsPage => {
-    cy.task('stubCreateContact')
+  submitWithValidValues = (
+    contactId = 1,
+    prisonerName = 'Gage Hewitt',
+    prisonName = 'ashfield'
+  ): ReviewRecipientsPage => {
+    cy.task('stubCreateContact', contactId)
     this.enterAValidPrisonerName(prisonerName)
     this.typeAheadAValidPrison(prisonName)
     return this.submitForm(ReviewRecipientsPage)

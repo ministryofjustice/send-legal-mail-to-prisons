@@ -19,12 +19,13 @@ export default class CreateNewContactByPrisonerNamePage extends Page {
   }
 
   submitWithValidValues = (
+    contactId = 1,
     prisonerDobDay = '1',
     prisonerDobMonth = '1',
     prisonerDobYear = '1990',
     prisonName = 'leeds'
   ): ReviewRecipientsPage => {
-    cy.task('stubCreateContact')
+    cy.task('stubCreateContact', contactId)
     this.enterAValidPrisonerDay(prisonerDobDay)
     this.enterAValidPrisonerMonth(prisonerDobMonth)
     this.enterAValidPrisonerYear(prisonerDobYear)
