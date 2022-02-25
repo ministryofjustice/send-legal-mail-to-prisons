@@ -3,6 +3,7 @@ import Page, { PageElement } from '../page'
 import ChooseBarcodeOptionPage from './chooseBarcodeOption'
 import CreateNewContactByPrisonNumberPage from './createNewContactByPrisonNumber'
 import FindRecipientByPrisonNumberPage from './findRecipientByPrisonNumber'
+import EditContactDetails from './editContactDetails'
 
 export default class ReviewRecipientsPage extends Page {
   constructor() {
@@ -28,12 +29,31 @@ export default class ReviewRecipientsPage extends Page {
     return Page.verifyOnPage(ReviewRecipientsPage)
   }
 
+  editContact = (recipientNumber: number): EditContactDetails => {
+    // Get row `recipientNumber` from the table, then get its 4th td cell to click the link within it
+    cy.task('stubGetContact', 1)
+    this.recipientsTableBodyRows()
+      .eq(recipientNumber - 1)
+      .find(`td:nth-of-type(4) a`)
+      .click()
+    return Page.verifyOnPage(EditContactDetails)
+  }
+
   hasRecipientNamesExactly = (...expectedPrisonerNames: Array<string>) => {
     this.recipientsTableBodyRows()
       .should('have.length', expectedPrisonerNames.length)
       .find('td:nth-of-type(1)')
       .each(prisonerNameCell => {
         expect(expectedPrisonerNames).contains(prisonerNameCell.text())
+      })
+  }
+
+  hasPrisonNamesExactly = (...expectedPrisonNames: Array<string>) => {
+    this.recipientsTableBodyRows()
+      .should('have.length', expectedPrisonNames.length)
+      .find('td:nth-of-type(3)')
+      .each(prisonNameCell => {
+        expect(expectedPrisonNames).contains(prisonNameCell.text())
       })
   }
 
