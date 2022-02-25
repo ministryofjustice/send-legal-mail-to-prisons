@@ -114,6 +114,17 @@ context('Scan Barcode Page', () => {
 
     scanBarcodePage.submitFormWithBarcodeThatFailsValidation()
 
-    scanBarcodePage.hasErrorContaining('correct format')
+    scanBarcodePage.hasErrorContaining('12 digits')
+  })
+
+  it('should redisplay form with errors given form submitted with empty barcode', () => {
+    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
+    cy.signIn()
+    cy.visit('/scan-barcode')
+    const scanBarcodePage = Page.verifyOnPage(ScanBarcodePage)
+
+    scanBarcodePage.submitFormWithEmptyBarcode()
+
+    scanBarcodePage.hasErrorContaining('Enter a barcode')
   })
 })

@@ -21,11 +21,6 @@ describe('BarcodeEntryFormValidator', () => {
 
   describe('should not validate BarcodeEntryForm with invalid barcodes', () => {
     const invalidForms = Array.of(
-      { description: 'Barcode field missing', form: {} },
-      {
-        description: 'Barcode field empty',
-        form: { barcode: '' },
-      },
       {
         description: 'Barcode field containing 11 digits',
         form: { barcode: '12345678901' },
@@ -50,8 +45,27 @@ describe('BarcodeEntryFormValidator', () => {
 
         expect(valid).toBe(false)
         expect(req.flash).toHaveBeenCalledWith('errors', [
-          { href: '#barcode', text: 'Enter the barcode number in the correct format' },
+          { href: '#barcode', text: 'Enter a barcode number which is 12 digits long.' },
         ])
+      })
+    })
+  })
+
+  describe('should not validate BarcodeEntryForm with empty barcodes', () => {
+    const invalidForms = Array.of(
+      { description: 'Barcode field missing', form: {} },
+      {
+        description: 'Barcode field empty',
+        form: { barcode: '' },
+      }
+    )
+
+    invalidForms.forEach(invalidForm => {
+      it(`should not validate invalid BarcodeEntryForm - ${invalidForm.description}`, () => {
+        const valid = validate(invalidForm.form, req)
+
+        expect(valid).toBe(false)
+        expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#barcode', text: 'Enter a barcode number.' }])
       })
     })
   })

@@ -21,7 +21,7 @@
 
     <div class="govuk-grid-row" id="scan-barcode-form">
       <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">Scan Rule 39 mail</h1>
+        <h1 class="govuk-heading-xl">Check Rule 39 mail</h1>
 
         <p>You need to check mail with a Rule 39 barcode is genuine.</p>
 
@@ -30,6 +30,7 @@
         }) }}
 
         <h2 class="govuk-heading-l">Scan the barcode</h2>
+        <p>Point the scanner at the barcode</p>
         <p>You'll see a number in the box below and hear a beep if the scan has worked. After a few seconds you'll get further instructions.</p>
 
         <form action="/scan-barcode" method="post" novalidate>
@@ -67,13 +68,6 @@
         <p>If the barcode will not scan, enter the barcode number manually instead.</p>
         <a href="/manually-enter-barcode" class="govuk-link" id="manual-barcode-entry">I cannot scan the barcode</a>
 
-      </div>
-
-      <div class="govuk-grid-column-one-third example-scanner">
-        <h3 class="govuk-heading-m">Aim the beam at the barcode</h3>
-        <div class="img-container">
-          <img src="/assets/images/barcode-scanner.png" alt="A barcode scanner being used to scan a barcode from an item of mail" />
-        </div>
       </div>
 
     </div>
