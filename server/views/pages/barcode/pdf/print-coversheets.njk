@@ -12,53 +12,50 @@
   <section class="app-container govuk-body" id="print-coversheets-content">
 
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
+      <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Your coversheets are downloading</h1>
 
         <p>Your PDF file <strong>{{ filename }}</strong> with {{ numberOfCoversheets }} {{ 'coversheets' if numberOfCoversheets > 1 else 'coversheet' }} is downloading.</p>
         <p>Check your computer's Downloads folder or wherever you usually download files.</p>
         <p>If your download hasn't started you can <a href="/barcode/pdf/download" class="govuk-link" id="downloadPdf">download your file again</a>.</p>
 
-        <h2 class="govuk-heading-m govuk-!-margin-top-4">When you've printed your coversheets</h2>
+        <h2 class="govuk-heading-m">When you've printed your coversheets</h2>
         <div class="envelope {{ envelopeSize }}">
-          <p class="govuk-!-margin-top-4 govuk-!-margin-bottom-4">
 
-            {% if envelopeSize == 'dl' %}
-              <ol>
-                <li>
-                  Fold each sheet in thirds.
-                  <span>
-                    <img src="/assets/images/print-barcodes-coversheet.png" alt="An example coversheet showing the fold marks" />
-                  </span>
-                </li>
-                <li>Insert the sheet into a window envelope. Make sure the address and barcode are visible.</li>
-              </ol>
-            {% endif %}
+          {% if envelopeSize == 'dl' %}
+            <ol class="govuk-list govuk-list--number">
+              <li>
+                Fold each sheet in thirds.
+                <span>
+                  <img src="/assets/images/print-barcodes-coversheet.png" alt="An example coversheet showing the fold marks" />
+                </span>
+              </li>
+              <li>Insert the sheet into a window envelope. Make sure the address and barcode are visible.</li>
+            </ol>
+          {% endif %}
 
-            {% if envelopeSize == 'c5' %}
-              <ol>
-                <li>
-                  Fold each sheet in half.
-                  <span>
-                    <img src="/assets/images/print-barcodes-coversheet.png" alt="An example coversheet showing the fold marks" />
-                  </span>
-                </li>
-                <li>Insert the sheet into a window envelope. Make sure the address and barcode are visible.</li>
-              <ol>
-            {% endif %}
+          {% if envelopeSize == 'c5' %}
+            <ol class="govuk-list govuk-list--number">
+              <li>
+                Fold each sheet in half.
+                <span>
+                  <img src="/assets/images/print-barcodes-coversheet.png" alt="An example coversheet showing the fold marks" />
+                </span>
+              </li>
+              <li>Insert the sheet into a window envelope. Make sure the address and barcode are visible.</li>
+            <ol>
+          {% endif %}
 
-            {% if envelopeSize == 'c4' %}
-              Insert the sheet into a window envelope. Make sure the address and barcode are visible.
-            {% endif %}
-          </p>
-
+          {% if envelopeSize == 'c4' %}
+            <p>Insert the sheet into a window envelope. Make sure the address and barcode are visible.</p>
+          {% endif %}
         </div>
       </div>
     </div>
 
-    <div class="govuk-grid-row govuk-!-margin-top-8 govuk-!-margin-bottom-6">
-      <div class="govuk-grid-column-full">
-        <h2 class="govuk-heading-m row govuk-!-margin-bottom-2">If you want to send more legal mail</h1>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m">If you want to send more legal mail</h1>
         <a href="/barcode/find-recipient" data-qa="send-more-legal-mail" class="govuk-link">Enter another prison number</a>
       </div>
     </div>
