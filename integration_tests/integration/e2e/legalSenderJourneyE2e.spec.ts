@@ -25,7 +25,7 @@ context('Legal Sender Journey E2E', () => {
     // Add a recipient by prison number where the recipient is a new contact
     findRecipientByPrisonNumberPage.submitWithUnknownPrisonNumber('A1234BC')
     let createNewContactPage = Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
-    let reviewRecipientsPage = createNewContactPage.submitWithValidValues('Gage Hewitt', 'ashfield')
+    let reviewRecipientsPage = createNewContactPage.submitWithValidValues(1, 'Gage Hewitt', 'ashfield')
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt')
 
     // Remove the recipient, leaving no recipients
@@ -40,7 +40,7 @@ context('Legal Sender Journey E2E', () => {
     // Add an unknown recipient by name
     let findRecipientByPrisonerNamePage = reviewRecipientsPage.addAnotherRecipient().goToByPrisonerName()
     let createNewContactByPrisonerNamePage = findRecipientByPrisonerNamePage.submitWithUnknownPrisonerName('John Smith')
-    reviewRecipientsPage = createNewContactByPrisonerNamePage.submitWithValidValues('1', '1', '1990', 'altcourse')
+    reviewRecipientsPage = createNewContactByPrisonerNamePage.submitWithValidValues(2, '1', '1', '1990', 'altcourse')
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt', 'John Smith')
 
     // Add a known recipient by name
@@ -53,7 +53,7 @@ context('Legal Sender Journey E2E', () => {
     findRecipientByPrisonerNamePage = reviewRecipientsPage.addAnotherRecipient().goToByPrisonerName()
     chooseContactPage = findRecipientByPrisonerNamePage.submitWithKnownPrisonerName() // the only known contact is John Doe
     createNewContactByPrisonerNamePage = chooseContactPage.submitForNewContact()
-    reviewRecipientsPage = createNewContactByPrisonerNamePage.submitWithValidValues('12', '12', '1979', 'leeds')
+    reviewRecipientsPage = createNewContactByPrisonerNamePage.submitWithValidValues(3, '12', '12', '1979', 'leeds')
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt', 'John Smith', 'John Doe', 'John Doe')
 
     // Remove some recipients
@@ -70,8 +70,13 @@ context('Legal Sender Journey E2E', () => {
     findRecipientByPrisonNumberPage = reviewRecipientsPage.addAnotherRecipient()
     findRecipientByPrisonNumberPage.submitWithUnknownPrisonNumber('D1234FB')
     createNewContactPage = Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
-    reviewRecipientsPage = createNewContactPage.submitWithValidValues('Fred Bloggs', 'ashfi')
+    reviewRecipientsPage = createNewContactPage.submitWithValidValues(4, 'Fred Bloggs', 'ashfi')
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt', 'John Doe', 'Fred Bloggs')
+
+    // Check we can access the edit contact page
+    const editContactPage = reviewRecipientsPage.editContact(1)
+    editContactPage.hasName('Gage Hewitt')
+    cy.go(-1)
 
     // Move forwards to choose how to prepare the barcodes
     const chooseBarcodeOptionPage = Page.verifyOnPage(ReviewRecipientsPage).prepareBarcodes()
