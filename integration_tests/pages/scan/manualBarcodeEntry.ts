@@ -17,6 +17,12 @@ export default class ManualBarcodeEntryPage extends Page {
     return Page.verifyOnPage(ManualBarcodeEntryPage)
   }
 
+  submitFormWithEmptyBarcode = (): ManualBarcodeEntryPage => {
+    this.setBarcode('')
+    this.submitButton().click()
+    return Page.verifyOnPage(ManualBarcodeEntryPage)
+  }
+
   submitFormWithBarcodeThatFailsValidation = (): ManualBarcodeEntryPage => {
     this.setBarcode(barcodes.INVALID_FORMAT_BARCODE)
     this.submitButton().click()

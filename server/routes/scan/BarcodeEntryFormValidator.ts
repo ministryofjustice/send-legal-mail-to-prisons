@@ -6,8 +6,10 @@ const TWELVE_DIGITS = /^\d{12}$/
 export default function validate(form: BarcodeEntryForm, req: Request): boolean {
   const errors: Array<Record<string, string>> = []
 
-  if (!validateBarcode(form.barcode)) {
-    errors.push({ href: '#barcode', text: 'Enter the barcode number in the correct format' })
+  if (!form.barcode) {
+    errors.push({ href: '#barcode', text: 'Enter a barcode number.' })
+  } else if (!validateBarcode(form.barcode)) {
+    errors.push({ href: '#barcode', text: 'Enter a barcode number which is 12 digits long.' })
   }
 
   if (errors.length > 0) {
@@ -19,5 +21,5 @@ export default function validate(form: BarcodeEntryForm, req: Request): boolean 
 }
 
 const validateBarcode = (barcode: string): boolean => {
-  return barcode && TWELVE_DIGITS.test(barcode)
+  return TWELVE_DIGITS.test(barcode)
 }
