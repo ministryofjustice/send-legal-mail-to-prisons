@@ -9,13 +9,14 @@ export default function authorisationMiddleware(authorisedRoles: string[] = []):
       const { authorities: roles = [] } = jwtDecode(res.locals.user.token) as { authorities?: string[] }
 
       if (authorisedRoles.length && !roles.some(role => authorisedRoles.includes(role))) {
-        logger.error('User is not authorised to access this')
+        logger.error(`User is not authorised to access ${req.originalUrl}. Redirect to authError`)
         return res.redirect('/authError')
       }
 
       return next()
     }
 
+    logger.error(`User is not authenticated, cannot access ${req.originalUrl}. Redirect to sign-in`)
     req.session.returnTo = req.originalUrl
     return res.redirect('/sign-in')
   }
