@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
+import { JwtPayload, verify, VerifyErrors } from 'jsonwebtoken'
 import MagicLinkService from '../../services/link/MagicLinkService'
+import config from '../../config'
 
 export default class VerifyLinkController {
   constructor(private readonly magicLinkService: MagicLinkService) {}
@@ -17,7 +19,7 @@ export default class VerifyLinkController {
       .verifyLink(secret)
       .then(token => {
         req.session.slmToken = token
-        res.redirect('/barcode/find-recipient')
+        this.verifyToken(token, req, res)
       })
       .catch(() => {
         req.flash('errors', [
@@ -25,5 +27,26 @@ export default class VerifyLinkController {
         ])
         res.redirect('request-link')
       })
+  }
+
+  private verifyToken(token: string, req: Request, res: Response) {
+    verify(token, config.barcodeTokenPublicKey, { algorithms: ['RS256'] }, (err: VerifyErrors, payload: JwtPayload) => {
+      if (err) {
+        req.flash('errors', [
+          { href: '#email', text: 'The link you used is no longer valid. Request a new one to sign in.' },
+        ])
+        res.redirect('/link/request-link')
+      }
+      req.session.validSlmToken = true
+      req.session.barcodeUserEmail = payload.sub
+      req.session.barcodeUserOrganisation = payload.organisation
+      // make the session expiry the same as the JWT - otherwise we lose the JWT when the session expires
+      req.session.cookie.expires = new Date(payload.exp * 1000)
+      const { id, ...savedSession } = req.session
+      req.session.regenerate(() => {
+        Object.assign(req.session, savedSession)
+        res.redirect('/barcode/find-recipient')
+      })
+    })
   }
 }
