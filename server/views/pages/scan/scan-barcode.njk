@@ -30,8 +30,8 @@
         }) }}
 
         <h2 class="govuk-heading-l">Scan the barcode</h2>
-        <p>Point the scanner at the barcode</p>
-        <p>You'll see a number in the box below and hear a beep if the scan has worked. After a few seconds you'll get further instructions.</p>
+
+        <p>Aim the scanner beam at the barcode. You'll see a number in the box below and hear a beep if the scan has worked. After a few seconds you'll get further instructions.</p>
 
         <form action="/scan-barcode" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
@@ -41,7 +41,12 @@
             {{ govukInput({
               classes: 'govuk-!-width-one-half',
               label: {
-                text: 'Point the scanner at the barcode'
+                text: 'Scan the barcode',
+                classes: "govuk-visually-hidden",
+                isPageHeading: false
+              },
+              hint: {
+                text: 'Point the scanner at the barcode.'
               },
               attributes: {
                 autofocus: '',
