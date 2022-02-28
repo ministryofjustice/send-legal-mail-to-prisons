@@ -3,6 +3,7 @@ import Page from '../../pages/page'
 import ScanBarcodePage from '../../pages/scan/scanBarcode'
 import ContactHelpdeskPage from '../../pages/helpdesk/contactHelpdesk'
 import ContactHelpdeskConfirmationPage from '../../pages/helpdesk/contactHelpdeskConfirmation'
+import AuthorisationErrorPage from '../../pages/authorisationError'
 
 context('Contact Helpdesk', () => {
   let contactHelpdeskPage: ContactHelpdeskPage
@@ -53,5 +54,23 @@ context('Contact Helpdesk', () => {
           .hasErrorContaining('email address')
       })
     })
+  })
+
+  it('should display authError page given unauthenticated user', () => {
+    cy.task('reset')
+    cy.visit('/scan-barcode/contact-helpdesk', { failOnStatusCode: false })
+
+    Page.verifyOnPage(AuthorisationErrorPage)
+  })
+
+  it('should display authError page given authenticated user without any of the SLM roles', () => {
+    cy.task('reset')
+    cy.task('stubSignIn')
+    cy.task('stubAuthUser')
+    cy.signIn()
+
+    cy.visit('/scan-barcode/contact-helpdesk', { failOnStatusCode: false })
+
+    Page.verifyOnPage(AuthorisationErrorPage)
   })
 })
