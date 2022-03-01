@@ -69,6 +69,7 @@ export default function createApp(
   app.use(setupCookiesPolicy())
 
   // no authentication
+  app.get('/privacy-policy', (req, res) => res.render('pages/privacy-policy/privacy-policy'))
   app.use('/start', setupLegalSenderStartPage())
   app.use('/link', requestLinkAuthorised())
   app.use('/link', setUpRequestLink(magicLinkService))
