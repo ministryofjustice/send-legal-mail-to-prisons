@@ -56,7 +56,7 @@ describe('VerifyLinkController', () => {
       expect(res.redirect).toHaveBeenCalledWith('request-link')
     })
 
-    it('should show error on email if the magic link service fails', async () => {
+    it('should show error and redirect if the magic link service fails', async () => {
       req.query.secret = 'some-secret'
       magicLinkService.verifyLink.mockRejectedValue('some-error')
 
@@ -66,18 +66,10 @@ describe('VerifyLinkController', () => {
         'errors',
         expect.arrayContaining([expect.objectContaining({ href: '#email' })])
       )
-    })
-
-    it('should redirect if the magic link service fails', async () => {
-      req.query.secret = 'some-secret'
-      magicLinkService.verifyLink.mockRejectedValue('some-error')
-
-      await verifyLinkController.verifyLink(req as unknown as Request, res as unknown as Response)
-
       expect(res.redirect).toHaveBeenCalledWith('request-link')
     })
 
-    it('should show error on email if token verification fails', async () => {
+    it('should show error and redirect if token verification fails', async () => {
       req.query.secret = 'some-secret'
       magicLinkService.verifyLink.mockResolvedValue('some-token')
       mockVerify.mockImplementation((token, key, opts, verifyCallback) => {
@@ -90,37 +82,18 @@ describe('VerifyLinkController', () => {
         'errors',
         expect.arrayContaining([expect.objectContaining({ href: '#email' })])
       )
-    })
-
-    it('should redirect if token verification fails', async () => {
-      req.query.secret = 'some-secret'
-      magicLinkService.verifyLink.mockResolvedValue('some-token')
-      mockVerify.mockImplementation((token, key, opts, verifyCallback) => {
-        verifyCallback(new JsonWebTokenError('some-error'), undefined)
-      })
-
-      await verifyLinkController.verifyLink(req as unknown as Request, res as unknown as Response)
-
       expect(res.redirect).toHaveBeenCalledWith('/link/request-link')
     })
   })
 
   describe('verifyLink - happy path', () => {
-    it('should call the magic link service', async () => {
-      req.query.secret = 'some-secret'
-      magicLinkService.verifyLink.mockResolvedValue('some-token')
-
-      await verifyLinkController.verifyLink(req as unknown as Request, res as unknown as Response)
-
-      expect(magicLinkService.verifyLink).toHaveBeenCalledWith('some-secret')
-    })
-
     it('should set the token on the session', async () => {
       req.query.secret = 'some-secret'
       magicLinkService.verifyLink.mockResolvedValue('some-token')
 
       await verifyLinkController.verifyLink(req as unknown as Request, res as unknown as Response)
 
+      expect(magicLinkService.verifyLink).toHaveBeenCalledWith('some-secret')
       expect(req.session.slmToken).toStrictEqual('some-token')
     })
 
@@ -159,18 +132,6 @@ describe('VerifyLinkController', () => {
       await verifyLinkController.verifyLink(req as unknown as Request, res as unknown as Response)
 
       expect(req.session.cookie.expires).toStrictEqual(new Date(2022, 2, 1, 17, 16, 54))
-    })
-
-    it('should regenerate the session', async () => {
-      req.query.secret = 'some-secret'
-      magicLinkService.verifyLink.mockResolvedValue('some-token')
-      mockVerify.mockImplementation((token, key, opts, verifyCallback) => {
-        verifyCallback(undefined, {})
-      })
-
-      await verifyLinkController.verifyLink(req as unknown as Request, res as unknown as Response)
-
-      expect(req.session.regenerate).toHaveBeenCalled()
     })
 
     it('should regenerate the session', async () => {
