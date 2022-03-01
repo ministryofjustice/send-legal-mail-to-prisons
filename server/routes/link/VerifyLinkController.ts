@@ -42,9 +42,10 @@ export default class VerifyLinkController {
       req.session.barcodeUserOrganisation = payload.organisation
       // make the session expiry the same as the JWT - otherwise we lose the JWT when the session expires
       req.session.cookie.expires = new Date(payload.exp * 1000)
-      const { id, ...savedSession } = req.session
+      const { id, ...sessionWithoutId } = req.session
       req.session.regenerate(() => {
-        Object.assign(req.session, savedSession)
+        // put the old session back - but keep the new session ID
+        Object.assign(req.session, sessionWithoutId)
         res.redirect('/barcode/find-recipient')
       })
     })
