@@ -1,0 +1,24 @@
+{% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
+
+{% set acceptHtml %}
+  <p class="govuk-body">You’ve {{ cookiesPolicy.policy }}ed additional cookies. You can <a class="govuk-link" href="/cookies-policy" data-qa="view">change your cookie settings</a> at any time.</p>
+{% endset %}
+
+<form action="/cookies-policy/confirm" method="POST" id="cookiePreferenceConfirmationForm">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+  {{ govukCookieBanner({
+    ariaLabel: "Cookies on Send legal mail",
+    messages: [
+      {
+        html: acceptHtml,
+        actions: [
+        {
+          text: "Hide this message",
+          type: "submit",
+          attributes: { 'data-qa': 'hide' }
+        }
+        ]
+      }
+    ]
+  }) }}
+</form>

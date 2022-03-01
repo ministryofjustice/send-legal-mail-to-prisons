@@ -7,9 +7,8 @@
  *
  * No code should be written here that renders a page non-functional if JS is not enabled or the script does not run/fails.
  */
-
-;(convertPrisonDropdownToAutoComplete = ($, document) => {
-  $(document).ready(() => {
+window.pageEnhancements = (($, document) => {
+  const convertPrisonDropdownToAutoComplete = () => {
     // get the prison names
     const prisonNames = $('select#prisonId option')
       .toArray()
@@ -60,10 +59,9 @@
         // Submit the form
         event.target.submit()
       })
-  })
-})($, document)
-;(enableCopyBarcodeButton = ($, document) => {
-  $(document).ready(() => {
+  }
+
+  const enableCopyBarcodeButton = () => {
     if (typeof ClipboardItem !== 'function') {
       return
     }
@@ -80,17 +78,77 @@
           navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
         }, 'image/png')
       })
-  })
-})($, document)
-;(autoDownloadCoversheetPdf = ($, document) => {
-  $(document).ready(() => {
+  }
+
+  const autoDownloadCoversheetPdf = () => {
     setTimeout(() => {
       $('#print-coversheets-content #downloadPdf').each((idx, element) => element.click())
     }, 1000)
-  })
+  }
+
+  const autoFocusBarcodeField = () => {
+    $('#scan-barcode-form #barcode').trigger('focus')
+  }
+
+  const extractCsrfFieldAsKeyValuePairFromForm = form => {
+    return form
+      .serializeArray()
+      .filter(formField => formField.name === '_csrf')
+      .map(formField => {
+        return `${formField.name}=${formField.value}`
+      })
+  }
+
+  const submitCookiePreferencesFormViaAjax = () => {
+    $('#cookiePreferencesForm button[type=submit]').on('click', function (event) {
+      event.preventDefault()
+      const form = $(this).closest('form')
+      const csrfQueryString = extractCsrfFieldAsKeyValuePairFromForm(form)
+      const formAction = `${form.attr('action')}?${csrfQueryString}`
+      const data = {}
+      data[this.name] = this.value
+
+      $.ajax(formAction, { contentType: 'application/json', method: 'POST', data: JSON.stringify(data) }).done(
+        response => {
+          const returnedPartial = response.partial
+          form.after(returnedPartial)
+          // setup the new content just inseted into the DOM to be submitted via ajax
+          submitCookiePreferenceConfirmationFormViaAjax()
+          form.remove()
+          // Use browser history API to change to URL to add the query string param (which would otherwise be set server side in a non-ajax request)
+          const urlWithQuerystringParam = window.location.pathname + '?showCookieConfirmation=true'
+          history.pushState(null, '', urlWithQuerystringParam)
+        }
+      )
+    })
+  }
+
+  const submitCookiePreferenceConfirmationFormViaAjax = () => {
+    $('#cookiePreferenceConfirmationForm button[type=submit]').on('click', function (event) {
+      event.preventDefault()
+      const form = $(this).closest('form')
+      const csrfQueryString = extractCsrfFieldAsKeyValuePairFromForm(form)
+      const formAction = `${form.attr('action')}?${csrfQueryString}`
+      $.ajax(formAction, { contentType: 'application/json', method: 'POST' })
+      form.remove()
+      // Use browser history API to change to URL to remove the query string param (which would otherwise be set server side in a non-ajax request)
+      const urlWithoutQuerystringParam = window.location.pathname
+      history.pushState(null, '', urlWithoutQuerystringParam)
+    })
+  }
+
+  return {
+    init: () => {
+      $(() => {
+        convertPrisonDropdownToAutoComplete()
+        enableCopyBarcodeButton()
+        autoDownloadCoversheetPdf()
+        autoFocusBarcodeField()
+        submitCookiePreferencesFormViaAjax()
+        submitCookiePreferenceConfirmationFormViaAjax()
+      })
+    },
+  }
 })($, document)
-;(autoFocusBarcodeField = ($, document) => {
-  $(document).ready(() => {
-    $('#scan-barcode-form #barcode').focus()
-  })
-})($, document)
+
+window.pageEnhancements.init()

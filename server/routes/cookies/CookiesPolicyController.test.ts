@@ -13,6 +13,7 @@ const req = {
   cookies: {},
   query: {},
   originalUrl: '',
+  is: jest.fn(),
 }
 const res = {
   cookie: jest.fn(),
@@ -23,6 +24,7 @@ const res = {
     url: undefined as string,
     externalUser: true,
   },
+  sendStatus: jest.fn(),
 }
 
 const next = jest.fn()
@@ -114,20 +116,23 @@ describe('CookiesPolicyController', () => {
 
   describe('submitCookiesPolicyPreferences', () => {
     afterEach(() => {
+      res.render.mockReset()
       res.redirect.mockReset()
       res.cookie.mockReset()
       req.originalUrl = ''
       req.body = {}
       req.cookies = {}
+      req.is.mockReset()
     })
 
-    it('should redirect to the last page', async () => {
+    it('should redirect to the last page and not set any cookies if no cookie preference submitted on the request', async () => {
       await cookiesPolicyController.submitCookiesPolicyPreferences(
         req as unknown as Request,
         res as unknown as Response
       )
 
       expect(res.redirect).toHaveBeenCalledWith('/lastPage')
+      expect(res.cookie).not.toHaveBeenCalled()
     })
 
     it('should redirect to the cookies policy page if we came from there', async () => {
@@ -139,11 +144,13 @@ describe('CookiesPolicyController', () => {
       )
 
       expect(res.redirect).toHaveBeenCalledWith('/cookies-policy')
+      expect(res.cookie).not.toHaveBeenCalled()
     })
 
-    it('should set a cookie with cookie preference', async () => {
+    it('should set a cookie with cookie preference and redirect given request submitted as a browser full page request/response (non ajax)', async () => {
       req.body = { cookies: 'accept' }
       res.cookie.mockReturnValue(res)
+      req.is.mockReturnValue(false)
 
       await cookiesPolicyController.submitCookiesPolicyPreferences(
         req as unknown as Request,
@@ -153,20 +160,64 @@ describe('CookiesPolicyController', () => {
       expect(res.cookie).toHaveBeenCalledWith(
         'cookies_policy',
         'accept',
-        expect.objectContaining({ sameSite: 'lax', secure: true })
+        expect.objectContaining({ sameSite: 'lax', secure: true, httpOnly: true })
       )
+      expect(req.is).toHaveBeenCalledWith('application/json')
+      expect(res.redirect).toHaveBeenCalledWith('/lastPage?showCookieConfirmation=true')
     })
 
-    it('should set cookie confirmation parameter on redirect url', async () => {
+    it('should set cookie and render response containing a page partial given request submitted as an ajax request', async () => {
       req.body = { cookies: 'accept' }
       res.cookie.mockReturnValue(res)
+      req.is.mockReturnValue(true)
 
       await cookiesPolicyController.submitCookiesPolicyPreferences(
         req as unknown as Request,
         res as unknown as Response
       )
 
-      expect(res.redirect).toHaveBeenCalledWith('/lastPage?showCookieConfirmation=true')
+      expect(res.render).toHaveBeenCalledWith(
+        'partials/cookies/cookie-preferences-set',
+        {
+          cookiesPolicy: { policy: 'accept' },
+        },
+        expect.any(Function)
+      )
+      expect(res.redirect).not.toHaveBeenCalled()
+      expect(req.is).toHaveBeenCalledWith('application/json')
+    })
+  })
+
+  describe('submitConfirmCookiesPolicy', () => {
+    afterEach(() => {
+      req.session.cookiesPolicy = {
+        policy: undefined as string,
+        showConfirmation: false,
+        lastPage: '/lastPage',
+      }
+      req.is.mockReset()
+      res.redirect.mockReset()
+      res.sendStatus.mockReset()
+    })
+
+    it('should redirect given request submitted as a browser full page request/response (non ajax)', async () => {
+      req.is.mockReturnValue(false)
+
+      await cookiesPolicyController.submitConfirmCookiesPolicy(req as unknown as Request, res as unknown as Response)
+
+      expect(res.redirect).toHaveBeenCalledWith('/lastPage')
+      expect(res.sendStatus).not.toHaveBeenCalled()
+      expect(req.is).toHaveBeenCalledWith('application/json')
+    })
+
+    it('should set 200 status given request submitted as an ajax request', async () => {
+      req.is.mockReturnValue(true)
+
+      await cookiesPolicyController.submitConfirmCookiesPolicy(req as unknown as Request, res as unknown as Response)
+
+      expect(res.sendStatus).toHaveBeenCalledWith(200)
+      expect(res.redirect).not.toHaveBeenCalled()
+      expect(req.is).toHaveBeenCalledWith('application/json')
     })
   })
 })

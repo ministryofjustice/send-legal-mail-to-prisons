@@ -1,9 +1,9 @@
 import fs from 'fs'
 import nunjucks, { Template } from 'nunjucks'
 import cheerio from 'cheerio'
-import { registerNunjucks } from '../../utils/nunjucksSetup'
+import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
-const snippet = fs.readFileSync('server/views/partials/cookie-banner.njk')
+const snippet = fs.readFileSync('server/views/partials/cookies/cookie-banner.njk')
 
 describe('Cookie Banner Partial Template', () => {
   let compiledTemplate: Template

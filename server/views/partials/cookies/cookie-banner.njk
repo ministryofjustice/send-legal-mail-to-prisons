@@ -8,7 +8,7 @@
         <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the service and make
             improvements.</p>
       {% endset %}
-      <form action="/cookies-policy/preferences" method="post">
+      <form action="/cookies-policy/preferences" method="post" id="cookiePreferencesForm">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {{ govukCookieBanner({
             ariaLabel: "Cookies on Send legal mail",
@@ -43,31 +43,9 @@
         }) }}
       </form>
     {% endif %}
+
     {% if cookiesPolicy.showConfirmation %}
-      {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
-
-      {% set acceptHtml %}
-        <p class="govuk-body">You’ve {{ cookiesPolicy.policy }}ed additional cookies. You can <a class="govuk-link" href="/cookies-policy" data-qa="view">change your cookie settings</a> at any time.</p>
-      {% endset %}
-
-      <form action="/cookies-policy/confirm" method="POST">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        {{ govukCookieBanner({
-          ariaLabel: "Cookies on Send legal mail",
-          messages: [
-            {
-              html: acceptHtml,
-              actions: [
-              {
-                text: "Hide this message",
-                type: "submit",
-                attributes: { 'data-qa': 'hide' }
-              }
-              ]
-            }
-          ]
-        }) }}
-      </form>
+      {% include "partials/cookies/cookie-preferences-set.njk" %}
     {% endif %}
   {% endblock %}
 {% endif %}
