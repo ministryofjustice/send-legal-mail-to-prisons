@@ -121,14 +121,14 @@
 
 {% block footer %}
   {%- from "govuk/components/footer/macro.njk" import govukFooter -%}
+  {% set footerItems = [{ href: "/cookies-policy", text: "Cookies" }] %}
+  {% if externalUser %}
+    {% set footerItems = (footerItems.unshift({ href: "/privacy-policy", text: "Privacy policy" }), footerItems) %}
+  {% endif %}
+
   {{ govukFooter({
     meta: {
-      items: [
-        {
-          href: "/cookies-policy",
-          text: "Cookies"
-         }
-      ]
+      items: footerItems
     }
   }) }}
 {% endblock %}
