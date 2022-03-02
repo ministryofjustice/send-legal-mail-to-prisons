@@ -38,6 +38,7 @@ export default class CookiesPolicyController {
           maxAge: 365 * 24 * 60 * 60 * 1000,
           sameSite: 'lax',
           secure: true,
+          httpOnly: true,
         })
         .redirect(`${redirectUrl}?showCookieConfirmation=true`)
     }
