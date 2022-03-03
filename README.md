@@ -163,3 +163,76 @@ Code coverage verification is not included in any GitHub or CircleCI checks. The
 In the [CircleCI builds](https://app.circleci.com/pipelines/github/ministryofjustice/send-legal-mail-to-prisons?filter=all) find a `unit_test` job and click on the `ARTIFACTS` tab.
 
 The unit test coverage report can be found at `test_results/jest/coverage/lcov-report/index.html`.
+
+## Querying App Insights to trace a user journey
+The use case for tracing the requests for a specific user journey is often based around investigating an error of some 
+sort discovered in the logs of either the API or UI. IE an error will have been seen in the logs and you want to 
+understand the user journey (requests / screens seen before and after the error) that led to the error.
+
+Records in App Insights have an `operation_Id` field which can be used as a correlation ID to cross reference data across
+the various App Insights tables / data sources. The `operation_Id` can be used as the starting point to query the data to 
+understand the user journey or behaviour.
+
+### Obtaining the `operation_Id`
+The following query can be used to show all requests for the `/link/verify` API endpoint that have failed, sorted by
+timestamp and showing the `operation_Id`:
+```
+requests
+| where cloud_RoleName == 'send-legal-mail-to-prisons-api'
+| where name == 'POST /link/verify'
+| where success == 'False'
+| project timestamp, name, resultCode, operation_Id
+| order by timestamp desc 
+```
+It might return:
+```
+timestamp [UTC]            name               resultCode  operation_Id
+3/3/2022, 1:31:55.668 PM   POST /link/verify  404         e32191a9b4464d3ab7cb781ada74c484
+3/2/2022, 4:21:50.339 PM   POST /link/verify  404         9f073edae6be406fa3ae0c4a0a7c7451
+3/2/2022, 1:31:51.738 PM   POST /link/verify  404         0242e48653dd4ebe8e43c69422b85736
+3/2/2022, 1:25:52.193 PM   POST /link/verify  404         ffd6f247ce354b80845fb8e6d4df5474
+3/2/2022, 1:23:17.463 PM   POST /link/verify  404         a842871a74a44d35991a275ef8de9b91
+3/2/2022, 12:03:34.780 PM  POST /link/verify  404         4bdb0eecd4bb4d17a4532e5517679177
+3/2/2022, 11:27:51.660 AM  POST /link/verify  404         8510fe92197d4991ba25c955a0b86bb4
+3/1/2022, 4:07:58.473 PM   POST /link/verify  404         ae381bd10b9d470ea793107634278834
+```
+
+### Obtaining the user journey with an `operation_Id`
+On the assumption you have an `operation_Id` a query can be performed to identify the specific web request and all other
+web requests associated with the same IP, therefore giving a picture of the user journey.
+
+Using the data from the previous section, let's assume we want to investigate the 2nd error. This happened at 4:21:50.339
+and it's `operation_Id` was `9f073edae6be406fa3ae0c4a0a7c7451`. Execute the following query:
+```
+requests
+| where cloud_RoleName == 'send-legal-mail-to-prisons'
+| where operation_Id == '9f073edae6be406fa3ae0c4a0a7c7451'
+| project client_IP
+| join kind=inner requests on client_IP
+| where not(name startswith "GET /assets/")
+| project 
+    timestamp, 
+    url=replace_regex(url, @'https?://[^/]+(.+)', @'\1'),
+    method=case(name startswith "GET ", "GET", "POST"), 
+    resultCode
+| order by timestamp desc 
+```
+This query works by querying the requests of `send-legal-mail-to-prisons` (the UI application) for the specified 
+`operation_Id`. From that the `client_IP` is used in the subquery (the `join`) for all requests with the same IP.  
+Requests to static resources in the `/assets/`path are filtered out, and then relevant columns are returned sorted by 
+the request timestamp.
+```
+timestamp [UTC]	           url	                                         method  resultCode
+3/2/2022, 4:21:50.433 PM   /link/request-link                            GET     200
+3/2/2022, 4:21:50.323 PM   /link/verify-link?secret=<redacted>           GET     302
+3/2/2022, 11:48:27.423 AM  /link/email-sent?showCookieConfirmation=true  GET     200
+3/2/2022, 11:48:27.366 AM  /cookies-policy/preferences                   POST    302
+3/2/2022, 11:47:35.873 AM  /link/email-sent                              GET     200
+3/2/2022, 11:47:33.979 AM  /link/request-link                            POST    302
+3/2/2022, 11:47:18.906 AM  /link/request-link                            GET     200
+3/2/2022, 11:47:06.948 AM  /start                                        GET     200
+```
+The above tells us the user hit the start page at 11:47:06.948 and submitted (POST) a request fpr a link to sign-in at 
+11:47:33.979, but didn't click the link until 4:21:50.323. At this point the link would have expired and would be the 
+root cause of the API error we are investigating (the 404 error from `/link/verify` at 4:21:50.339). We can see the 
+user was then presented with the Request A Link page again.
