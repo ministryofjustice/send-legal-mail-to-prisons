@@ -14,8 +14,12 @@ export default function recipientTableRowsFilter(recipients: Array<Recipient>): 
         text: recipient.prisonNumber ? recipient.prisonNumber : moment(recipient.prisonerDob).format('DD-MM-YYYY'), // Column 2 - Prison number or DOB
       },
       { text: recipient.prisonAddress.premise }, // Column 3 - Prison name
-      { html: `<a href="/barcode/edit-contact/${recipient.contactId}" class="govuk-link">Edit details</a>` }, // Column 4 - Edit recipient details link
-      { html: `<a href="/barcode/review-recipients/remove/${idx}" class="govuk-link">Remove</a>` } // Column 5 - Remove recipient link
+      {
+        html: `<a href="/barcode/edit-contact/${recipient.contactId}" class="govuk-link govuk-link--no-visited-state">Edit details</a>`,
+      }, // Column 4 - Edit recipient details link
+      {
+        html: `<a href="/barcode/review-recipients/remove/${idx}" class="govuk-link govuk-link--no-visited-state">Remove</a>`,
+      } // Column 5 - Remove recipient link
     )
   })
 }

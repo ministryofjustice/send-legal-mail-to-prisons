@@ -34,15 +34,19 @@ describe('recipientTableRowsFilter', () => {
         { text: 'John Smith' },
         { text: 'A1234BC' },
         { text: 'HMP BRINSFORD' },
-        { html: '<a href="/barcode/edit-contact/1" class="govuk-link">Edit details</a>' },
-        { html: '<a href="/barcode/review-recipients/remove/0" class="govuk-link">Remove</a>' },
+        { html: '<a href="/barcode/edit-contact/1" class="govuk-link govuk-link--no-visited-state">Edit details</a>' },
+        {
+          html: '<a href="/barcode/review-recipients/remove/0" class="govuk-link govuk-link--no-visited-state">Remove</a>',
+        },
       ],
       [
         { text: 'Gage Hewitt' },
         { text: 'R9831RQ' },
         { text: 'HMP BRIXTON' },
-        { html: '<a href="/barcode/edit-contact/2" class="govuk-link">Edit details</a>' },
-        { html: '<a href="/barcode/review-recipients/remove/1" class="govuk-link">Remove</a>' },
+        { html: '<a href="/barcode/edit-contact/2" class="govuk-link govuk-link--no-visited-state">Edit details</a>' },
+        {
+          html: '<a href="/barcode/review-recipients/remove/1" class="govuk-link govuk-link--no-visited-state">Remove</a>',
+        },
       ],
     ])
   })
@@ -60,15 +64,19 @@ describe('recipientTableRowsFilter', () => {
         { text: 'John Smith' },
         { text: 'A1234BC' },
         { text: 'HMP BRINSFORD' },
-        { html: '<a href="/barcode/edit-contact/1" class="govuk-link">Edit details</a>' },
-        { html: '<a href="/barcode/review-recipients/remove/0" class="govuk-link">Remove</a>' },
+        { html: '<a href="/barcode/edit-contact/1" class="govuk-link govuk-link--no-visited-state">Edit details</a>' },
+        {
+          html: '<a href="/barcode/review-recipients/remove/0" class="govuk-link govuk-link--no-visited-state">Remove</a>',
+        },
       ],
       [
         { text: 'Gage Hewitt' },
         { text: '01-01-1990' },
         { text: 'HMP BRIXTON' },
-        { html: '<a href="/barcode/edit-contact/2" class="govuk-link">Edit details</a>' },
-        { html: '<a href="/barcode/review-recipients/remove/1" class="govuk-link">Remove</a>' },
+        { html: '<a href="/barcode/edit-contact/2" class="govuk-link govuk-link--no-visited-state">Edit details</a>' },
+        {
+          html: '<a href="/barcode/review-recipients/remove/1" class="govuk-link govuk-link--no-visited-state">Remove</a>',
+        },
       ],
     ])
   })
