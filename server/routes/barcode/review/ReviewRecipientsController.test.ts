@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
+import moment from 'moment'
 import ReviewRecipientsController from './ReviewRecipientsController'
 
 const req = {
@@ -11,6 +12,22 @@ const req = {
 const res = {
   render: jest.fn(),
   redirect: jest.fn(),
+}
+
+const anEditContactForm = {
+  contactId: 1,
+  prisonerName: 'some-name',
+  prisonId: 'KTI',
+  prisonNumber: 'some-prison-number',
+  dob: moment('1990-01-19', 'YYYY-MM-DD').toDate(),
+  'dob-day': '19',
+  'dob-month': '1',
+  'dob-year': '1990',
+}
+const aRecipient = {
+  prisonerName: 'John Smith',
+  prisonNumber: 'A1234BC',
+  prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
 }
 
 describe('ReviewRecipientsController', () => {
@@ -35,6 +52,17 @@ describe('ReviewRecipientsController', () => {
       await reviewRecipientsController.getReviewRecipientsView(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
+    })
+
+    it('should render page having cleared editContactForm', async () => {
+      const recipients = [aRecipient]
+      req.session.recipients = recipients
+      req.session.editContactForm = anEditContactForm
+
+      await reviewRecipientsController.getReviewRecipientsView(req as unknown as Request, res as unknown as Response)
+
+      expect(res.render).toHaveBeenCalledWith('pages/barcode/review-recipients', { errors: [], recipients })
+      expect(req.session.editContactForm).toBeUndefined()
     })
   })
 
