@@ -21,8 +21,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Request a link to sign in</h1>
-        <h2 class="govuk-heading-s">Enter your Criminal Justice Secure Mail (CJSM) email address.</h2>
-        <p>You'll receive an email containing a link to the service in your inbox. Follow the link to sign in.</p>
+        <p>Enter your Criminal Justice Secure Mail (CJSM) email. You'll receive an email containing a link to the service in your inbox. Follow the link to sign in.</p>
         <p>The link will expire {{ magicLinkValidityDuration }} minutes after you request it.</p>
       </div>
     </div>
@@ -35,12 +34,18 @@
           {% call govukFieldset({ }) %}
             {{ govukInput({
               label: {
-                text: 'Enter your CJSM email, for example name@myorganisation.com.cjsm.net'
+                text: 'Enter your CJSM email',
+                classes: 'govuk-label–s'
+              },
+              hint: {
+                text: 'For example, name@myorganisation.com.cjsm.net'
               },
               id: "email",
               name: "email",
               value: form.email,
               type: 'email',
+              spellcheck: false,
+              autocomplete: 'email',
               errorMessage: errors | findError('email')
             }) }}
             <div class="govuk-button-group">
