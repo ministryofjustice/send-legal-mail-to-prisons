@@ -11,6 +11,9 @@ export type ZendeskTicket = {
       body: string
     }
     tags: ['SendLegalMail', 'slm_legal_sender' | 'slm_mailroom']
+    requester: {
+      email: string
+    }
   }
 }
 
@@ -43,6 +46,9 @@ Email: ${contactHelpdeskForm.email}
             body: messageBody,
           },
           tags: ['SendLegalMail', externalUser ? 'slm_legal_sender' : 'slm_mailroom'],
+          requester: {
+            email: `${contactHelpdeskForm.email}`,
+          },
         },
       }
       const response = (await ZendeskService.restClient().post({

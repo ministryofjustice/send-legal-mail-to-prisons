@@ -46,6 +46,9 @@ Email: mailroom@brixton.prison.gov.uk
 `,
           },
           tags: ['SendLegalMail', 'slm_mailroom'],
+          requester: {
+            email: `mailroom@brixton.prison.gov.uk`,
+          },
         },
       }
       mockedZendeskApi.post('/api/v2/tickets', expectedRequestBody).reply(201, { ticket: { id: 1234 } })
@@ -84,6 +87,9 @@ Email: user@legal-sender.co.uk.cjsm.net
 `,
           },
           tags: ['SendLegalMail', 'slm_legal_sender'],
+          requester: {
+            email: `user@legal-sender.co.uk.cjsm.net`,
+          },
         },
       }
       mockedZendeskApi.post('/api/v2/tickets', expectedRequestBody).reply(201, { ticket: { id: 1234 } })
@@ -121,6 +127,9 @@ Email: user@legal-sender.co.uk.cjsm.net
 `,
           },
           tags: ['SendLegalMail', 'slm_legal_sender'],
+          requester: {
+            email: `user@legal-sender.co.uk.cjsm.net`,
+          },
         },
       }
       mockedZendeskApi.post('/api/v2/tickets', expectedRequestBody).reply(201, { ticket: { id: 1234 } })
