@@ -41,7 +41,7 @@ Email: ${contactHelpdeskForm.email}
 `
       const requestBody: ZendeskTicket = {
         ticket: {
-          subject: `Page ID: ${contactHelpdeskForm.pageId}`,
+          subject: 'Send Legal Mail support request',
           comment: {
             body: messageBody,
           },
