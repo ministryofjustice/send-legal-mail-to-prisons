@@ -11,7 +11,7 @@ export default function recipientTableRowsFilter(recipients: Array<Recipient>): 
     return Array.of(
       { text: recipient.prisonerName }, // Column 1 - Prisoner Name
       {
-        text: recipient.prisonNumber ? recipient.prisonNumber : moment(recipient.prisonerDob).format('DD-MM-YYYY'), // Column 2 - Prison number or DOB
+        text: recipient.prisonNumber ? recipient.prisonNumber : moment(recipient.prisonerDob).format('D MMMM YYYY'), // Column 2 - Prison number or DOB
       },
       { text: recipient.prisonAddress.premise }, // Column 3 - Prison name
       {
