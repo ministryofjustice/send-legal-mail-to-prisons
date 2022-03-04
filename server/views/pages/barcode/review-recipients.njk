@@ -23,7 +23,7 @@
 
         {% if recipients.length > 0 %}
           {{ govukTable({
-            firstCellIsHeader: false,
+            firstCellIsHeader: true,
             head: [
               { text: 'Name' },
               { text: 'Prison number or date of birth' },
@@ -36,7 +36,7 @@
           }) }}
 
           <p class="govuk-!-margin-top-6 govuk-!-margin-bottom-6">
-            <a href="/barcode/find-recipient" class="govuk-link" data-qa="add-another-recipient">Add another recipient</a>
+            <a href="/barcode/find-recipient" class="govuk-link govuk-link--no-visited-state" data-qa="add-another-recipient">Add another recipient</a>
           </p>
 
           {{ govukButton({

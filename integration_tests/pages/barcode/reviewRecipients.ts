@@ -24,7 +24,7 @@ export default class ReviewRecipientsPage extends Page {
     // Get row `recipientNumber` from the table, then get its 5th td cell to click the link within it
     this.recipientsTableBodyRows()
       .eq(recipientNumber - 1)
-      .find(`td:nth-of-type(5) a`)
+      .find(`td:nth-of-type(4) a`)
       .click()
     return Page.verifyOnPage(ReviewRecipientsPage)
   }
@@ -34,7 +34,7 @@ export default class ReviewRecipientsPage extends Page {
     cy.task('stubGetContact', 1)
     this.recipientsTableBodyRows()
       .eq(recipientNumber - 1)
-      .find(`td:nth-of-type(4) a`)
+      .find(`td:nth-of-type(3) a`)
       .click()
     return Page.verifyOnPage(EditContactDetails)
   }
@@ -42,7 +42,7 @@ export default class ReviewRecipientsPage extends Page {
   hasRecipientNamesExactly = (...expectedPrisonerNames: Array<string>) => {
     this.recipientsTableBodyRows()
       .should('have.length', expectedPrisonerNames.length)
-      .find('td:nth-of-type(1)')
+      .find('th')
       .each(prisonerNameCell => {
         expect(expectedPrisonerNames).contains(prisonerNameCell.text())
       })
@@ -51,7 +51,7 @@ export default class ReviewRecipientsPage extends Page {
   hasPrisonNamesExactly = (...expectedPrisonNames: Array<string>) => {
     this.recipientsTableBodyRows()
       .should('have.length', expectedPrisonNames.length)
-      .find('td:nth-of-type(3)')
+      .find('td:nth-of-type(2)')
       .each(prisonNameCell => {
         expect(expectedPrisonNames).contains(prisonNameCell.text())
       })
