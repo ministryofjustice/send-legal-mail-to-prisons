@@ -48,6 +48,7 @@ Email: mailroom@brixton.prison.gov.uk
           tags: ['SendLegalMail', 'slm_mailroom'],
           requester: {
             email: `mailroom@brixton.prison.gov.uk`,
+            name: 'Mr Mail Room User',
           },
         },
       }
@@ -89,6 +90,7 @@ Email: user@legal-sender.co.uk.cjsm.net
           tags: ['SendLegalMail', 'slm_legal_sender'],
           requester: {
             email: `user@legal-sender.co.uk.cjsm.net`,
+            name: 'Mrs Legal Sender User',
           },
         },
       }
@@ -129,6 +131,7 @@ Email: user@legal-sender.co.uk.cjsm.net
           tags: ['SendLegalMail', 'slm_legal_sender'],
           requester: {
             email: `user@legal-sender.co.uk.cjsm.net`,
+            name: 'Mrs Legal Sender User',
           },
         },
       }

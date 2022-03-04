@@ -13,6 +13,7 @@ export type ZendeskTicket = {
     tags: ['SendLegalMail', 'slm_legal_sender' | 'slm_mailroom']
     requester: {
       email: string
+      name: string
     }
   }
 }
@@ -48,6 +49,7 @@ Email: ${contactHelpdeskForm.email}
           tags: ['SendLegalMail', externalUser ? 'slm_legal_sender' : 'slm_mailroom'],
           requester: {
             email: `${contactHelpdeskForm.email}`,
+            name: `${contactHelpdeskForm.name}`,
           },
         },
       }
