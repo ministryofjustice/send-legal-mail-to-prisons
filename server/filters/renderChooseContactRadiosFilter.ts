@@ -11,7 +11,7 @@ export default function renderChooseContactRadiosFilter(
     if ((contact.prisonNumber?.trim() ?? '') !== '') {
       text += ` ${contact.prisonNumber}`
     } else if ((contact.dob?.trim() ?? '') !== '') {
-      text += ` ${moment(contact.dob, 'YYYY-MM-DD').format('DD-MM-YYYY')}`
+      text += ` ${moment(contact.dob, 'YYYY-MM-DD').format('D MMMM YYYY')}`
     }
     return {
       value: contact.id.toString(),

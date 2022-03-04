@@ -83,7 +83,7 @@ describe('recipientTableRowsFilter', () => {
       ],
       [
         { text: 'Gage Hewitt' },
-        { text: '01-01-1990' },
+        { text: '1 January 1990' },
         { text: 'HMP BRIXTON' },
         {
           html: '<a href="/barcode/edit-contact/2" class="govuk-link govuk-link--no-visited-state">Edit details</a>',

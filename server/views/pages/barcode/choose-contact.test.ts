@@ -38,7 +38,7 @@ describe('Choose Contact View', () => {
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('#contactId').val()).toEqual('1')
-    expect($('#contactId').next('label').text().trim()).toEqual('John Smith 01-01-1990')
+    expect($('#contactId').next('label').text().trim()).toEqual('John Smith 1 January 1990')
     expect($('#contactId-2').val()).toEqual('2')
     expect($('#contactId-2').next('label').text().trim()).toEqual('John Smith A1234BC')
     expect($('#contactId-3').val()).toEqual('-1')
