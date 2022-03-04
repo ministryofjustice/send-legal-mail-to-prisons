@@ -53,6 +53,13 @@ context('Contact Helpdesk', () => {
           .hasErrorContaining('full name')
           .hasErrorContaining('email address')
       })
+
+      it('should rerender page with error given calling Zendesk API fails', () => {
+        cy.task('stubCreateZendeskTicketFailure')
+        contactHelpdeskPage.submitFormWithValidValues(ContactHelpdeskPage)
+
+        contactHelpdeskPage.hasErrorContaining('problem sending your message')
+      })
     })
   })
 

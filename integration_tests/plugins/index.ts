@@ -50,5 +50,6 @@ export default (on: (string, Record) => void): void => {
     stubGetPrisonRegister: prisonRegister.stubGetPrisonRegister,
 
     stubCreateZendeskTicket: zendesk.stubCreateZendeskTicket,
+    stubCreateZendeskTicketFailure: zendesk.stubCreateZendeskTicketFailure,
   })
 }
