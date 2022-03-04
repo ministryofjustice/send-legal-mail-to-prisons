@@ -32,7 +32,7 @@ describe(`Zendesk Service`, () => {
 
       const expectedRequestBody: ZendeskTicket = {
         ticket: {
-          subject: `Page ID: scan-barcode`,
+          subject: 'Send Legal Mail support request',
           comment: {
             body: `
 Page ID: scan-barcode
@@ -72,7 +72,7 @@ Email: mailroom@brixton.prison.gov.uk
 
       const expectedRequestBody: ZendeskTicket = {
         ticket: {
-          subject: `Page ID: review-recipients`,
+          subject: 'Send Legal Mail support request',
           comment: {
             body: `
 Page ID: review-recipients
@@ -112,7 +112,7 @@ Email: user@legal-sender.co.uk.cjsm.net
 
       const expectedRequestBody: ZendeskTicket = {
         ticket: {
-          subject: `Page ID: review-recipients`,
+          subject: 'Send Legal Mail support request',
           comment: {
             body: `
 Page ID: review-recipients
