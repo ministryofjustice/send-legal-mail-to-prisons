@@ -6,6 +6,7 @@ export default class ReviewRecipientsController {
     if (!req.session.recipients) {
       return res.redirect('/barcode/find-recipient')
     }
+    req.session.editContactForm = undefined
 
     const view = new ReviewRecipientsView(req.session.recipients, req.flash('errors'))
     return res.render('pages/barcode/review-recipients', { ...view.renderArgs })

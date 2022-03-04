@@ -49,16 +49,19 @@
                 {
                   name: "day",
                   classes: "govuk-input--width-2" + dobErrorClass,
+                  attributes: { 'maxlength': 2 },
                   value: form['prisonerDob-day']
                 },
                 {
                   name: "month",
                   classes: "govuk-input--width-2" + dobErrorClass,
+                  attributes: { 'maxlength': 2 },
                   value: form['prisonerDob-month']
                 },
                 {
                   name: "year",
                   classes: "govuk-input--width-4" + dobErrorClass,
+                  attributes: { 'maxlength': 4 },
                   value: form['prisonerDob-year']
                 }
               ]
