@@ -30,18 +30,25 @@ export default class ContactHelpdeskController {
     const { externalUser } = res.locals
     const username = externalUser ? req.session.barcodeUserEmail : res.locals.user.username
     const organisation = externalUser ? req.session.barcodeUserOrganisation : null
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const zendeskTicketId = await this.zendeskService.createSupportTicket(
-      req.session.contactHelpdeskForm,
-      externalUser,
-      username,
-      organisation
-    )
 
-    // Uploaded file properties are available in req.file; remember to delete req.file.path
-    if (req.file) {
-      logger.info(`Uploaded file: ${JSON.stringify(req.file)}`)
-      fs.unlinkSync(req.file.path)
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const zendeskTicketId = await this.zendeskService.createSupportTicket(
+        req.session.contactHelpdeskForm,
+        externalUser,
+        username,
+        organisation
+      )
+    } catch (e) {
+      req.flash('errors', [{ text: 'There was a problem sending your message to the Helpdesk.' }])
+      // Redirect to original url inc. query string because Legal Sender and Mail Room journeys have different urls, so can't hardcode a redirect url here
+      return res.redirect(req.originalUrl)
+    } finally {
+      // Uploaded file properties are available in req.file; remember to delete req.file.path
+      if (req.file) {
+        logger.info(`Uploaded file: ${JSON.stringify(req.file)}`)
+        fs.unlinkSync(req.file.path)
+      }
     }
 
     req.session.contactHelpdeskForm = undefined

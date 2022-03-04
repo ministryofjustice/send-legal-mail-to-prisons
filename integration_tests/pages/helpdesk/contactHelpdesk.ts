@@ -11,11 +11,11 @@ export default class ContactHelpdeskPage extends Page {
     return this
   }
 
-  submitFormWithValidValues = (): ContactHelpdeskConfirmationPage => {
+  submitFormWithValidValues<T>(T = ContactHelpdeskConfirmationPage): T {
     this.problemDetailField().clear().type('I had a problem with ....')
     this.nameField().clear().type('Mr A User')
     this.emailField().clear().type('a.user@email.com')
-    return this.submitForm(ContactHelpdeskConfirmationPage)
+    return this.submitForm(T)
   }
 
   submitFormWithNoValues = (): ContactHelpdeskPage => {

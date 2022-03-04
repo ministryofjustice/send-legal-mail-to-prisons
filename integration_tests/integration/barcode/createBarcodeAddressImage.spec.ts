@@ -33,7 +33,7 @@ context('Create Barcode Image', () => {
     reviewRecipientsPage
       .addAnotherRecipient()
       .submitWithUnknownPrisonNumber()
-      .submitWithValidValues('Arry Ardnut')
+      .submitWithValidValues(2, 'Arry Ardnut')
       .prepareBarcodes()
 
     const page = Page.verifyOnPage(ChooseBarcodeOptionPage)
