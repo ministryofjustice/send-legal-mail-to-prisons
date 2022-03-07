@@ -23,7 +23,7 @@ export default abstract class Page {
   }
 
   checkOnPage = (): void => {
-    cy.get(`#${this.pageId}`).should('exist')
+    cy.get('#pageId').should('have.attr', 'data-qa').should('equal', this.pageId)
   }
 
   checkCsfrTokenForFormBasedPages = (): void => {
