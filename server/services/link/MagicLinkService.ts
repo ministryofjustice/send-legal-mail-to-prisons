@@ -12,12 +12,12 @@ export default class MagicLinkService {
 
   async requestLink(email: string): Promise<unknown> {
     const magicLinkRequest: MagicLinkRequest = { email }
-    return this.hmppsAuthClient.getSystemClientToken().then(hmppsToken => {
-      return MagicLinkService.restClient(hmppsToken).post({
+    return this.hmppsAuthClient.getSystemClientToken().then(hmppsToken =>
+      MagicLinkService.restClient(hmppsToken).post({
         path: `/link/email`,
         data: magicLinkRequest,
       })
-    })
+    )
   }
 
   async verifyLink(secret: string): Promise<string> {
