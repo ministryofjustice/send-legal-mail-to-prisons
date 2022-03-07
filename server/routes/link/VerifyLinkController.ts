@@ -35,8 +35,9 @@ export default class VerifyLinkController {
         req.flash('errors', [
           { href: '#email', text: 'The link you used is no longer valid. Request a new one to sign in.' },
         ])
-        res.redirect('/link/request-link')
+        return res.redirect('/link/request-link')
       }
+
       req.session.validSlmToken = true
       req.session.barcodeUserEmail = payload.sub
       req.session.barcodeUserOrganisation = payload.organisation
@@ -46,8 +47,8 @@ export default class VerifyLinkController {
       req.session.regenerate(() => {
         // put the old session back - but keep the new session ID
         Object.assign(req.session, sessionWithoutId)
-        res.redirect('/barcode/find-recipient')
       })
+      return res.redirect('/barcode/find-recipient')
     })
   }
 }

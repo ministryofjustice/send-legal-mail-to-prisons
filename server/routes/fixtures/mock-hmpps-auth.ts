@@ -1,0 +1,12 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import nock from 'nock'
+import config from '../../config'
+
+export default function mockHmppsAuth() {
+  const mockedHmppsAuthApi = nock(config.apis.hmppsAuth.url)
+  mockedHmppsAuthApi.post('/oauth/token').reply(201, {
+    access_token:
+      'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRwcy1jbGllbnQta2V5In0.eyJzdWIiOiJzZW5kLWxlZ2FsLW1haWwtdG8tcHJpc29ucy1jbGllbnQiLCJncmFudF90eXBlIjoiY2xpZW50X2NyZWRlbnRpYWxzIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImF1dGhfc291cmNlIjoibm9uZSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTA5MC9hdXRoL2lzc3VlciIsImV4cCI6MTY0NjY3NDEzMywiYXV0aG9yaXRpZXMiOlsiUk9MRV9TTE1fRU1BSUxfTElOSyIsIlJPTEVfU0xNX1NDQU5fQkFSQ09ERSIsIlJPTEVfU0xNX0NSRUFURV9CQVJDT0RFIl0sImp0aSI6Im1lMk5QcXUzME52MnRncEdGM1hNZ2FIcUpMcyIsImNsaWVudF9pZCI6InNlbmQtbGVnYWwtbWFpbC10by1wcmlzb25zLWNsaWVudCJ9.n2HPheK6qtXHPQLbqmGiDCFMUQK67Nel7GtWZl_rUbe5TOkx27rs2CU8OkgixsUWCD5mfdyoZj23kvMYbiZ3ZDMeOAefKp7FerA3EP81bTVLOKOFUPo_sKFe7jKzNcC4tjcFgeniZ4BS7o0pzK6Lg7iJiEn7rgLuQx1-7XbODK2Y3ylo_0BBvEpkZCdqoC4jvWX8zkKNqmB7_cWyUsiXTpgoHXSizZMECjIU0IoiQeWWKDaUgBqOGCexzMBkT_Prt5qq-hIhZsATllMqb4qTiFPPB5J0aP9xWNivJvGZR83RnjczkJk-a7tQ77SFeODWvURVaKd6w-IKZQYcOHav1Q',
+    expires_in: 3599,
+  })
+}

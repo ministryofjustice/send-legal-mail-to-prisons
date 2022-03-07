@@ -73,11 +73,16 @@ export default class HmppsAuthClient {
       return token
     }
 
-    const newToken = await getSystemClientTokenFromHmppsAuth(username)
+    try {
+      const newToken = await getSystemClientTokenFromHmppsAuth(username)
 
-    // set TTL slightly less than expiry of token. Async but no need to wait
-    await this.tokenStore.setToken(key, newToken.body.access_token, newToken.body.expires_in - 60)
+      // set TTL slightly less than expiry of token. Async but no need to wait
+      await this.tokenStore.setToken(key, newToken.body.access_token, newToken.body.expires_in - 60)
 
-    return newToken.body.access_token
+      return newToken.body.access_token
+    } catch (err) {
+      logger.info(`TOKEN ERROR: ${JSON.stringify(err)}`)
+      throw err
+    }
   }
 }
