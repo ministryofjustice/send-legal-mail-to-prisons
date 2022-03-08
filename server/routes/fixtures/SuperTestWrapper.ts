@@ -5,6 +5,7 @@ import nock from 'nock'
 import express from 'express'
 import app from '../../index'
 import config from '../../config'
+import mockHmppsAuth from './mock-hmpps-auth'
 
 jest.mock('redis', () => jest.requireActual('redis-mock'))
 
@@ -20,6 +21,7 @@ export default class SuperTestWrapper {
   }
 
   authenticateAsLegalSenderUser = async () => {
+    mockHmppsAuth()
     const mockedSendLegalMailApi = nock(config.apis.sendLegalMail.url)
     mockedSendLegalMailApi.post('/link/verify', { secret: 'some-secret' }).reply(201, {
       token:
@@ -31,7 +33,8 @@ export default class SuperTestWrapper {
   }
 
   unauthenticated = async () => {
+    mockHmppsAuth()
     await this.request.get('/link/request-link?force=true') // log out legal sender user
-    await this.request.get('/sign-out') // log out mail room user
+    nock.cleanAll()
   }
 }
