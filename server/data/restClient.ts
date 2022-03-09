@@ -37,7 +37,8 @@ export default class RestClient {
     private readonly name: string,
     private readonly config: ApiConfig,
     private readonly hmppsToken: string = undefined,
-    private readonly slmToken: string = undefined
+    private readonly slmToken: string = undefined,
+    private readonly sourceIp: string = undefined
   ) {
     this.agent = config.url.startsWith('https') ? new HttpsAgent(config.agent) : new Agent(config.agent)
   }
@@ -125,6 +126,10 @@ export default class RestClient {
       request.set('Create-Barcode-Token', this.slmToken)
     } else if (this.basicAuth()) {
       request.auth(this.basicAuth().user, this.basicAuth().pass, { type: 'basic' })
+    }
+
+    if (this.sourceIp) {
+      request.set('x-forwarded-for', this.sourceIp)
     }
 
     return request
