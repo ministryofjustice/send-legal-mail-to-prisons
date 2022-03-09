@@ -5,6 +5,10 @@ import logger from '../../logger'
 
 export default function authorisationMiddleware(authorisedRoles: string[] = []): RequestHandler {
   return (req, res, next) => {
+    if (req.session?.msjSmokeTestUser) {
+      return next()
+    }
+
     if (res.locals && res.locals.user && res.locals.user.token) {
       const { authorities: roles = [] } = jwtDecode(res.locals.user.token) as { authorities?: string[] }
 
