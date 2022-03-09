@@ -20,17 +20,25 @@ export type AuthenticationMiddleware = (tokenVerifier: TokenVerifier) => Request
 
 const authenticationMiddleware: AuthenticationMiddleware = verifyToken => {
   return async (req, res, next) => {
-    if (req.session?.msjSmokeTestUser || req.query?.smoketest === 'true') {
-      req.session.msjSmokeTestUser = true
-      req.user = { username: 'smoke-test-msj', token: 'smoke-test-msj', authSource: 'smoke-test-msj' }
+    const { msjSecret } = config.smoketest
+
+    function configureMsjSmoketestUser() {
+      req.user = { username: msjSecret, token: msjSecret, authSource: 'smoketest' }
       res.locals.user = {
-        username: 'smoke-test-msj',
+        username: msjSecret,
         name: 'Smoke Test MSJ',
         displayName: 'Smoke Test MSJ',
-        activeCaseLoadId: 'STI',
+        activeCaseLoadId: 'SKI',
       }
       res.locals.user.roles = ['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_SECURITY_ANALYST']
-      return next()
+    }
+
+    if (msjSecret) {
+      if (req.session?.msjSmokeTestUser || req.query[msjSecret] === 'true') {
+        req.session.msjSmokeTestUser = true
+        configureMsjSmoketestUser()
+        return next()
+      }
     }
     if (req.isAuthenticated() && (await verifyToken(req))) {
       return next()

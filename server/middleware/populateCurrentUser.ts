@@ -1,11 +1,12 @@
 import { RequestHandler } from 'express'
 import logger from '../../logger'
 import UserService from '../services/userService'
+import config from '../config'
 
 export default function populateCurrentUser(userService: UserService): RequestHandler {
   return async (req, res, next) => {
     try {
-      if (req.session?.msjSmokeTestUser) {
+      if (config.smoketest.msjSecret && req.session?.msjSmokeTestUser) {
         return next()
       }
       if (res.locals.user) {

@@ -2,10 +2,11 @@ import jwtDecode from 'jwt-decode'
 import { RequestHandler } from 'express'
 
 import logger from '../../logger'
+import config from '../config'
 
 export default function authorisationMiddleware(authorisedRoles: string[] = []): RequestHandler {
   return (req, res, next) => {
-    if (req.session?.msjSmokeTestUser) {
+    if (config.smoketest.msjSecret && req.session?.msjSmokeTestUser) {
       return next()
     }
 

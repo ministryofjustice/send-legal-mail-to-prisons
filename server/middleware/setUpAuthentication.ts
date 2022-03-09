@@ -33,7 +33,7 @@ export default function setUpAuth(): Router {
   const authSignOutUrl = `${authUrl}/sign-out?client_id=${config.apis.hmppsAuth.apiClientId}&redirect_uri=${config.domain}`
 
   router.use('/sign-out', (req, res) => {
-    if (req.user) {
+    if (req.user || req.session.msjSmokeTestUser) {
       req.logout()
       req.session.destroy(() => res.redirect(authSignOutUrl))
       return

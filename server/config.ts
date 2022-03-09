@@ -137,4 +137,8 @@ export default {
     mailRoomJourney: get('MAIL_ROOM_PHASE_BANNER_LINK', 'https://eu.surveymonkey.com/r/CheckRule39Mail'),
   },
   fileUploadsEnabled: toBoolean(get('FILE_UPLOADS_ENABLED', false)),
+  smoketest: {
+    msjSecret: get('APP_SMOKETEST_MSJSECRET', null),
+    lsjSecret: get('APP_SMOKETEST_LSJSECRET', null),
+  },
 }
