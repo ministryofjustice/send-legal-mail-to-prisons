@@ -39,6 +39,7 @@ import setupCsrf from './middleware/setupCsrf'
 import setupLegalSenderStartPage from './middleware/start/setupLegalSenderStartPage'
 import ZendeskService from './services/helpdesk/ZendeskService'
 import contactHelpdeskAuthorisationMiddleware from './middleware/helpdesk/contactHelpdeskAuthorisationMiddleware'
+import VerifyLinkController from './routes/link/VerifyLinkController'
 
 export default function createApp(
   userService: UserService,
@@ -72,9 +73,10 @@ export default function createApp(
   app.get('/privacy-policy', (req, res) => res.render('pages/privacy-policy/privacy-policy'))
   app.use('/start', setupLegalSenderStartPage())
   app.use('/link', requestLinkAuthorised())
-  app.use('/link', setUpRequestLink(magicLinkService))
+  const verifyLinkController = new VerifyLinkController(magicLinkService)
+  app.use('/link', setUpRequestLink(magicLinkService, verifyLinkController))
   app.use('/link', setupLinkEmailSent())
-  app.use('/link', setUpVerifyLink(magicLinkService))
+  app.use('/link', setUpVerifyLink(verifyLinkController))
   app.use('/contact-helpdesk', setupContactHelpdesk(zendeskService))
 
   // authenticated with createBarcodeToken

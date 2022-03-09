@@ -38,6 +38,7 @@ declare module 'express-session' {
     cookiesPolicy: CookiesPolicy
     contactHelpdeskForm: ContactHelpdeskForm
     editContactForm: EditContactForm
+    smokeTestUser: boolean
   }
 
   export interface CookiesPolicy {
