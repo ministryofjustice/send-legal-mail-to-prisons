@@ -35,7 +35,8 @@ export default class PdfController {
     try {
       req.session.recipients = await this.createBarcodeService.addBarcodeValuesToRecipients(
         req.session.recipients,
-        req.session.slmToken
+        req.session.slmToken,
+        req.ip
       )
     } catch (error) {
       logger.error('An error was received when trying to assign a barcode to ', error)

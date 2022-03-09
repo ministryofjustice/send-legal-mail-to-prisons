@@ -44,7 +44,7 @@ describe('CreateBarcodeService', () => {
         })
         .reply(201, { barcode: '123456789012' })
 
-      const barcodeValue = await createBarcodeService.generateBarcodeValue('some-token', recipient)
+      const barcodeValue = await createBarcodeService.generateBarcodeValue('some-token', '127.0.0.1', recipient)
 
       expect(barcodeValue).toBe('123456789012')
     })
@@ -70,7 +70,7 @@ describe('CreateBarcodeService', () => {
         .reply(400, 'something bad happened')
 
       try {
-        await createBarcodeService.generateBarcodeValue('some-token', recipient)
+        await createBarcodeService.generateBarcodeValue('some-token', '127.0.0.1', recipient)
         fail('Was expecting createBarcodeService.generateBarcodeValue to have thrown an error but it did not')
       } catch (error) {
         expect(error).toStrictEqual(new Error('Error generating new barcode value'))
@@ -185,7 +185,11 @@ describe('CreateBarcodeService', () => {
         })
         .reply(201, { barcode: '098765432109' })
 
-      const recipientsWithBarcodes = await createBarcodeService.addBarcodeValuesToRecipients(recipients, 'some-token')
+      const recipientsWithBarcodes = await createBarcodeService.addBarcodeValuesToRecipients(
+        recipients,
+        'some-token',
+        '127.0.0.1'
+      )
 
       expect(recipientsWithBarcodes).toStrictEqual([
         {
@@ -265,7 +269,7 @@ describe('CreateBarcodeService', () => {
         .reply(400, 'Some API error generating a new barcode number')
 
       try {
-        await createBarcodeService.addBarcodeValuesToRecipients(recipients, 'some-token')
+        await createBarcodeService.addBarcodeValuesToRecipients(recipients, 'some-token', '127.0.0.1')
         fail('Was expecting createBarcodeService.addBarcodeValuesToRecipients to have thrown an error but it did not')
       } catch (error) {
         expect(error).toStrictEqual(new Error('Error generating new barcode value'))

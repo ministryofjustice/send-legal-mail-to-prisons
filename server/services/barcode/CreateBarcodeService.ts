@@ -16,8 +16,8 @@ export default class CreateBarcodeService {
     registerFont('liberation_sans_bold.ttf', { family: `${this.opts.font} Bold` })
   }
 
-  private static restClient(slmToken: string): RestClient {
-    return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, undefined, slmToken)
+  private static restClient(slmToken: string, sourceIp: string): RestClient {
+    return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, undefined, slmToken, sourceIp)
   }
 
   private opts = {
@@ -42,7 +42,7 @@ export default class CreateBarcodeService {
   /**
    * Returns a string containing a freshly generated barcode value.
    */
-  async generateBarcodeValue(slmToken: string, recipient: Recipient): Promise<string> {
+  async generateBarcodeValue(slmToken: string, sourceIp: string, recipient: Recipient): Promise<string> {
     try {
       const requestBody: CreateBarcodeRequest = {
         prisonerName: recipient.prisonerName,
@@ -51,7 +51,7 @@ export default class CreateBarcodeService {
         dob: recipient.prisonerDob ? moment(recipient.prisonerDob).format('YYYY-MM-DD') : undefined,
         contactId: recipient.contactId,
       }
-      const response = (await CreateBarcodeService.restClient(slmToken).post({
+      const response = (await CreateBarcodeService.restClient(slmToken, sourceIp).post({
         path: `/barcode`,
         data: requestBody,
       })) as CreateBarcodeResponse
@@ -73,11 +73,15 @@ export default class CreateBarcodeService {
   /**
    * Returns the array of Recipients with a freshly generated barcode value for each Recipient
    */
-  async addBarcodeValuesToRecipients(recipients: Array<Recipient>, token: string): Promise<Array<Recipient>> {
+  async addBarcodeValuesToRecipients(
+    recipients: Array<Recipient>,
+    token: string,
+    sourceIp: string
+  ): Promise<Array<Recipient>> {
     return Promise.all(
       recipients.map(async recipient => {
         if (!recipient.barcodeValue) {
-          const barcodeValue = await this.generateBarcodeValue(token, recipient)
+          const barcodeValue = await this.generateBarcodeValue(token, sourceIp, recipient)
           return { ...recipient, barcodeValue }
         }
         return recipient
