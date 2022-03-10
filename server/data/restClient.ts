@@ -129,7 +129,8 @@ export default class RestClient {
     }
 
     if (this.sourceIp) {
-      request.set('x-forwarded-for', this.sourceIp)
+      logger.info(`Setting x-slm-client-ip header with value: ${this.sourceIp}`)
+      request.set('x-slm-client-ip', this.sourceIp)
     }
 
     return request
