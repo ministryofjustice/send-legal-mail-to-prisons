@@ -14,7 +14,6 @@ export default class GenerateBarcodeImageController {
     }
 
     try {
-      logger.info(`Calling createBarcodeService with client IP: ${req.ip}`)
       req.session.recipients = await this.createBarcodeService.addBarcodeValuesToRecipients(
         req.session.recipients,
         req.session.slmToken,
