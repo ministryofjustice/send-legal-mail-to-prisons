@@ -52,18 +52,18 @@
 
   <!--[if lt IE 9]>
   <link href="/assets/stylesheets/application-ie8.css?{{ version }}" rel="stylesheet"/>
-  <script src="/assets/js/html5shiv-3.7.3.min.js"></script>
+  <script src="/assets/js/html5shiv-3.7.3.min.js" nonce="{{ cspNonce }}"></script>
   <![endif]-->
 
-  <script src="/assets/js/jquery.min.js"></script> 
+  <script src="/assets/js/jquery.min.js" nonce="{{ cspNonce }}"></script>
 
-  <script src="/assets/js/jquery.inputmask.js"></script>
-  <script src="/assets/js/inputmask.binding.js"></script>
+  <script src="/assets/js/jquery.inputmask.js" nonce="{{ cspNonce }}"></script>
+  <script src="/assets/js/inputmask.binding.js" nonce="{{ cspNonce }}"></script>
 
-  <script src="/assets/js/accessible-autocomplete.min.js"></script>
+  <script src="/assets/js/accessible-autocomplete.min.js" nonce="{{ cspNonce }}"></script>
   <link href="/assets/stylesheets/accessible-autocomplete.min.css" rel="stylesheet"/>
 
-  <script src="/assets/js/page-enhancements.js"></script>
+  <script src="/assets/js/page-enhancements.js" nonce="{{ cspNonce }}"></script>
 
 {% endblock %}
 
@@ -139,9 +139,9 @@
 {% block bodyEnd %}
   {# Run JavaScript at end of the
   <body>, to avoid blocking the initial render. #}
-  <script src="/assets/govuk/all.js"></script>
-  <script src="/assets/moj/all.js"></script>
-  <script src="/assets/govukFrontendInit.js"></script>
-  <script src="/assets/mojFrontendInit.js"></script>
+  <script src="/assets/govuk/all.js" nonce="{{ cspNonce }}"></script>
+  <script src="/assets/moj/all.js" nonce="{{ cspNonce }}"></script>
+  <script src="/assets/govukFrontendInit.js" nonce="{{ cspNonce }}"></script>
+  <script src="/assets/mojFrontendInit.js" nonce="{{ cspNonce }}"></script>
   {% block pageScripts %}{% endblock %}
 {% endblock %}
