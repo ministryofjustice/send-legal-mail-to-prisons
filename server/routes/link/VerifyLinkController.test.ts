@@ -19,6 +19,7 @@ const req = {
   flash: jest.fn(),
   body: {},
   query: { secret: undefined as string },
+  ip: '127.0.0.1',
 }
 const res = {
   render: jest.fn(),
@@ -93,7 +94,7 @@ describe('VerifyLinkController', () => {
 
       await verifyLinkController.verifyLink(req as unknown as Request, res as unknown as Response)
 
-      expect(magicLinkService.verifyLink).toHaveBeenCalledWith('some-secret')
+      expect(magicLinkService.verifyLink).toHaveBeenCalledWith('some-secret', '127.0.0.1')
       expect(req.session.slmToken).toStrictEqual('some-token')
     })
 

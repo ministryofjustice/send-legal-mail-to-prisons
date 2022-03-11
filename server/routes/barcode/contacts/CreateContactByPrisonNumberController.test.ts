@@ -14,6 +14,7 @@ const req = {
   session: {} as SessionData,
   flash: jest.fn(),
   body: {},
+  ip: '127.0.0.1',
 }
 const res = {
   render: jest.fn(),
@@ -170,7 +171,13 @@ describe('CreateContactByPrisonNumberController', () => {
         prisonerName: 'Fred Bloggs',
         prisonId: 'SKI',
       })
-      expect(contactService.createContact).toHaveBeenCalledWith('some-token', 'Fred Bloggs', 'SKI', 'A1234BC')
+      expect(contactService.createContact).toHaveBeenCalledWith(
+        'some-token',
+        '127.0.0.1',
+        'Fred Bloggs',
+        'SKI',
+        'A1234BC'
+      )
     })
 
     it('should redirect to create-new-contact if there is an error adding the recipient', async () => {
@@ -218,7 +225,13 @@ describe('CreateContactByPrisonNumberController', () => {
         prisonerName: 'Fred Bloggs',
         prisonId: 'SKI',
       })
-      expect(contactService.createContact).toHaveBeenCalledWith('some-token', 'Fred Bloggs', 'SKI', 'A1234BC')
+      expect(contactService.createContact).toHaveBeenCalledWith(
+        'some-token',
+        '127.0.0.1',
+        'Fred Bloggs',
+        'SKI',
+        'A1234BC'
+      )
     })
   })
 })

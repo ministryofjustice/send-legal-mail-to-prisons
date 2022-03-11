@@ -14,6 +14,7 @@ const req = {
   flash: jest.fn(),
   body: {},
   params: { contactId: 1 },
+  ip: '127.0.0.1',
 }
 const res = {
   render: jest.fn(),
@@ -203,6 +204,7 @@ describe('EditContactController', () => {
 
       expect(contactService.updateContact).toHaveBeenCalledWith(
         'some-token',
+        '127.0.0.1',
         anEditContactForm.prisonerName,
         anEditContactForm.prisonId,
         anEditContactForm.contactId,

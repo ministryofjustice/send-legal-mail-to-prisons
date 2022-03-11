@@ -15,6 +15,7 @@ const req = {
   session: {} as SessionData,
   flash: jest.fn(),
   body: {},
+  ip: '127.0.0.1',
 }
 const res = {
   render: jest.fn(),
@@ -177,6 +178,7 @@ describe('CreateContactByPrisonerNameController', () => {
       })
       expect(contactService.createContact).toHaveBeenCalledWith(
         'some-token',
+        '127.0.0.1',
         'Fred Bloggs',
         'SKI',
         undefined,
@@ -240,6 +242,7 @@ describe('CreateContactByPrisonerNameController', () => {
       expect(req.session.createNewContactByPrisonerNameForm).toBeUndefined()
       expect(contactService.createContact).toHaveBeenCalledWith(
         'some-token',
+        '127.0.0.1',
         'Fred Bloggs',
         'SKI',
         undefined,
