@@ -16,7 +16,7 @@ export default class VerifyLinkController {
     req.session.slmToken = undefined
 
     return this.magicLinkService
-      .verifyLink(secret)
+      .verifyLink(secret, req.ip)
       .then(token => {
         req.session.slmToken = token
         this.verifyToken(token, req, res)

@@ -40,10 +40,12 @@ describe('Contact Service', () => {
         .post('/contact', { prisonerName: 'some-name', prisonId: 'SKI', prisonNumber: 'A1234BC' })
         .reply(201, contactResponse)
 
-      contactService.createContact('some-token', 'some-name', 'SKI', 'A1234BC', undefined).then(response => {
-        expect(response).toStrictEqual(contactResponse)
-        done()
-      })
+      contactService
+        .createContact('some-token', '127.0.0.1', 'some-name', 'SKI', 'A1234BC', undefined)
+        .then(response => {
+          expect(response).toStrictEqual(contactResponse)
+          done()
+        })
     })
 
     it('should include dob in request', done => {
@@ -58,7 +60,7 @@ describe('Contact Service', () => {
         .reply(201, contactResponse)
 
       contactService
-        .createContact('some-token', 'some-name', 'SKI', undefined, moment('1990-02-27').toDate())
+        .createContact('some-token', '127.0.0.1', 'some-name', 'SKI', undefined, moment('1990-02-27').toDate())
         .then(response => {
           expect(response).toStrictEqual(contactResponse)
           done()
@@ -77,10 +79,12 @@ describe('Contact Service', () => {
         .post('/contact', { prisonerName: 'some-name', prisonId: 'SKI', prisonNumber: 'THIS IS TOO LONG' })
         .reply(400, errorResponse)
 
-      contactService.createContact('some-token', 'some-name', 'SKI', 'THIS IS TOO LONG', undefined).catch(error => {
-        expect(JSON.parse(error.text)).toStrictEqual(errorResponse)
-        done()
-      })
+      contactService
+        .createContact('some-token', '127.0.0.1', 'some-name', 'SKI', 'THIS IS TOO LONG', undefined)
+        .catch(error => {
+          expect(JSON.parse(error.text)).toStrictEqual(errorResponse)
+          done()
+        })
     })
   })
 
@@ -96,10 +100,12 @@ describe('Contact Service', () => {
         .put('/contact/1', { prisonerName: 'some-name', prisonId: 'SKI', prisonNumber: 'A1234BC' })
         .reply(201, contactResponse)
 
-      contactService.updateContact('some-token', 'some-name', 'SKI', 1, 'A1234BC', undefined).then(response => {
-        expect(response).toStrictEqual(contactResponse)
-        done()
-      })
+      contactService
+        .updateContact('some-token', '127.0.0.1', 'some-name', 'SKI', 1, 'A1234BC', undefined)
+        .then(response => {
+          expect(response).toStrictEqual(contactResponse)
+          done()
+        })
     })
 
     it('should include dob in request', done => {
@@ -114,7 +120,7 @@ describe('Contact Service', () => {
         .reply(201, contactResponse)
 
       contactService
-        .updateContact('some-token', 'some-name', 'SKI', 1, undefined, moment('1990-02-27').toDate())
+        .updateContact('some-token', '127.0.0.1', 'some-name', 'SKI', 1, undefined, moment('1990-02-27').toDate())
         .then(response => {
           expect(response).toStrictEqual(contactResponse)
           done()
@@ -133,10 +139,12 @@ describe('Contact Service', () => {
         .put('/contact/1', { prisonerName: 'some-name', prisonId: 'SKI', prisonNumber: 'THIS IS TOO LONG' })
         .reply(400, errorResponse)
 
-      contactService.updateContact('some-token', 'some-name', 'SKI', 1, 'THIS IS TOO LONG', undefined).catch(error => {
-        expect(JSON.parse(error.text)).toStrictEqual(errorResponse)
-        done()
-      })
+      contactService
+        .updateContact('some-token', '127.0.0.1', 'some-name', 'SKI', 1, 'THIS IS TOO LONG', undefined)
+        .catch(error => {
+          expect(JSON.parse(error.text)).toStrictEqual(errorResponse)
+          done()
+        })
     })
   })
 
@@ -144,7 +152,7 @@ describe('Contact Service', () => {
     it('should search by name', done => {
       mockedSendLegalMailApi.get('/contacts').query({ name: 'Smith' }).reply(200, [aContact])
 
-      contactService.searchContacts('some-token', 'Smith').then(response => {
+      contactService.searchContacts('some-token', '127.0.0.1', 'Smith').then(response => {
         expect(response).toStrictEqual([aContact])
         done()
       })
@@ -153,7 +161,7 @@ describe('Contact Service', () => {
     it('should handle zero results', done => {
       mockedSendLegalMailApi.get('/contacts').query({ name: 'Smith' }).reply(200, [])
 
-      contactService.searchContacts('some-token', 'Smith').then(response => {
+      contactService.searchContacts('some-token', '127.0.0.1', 'Smith').then(response => {
         expect(response).toStrictEqual([])
         done()
       })
@@ -169,7 +177,7 @@ describe('Contact Service', () => {
       }
       mockedSendLegalMailApi.get('/contacts').query({ name: '' }).reply(400, errorResponse)
 
-      contactService.searchContacts('some-token', '').catch(error => {
+      contactService.searchContacts('some-token', '127.0.0.1', '').catch(error => {
         expect(JSON.parse(error.text)).toStrictEqual(errorResponse)
         done()
       })
@@ -180,7 +188,7 @@ describe('Contact Service', () => {
     it('should return a contact if found', done => {
       mockedSendLegalMailApi.get('/contact/prisonNumber/A1234BC').reply(200, aContact)
 
-      contactService.getContactByPrisonNumber('some-token', 'A1234BC').then(response => {
+      contactService.getContactByPrisonNumber('some-token', '127.0.0.1', 'A1234BC').then(response => {
         expect(response).toStrictEqual(aContact)
         done()
       })
@@ -189,7 +197,7 @@ describe('Contact Service', () => {
     it('should return undefined if not found', done => {
       mockedSendLegalMailApi.get('/contact/prisonNumber/A1234BC').reply(404)
 
-      contactService.getContactByPrisonNumber('some-token', 'A1234BC').then(response => {
+      contactService.getContactByPrisonNumber('some-token', '127.0.0.1', 'A1234BC').then(response => {
         expect(response).toBeUndefined()
         done()
       })
@@ -205,7 +213,7 @@ describe('Contact Service', () => {
       }
       mockedSendLegalMailApi.get('/contact/prisonNumber/A1234BC').reply(400, errorResponse)
 
-      contactService.getContactByPrisonNumber('some-token', 'A1234BC').catch(error => {
+      contactService.getContactByPrisonNumber('some-token', '127.0.0.1', 'A1234BC').catch(error => {
         expect(JSON.parse(error.text)).toStrictEqual(errorResponse)
         done()
       })
@@ -216,7 +224,7 @@ describe('Contact Service', () => {
     it('should return a contact if found', done => {
       mockedSendLegalMailApi.get('/contact/1').reply(200, aContact)
 
-      contactService.getContactById('some-token', 1).then(response => {
+      contactService.getContactById('some-token', '127.0.0.1', 1).then(response => {
         expect(response).toStrictEqual(aContact)
         done()
       })
@@ -232,7 +240,7 @@ describe('Contact Service', () => {
       }
       mockedSendLegalMailApi.get('/contact/1').reply(404, errorResponse)
 
-      contactService.getContactById('some-token', 1).catch(error => {
+      contactService.getContactById('some-token', '127.0.0.1', 1).catch(error => {
         expect(JSON.parse(error.text)).toStrictEqual(errorResponse)
         done()
       })

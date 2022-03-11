@@ -40,7 +40,7 @@ export default class ScanBarcodeController {
       return res.redirect('/scan-barcode')
     }
 
-    return this.verifyBarcode(req.session.barcodeEntryForm.barcode, req.user.username, req).then(() =>
+    return this.verifyBarcode(req.session.barcodeEntryForm.barcode, req.user.username, req.ip, req).then(() =>
       res.redirect('/scan-barcode/result')
     )
   }
@@ -60,7 +60,7 @@ export default class ScanBarcodeController {
       return res.redirect('/manually-enter-barcode')
     }
 
-    return this.verifyBarcode(req.session.barcodeEntryForm.barcode, req.user.username, req).then(() =>
+    return this.verifyBarcode(req.session.barcodeEntryForm.barcode, req.user.username, req.ip, req).then(() =>
       res.redirect('/scan-barcode/result')
     )
   }
@@ -79,7 +79,7 @@ export default class ScanBarcodeController {
   async getFurtherChecksNeededView(req: Request, res: Response): Promise<void> {
     this.trackEvent('furtherChecksNeeded', res)
     const form: BarcodeEntryForm = req.session.barcodeEntryForm
-    await this.scanBarcodeService.notifyMoreChecksRequested(form.lastScannedBarcode, req.user.username)
+    await this.scanBarcodeService.notifyMoreChecksRequested(form.lastScannedBarcode, req.user.username, req.ip)
 
     form.errorCode = { code: 'FURTHER_CHECKS_NEEDED' }
     return res.redirect('/scan-barcode/result')
@@ -95,10 +95,10 @@ export default class ScanBarcodeController {
     return res.render('pages/scan/scan-barcode-result', { ...view.renderArgs })
   }
 
-  private async verifyBarcode(barcode: string, user: string, req: Request): Promise<void> {
+  private async verifyBarcode(barcode: string, user: string, sourceIp: string, req: Request): Promise<void> {
     req.session.barcodeEntryForm = { lastScannedBarcode: barcode }
     return this.scanBarcodeService
-      .verifyBarcode(barcode, user)
+      .verifyBarcode(barcode, user, sourceIp)
       .then(apiResponse => {
         const checkBarcodeResponse = apiResponse as CheckBarcodeResponse
         req.session.barcodeEntryForm.createdBy = checkBarcodeResponse.createdBy

@@ -20,7 +20,7 @@ export default class RequestLinkController {
     }
 
     return this.magicLinkService
-      .requestLink(req.session.requestLinkForm.email)
+      .requestLink(req.session.requestLinkForm.email, req.ip)
       .then(() => {
         res.redirect('email-sent')
       })

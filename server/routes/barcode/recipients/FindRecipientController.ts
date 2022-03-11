@@ -38,6 +38,7 @@ export default class FindRecipientController {
     try {
       const contact = await this.contactService.getContactByPrisonNumber(
         req.session.slmToken,
+        req.ip,
         req.session.recipientForm.prisonNumber
       )
       if (contact) {
@@ -78,6 +79,7 @@ export default class FindRecipientController {
     try {
       const contacts = await this.contactService.searchContacts(
         req.session.slmToken,
+        req.ip,
         req.session.recipientForm.prisonerName
       )
       if (contacts.length > 0) {

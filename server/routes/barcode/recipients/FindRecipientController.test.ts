@@ -14,6 +14,7 @@ const req = {
   session: {} as SessionData,
   flash: jest.fn(),
   body: {},
+  ip: '127.0.0.1',
 }
 const res = {
   render: jest.fn(),
@@ -79,7 +80,7 @@ describe('FindRecipientController', () => {
 
       await findRecipientController.submitFindByPrisonNumber(req as unknown as Request, res as unknown as Response)
 
-      expect(contactService.getContactByPrisonNumber).toHaveBeenCalledWith('some-token', 'A1234BC')
+      expect(contactService.getContactByPrisonNumber).toHaveBeenCalledWith('some-token', '127.0.0.1', 'A1234BC')
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient/create-new-contact/by-prison-number')
     })
 

@@ -13,6 +13,9 @@ const stubRequestLink = (): SuperAgentRequest =>
       method: 'POST',
       urlPattern: '/send-legal-mail/link/email',
       bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }],
+      headers: {
+        'x-slm-client-ip': { matches: '.+' },
+      },
     },
     response: {
       status: 200,
@@ -28,6 +31,9 @@ const stubRequestLinkFailure = (): SuperAgentRequest =>
       method: 'POST',
       urlPattern: '/send-legal-mail/link/email',
       bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }],
+      headers: {
+        'x-slm-client-ip': { matches: '.+' },
+      },
     },
     response: {
       status: 500,
@@ -43,6 +49,9 @@ const stubRequestLinkNonCjsmEmailFailure = (): SuperAgentRequest =>
       method: 'POST',
       urlPattern: '/send-legal-mail/link/email',
       bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }],
+      headers: {
+        'x-slm-client-ip': { matches: '.+' },
+      },
     },
     response: {
       status: 400,
@@ -65,6 +74,9 @@ const stubRequestLinkEmailTooLong = (): SuperAgentRequest =>
       method: 'POST',
       urlPattern: '/send-legal-mail/link/email',
       bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }],
+      headers: {
+        'x-slm-client-ip': { matches: '.+' },
+      },
     },
     response: {
       status: 400,
@@ -87,6 +99,9 @@ const stubVerifyLink = (): SuperAgentRequest =>
       method: 'POST',
       urlPattern: '/send-legal-mail/link/verify',
       bodyPatterns: [{ matchesJsonPath: '$[?(@.secret =~ /.*/i)]' }],
+      headers: {
+        'x-slm-client-ip': { matches: '.+' },
+      },
     },
     response: {
       status: 201,
@@ -113,6 +128,9 @@ const stubVerifyLinkThatWillExpireIn1SecondFromNow = (): SuperAgentRequest => {
       method: 'POST',
       urlPattern: '/send-legal-mail/link/verify',
       bodyPatterns: [{ matchesJsonPath: '$[?(@.secret =~ /.*/i)]' }],
+      headers: {
+        'x-slm-client-ip': { matches: '.+' },
+      },
     },
     response: {
       status: 201,
@@ -130,6 +148,9 @@ const stubVerifyLinkInvalidSignatureFailure = (): SuperAgentRequest =>
       method: 'POST',
       urlPattern: '/send-legal-mail/link/verify',
       bodyPatterns: [{ matchesJsonPath: '$[?(@.secret =~ /.*/i)]' }],
+      headers: {
+        'x-slm-client-ip': { matches: '.+' },
+      },
     },
     response: {
       status: 201,
@@ -149,6 +170,9 @@ const stubVerifyLinkNotFoundFailure = (): SuperAgentRequest =>
       method: 'POST',
       urlPattern: '/send-legal-mail/link/verify',
       bodyPatterns: [{ matchesJsonPath: '$[?(@.secret =~ /.*/i)]' }],
+      headers: {
+        'x-slm-client-ip': { matches: '.+' },
+      },
     },
     response: {
       status: 404,
@@ -164,6 +188,9 @@ const stubVerifyValidBarcode = (): SuperAgentRequest =>
       method: 'POST',
       urlPattern: '/send-legal-mail/barcode/check',
       bodyPatterns: [{ matchesJsonPath: `$[?(@.barcode == "${barcodes.VALID_BARCODE}")]` }],
+      headers: {
+        'x-slm-client-ip': { matches: '.+' },
+      },
     },
     response: {
       status: 200,
@@ -182,6 +209,9 @@ const stubVerifyDuplicateBarcode = (): SuperAgentRequest =>
       method: 'POST',
       urlPattern: '/send-legal-mail/barcode/check',
       bodyPatterns: [{ matchesJsonPath: `$[?(@.barcode == "${barcodes.PREVIOUSLY_SCANNED_BARCODE}")]` }],
+      headers: {
+        'x-slm-client-ip': { matches: '.+' },
+      },
     },
     response: {
       status: 400,
@@ -210,6 +240,9 @@ const stubVerifyRandomCheckBarcode = (): SuperAgentRequest =>
       method: 'POST',
       urlPattern: '/send-legal-mail/barcode/check',
       bodyPatterns: [{ matchesJsonPath: `$[?(@.barcode == "${barcodes.BARCODE_SELECTED_FOR_RANDOM_CHECK}")]` }],
+      headers: {
+        'x-slm-client-ip': { matches: '.+' },
+      },
     },
     response: {
       status: 400,
@@ -233,6 +266,9 @@ const stubVerifyExpiredBarcode = (): SuperAgentRequest =>
       method: 'POST',
       urlPattern: '/send-legal-mail/barcode/check',
       bodyPatterns: [{ matchesJsonPath: `$[?(@.barcode == "${barcodes.EXPIRED_BARCODE}")]` }],
+      headers: {
+        'x-slm-client-ip': { matches: '.+' },
+      },
     },
     response: {
       status: 400,
@@ -258,6 +294,9 @@ const stubVerifyNotFoundBarcode = (): SuperAgentRequest =>
       method: 'POST',
       urlPattern: '/send-legal-mail/barcode/check',
       bodyPatterns: [{ matchesJsonPath: `$[?(@.barcode == "${barcodes.UNRECOGNISED_BARCODE}")]` }],
+      headers: {
+        'x-slm-client-ip': { matches: '.+' },
+      },
     },
     response: {
       status: 404,
@@ -296,6 +335,7 @@ const stubCreateBarcode = (prisonerName?: string): SuperAgentRequest => {
           equalTo:
             'eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJkZTE3NGM0Yi0xY2M2LTQxYWYtYTczYi01ZTE2YmI5YzE1ZWIiLCJzdWIiOiJtaWtlLmhhbG1hQGRpZ2l0YWwuanVzdGljZS5nb3YudWsiLCJleHAiOjQ3ODc1Njk3MjF9.WTqNajHRgZCbNe0g20lK5a7s_5-VeWD-FViu6gTgQaEsavimH_wEz1wZ4sj5osCDkCaLIgjYxGFt_p2IAsr7x0pI5b3CenN4_EMrz2pVVxAXOEEI8Q8QVfTy-iBGyO9W95rFGtmxbdsmYpr7LIr6DxJDUCCrCoeH8f4Dl-4QfKLUn-x_9_Bfum1rtAJ38B5pwiwhlzxeHD58C5XIc7swURGpCA97gtog7kEbyrCDF5AkIM4oYC1ViTMfDypnIJaDAU2ggxkaV5EkiIOB386POjUXkePQDnPajX3C-ugbJlKUPHp9z0CL_ngw5iK3wf9mEy2mWi9VHbUnyqVzfhrbIJK2PKQ0Fb8ZJIZhlB_rD68bgpaKskJwGy3lCMqDV5hiK5rUMsw_6n0asdYIhOvrEkXHrwmR4eRfobkLmtXGGRBswWuMhVXbYxBfZPU4PSkReTnbGRxSub-_UmMIvI_CXXaMdyRv0ixG4R3R7HfgLyZiTffN0p8nKmzKDXWWmPVJ',
         },
+        'x-slm-client-ip': { matches: '.+' },
       },
     },
     response: {
@@ -322,6 +362,7 @@ const stubCreateBarcodeFailure = (prisonerName?: string): SuperAgentRequest => {
           equalTo:
             'eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJkZTE3NGM0Yi0xY2M2LTQxYWYtYTczYi01ZTE2YmI5YzE1ZWIiLCJzdWIiOiJtaWtlLmhhbG1hQGRpZ2l0YWwuanVzdGljZS5nb3YudWsiLCJleHAiOjQ3ODc1Njk3MjF9.WTqNajHRgZCbNe0g20lK5a7s_5-VeWD-FViu6gTgQaEsavimH_wEz1wZ4sj5osCDkCaLIgjYxGFt_p2IAsr7x0pI5b3CenN4_EMrz2pVVxAXOEEI8Q8QVfTy-iBGyO9W95rFGtmxbdsmYpr7LIr6DxJDUCCrCoeH8f4Dl-4QfKLUn-x_9_Bfum1rtAJ38B5pwiwhlzxeHD58C5XIc7swURGpCA97gtog7kEbyrCDF5AkIM4oYC1ViTMfDypnIJaDAU2ggxkaV5EkiIOB386POjUXkePQDnPajX3C-ugbJlKUPHp9z0CL_ngw5iK3wf9mEy2mWi9VHbUnyqVzfhrbIJK2PKQ0Fb8ZJIZhlB_rD68bgpaKskJwGy3lCMqDV5hiK5rUMsw_6n0asdYIhOvrEkXHrwmR4eRfobkLmtXGGRBswWuMhVXbYxBfZPU4PSkReTnbGRxSub-_UmMIvI_CXXaMdyRv0ixG4R3R7HfgLyZiTffN0p8nKmzKDXWWmPVJ',
         },
+        'x-slm-client-ip': { matches: '.+' },
       },
     },
     response: {
@@ -343,6 +384,7 @@ const stubCreateContact = (contactId: number): SuperAgentRequest =>
           equalTo:
             'eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJkZTE3NGM0Yi0xY2M2LTQxYWYtYTczYi01ZTE2YmI5YzE1ZWIiLCJzdWIiOiJtaWtlLmhhbG1hQGRpZ2l0YWwuanVzdGljZS5nb3YudWsiLCJleHAiOjQ3ODc1Njk3MjF9.WTqNajHRgZCbNe0g20lK5a7s_5-VeWD-FViu6gTgQaEsavimH_wEz1wZ4sj5osCDkCaLIgjYxGFt_p2IAsr7x0pI5b3CenN4_EMrz2pVVxAXOEEI8Q8QVfTy-iBGyO9W95rFGtmxbdsmYpr7LIr6DxJDUCCrCoeH8f4Dl-4QfKLUn-x_9_Bfum1rtAJ38B5pwiwhlzxeHD58C5XIc7swURGpCA97gtog7kEbyrCDF5AkIM4oYC1ViTMfDypnIJaDAU2ggxkaV5EkiIOB386POjUXkePQDnPajX3C-ugbJlKUPHp9z0CL_ngw5iK3wf9mEy2mWi9VHbUnyqVzfhrbIJK2PKQ0Fb8ZJIZhlB_rD68bgpaKskJwGy3lCMqDV5hiK5rUMsw_6n0asdYIhOvrEkXHrwmR4eRfobkLmtXGGRBswWuMhVXbYxBfZPU4PSkReTnbGRxSub-_UmMIvI_CXXaMdyRv0ixG4R3R7HfgLyZiTffN0p8nKmzKDXWWmPVJ',
         },
+        'x-slm-client-ip': { matches: '.+' },
       },
     },
     response: {
@@ -374,6 +416,7 @@ const stubSearchContactsNone = (): SuperAgentRequest =>
           equalTo:
             'eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJkZTE3NGM0Yi0xY2M2LTQxYWYtYTczYi01ZTE2YmI5YzE1ZWIiLCJzdWIiOiJtaWtlLmhhbG1hQGRpZ2l0YWwuanVzdGljZS5nb3YudWsiLCJleHAiOjQ3ODc1Njk3MjF9.WTqNajHRgZCbNe0g20lK5a7s_5-VeWD-FViu6gTgQaEsavimH_wEz1wZ4sj5osCDkCaLIgjYxGFt_p2IAsr7x0pI5b3CenN4_EMrz2pVVxAXOEEI8Q8QVfTy-iBGyO9W95rFGtmxbdsmYpr7LIr6DxJDUCCrCoeH8f4Dl-4QfKLUn-x_9_Bfum1rtAJ38B5pwiwhlzxeHD58C5XIc7swURGpCA97gtog7kEbyrCDF5AkIM4oYC1ViTMfDypnIJaDAU2ggxkaV5EkiIOB386POjUXkePQDnPajX3C-ugbJlKUPHp9z0CL_ngw5iK3wf9mEy2mWi9VHbUnyqVzfhrbIJK2PKQ0Fb8ZJIZhlB_rD68bgpaKskJwGy3lCMqDV5hiK5rUMsw_6n0asdYIhOvrEkXHrwmR4eRfobkLmtXGGRBswWuMhVXbYxBfZPU4PSkReTnbGRxSub-_UmMIvI_CXXaMdyRv0ixG4R3R7HfgLyZiTffN0p8nKmzKDXWWmPVJ',
         },
+        'x-slm-client-ip': { matches: '.+' },
       },
     },
     response: {
@@ -400,6 +443,7 @@ const stubSearchContactsOne = (): SuperAgentRequest =>
           equalTo:
             'eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJkZTE3NGM0Yi0xY2M2LTQxYWYtYTczYi01ZTE2YmI5YzE1ZWIiLCJzdWIiOiJtaWtlLmhhbG1hQGRpZ2l0YWwuanVzdGljZS5nb3YudWsiLCJleHAiOjQ3ODc1Njk3MjF9.WTqNajHRgZCbNe0g20lK5a7s_5-VeWD-FViu6gTgQaEsavimH_wEz1wZ4sj5osCDkCaLIgjYxGFt_p2IAsr7x0pI5b3CenN4_EMrz2pVVxAXOEEI8Q8QVfTy-iBGyO9W95rFGtmxbdsmYpr7LIr6DxJDUCCrCoeH8f4Dl-4QfKLUn-x_9_Bfum1rtAJ38B5pwiwhlzxeHD58C5XIc7swURGpCA97gtog7kEbyrCDF5AkIM4oYC1ViTMfDypnIJaDAU2ggxkaV5EkiIOB386POjUXkePQDnPajX3C-ugbJlKUPHp9z0CL_ngw5iK3wf9mEy2mWi9VHbUnyqVzfhrbIJK2PKQ0Fb8ZJIZhlB_rD68bgpaKskJwGy3lCMqDV5hiK5rUMsw_6n0asdYIhOvrEkXHrwmR4eRfobkLmtXGGRBswWuMhVXbYxBfZPU4PSkReTnbGRxSub-_UmMIvI_CXXaMdyRv0ixG4R3R7HfgLyZiTffN0p8nKmzKDXWWmPVJ',
         },
+        'x-slm-client-ip': { matches: '.+' },
       },
     },
     response: {
@@ -428,6 +472,7 @@ const stubGetContactNone = (): SuperAgentRequest =>
           equalTo:
             'eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJkZTE3NGM0Yi0xY2M2LTQxYWYtYTczYi01ZTE2YmI5YzE1ZWIiLCJzdWIiOiJtaWtlLmhhbG1hQGRpZ2l0YWwuanVzdGljZS5nb3YudWsiLCJleHAiOjQ3ODc1Njk3MjF9.WTqNajHRgZCbNe0g20lK5a7s_5-VeWD-FViu6gTgQaEsavimH_wEz1wZ4sj5osCDkCaLIgjYxGFt_p2IAsr7x0pI5b3CenN4_EMrz2pVVxAXOEEI8Q8QVfTy-iBGyO9W95rFGtmxbdsmYpr7LIr6DxJDUCCrCoeH8f4Dl-4QfKLUn-x_9_Bfum1rtAJ38B5pwiwhlzxeHD58C5XIc7swURGpCA97gtog7kEbyrCDF5AkIM4oYC1ViTMfDypnIJaDAU2ggxkaV5EkiIOB386POjUXkePQDnPajX3C-ugbJlKUPHp9z0CL_ngw5iK3wf9mEy2mWi9VHbUnyqVzfhrbIJK2PKQ0Fb8ZJIZhlB_rD68bgpaKskJwGy3lCMqDV5hiK5rUMsw_6n0asdYIhOvrEkXHrwmR4eRfobkLmtXGGRBswWuMhVXbYxBfZPU4PSkReTnbGRxSub-_UmMIvI_CXXaMdyRv0ixG4R3R7HfgLyZiTffN0p8nKmzKDXWWmPVJ',
         },
+        'x-slm-client-ip': { matches: '.+' },
       },
     },
     response: {
@@ -455,6 +500,7 @@ const stubGetContactOne = (): SuperAgentRequest =>
           equalTo:
             'eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJkZTE3NGM0Yi0xY2M2LTQxYWYtYTczYi01ZTE2YmI5YzE1ZWIiLCJzdWIiOiJtaWtlLmhhbG1hQGRpZ2l0YWwuanVzdGljZS5nb3YudWsiLCJleHAiOjQ3ODc1Njk3MjF9.WTqNajHRgZCbNe0g20lK5a7s_5-VeWD-FViu6gTgQaEsavimH_wEz1wZ4sj5osCDkCaLIgjYxGFt_p2IAsr7x0pI5b3CenN4_EMrz2pVVxAXOEEI8Q8QVfTy-iBGyO9W95rFGtmxbdsmYpr7LIr6DxJDUCCrCoeH8f4Dl-4QfKLUn-x_9_Bfum1rtAJ38B5pwiwhlzxeHD58C5XIc7swURGpCA97gtog7kEbyrCDF5AkIM4oYC1ViTMfDypnIJaDAU2ggxkaV5EkiIOB386POjUXkePQDnPajX3C-ugbJlKUPHp9z0CL_ngw5iK3wf9mEy2mWi9VHbUnyqVzfhrbIJK2PKQ0Fb8ZJIZhlB_rD68bgpaKskJwGy3lCMqDV5hiK5rUMsw_6n0asdYIhOvrEkXHrwmR4eRfobkLmtXGGRBswWuMhVXbYxBfZPU4PSkReTnbGRxSub-_UmMIvI_CXXaMdyRv0ixG4R3R7HfgLyZiTffN0p8nKmzKDXWWmPVJ',
         },
+        'x-slm-client-ip': { matches: '.+' },
       },
     },
     response: {
@@ -481,6 +527,7 @@ const stubGetContact = (contactId = 1): SuperAgentRequest =>
           equalTo:
             'eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJkZTE3NGM0Yi0xY2M2LTQxYWYtYTczYi01ZTE2YmI5YzE1ZWIiLCJzdWIiOiJtaWtlLmhhbG1hQGRpZ2l0YWwuanVzdGljZS5nb3YudWsiLCJleHAiOjQ3ODc1Njk3MjF9.WTqNajHRgZCbNe0g20lK5a7s_5-VeWD-FViu6gTgQaEsavimH_wEz1wZ4sj5osCDkCaLIgjYxGFt_p2IAsr7x0pI5b3CenN4_EMrz2pVVxAXOEEI8Q8QVfTy-iBGyO9W95rFGtmxbdsmYpr7LIr6DxJDUCCrCoeH8f4Dl-4QfKLUn-x_9_Bfum1rtAJ38B5pwiwhlzxeHD58C5XIc7swURGpCA97gtog7kEbyrCDF5AkIM4oYC1ViTMfDypnIJaDAU2ggxkaV5EkiIOB386POjUXkePQDnPajX3C-ugbJlKUPHp9z0CL_ngw5iK3wf9mEy2mWi9VHbUnyqVzfhrbIJK2PKQ0Fb8ZJIZhlB_rD68bgpaKskJwGy3lCMqDV5hiK5rUMsw_6n0asdYIhOvrEkXHrwmR4eRfobkLmtXGGRBswWuMhVXbYxBfZPU4PSkReTnbGRxSub-_UmMIvI_CXXaMdyRv0ixG4R3R7HfgLyZiTffN0p8nKmzKDXWWmPVJ',
         },
+        'x-slm-client-ip': { matches: '.+' },
       },
     },
     response: {
@@ -507,6 +554,7 @@ const stubUpdateContact = (contactId: number): SuperAgentRequest =>
           equalTo:
             'eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJkZTE3NGM0Yi0xY2M2LTQxYWYtYTczYi01ZTE2YmI5YzE1ZWIiLCJzdWIiOiJtaWtlLmhhbG1hQGRpZ2l0YWwuanVzdGljZS5nb3YudWsiLCJleHAiOjQ3ODc1Njk3MjF9.WTqNajHRgZCbNe0g20lK5a7s_5-VeWD-FViu6gTgQaEsavimH_wEz1wZ4sj5osCDkCaLIgjYxGFt_p2IAsr7x0pI5b3CenN4_EMrz2pVVxAXOEEI8Q8QVfTy-iBGyO9W95rFGtmxbdsmYpr7LIr6DxJDUCCrCoeH8f4Dl-4QfKLUn-x_9_Bfum1rtAJ38B5pwiwhlzxeHD58C5XIc7swURGpCA97gtog7kEbyrCDF5AkIM4oYC1ViTMfDypnIJaDAU2ggxkaV5EkiIOB386POjUXkePQDnPajX3C-ugbJlKUPHp9z0CL_ngw5iK3wf9mEy2mWi9VHbUnyqVzfhrbIJK2PKQ0Fb8ZJIZhlB_rD68bgpaKskJwGy3lCMqDV5hiK5rUMsw_6n0asdYIhOvrEkXHrwmR4eRfobkLmtXGGRBswWuMhVXbYxBfZPU4PSkReTnbGRxSub-_UmMIvI_CXXaMdyRv0ixG4R3R7HfgLyZiTffN0p8nKmzKDXWWmPVJ',
         },
+        'x-slm-client-ip': { matches: '.+' },
       },
     },
     response: {
