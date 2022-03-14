@@ -21,7 +21,7 @@ executors:
   integration-test:
     docker:
       - image: cimg/node:<< pipeline.parameters.node-version >>
-      - image: circleci/redis:buster
+      - image: cimg/redis:6.2.6
     working_directory: ~/app
 
 jobs:
