@@ -4,7 +4,6 @@ import cookieSession from 'cookie-session'
 import createError from 'http-errors'
 import jwt from 'jsonwebtoken'
 
-import redis from 'redis'
 import allRoutes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
@@ -42,6 +41,7 @@ class MockSmokeTestStore extends SmokeTestStore {
     return ''
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async startSmokeTest(req: Request): Promise<string> {
     return ''
   }
