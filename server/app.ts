@@ -38,6 +38,7 @@ import ZendeskService from './services/helpdesk/ZendeskService'
 import contactHelpdeskAuthorisationMiddleware from './middleware/helpdesk/contactHelpdeskAuthorisationMiddleware'
 import setUpLink from './middleware/link/setUpLink'
 import SmokeTestStore from './data/cache/SmokeTestStore'
+import setupSmokeTest from './middleware/smoketest/SmokeTestMiddleware'
 
 export default function createApp(
   userService: UserService,
@@ -66,7 +67,7 @@ export default function createApp(
   nunjucksSetup(app)
 
   const smokeTestStore = new SmokeTestStore()
-  app.post('/getSmokeTestSecret', async (req, res) => res.json({ secret: await smokeTestStore.startSmokeTest(req) }))
+  app.use(setupSmokeTest(smokeTestStore))
 
   app.use(setupCsrf())
   app.use(setupCookiesPolicy())
