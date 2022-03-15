@@ -1,14 +1,17 @@
-import express, { Express, Router } from 'express'
+// eslint-disable-next-line max-classes-per-file
+import express, { Express, Request, Router } from 'express'
 import cookieSession from 'cookie-session'
 import createError from 'http-errors'
 import jwt from 'jsonwebtoken'
 
+import redis from 'redis'
 import allRoutes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import standardRouter from '../standardRouter'
 import UserService from '../../services/userService'
 import * as auth from '../../authentication/auth'
+import SmokeTestStore from '../../data/cache/SmokeTestStore'
 
 const user = {
   name: 'john smith',
@@ -29,6 +32,18 @@ class MockUserService extends UserService {
       token,
       ...user,
     }
+  }
+}
+
+jest.mock('redis', () => jest.requireActual('redis-mock'))
+
+class MockSmokeTestStore extends SmokeTestStore {
+  async getSmokeTestSecret(): Promise<string> {
+    return ''
+  }
+
+  async startSmokeTest(req: Request): Promise<string> {
+    return ''
   }
 }
 
@@ -62,7 +77,7 @@ export default function appWithAllRoutes({ production = false }: { production?: 
     }
     next()
   }
-  return appSetup(allRoutes(standardRouter(new MockUserService())), production)
+  return appSetup(allRoutes(standardRouter(new MockUserService(), new MockSmokeTestStore())), production)
 }
 
 const createToken = () => {
