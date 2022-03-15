@@ -13,6 +13,11 @@ generic-service:
     SUPPORTED_PRISONS: ""
     COVERSHEET_PRINT_DEBUG: "true"
 
+  namespace_secrets:
+    smoke-test:
+      APP_SMOKETEST_MSJSECRET: "APP_SMOKETEST_MSJSECRET"
+      APP_SMOKETEST_LSJSECRET: "APP_SMOKETEST_LSJSECRET"
+
 gotenberg:
   replicaCount: 1
 
