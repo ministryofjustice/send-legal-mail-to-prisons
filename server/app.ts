@@ -16,14 +16,11 @@ import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
-import setUpRequestLink from './middleware/link/setupRequestLink'
-import setUpVerifyLink from './middleware/link/setupVerifyLink'
 import MagicLinkService from './services/link/MagicLinkService'
 import barcodeAuthorisationMiddleware from './middleware/barcode/barcodeAuthorisationMiddleware'
 import setUpCreateBarcode from './middleware/barcode/setupBarcode'
 import populateBarcodeUser from './middleware/barcode/populateBarcodeUser'
 import setupScanBarcode from './middleware/scan/setupScanBarcode'
-import setupLinkEmailSent from './middleware/link/setupLinkEmailSent'
 import requestLinkAuthorised from './middleware/link/requestLinkAuthorised'
 import ScanBarcodeService from './services/scan/ScanBarcodeService'
 import CreateBarcodeService from './services/barcode/CreateBarcodeService'
@@ -39,6 +36,7 @@ import setupCsrf from './middleware/setupCsrf'
 import setupLegalSenderStartPage from './middleware/start/setupLegalSenderStartPage'
 import ZendeskService from './services/helpdesk/ZendeskService'
 import contactHelpdeskAuthorisationMiddleware from './middleware/helpdesk/contactHelpdeskAuthorisationMiddleware'
+import setUpLink from './middleware/link/setUpLink'
 
 export default function createApp(
   userService: UserService,
@@ -72,9 +70,7 @@ export default function createApp(
   app.get('/privacy-policy', (req, res) => res.render('pages/privacy-policy/privacy-policy'))
   app.use('/start', setupLegalSenderStartPage())
   app.use('/link', requestLinkAuthorised())
-  app.use('/link', setUpRequestLink(magicLinkService))
-  app.use('/link', setupLinkEmailSent())
-  app.use('/link', setUpVerifyLink(magicLinkService))
+  app.use('/link', setUpLink(app, magicLinkService))
   app.use('/contact-helpdesk', setupContactHelpdesk(zendeskService))
 
   // authenticated with createBarcodeToken

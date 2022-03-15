@@ -3,9 +3,14 @@ import type { ErrorResponse } from 'sendLegalMailApiClient'
 import RequestLinkView from './RequestLinkView'
 import validate from './RequestLinkValidator'
 import MagicLinkService from '../../services/link/MagicLinkService'
+import VerifyLinkController from './VerifyLinkController'
+import config from '../../config'
 
 export default class RequestLinkController {
-  constructor(private readonly magicLinkService: MagicLinkService) {}
+  constructor(
+    private readonly magicLinkService: MagicLinkService,
+    private readonly verifyLinkController: VerifyLinkController
+  ) {}
 
   async getRequestLinkView(req: Request, res: Response): Promise<void> {
     const view = new RequestLinkView(req.session?.requestLinkForm || {}, req.flash('errors'))
@@ -14,6 +19,11 @@ export default class RequestLinkController {
   }
 
   async submitLinkRequest(req: Request, res: Response): Promise<void> {
+    if (config.smoketest.lsjSecret && req.body.email === config.smoketest.lsjSecret) {
+      req.query.secret = config.smoketest.lsjSecret
+      return this.verifyLinkController.verifyLink(req, res)
+    }
+
     req.session.requestLinkForm = { ...req.body }
     if (!validate(req.session.requestLinkForm, req)) {
       return res.redirect('request-link')
