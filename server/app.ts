@@ -37,6 +37,8 @@ import setupLegalSenderStartPage from './middleware/start/setupLegalSenderStartP
 import ZendeskService from './services/helpdesk/ZendeskService'
 import contactHelpdeskAuthorisationMiddleware from './middleware/helpdesk/contactHelpdeskAuthorisationMiddleware'
 import setUpLink from './middleware/link/setUpLink'
+import SmokeTestStore from './data/cache/SmokeTestStore'
+import setupSmokeTest from './middleware/smoketest/SmokeTestMiddleware'
 
 export default function createApp(
   userService: UserService,
@@ -63,6 +65,10 @@ export default function createApp(
   app.use(setUpStaticResources())
   app.use(setupPdfRenderer(new GotenbergClient()))
   nunjucksSetup(app)
+
+  const smokeTestStore = new SmokeTestStore()
+  app.use(setupSmokeTest(smokeTestStore))
+
   app.use(setupCsrf())
   app.use(setupCookiesPolicy())
 
@@ -93,7 +99,7 @@ export default function createApp(
   )
   app.use('/scan-barcode/contact-helpdesk', setupContactHelpdesk(zendeskService))
 
-  app.use('/', indexRoutes(standardRouter(userService)))
+  app.use('/', indexRoutes(standardRouter(userService, smokeTestStore)))
   app.use('/', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_SECURITY_ANALYST']))
 
   app.use('/', setupScanBarcode(scanBarcodeService, prisonRegisterService, appInsightsClient))

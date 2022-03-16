@@ -15,4 +15,8 @@ export default abstract class RedisStore {
     this.getRedisAsync = promisify(redisClient.get).bind(redisClient)
     this.setRedisAsync = promisify(redisClient.set).bind(redisClient)
   }
+
+  protected deleteEntry(key: string) {
+    this.redisClient.del(key)
+  }
 }
