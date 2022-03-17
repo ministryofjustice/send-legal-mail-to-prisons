@@ -8,6 +8,9 @@ export default function createErrorHandler(production: boolean) {
 
     if (error.status === 401 || error.status === 403) {
       logger.info('Logging user out')
+      if (res.locals.externalUser) {
+        return res.redirect('/link/request-link')
+      }
       return res.redirect('/sign-out')
     }
 
