@@ -55,6 +55,9 @@ const authenticationMiddleware: AuthenticationMiddleware = (verifyToken, smokeTe
       return next()
     }
     req.session.returnTo = req.originalUrl
+    if (res.locals.externalUser) {
+      return res.redirect('/link/request-link')
+    }
     return res.redirect('/sign-in')
   }
 }
