@@ -59,6 +59,12 @@
         <a href="/barcode/find-recipient" data-qa="send-more-legal-mail" class="govuk-link">Enter another prison number</a>
       </div>
     </div>
+
+    {% if smokeTestBarcode %}
+    <div class="govuk-visually-hidden">
+      <p data-qa='smoke-test-barcode'>{{ smokeTestBarcode }}</p>
+    </div>
+    {% endif %}
   </section>
 
 {% endblock %}

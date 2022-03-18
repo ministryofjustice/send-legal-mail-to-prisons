@@ -39,6 +39,7 @@ declare module 'express-session' {
     contactHelpdeskForm: ContactHelpdeskForm
     editContactForm: EditContactForm
     msjSmokeTestUser: boolean
+    lsjSmokeTestUser: boolean
   }
 
   export interface CookiesPolicy {
