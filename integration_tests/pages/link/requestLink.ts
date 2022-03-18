@@ -1,6 +1,7 @@
 import Page, { PageElement } from '../page'
 // eslint-disable-next-line import/no-cycle
 import EmailSentPage from './emailSent'
+import FindRecipientByPrisonNumberPage from '../barcode/findRecipientByPrisonNumber'
 
 export default class RequestLinkPage extends Page {
   constructor() {
@@ -23,6 +24,12 @@ export default class RequestLinkPage extends Page {
 
     this.submitButton().click()
     return Page.verifyOnPage(RequestLinkPage)
+  }
+
+  submitFormWithSmokeTestUser = (email: string): FindRecipientByPrisonNumberPage => {
+    this.emailField().type(email)
+    this.submitButton().click()
+    return Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   }
 
   emailField = (): PageElement => cy.get('#email')
