@@ -151,14 +151,18 @@ jobs:
     steps:
       - checkout
       - hmpps/k8s_setup
+      - - run:
+            name: Set environment variables
+            command: |
+              echo 'CYPRESS_APP_SMOKETEST_LSJSECRET=$(kubectl get secret smoke-test --template={{.data.APP_SMOKETEST_LSJSECRET}} | base64 -d)' >> $BASH_ENV
+              echo 'CYPRESS_APP_SMOKETEST_MSJSECRET=$(kubectl get secret smoke-test --template={{.data.APP_SMOKETEST_MSJSECRET}} | base64 -d)' >> $BASH_ENV
+              source $BASH_ENV
       - run:
+          name: Run smoke tests
           command: |
             cp -r -n integration_tests/* smoke_tests
             cd smoke_tests
             npm install
-            echo 'CYPRESS_APP_SMOKETEST_LSJSECRET=$(kubectl get secret smoke-test --template={{.data.APP_SMOKETEST_LSJSECRET}} | base64 -d)' >> $BASH_ENV
-            echo 'CYPRESS_APP_SMOKETEST_MSJSECRET=$(kubectl get secret smoke-test --template={{.data.APP_SMOKETEST_MSJSECRET}} | base64 -d)' >> $BASH_ENV
-            source $BASH_ENV
             cypress run
       - store_test_results:
           path: smoke_tests/test_results
