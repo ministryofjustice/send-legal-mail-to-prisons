@@ -156,8 +156,8 @@ jobs:
             cp -r -n integration_tests/* smoke_tests
             cd smoke_tests
             npm install
-            echo 'APP_SMOKETEST_LSJSECRET=$(kubectl get secret smoke-test --template={{.data.APP_SMOKETEST_LSJSECRET}} | base64 -d)' >> $BASH_ENV
-            echo 'APP_SMOKETEST_MSJSECRET=$(kubectl get secret smoke-test --template={{.data.APP_SMOKETEST_MSJSECRET}} | base64 -d)' >> $BASH_ENV
+            echo 'CYPRESS_APP_SMOKETEST_LSJSECRET=$(kubectl get secret smoke-test --template={{.data.APP_SMOKETEST_LSJSECRET}} | base64 -d)' >> $BASH_ENV
+            echo 'CYPRESS_APP_SMOKETEST_MSJSECRET=$(kubectl get secret smoke-test --template={{.data.APP_SMOKETEST_MSJSECRET}} | base64 -d)' >> $BASH_ENV
             source $BASH_ENV
             cypress run
       - store_test_results:
