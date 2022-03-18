@@ -24,6 +24,11 @@ executors:
       - image: cimg/redis:6.2.6
     working_directory: ~/app
 
+  smoke-test:
+    docker:
+      - image: cypress/included:8.7.0
+    working_directory: ~/tests
+
 jobs:
   build:
     executor:
@@ -141,68 +146,92 @@ jobs:
       - store_artifacts:
           path: integration_tests/downloads
 
+  run_smoke_test:
+    executor: smoke-test
+    steps:
+      - checkout
+      - run:
+          command: |
+            cp -r -n integration_tests/* smoke_tests
+            cd smoke_tests
+            npm install
+            cypress run
+      - store_test_results:
+          path: smoke_tests/test_results
+      - store_artifacts:
+          path: smoke_tests/videos
+      - store_artifacts:
+          path: smoke_tests/screenshots
+      - store_artifacts:
+          path: smoke_tests/downloads
+
 workflows:
   version: 2
   build-test-and-deploy:
     jobs:
-      - build:
-          filters:
-            tags:
-              ignore: /.*/
-      - unit_test:
-          requires:
-            - build
-      - integration_test:
-          requires:
-            - build
-      - hmpps/helm_lint:
-          name: helm_lint
-      - hmpps/build_docker:
-          name: build_docker
+      - run_smoke_test:
           filters:
             branches:
               only:
-                - main
-      - hmpps/deploy_env:
-          name: deploy_dev
-          env: "dev"
-          context: hmpps-common-vars
-          filters:
-            branches:
-              only:
-                - main
-          requires:
-            - helm_lint
-            - unit_test
-            - integration_test
-            - build_docker
-
-      - request-preprod-approval:
-          type: approval
-          requires:
-            - deploy_dev
-      - hmpps/deploy_env:
-          name: deploy_preprod
-          env: "preprod"
-          context:
-            - hmpps-common-vars
-            - send-legal-mail-to-prisons-preprod
-          requires:
-            - request-preprod-approval
-      - request-prod-approval:
-          type: approval
-          requires:
-            - deploy_preprod
-      - hmpps/deploy_env:
-          name: deploy_prod
-          env: "prod"
-          slack_notification: true
-          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
-          context:
-            - hmpps-common-vars
-            - send-legal-mail-to-prisons-prod
-          requires:
-            - request-prod-approval
+                - mh-SLM-190-circle-job
+#      - build:
+#          filters:
+#            tags:
+#              ignore: /.*/
+#      - unit_test:
+#          requires:
+#            - build
+#      - integration_test:
+#          requires:
+#            - build
+#      - hmpps/helm_lint:
+#          name: helm_lint
+#      - hmpps/build_docker:
+#          name: build_docker
+#          filters:
+#            branches:
+#              only:
+#                - main
+#      - hmpps/deploy_env:
+#          name: deploy_dev
+#          env: "dev"
+#          context: hmpps-common-vars
+#          filters:
+#            branches:
+#              only:
+#                - main
+#          requires:
+#            - helm_lint
+#            - unit_test
+#            - integration_test
+#            - build_docker
+#
+#      - request-preprod-approval:
+#          type: approval
+#          requires:
+#            - deploy_dev
+#      - hmpps/deploy_env:
+#          name: deploy_preprod
+#          env: "preprod"
+#          context:
+#            - hmpps-common-vars
+#            - send-legal-mail-to-prisons-preprod
+#          requires:
+#            - request-preprod-approval
+#      - request-prod-approval:
+#          type: approval
+#          requires:
+#            - deploy_preprod
+#      - hmpps/deploy_env:
+#          name: deploy_prod
+#          env: "prod"
+#          slack_notification: true
+#          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
+#          context:
+#            - hmpps-common-vars
+#            - send-legal-mail-to-prisons-prod
+#          requires:
+#            - request-prod-approval
 
   security:
     triggers:

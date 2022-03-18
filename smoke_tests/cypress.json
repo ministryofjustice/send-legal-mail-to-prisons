@@ -1,0 +1,18 @@
+{
+  "chromeWebSecurity": false,
+  "baseUrl": "https://send-legal-mail-dev.prison.service.justice.gov.uk",
+  "ignoreTestFiles": "**/!(*.spec).ts",
+  "fixturesFolder": "fixtures",
+  "integrationFolder": "smoke",
+  "pluginsFile": "plugins/index.ts",
+  "screenshotsFolder": "screenshots",
+  "supportFile": "support/index.ts",
+  "videosFolder": "videos",
+  "reporter": "cypress-multi-reporters",
+  "reporterOptions": {
+    "configFile": "reporter-config.json"
+  },
+  "videoUploadOnPasses": false,
+  "taskTimeout": 60000,
+  "downloadsFolder": "downloads"
+}
