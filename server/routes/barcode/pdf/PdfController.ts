@@ -16,7 +16,7 @@ export default class PdfController {
       return res.redirect('/barcode/find-recipient')
     }
 
-    const view = new PdfControllerView(req.session.pdfForm || {}, req.flash('errors'))
+    const view = new PdfControllerView(req.session.pdfForm || {}, '', req.flash('errors'))
     return res.render('pages/barcode/pdf/select-envelope-size', { ...view.renderArgs })
   }
 

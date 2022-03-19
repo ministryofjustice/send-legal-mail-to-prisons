@@ -43,7 +43,7 @@ const authenticationMiddleware: AuthenticationMiddleware = (verifyToken, smokeTe
       }
     }
 
-    if (msjSecret && req.query['smoke-test']) {
+    if (msjSecret || req.query['smoke-test']) {
       await checkForSmokeTestRequest()
       if (req.session.msjSmokeTestUser) {
         configureMsjSmoketestUser()
