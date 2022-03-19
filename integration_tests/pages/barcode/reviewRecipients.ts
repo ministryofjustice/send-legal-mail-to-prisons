@@ -39,22 +39,24 @@ export default class ReviewRecipientsPage extends Page {
     return Page.verifyOnPage(EditContactDetails)
   }
 
-  hasRecipientNamesExactly = (...expectedPrisonerNames: Array<string>) => {
+  hasRecipientNamesExactly = (...expectedPrisonerNames: Array<string>): ReviewRecipientsPage => {
     this.recipientsTableBodyRows()
       .should('have.length', expectedPrisonerNames.length)
       .find('th')
       .each(prisonerNameCell => {
         expect(expectedPrisonerNames).contains(prisonerNameCell.text())
       })
+    return this
   }
 
-  hasPrisonNamesExactly = (...expectedPrisonNames: Array<string>) => {
+  hasPrisonNamesExactly = (...expectedPrisonNames: Array<string>): ReviewRecipientsPage => {
     this.recipientsTableBodyRows()
       .should('have.length', expectedPrisonNames.length)
       .find('td:nth-of-type(2)')
       .each(prisonNameCell => {
         expect(expectedPrisonNames).contains(prisonNameCell.text())
       })
+    return this
   }
 
   hasNoRecipients = (): ReviewRecipientsPage => {

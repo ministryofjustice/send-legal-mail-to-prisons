@@ -17,6 +17,11 @@ export default class ManualBarcodeEntryPage extends Page {
     return Page.verifyOnPage(ManualBarcodeEntryPage)
   }
 
+  submitBarcode = (barcode: string): ScanBarcodeResultPage => {
+    this.setBarcode(barcode).submitButton().click()
+    return Page.verifyOnPage(ScanBarcodeResultPage)
+  }
+
   submitFormWithEmptyBarcode = (): ManualBarcodeEntryPage => {
     this.setBarcode('')
     this.submitButton().click()
