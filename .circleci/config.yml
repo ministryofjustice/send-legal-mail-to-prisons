@@ -164,13 +164,13 @@ jobs:
               --msj-url https://check-rule39-mail-dev.prison.service.justice.gov.uk \
               --cypress-exe cypress
       - store_test_results:
-          path: smoke_tests/test_results
+          path: /tmp/slm-smoke-test-dev/test_results
       - store_artifacts:
-          path: smoke_tests/videos
+          path: /tmp/slm-smoke-test-dev/videos
       - store_artifacts:
-          path: smoke_tests/screenshots
+          path: /tmp/slm-smoke-test-dev/screenshots
       - store_artifacts:
-          path: smoke_tests/downloads
+          path: /tmp/slm-smoke-test-dev/downloads
 
 workflows:
   version: 2
