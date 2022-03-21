@@ -161,7 +161,8 @@ jobs:
               --lsj-secret $(kubectl get secret smoke-test --template={{.data.APP_SMOKETEST_LSJSECRET}} | base64 -d) \
               --msj-secret $(kubectl get secret smoke-test --template={{.data.APP_SMOKETEST_MSJSECRET}} | base64 -d) \
               --lsj-url https://send-legal-mail-dev.prison.service.justice.gov.uk \
-              --msj-url https://check-rule39-mail-dev.prison.service.justice.gov.uk
+              --msj-url https://check-rule39-mail-dev.prison.service.justice.gov.uk \
+              --cypress-exe cypress
       - store_test_results:
           path: smoke_tests/test_results
       - store_artifacts:

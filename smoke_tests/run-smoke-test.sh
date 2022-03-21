@@ -5,6 +5,7 @@ LSJ_SECRET='terry'
 MSJ_SECRET='bob'
 LSJ_URL='http://localhost:3000'
 MSJ_URL='http://localhost:3000'
+CYPRESS_EXE=./node_modules/.bin/cypress
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -33,6 +34,11 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       shift # past value
       ;;
+    --cypress-exe)
+      CYPRESS_EXE=$2
+      shift # past argument
+      shift # past value
+      ;;
   esac
 done
 
@@ -51,4 +57,4 @@ export CYPRESS_LSJ_URL=$LSJ_URL
 export CYPRESS_MSJ_URL=$MSJ_URL
 export CYPRESS_APP_SMOKETEST_MSJAUTHCODE=$(curl -XPOST $MSJ_URL/getSmokeTestSecret -H 'Content-Type: application/json' -d "{ \"msjSecret\": \"$MSJ_SECRET\" }" | jq -r '.token')
 
-node_modules/.bin/cypress run
+$CYPRESS_EXE run
