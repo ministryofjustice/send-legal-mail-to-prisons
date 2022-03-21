@@ -16,7 +16,7 @@ export default class PdfController {
       return res.redirect('/barcode/find-recipient')
     }
 
-    const view = new PdfControllerView(req.session.pdfForm || {}, req.flash('errors'))
+    const view = new PdfControllerView(req.session.pdfForm || {}, '', req.flash('errors'))
     return res.render('pages/barcode/pdf/select-envelope-size', { ...view.renderArgs })
   }
 
@@ -63,10 +63,16 @@ export default class PdfController {
     const filename = this.pdfFilename(numberOfCoversheets, this.envelopeSize(req.session.pdfForm))
     const { envelopeSize } = req.session.pdfForm
 
+    let smokeTestBarcode: string
+    if (req.session.lsjSmokeTestUser) {
+      smokeTestBarcode = req.session.pdfRecipients[0].barcodeValue
+    }
+
     return res.render('pages/barcode/pdf/print-coversheets', {
       envelopeSize,
       numberOfCoversheets,
       filename,
+      smokeTestBarcode,
     })
   }
 

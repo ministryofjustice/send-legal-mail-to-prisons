@@ -14,17 +14,23 @@ export const ENVELOPE_SIZES: Array<EnvelopeSizeSpec> = [
 ]
 
 export default class PdfControllerView {
-  constructor(private readonly pdfForm: PdfForm, private readonly errors?: Array<Record<string, string>>) {}
+  constructor(
+    private readonly pdfForm: PdfForm,
+    private readonly smokeTestBarcode: string,
+    private readonly errors?: Array<Record<string, string>>
+  ) {}
 
   get renderArgs(): {
     form: PdfForm
     errors: Array<Record<string, string>>
     envelopeSizes: Array<EnvelopeSizeSpec>
+    smokeTestBarcode: string
   } {
     return {
       form: this.pdfForm,
       errors: this.errors || [],
       envelopeSizes: ENVELOPE_SIZES,
+      smokeTestBarcode: this.smokeTestBarcode,
     }
   }
 }
