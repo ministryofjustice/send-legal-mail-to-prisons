@@ -1,13 +1,13 @@
 # Smoke Tests
 
 ## TODO
-* Get PR in with only the server changes
 * Working locally - get it working in Circle
 * See if we can get Circle working with the run-slm-dev script
 * See if we can have a single run script that accepts parameters for local/dev/preprod etc.
 * Document how the tests work in Circle
 * Document how to run the tests locally either against running projects or against dev/preprod
 * Document how to run locally against projects while developing (e.g. how you have to set CYPRESS_APP_SMOKETEST_MSJAUTHCODE each run to refresh the token, that you have to run `./node_modules/.bin/cypress open` to open in Cypress)
+* add some custom metrics when barcodes are created and scanned by the smoke test?
 
 ## Automated Test Users
 
