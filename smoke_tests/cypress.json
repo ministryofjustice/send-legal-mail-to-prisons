@@ -1,6 +1,5 @@
 {
   "chromeWebSecurity": false,
-  "baseUrl": "https://send-legal-mail-dev.prison.service.justice.gov.uk",
   "ignoreTestFiles": "**/!(*.spec).ts",
   "fixturesFolder": "fixtures",
   "integrationFolder": "smoke",
@@ -13,6 +12,6 @@
     "configFile": "reporter-config.json"
   },
   "videoUploadOnPasses": false,
-  "taskTimeout": 60000,
+  "taskTimeout": 10000,
   "downloadsFolder": "downloads"
 }

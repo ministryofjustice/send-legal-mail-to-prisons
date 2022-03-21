@@ -1,13 +1,36 @@
 # Smoke Tests
 
-## TODO
-* Working locally - get it working in Circle
-* See if we can get Circle working with the run-slm-dev script
-* See if we can have a single run script that accepts parameters for local/dev/preprod etc.
-* Document how the tests work in Circle
-* Document how to run the tests locally either against running projects or against dev/preprod
-* Document how to run locally against projects while developing (e.g. how you have to set CYPRESS_APP_SMOKETEST_MSJAUTHCODE each run to refresh the token, that you have to run `./node_modules/.bin/cypress open` to open in Cypress)
-* add some custom metrics when barcodes are created and scanned by the smoke test?
+## Overview
+
+We have a smoke test for both the Legal Sender Journey and the Mailroom Staff Journey in `integration_tests/smoke/smoke.spec.ts`. These run against the dev and preprod environments using secrets stored in Kubernetes under key `smoke-test`.
+
+The smoke tests work by taking a copy of the `integration_tests` directory to re-use the existing Cypress config, overriding some configuration found in the `smoke_tests` and running the script `smoke_tests/run-smoke-test.sh` to perform the test.
+
+In CircleCI the test script runs on a cypress Docker image. It copies the smoke test project into a temp directory, installs the necessary npm modules needed for Cypress and typescript and runs the Cypress tests.
+
+## Running locally
+
+(Note that this requires `kubectl` and `jq` to be installed locally.)
+
+* Start up the API and UI's dependent containers.
+* Start both the API and the UI with env vars `APP_SMOKETEST_LSJSECRET=terry` and `APP_SMOKETEST_MSJSECRET=bob`. 
+* cd into the `smoke_tests` directory and run script `./run-smoke-test.sh`.
+
+The smoke tests should run against local apps using the default parameters found in the script `run-smoke-test.sh`.
+
+If the tests fail you can check the video produced in directory `/tmp/slm-smoke-test-local/videos`.
+
+## Running in CircleCI
+
+Smoke tests have been configured for dev and preprod and these can be found in `.circleci/config.yml` under job `run_smoke_test` which are run as part of the `build_test_deploy` pipeline.
+
+### Running locally against dev or preprod
+
+Follow the instructions for [running locally](#running-locally) but when calling `run-smoke-test.sh` add some parameters to override the env secrets and URLs. 
+
+The tests will be run in directory `/tmp/slm-smoke-test-<env>` where <env> is passed as a parameter.
+
+See the Circle job `run_smoke_test` in `.circleci/config.yml` for inspiration.
 
 ## Automated Test Users
 
