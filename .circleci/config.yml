@@ -150,9 +150,11 @@ jobs:
       - checkout
       - hmpps/k8s_setup
       - run:
+          name: Install jq
+          command: apt install -y jq
+      - run:
           name: Run smoke tests
           command: |
-            apt install -y jq
             cd smoke_tests
             ./run-smoke-test.sh \
               --env dev \
