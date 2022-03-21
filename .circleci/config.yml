@@ -153,6 +153,7 @@ jobs:
           name: Run smoke tests
           command: |
             apt install -y jq
+            cd smoke_tests
             ./run-smoke-test.sh \
               --env dev \
               --lsj-secret $(kubectl get secret smoke-test --template={{.data.APP_SMOKETEST_LSJSECRET}} | base64 -d) \
