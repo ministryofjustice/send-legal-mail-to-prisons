@@ -212,12 +212,8 @@ workflows:
             - integration_test
             - build_docker
       - run_smoke_test:
-          name: smoke-test-dev
+          name: smoke_test_dev
           env: dev
-          requires:
-            - deploy_dev
-      - request-preprod-approval:
-          type: approval
           requires:
             - deploy_dev
       - hmpps/deploy_env:
@@ -227,9 +223,9 @@ workflows:
             - hmpps-common-vars
             - send-legal-mail-to-prisons-preprod
           requires:
-            - request-preprod-approval
+            - smoke_test_dev
       - run_smoke_test:
-          name: smoke-test-preprod
+          name: smoke_test_preprod
           env: preprod
           requires:
             - deploy_preprod
@@ -239,7 +235,7 @@ workflows:
       - request-prod-approval:
           type: approval
           requires:
-            - deploy_preprod
+            - smoke_test_preprod
       - hmpps/deploy_env:
           name: deploy_prod
           env: "prod"
