@@ -18,13 +18,14 @@ context('Smoke test', () => {
       .submitForm<ReviewRecipientsPage>(ReviewRecipientsPage)
       .hasRecipientNamesExactly('lsj-smoketest')
       .hasPrisonNamesExactly('HMP Stocken')
-    const printCoversheetsPage = reviewRecipientsPage //
+    reviewRecipientsPage //
       .prepareBarcodes()
       .continueToCoversheet()
       .submitHavingSelectedDlEnvelopeSize()
-    printCoversheetsPage.smokeTestBarcode().then(smokeTestBarcode => {
-      cy.task('setSmokeTestBarcode', smokeTestBarcode)
-    })
+      .smokeTestBarcode()
+      .then(smokeTestBarcode => {
+        cy.task('setSmokeTestBarcode', smokeTestBarcode)
+      })
   })
 
   it('should scan the barcode', () => {
