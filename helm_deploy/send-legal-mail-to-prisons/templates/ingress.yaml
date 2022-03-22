@@ -9,6 +9,11 @@ metadata:
     nginx.ingress.kubernetes.io/custom-http-errors: "418"
     external-dns.alpha.kubernetes.io/aws-weight: "100"
     external-dns.alpha.kubernetes.io/set-identifier: {{ .Values.ingress.internalSetIdentifier }}
+    # rate limit config - see SLM-196 for calculation
+    nginx.ingress.kubernetes.io/limit-rpm: "200"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      add_header X-Robots-Tag "noindex, nofollow";
+      limit_req_status 429;
 spec:
   tls:
   - hosts:
@@ -38,6 +43,11 @@ metadata:
       location = / {
         return 301 $scheme://$host/barcode/find-recipient;
       }
+    # rate limit config - see SLM-196 for calculation
+    nginx.ingress.kubernetes.io/limit-rpm: "200"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      add_header X-Robots-Tag "noindex, nofollow";
+      limit_req_status 429;
 spec:
   tls:
     - hosts:
