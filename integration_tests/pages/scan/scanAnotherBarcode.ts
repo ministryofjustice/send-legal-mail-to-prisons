@@ -28,6 +28,11 @@ export default class ScanAnotherBarcodePage extends Page {
     this.barcode().type('\n')
   }
 
+  submitBarcode = (barcode: string): ScanBarcodeResultPage => {
+    this.setBarcode(barcode).pressEnterInBarcodeField()
+    return Page.verifyOnPage(ScanBarcodeResultPage)
+  }
+
   submitFormWithBarcodeThatFailsValidation = (): ScanAnotherBarcodePage => {
     this.setBarcode(barcodes.INVALID_FORMAT_BARCODE)
     this.pressEnterInBarcodeField()

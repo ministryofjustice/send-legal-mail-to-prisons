@@ -17,6 +17,13 @@ export default class ScanBarcodeResultPage extends Page {
     return Page.verifyOnPage(ScanAnotherBarcodePage)
   }
 
+  isSuccessOrRandomCheck = (): ScanBarcodeResultPage => {
+    cy.get('h1')
+      .invoke('text')
+      .should('match', /(Ready|random)/i)
+    return Page.verifyOnPage(ScanBarcodeResultPage)
+  }
+
   furtherChecksNecessaryLink = (): PageElement => cy.get('#further-checks')
 
   scanAnotherBarcodeButton = (): PageElement => cy.get('a[data-qa="scan-another-barcode"]')

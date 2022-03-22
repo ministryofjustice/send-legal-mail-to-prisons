@@ -26,6 +26,11 @@ export default class ScanBarcodePage extends Page {
     this.barcode().type('\n')
   }
 
+  submitBarcode = (barcode: string): ScanBarcodeResultPage => {
+    this.setBarcode(barcode).pressEnterInBarcodeField()
+    return Page.verifyOnPage(ScanBarcodeResultPage)
+  }
+
   submitFormWithEmptyBarcode = (): ScanBarcodePage => {
     this.setBarcode('')
     this.pressEnterInBarcodeField()
@@ -73,10 +78,11 @@ export default class ScanBarcodePage extends Page {
     return Page.verifyOnPage(ManualBarcodeEntryPage)
   }
 
-  hasErrorContaining = (partialMessage: string): void => {
+  hasErrorContaining = (partialMessage: string): ScanBarcodePage => {
     cy.get('.govuk-error-summary__list').should('contain', partialMessage)
     cy.get('#barcode-error').should('contain', partialMessage)
     this.barcode().should('have.class', 'govuk-input--error')
+    return this
   }
 
   barcode = (): PageElement => cy.get('#barcode')

@@ -13,6 +13,12 @@ export default class FindRecipientByPrisonNumberPage extends Page {
     this.prisonNumberField().should('be.focused')
   }
 
+  submitWithPrisonNumber = (prisonNumber): CreateNewContactByPrisonNumberPage => {
+    this.prisonNumberField().clear().type(prisonNumber)
+    this.submitButton().click()
+    return Page.verifyOnPage(CreateNewContactByPrisonNumberPage)
+  }
+
   submitWithUnknownPrisonNumber = (prisonNumber = 'A1234BC'): CreateNewContactByPrisonNumberPage => {
     this.prisonNumberField().clear().type(prisonNumber)
     cy.task('stubGetContactNone')

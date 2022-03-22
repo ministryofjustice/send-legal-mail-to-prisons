@@ -12,6 +12,11 @@ generic-service:
     PRISON_REGISTER_API_URL: "https://prison-register-preprod.hmpps.service.justice.gov.uk"
     SUPPORTED_PRISONS: "SKI"
 
+  namespace_secrets:
+    smoke-test:
+      APP_SMOKETEST_MSJSECRET: "APP_SMOKETEST_MSJSECRET"
+      APP_SMOKETEST_LSJSECRET: "APP_SMOKETEST_LSJSECRET"
+
 generic-prometheus-alerts:
   alertSeverity: farsight-alerts
 
