@@ -7,7 +7,9 @@ import IndexPage from '../pages'
 context('Smoke test', () => {
   it('should create a barcode', () => {
     cy.visit(`${Cypress.env('LSJ_URL')}/link/request-link`)
-    const requestLinkPage = Page.verifyOnPage(RequestLinkPage)
+    let requestLinkPage = Page.verifyOnPage(RequestLinkPage)
+    requestLinkPage = requestLinkPage.clickCookieAction(RequestLinkPage, 'reject')
+    requestLinkPage = requestLinkPage.clickCookieAction(RequestLinkPage, 'hide')
     const findRecipientPage = requestLinkPage.submitFormWithSmokeTestUser(Cypress.env('APP_SMOKETEST_LSJSECRET'))
 
     const createContactPage = findRecipientPage //
@@ -18,13 +20,14 @@ context('Smoke test', () => {
       .submitForm<ReviewRecipientsPage>(ReviewRecipientsPage)
       .hasRecipientNamesExactly('lsj-smoketest')
       .hasPrisonNamesExactly('HMP Stocken')
-    const printCoversheetsPage = reviewRecipientsPage //
+    reviewRecipientsPage //
       .prepareBarcodes()
       .continueToCoversheet()
       .submitHavingSelectedDlEnvelopeSize()
-    printCoversheetsPage.smokeTestBarcode().then(smokeTestBarcode => {
-      cy.task('setSmokeTestBarcode', smokeTestBarcode)
-    })
+      .smokeTestBarcode()
+      .then(smokeTestBarcode => {
+        cy.task('setSmokeTestBarcode', smokeTestBarcode)
+      })
   })
 
   it('should scan the barcode', () => {
