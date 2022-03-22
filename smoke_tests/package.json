@@ -1,0 +1,14 @@
+{
+  "type": "module",
+  "dependencies": {
+    "typescript": "^4.6.2"
+  },
+  "devDependencies": {
+    "axe-core": "^4.4.1",
+    "cypress-axe": "^0.14.0",
+    "cypress-multi-reporters": "^1.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "mocha-junit-reporter": "^2.0.2",
+    "superagent": "^7.1.1"
+  }
+}

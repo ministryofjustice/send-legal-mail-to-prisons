@@ -1,0 +1,17 @@
+{
+  "chromeWebSecurity": false,
+  "ignoreTestFiles": "**/!(*.spec).ts",
+  "fixturesFolder": "fixtures",
+  "integrationFolder": "smoke",
+  "pluginsFile": "plugins/index.ts",
+  "screenshotsFolder": "screenshots",
+  "supportFile": "support/index.ts",
+  "videosFolder": "videos",
+  "reporter": "cypress-multi-reporters",
+  "reporterOptions": {
+    "configFile": "reporter-config.json"
+  },
+  "videoUploadOnPasses": false,
+  "taskTimeout": 10000,
+  "downloadsFolder": "downloads"
+}
