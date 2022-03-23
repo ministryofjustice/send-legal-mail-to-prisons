@@ -1,0 +1,35 @@
+#
+# An artillery file to apply load to the dev environment to exercise the rate limit configured at the ingress.
+# This file is not a test in the strictest sense because it will not fail if the rate limit is not breached and 429's are
+# not received. The purpose of this file is to apply sufficient load in a controlled manner to hopefully trigger the rate
+# limited at the ingress; and to provide comments/documentation as to the rationale behind the rate and duration that
+# the load is applied.
+#
+# The onus is very much on the developer to manually run this and look at the output to determine that the rate limiter
+# kicked in by virtue of the fact that some requests towards the end of the run returned a HTTP 429
+#
+# To run:
+# $ docker run --rm -it -v ${PWD}:/scripts artilleryio/artillery:latest run /scripts/rate-limit-triggered.yml
+#
+config:
+  target: 'https://send-legal-mail-dev.prison.service.justice.gov.uk'
+  phases:
+      # Our allowed rate is 60 requests per minute (1 request per second). And we believe we have 6 nginx instances sat
+      # behind the ingress. Therefore a client should be able to sustain 6 requests per second and not trigger the rate
+      # limit. Anything above this rate for a sustained period will trigger the rate limiter and start to return HTTP 429's.
+      # The time in which it takes to trigger the rate limiter is based on how much above 6 requests/second the requests
+      # are sent. 7 requests/second will eventually trigger the rate limiter, but it will take a while.
+      # Our objective when implementing the rate limiter is to prevent DOS style attacks, which are typically high request
+      # rates. Sending 50 requests per second for a minute should start to trigger the rate limiter, returning HTTP 429's
+      # towards the end of the minute.
+      - name: Simulate a DOS attack
+        duration: 60
+        arrivalRate: 50
+
+scenarios:
+  - name: Send request
+    flow:
+      - get:
+          url: /link/request-link
+          expect:
+            - statusCode: 200

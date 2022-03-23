@@ -9,7 +9,7 @@ metadata:
     nginx.ingress.kubernetes.io/custom-http-errors: "418"
     external-dns.alpha.kubernetes.io/aws-weight: "100"
     external-dns.alpha.kubernetes.io/set-identifier: {{ .Values.ingress.internalSetIdentifier }}
-    nginx.ingress.kubernetes.io/limit-rpm: "30"
+    nginx.ingress.kubernetes.io/limit-rpm: "60"
     nginx.ingress.kubernetes.io/server-snippet: |
       add_header X-Robots-Tag "noindex, nofollow";
       limit_req_status 429;
@@ -42,7 +42,7 @@ metadata:
       location = / {
         return 301 $scheme://$host/barcode/find-recipient;
       }
-    nginx.ingress.kubernetes.io/limit-rpm: "30"
+    nginx.ingress.kubernetes.io/limit-rpm: "60"
     nginx.ingress.kubernetes.io/server-snippet: |
       add_header X-Robots-Tag "noindex, nofollow";
       limit_req_status 429;

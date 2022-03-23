@@ -1,0 +1,38 @@
+#
+# An artillery file to apply load to the dev environment to exercise the rate limit configured at the ingress, specifically
+# that it supports the anticipated traffic for an average user.
+# In this context an average user is a Legal Sender creating a barcode. The creation of a barcode takes an average of 9
+# screens, where each screen makes 15 HTTP requests. Between the display of each screen the user typically requires 'thinking'
+# time, so the anticipated traffic is in fits and spurts - eg: 15 requests, pause, 15 requests, pause, 15 requests, pause etc.
+#
+# This file is not a test in the strictest sense because it will not fail if requests fail because of the rate limiter.
+# IE. it will not fail if 429's are received. The purpose of this file is to apply sufficient load in a controlled manner
+# to prove that we can support the average user journey and not trigger the rate limiter.
+#
+# The onus is very much on the developer to manually run this and look at the output to determine success by virtue of
+# the fact that no requests returned a HTTP 429
+#
+# To run:
+# $ docker run --rm -it -v ${PWD}:/scripts artilleryio/artillery:latest run /scripts/rate-limit-supports-user-journey.yml
+#
+config:
+  target: 'https://send-legal-mail-dev.prison.service.justice.gov.uk'
+  phases:
+      - name: A single user for 20 minutes
+        duration: 1200
+        arrivalRate: 1
+        maxVusers: 1
+
+scenarios:
+  # Simulate a page render by sending 15 requests (doesn't matter what URL, its more about the number of requests)
+  # then wait 3 seconds. 3 seconds plus the time to send 15 requests means that this scenario will be triggered approx
+  # 20 times per minute. IE. We are simulating navigating to 20 pages per minute, which we think is equivalent to creating
+  # 2 barcodes. (2 barcodes is 18 pages, but close enough)
+  - name: Simulate a page render and user thinking time
+    flow:
+      - log: Simulate a page render and user thinking time
+      - loop:
+          - get:
+              url: /link/request-link
+        count: 15
+      - think: 3
