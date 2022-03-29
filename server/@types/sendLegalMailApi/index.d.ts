@@ -5,6 +5,7 @@
 
 export interface paths {
   '/contact/{id}': {
+    get: operations['getContact']
     put: operations['updateContact']
   }
   '/link/verify': {
@@ -27,17 +28,17 @@ export interface paths {
   '/barcode/check': {
     post: operations['checkBarcode']
   }
+  '/barcode-stats-report': {
+    post: operations['createBarcodeStatsReport']
+  }
   '/contacts': {
     get: operations['searchContactsByName']
-  }
-  '/contact/{prisonNumber}': {
-    get: operations['getContactByPrisonNumberOld']
   }
   '/contact/prisonNumber/{prisonNumber}': {
     get: operations['getContactByPrisonNumber']
   }
-  '/contact/id/{id}': {
-    get: operations['getContact']
+  '/cjsm/user/me': {
+    get: operations['getUserDetails']
   }
 }
 
@@ -62,35 +63,6 @@ export interface components {
       dob?: string
       /**
        * @description The prison number of the new contact if known
-       * @example A1234BC
-       */
-      prisonNumber?: string
-    }
-    ContactResponse: {
-      /**
-       * Format: int64
-       * @description The ID of the contact
-       * @example 1
-       */
-      id: number
-      /**
-       * @description The name of the contact
-       * @example John Doe
-       */
-      prisonerName: string
-      /**
-       * @description The ID of the prison location of the contact
-       * @example BXI
-       */
-      prisonId: string
-      /**
-       * Format: date
-       * @description The date of birth of the contact if known
-       * @example 1965-04-23
-       */
-      dob?: string
-      /**
-       * @description The prison number of the contact if known
        * @example A1234BC
        */
       prisonNumber?: string
@@ -258,6 +230,35 @@ export interface components {
         code: unknown
         userMessage: unknown
       }
+    ContactResponse: {
+      /**
+       * Format: int64
+       * @description The ID of the contact
+       * @example 1
+       */
+      id: number
+      /**
+       * @description The name of the contact
+       * @example John Doe
+       */
+      prisonerName: string
+      /**
+       * @description The ID of the prison location of the contact
+       * @example BXI
+       */
+      prisonId: string
+      /**
+       * Format: date
+       * @description The date of birth of the contact if known
+       * @example 1965-04-23
+       */
+      dob?: string
+      /**
+       * @description The prison number of the contact if known
+       * @example A1234BC
+       */
+      prisonNumber?: string
+    }
     VerifyLinkRequest: {
       /** @description The secret to verify */
       secret: string
@@ -323,6 +324,28 @@ export interface components {
        */
       createdBy: string
     }
+    UserDetails: {
+      /**
+       * @description The ID of the user
+       * @example some.user@some.solicitors.cjsm.net
+       */
+      userId: string
+      /**
+       * @description The organisation of the user
+       * @example Some Solicitors Ltd
+       */
+      organisation?: string
+      /**
+       * @description The organisation type
+       * @example Barristers
+       */
+      organisationType?: string
+      /**
+       * @description The user's town or city
+       * @example London
+       */
+      townOrCity?: string
+    }
     Link: {
       href?: string
       hreflang?: string
@@ -338,6 +361,45 @@ export interface components {
 }
 
 export interface operations {
+  getContact: {
+    parameters: {
+      path: {
+        id: number
+      }
+    }
+    responses: {
+      /** Contact udpated */
+      200: {
+        content: {
+          'application/json': components['schemas']['ContactResponse']
+        }
+      }
+      /** Bad request */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid CJSM email link token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires a valid token with role ROLE_SLM_CREATE_BARCODE */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Contact not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   updateContact: {
     parameters: {
       path: {
@@ -588,6 +650,14 @@ export interface operations {
       }
     }
   }
+  createBarcodeStatsReport: {
+    responses: {
+      /** Report created and emailed */
+      201: unknown
+      /** No recipients configured. Add a comma separated list of email addresses to helm values file entry env.APP_BARCODE_STATS_REPORT_RECIPIENT_EMAILS. */
+      404: unknown
+    }
+  }
   searchContactsByName: {
     parameters: {
       query: {
@@ -616,40 +686,6 @@ export interface operations {
       }
       /** Forbidden, requires a valid token with role ROLE_SLM_CREATE_BARCODE */
       403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getContactByPrisonNumberOld: {
-    parameters: {
-      path: {
-        /** The prison number of the Contact to return. */
-        prisonNumber: string
-      }
-    }
-    responses: {
-      /** Contact returned */
-      200: {
-        content: {
-          'application/json': components['schemas']['ContactResponse']
-        }
-      }
-      /** Unauthorised, requires a valid magic link token */
-      401: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** Forbidden, requires a valid token with role ROLE_SLM_CREATE_BARCODE */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** Contact not found */
-      404: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
@@ -690,17 +726,12 @@ export interface operations {
       }
     }
   }
-  getContact: {
-    parameters: {
-      path: {
-        id: number
-      }
-    }
+  getUserDetails: {
     responses: {
-      /** Contact udpated */
+      /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ContactResponse']
+          'application/json': components['schemas']['UserDetails']
         }
       }
       /** Bad request */
@@ -709,19 +740,13 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
-      /** Unauthorised, requires a valid CJSM email link token */
+      /** Unauthorised, requires a valid magic link token */
       401: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
-      /** Forbidden, requires a valid token with role ROLE_SLM_CREATE_BARCODE */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** Contact not found */
+      /** Not found, the email is not in the CJSM directory */
       404: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
