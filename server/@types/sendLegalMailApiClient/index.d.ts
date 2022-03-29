@@ -17,4 +17,6 @@ declare module 'sendLegalMailApiClient' {
 
   export type ContactRequest = components['schemas']['ContactRequest']
   export type Contact = components['schemas']['ContactResponse']
+
+  export type CjsmUserDetails = components['schemas']['UserDetails']
 }
