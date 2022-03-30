@@ -26,6 +26,7 @@ describe('Scan Barcode Result View', () => {
 
     expect($('h1').text()).toEqual('Ready for final delivery')
     expect($('p').text()).toContain('Aardvark Lawyers')
+    expect($('#scan-result-type').attr('data-value')).toEqual('READY_TO_DELIVER')
   })
 
   it('should render view for Duplicate scan', () => {
@@ -49,6 +50,7 @@ describe('Scan Barcode Result View', () => {
     expect($('h1').text()).toEqual('Barcode already scanned: carry out further checks')
     expect($('.govuk-notification-banner__content p strong').text()).toContain('9:11 am on 8 December 2021 at LEI')
     expect($('li strong').text()).toContain('Aardvark Lawyers')
+    expect($('#scan-result-type').attr('data-value')).toEqual('DUPLICATE')
   })
 
   it('should render view for Random Check scan', () => {
@@ -69,6 +71,7 @@ describe('Scan Barcode Result View', () => {
 
     expect($('h1').text()).toEqual('Item selected for a random check')
     expect($('.govuk-notification-banner__content p').text()).toContain('Aardvark Lawyers')
+    expect($('#scan-result-type').attr('data-value')).toEqual('RANDOM_CHECK')
   })
 
   it('should render view for Expired scan', () => {
@@ -96,6 +99,7 @@ describe('Scan Barcode Result View', () => {
     expect($('li strong').text()).toContain('Aardvark Lawyers')
     expect($('p strong').text()).toContain(`42 days ago, on ${createdDate.format('D MMMM YYYY')}`)
     expect($('p').text()).toContain(`longer than 14 days to arrive`)
+    expect($('#scan-result-type').attr('data-value')).toEqual('EXPIRED')
   })
 
   it('should render view for invalid/not found barcode', () => {
@@ -113,6 +117,7 @@ describe('Scan Barcode Result View', () => {
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('h1').text()).toEqual('Barcode not recognised: carry out further checks')
+    expect($('#scan-result-type').attr('data-value')).toEqual('NOT_FOUND')
   })
 
   it('should render view for user indicating a problem entering barcode', () => {
@@ -131,6 +136,7 @@ describe('Scan Barcode Result View', () => {
 
     expect($('h1').text()).toEqual(`Barcode doesn't scan: carry out further checks`)
     expect($('p').text()).toContain(`barcode can't be linked to an approved sender`)
+    expect($('#scan-result-type').attr('data-value')).toEqual('CANNOT_ENTER_BARCODE')
   })
 
   it('should render view for user indicating further checks are necessary', () => {
@@ -143,5 +149,6 @@ describe('Scan Barcode Result View', () => {
 
     expect($('h1').text()).toEqual('Item of concern: carry out further checks')
     expect($('li strong').text()).toContain('Aardvark Lawyers')
+    expect($('#scan-result-type').attr('data-value')).toEqual('FURTHER_CHECKS_NEEDED')
   })
 })
