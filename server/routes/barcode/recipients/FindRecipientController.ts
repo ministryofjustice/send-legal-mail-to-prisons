@@ -37,7 +37,7 @@ export default class FindRecipientController {
     req.session.findRecipientByPrisonNumberForm = undefined
     try {
       const contact = await this.contactService.getContactByPrisonNumber(
-        req.session.slmToken,
+        req.session.barcodeUser.token,
         req.ip,
         req.session.recipientForm.prisonNumber
       )
@@ -78,7 +78,7 @@ export default class FindRecipientController {
     req.session.findRecipientByPrisonerNameForm = undefined
     try {
       const contacts = await this.contactService.searchContacts(
-        req.session.slmToken,
+        req.session.barcodeUser.token,
         req.ip,
         req.session.recipientForm.prisonerName
       )

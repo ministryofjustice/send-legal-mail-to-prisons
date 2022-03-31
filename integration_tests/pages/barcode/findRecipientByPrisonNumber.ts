@@ -60,6 +60,7 @@ export default class FindRecipientByPrisonNumberPage extends Page {
     cy.task('stubRequestLink')
     cy.task('stubGetPrisonRegister')
     cy.task('stubVerifyLink')
+    cy.task('stubGetCjsmUserDetails')
     cy.visit('/link/verify-link?secret=a-valid-secret')
     return Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   }

@@ -62,7 +62,7 @@ export default class CreateContactByPrisonerNameController {
     try {
       const { prisonerName, prisonId, prisonNumber } = req.session.recipientForm
       const contact = await this.contactService.createContact(
-        req.session.slmToken,
+        req.session.barcodeUser.token,
         req.ip,
         prisonerName,
         prisonId,

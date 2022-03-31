@@ -39,6 +39,7 @@ import contactHelpdeskAuthorisationMiddleware from './middleware/helpdesk/contac
 import setUpLink from './middleware/link/setUpLink'
 import SmokeTestStore from './data/cache/SmokeTestStore'
 import setupSmokeTest from './middleware/smoketest/SmokeTestMiddleware'
+import CjsmService from './services/cjsm/CjsmService'
 
 export default function createApp(
   userService: UserService,
@@ -49,7 +50,8 @@ export default function createApp(
   appInsightsClient: AppInsightsService,
   contactService: ContactService,
   recipientFormService: RecipientFormService,
-  zendeskService: ZendeskService
+  zendeskService: ZendeskService,
+  cjsmService: CjsmService
 ): express.Application {
   const app = express()
 
@@ -81,7 +83,7 @@ export default function createApp(
 
   // authenticated with createBarcodeToken
   app.use('/barcode', barcodeAuthorisationMiddleware())
-  app.use('/barcode', populateBarcodeUser())
+  app.use('/barcode', populateBarcodeUser(cjsmService))
   app.use(
     '/barcode',
     setUpCreateBarcode(createBarcodeService, prisonRegisterService, contactService, recipientFormService)

@@ -7,22 +7,20 @@ import logger from '../../../logger'
 
 export default function barcodeAuthorisationMiddleware(): RequestHandler {
   return (req, res, next) => {
-    res.locals.barcodeUser = undefined
-
-    if (!req.session.slmToken || !req.session.validSlmToken) {
+    if (!req.session.barcodeUser?.token || !req.session.barcodeUser?.tokenValid) {
       return res.redirect('/link/request-link')
     }
 
     return verify(
-      req.session.slmToken,
+      req.session.barcodeUser.token,
       config.barcodeTokenPublicKey,
       { algorithms: ['RS256'] },
       (err: VerifyErrors) => {
         if (err) {
-          const errorMessage = `Found an invalid JWT: ${req.session.slmToken} which caused error: ${err}`
+          const errorMessage = `Found an invalid JWT: ${req.session.barcodeUser.token} which caused error: ${err}`
           logger.warn(errorMessage)
-          req.session.validSlmToken = false
-          req.session.slmToken = undefined
+          req.session.barcodeUser.token = undefined
+          req.session.barcodeUser.tokenValid = false
           return next(
             createError(401, 'invalid JWT', {
               code: 'EBADJWT',

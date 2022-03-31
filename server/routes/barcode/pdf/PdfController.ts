@@ -35,7 +35,7 @@ export default class PdfController {
     try {
       req.session.recipients = await this.createBarcodeService.addBarcodeValuesToRecipients(
         req.session.recipients,
-        req.session.slmToken,
+        req.session.barcodeUser.token,
         req.ip
       )
     } catch (error) {

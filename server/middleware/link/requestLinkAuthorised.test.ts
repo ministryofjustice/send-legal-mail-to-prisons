@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import requestLinkAuthorised from './requestLinkAuthorised'
 
-const req = { session: {} } as Request
+const req = { session: { barcodeUser: {} } } as Request
 const res = { redirect: jest.fn() } as unknown as Response
 const next = jest.fn()
 
@@ -23,7 +23,7 @@ describe('redirect signed in users to the app if they request /link/request-link
 
   it('should redirect if already signed in', async () => {
     req.originalUrl = '/link/request-link'
-    req.session.validSlmToken = true
+    req.session.barcodeUser.tokenValid = true
 
     await middleware(req, res, next)
 
@@ -33,7 +33,7 @@ describe('redirect signed in users to the app if they request /link/request-link
 
   it('should not redirect if not signed in', async () => {
     req.originalUrl = '/link/request-link'
-    req.session.validSlmToken = false
+    req.session.barcodeUser.tokenValid = false
 
     await middleware(req, res, next)
 
@@ -43,7 +43,7 @@ describe('redirect signed in users to the app if they request /link/request-link
 
   it('should not redirect if forcing a sign out', async () => {
     req.originalUrl = '/link/request-link?force=true'
-    req.session.validSlmToken = true
+    req.session.barcodeUser.tokenValid = true
 
     await middleware(req, res, next)
 
