@@ -1,4 +1,5 @@
 import type { EditContactForm, RecipientForm } from 'forms'
+import type { CjsmUserDetails } from 'sendLegalMailApiClient'
 import {
   BarcodeEntryForm,
   ChooseBarcodeOptionForm,
@@ -19,10 +20,6 @@ declare module 'express-session' {
     returnTo: string
     nowInMinutes: number
     requestLinkForm: RequestLinkForm
-    slmToken: string
-    validSlmToken: boolean
-    barcodeUserEmail: string
-    barcodeUserOrganisation: string
     findRecipientByPrisonNumberForm: FindRecipientByPrisonNumberForm
     createNewContactByPrisonNumberForm: CreateNewContactByPrisonNumberForm
     barcodeEntryForm: BarcodeEntryForm
@@ -40,12 +37,20 @@ declare module 'express-session' {
     editContactForm: EditContactForm
     msjSmokeTestUser: boolean
     lsjSmokeTestUser: boolean
+    barcodeUser: BarcodeUser
   }
 
   export interface CookiesPolicy {
     policy: 'accept' | 'reject' | 'n/a' | undefined
     showConfirmation: boolean
     lastPage: string
+  }
+
+  export interface BarcodeUser {
+    email?: string
+    cjsmDetails?: CjsmUserDetails
+    token?: string
+    tokenValid: boolean
   }
 }
 

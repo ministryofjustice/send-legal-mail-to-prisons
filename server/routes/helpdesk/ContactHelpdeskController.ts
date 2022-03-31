@@ -28,8 +28,8 @@ export default class ContactHelpdeskController {
     }
 
     const { externalUser } = res.locals
-    const username = externalUser ? req.session.barcodeUserEmail : res.locals.user.username
-    const organisation = externalUser ? req.session.barcodeUserOrganisation : null
+    const username = externalUser ? req.session.barcodeUser?.email : res.locals.user.username
+    const organisation = externalUser ? req.session.barcodeUser?.cjsmDetails.organisation : null
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars

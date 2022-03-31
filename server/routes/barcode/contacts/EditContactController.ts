@@ -46,7 +46,7 @@ export default class EditContactController {
     else {
       let contact: Contact
       try {
-        contact = await this.contactService.getContactById(req.session.slmToken, req.ip, contactId)
+        contact = await this.contactService.getContactById(req.session.barcodeUser.token, req.ip, contactId)
       } catch (error) {
         logger.error(`Unable to load contact with id ${contactId} due to error:`, error)
         req.flash('errors', [{ text: 'We were unable to find the contact' }])
@@ -84,7 +84,7 @@ export default class EditContactController {
     try {
       const { contactId, prisonerName, prisonNumber, prisonId } = req.session.editContactForm
       updatedContact = await this.contactService.updateContact(
-        req.session.slmToken,
+        req.session.barcodeUser.token,
         req.ip,
         prisonerName,
         prisonId,

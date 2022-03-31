@@ -5,7 +5,7 @@ import GenerateBarcodeImageController from './GenerateBarcodeImageController'
 import CreateBarcodeService from '../../../services/barcode/CreateBarcodeService'
 
 const req = {
-  session: {} as SessionData,
+  session: { barcodeUser: { token: 'some-token' } } as SessionData,
   flash: jest.fn(),
 }
 
@@ -31,7 +31,7 @@ describe('GenerateBarcodeImageController', () => {
   afterEach(() => {
     res.render.mockReset()
     res.redirect.mockReset()
-    req.session = {} as SessionData
+    req.session = { barcodeUser: { token: 'some-token' } } as SessionData
     createBarcodeService.generateAddressAndBarcodeDataUrlImage.mockReset()
     createBarcodeService.addBarcodeValuesToRecipients.mockReset()
   })

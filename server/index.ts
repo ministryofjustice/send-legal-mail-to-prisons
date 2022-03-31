@@ -13,6 +13,7 @@ import PrisonRegisterStore from './data/cache/PrisonRegisterStore'
 import ContactService from './services/contacts/ContactService'
 import RecipientFormService from './routes/barcode/recipients/RecipientFormService'
 import ZendeskService from './services/helpdesk/ZendeskService'
+import CjsmService from './services/cjsm/CjsmService'
 
 const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application => {
   const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
@@ -25,6 +26,7 @@ const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application 
   const contactService = new ContactService()
   const recipientFormService = new RecipientFormService(prisonRegisterService)
   const zendeskService = new ZendeskService()
+  const cjsmService = new CjsmService()
 
   return createApp(
     userService,
@@ -35,7 +37,8 @@ const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application 
     appInsightsService,
     contactService,
     recipientFormService,
-    zendeskService
+    zendeskService,
+    cjsmService
   )
 }
 

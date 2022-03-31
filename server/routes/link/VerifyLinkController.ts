@@ -12,13 +12,12 @@ export default class VerifyLinkController {
       return res.redirect('request-link')
     }
 
-    req.session.validSlmToken = false
-    req.session.slmToken = undefined
+    req.session.barcodeUser = { tokenValid: false, token: undefined }
 
     return this.magicLinkService
       .verifyLink(secret, req.ip)
       .then(token => {
-        req.session.slmToken = token
+        req.session.barcodeUser.token = token
         this.verifyToken(token, req, res)
       })
       .catch(() => {
@@ -38,9 +37,9 @@ export default class VerifyLinkController {
         return res.redirect('/link/request-link')
       }
 
-      req.session.validSlmToken = true
-      req.session.barcodeUserEmail = payload.sub
-      req.session.barcodeUserOrganisation = payload.organisation
+      req.session.barcodeUser.email = payload.sub
+      req.session.barcodeUser.token = token
+      req.session.barcodeUser.tokenValid = true
       // make the session expiry the same as the JWT - otherwise we lose the JWT when the session expires
       req.session.cookie.expires = new Date(payload.exp * 1000)
       const { id, ...sessionWithoutId } = req.session

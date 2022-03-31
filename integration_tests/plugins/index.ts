@@ -44,6 +44,7 @@ export default (on: (string, Record) => void): void => {
     stubGetContactOne: sendLegalMail.stubGetContactOne,
     stubGetContact: sendLegalMail.stubGetContact,
     stubUpdateContact: sendLegalMail.stubUpdateContact,
+    stubGetCjsmUserDetails: sendLegalMail.stubGetCjsmUserDetails,
 
     stubCreateBarcode: sendLegalMail.stubCreateBarcode,
     stubCreateBarcodeFailure: sendLegalMail.stubCreateBarcodeFailure,

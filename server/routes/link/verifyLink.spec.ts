@@ -14,8 +14,8 @@ describe('Verify Link', () => {
     mockedSendLegalMailApi = nock(config.apis.sendLegalMail.url)
   })
 
-  afterEach(() => {
-    nock.cleanAll()
+  afterEach(async () => {
+    await superTest.cleanAll()
   })
 
   describe('verifyLink - sad path', () => {
@@ -50,6 +50,8 @@ describe('Verify Link', () => {
 
   describe('verifyLink - happy path', () => {
     it('should render find recipient by prison number', async () => {
+      superTest.mockVerifyLink()
+      superTest.mockCjsmUser()
       superTest.request.redirects(2) // two redirects happen with this request/response
       mockedSendLegalMailApi.post('/link/verify', { secret: 'some-secret' }).reply(201, {
         token:

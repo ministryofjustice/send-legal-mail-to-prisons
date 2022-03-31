@@ -109,8 +109,11 @@ describe('ContactHelpdeskController', () => {
       req.body = contactHelpdeskForm
       mockContactHelpdeskFormValidator.mockReturnValue([])
       res.locals = { externalUser: true }
-      req.session.barcodeUserEmail = 'user@legal-sender.co.uk.cjsm.net'
-      req.session.barcodeUserOrganisation = 'Legal Senders R Us'
+      req.session.barcodeUser = {
+        email: 'user@legal-sender.co.uk.cjsm.net',
+        tokenValid: false,
+        cjsmDetails: { organisation: 'Legal Senders R Us' },
+      }
 
       await contactHelpdeskController.submitContactHelpdesk(req as unknown as Request, res as unknown as Response)
 

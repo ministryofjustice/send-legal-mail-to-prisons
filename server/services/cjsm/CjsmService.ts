@@ -3,8 +3,8 @@ import RestClient from '../../data/restClient'
 import config from '../../config'
 
 export default class CjsmService {
-  private static restClient(hmppsToken: string): RestClient {
-    return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, hmppsToken, null)
+  private static restClient(slmToken: string): RestClient {
+    return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, null, slmToken)
   }
 
   async getUserDetails(slmToken: string): Promise<unknown> {

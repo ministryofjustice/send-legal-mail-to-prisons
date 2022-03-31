@@ -11,7 +11,7 @@ jest.mock('../../../config')
 jest.mock('./newContactByPrisonNumberValidator')
 
 const req = {
-  session: {} as SessionData,
+  session: { barcodeUser: { token: 'some-token' } } as SessionData,
   flash: jest.fn(),
   body: {},
   ip: '127.0.0.1',
@@ -52,7 +52,7 @@ describe('CreateContactByPrisonNumberController', () => {
     contactService.createContact.mockReset()
     res.render.mockReset()
     res.redirect.mockReset()
-    req.session = {} as SessionData
+    req.session = { barcodeUser: { token: 'some-token' } } as SessionData
     req.flash.mockReset()
   })
 
@@ -158,7 +158,7 @@ describe('CreateContactByPrisonNumberController', () => {
         prisonId: 'SKI',
       }
       req.session.recipientForm = { prisonNumber: 'A1234BC' }
-      req.session.slmToken = 'some-token'
+      req.session.barcodeUser.token = 'some-token'
       mockNewContactValidator.mockReturnValue([])
 
       await createContactController.submitCreateNewContact(req as unknown as Request, res as unknown as Response)
@@ -211,7 +211,7 @@ describe('CreateContactByPrisonNumberController', () => {
         prisonId: 'SKI',
       }
       req.session.recipientForm = { prisonNumber: 'A1234BC' }
-      req.session.slmToken = 'some-token'
+      req.session.barcodeUser.token = 'some-token'
       mockNewContactValidator.mockReturnValue([])
       contactService.createContact.mockRejectedValue('some-error')
 

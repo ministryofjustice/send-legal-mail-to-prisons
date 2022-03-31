@@ -11,7 +11,7 @@ jest.mock('../validators/prisonNumberValidator')
 jest.mock('../validators/prisonerNameValidator')
 
 const req = {
-  session: {} as SessionData,
+  session: { barcodeUser: { token: 'some-token' } } as SessionData,
   flash: jest.fn(),
   body: {},
   ip: '127.0.0.1',
@@ -50,7 +50,7 @@ describe('FindRecipientController', () => {
     recipientFormService.resetForm.mockReset()
     res.render.mockReset()
     res.redirect.mockReset()
-    req.session = {} as SessionData
+    req.session = { barcodeUser: { token: 'some-token' } } as SessionData
   })
 
   describe('submitFindByPrisonNumber', () => {
@@ -74,7 +74,7 @@ describe('FindRecipientController', () => {
     it('should redirect to create-new-contact if no contact found', async () => {
       req.session.recipientForm = {}
       req.body = { prisonNumber: 'A1234BC' }
-      req.session.slmToken = 'some-token'
+      req.session.barcodeUser.token = 'some-token'
       mockPrisonNumberValidator.mockReturnValue([])
       contactService.getContactByPrisonNumber.mockReturnValue(undefined)
 

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { JsonWebTokenError, verify } from 'jsonwebtoken'
+import type { CjsmUserDetails } from 'sendLegalMailApiClient'
 import VerifyLinkController from './VerifyLinkController'
 import MagicLinkService from '../../services/link/MagicLinkService'
 
@@ -7,10 +8,13 @@ jest.mock('jsonwebtoken')
 
 const req = {
   session: {
-    validSlmToken: false,
-    slmToken: undefined as string,
-    barcodeUserEmail: undefined as string,
-    barcodeUserOrganisation: undefined as string,
+    barcodeUser: {
+      token: undefined as string,
+      tokenValid: false,
+      email: undefined as string,
+      cjsmDetails: undefined as CjsmUserDetails,
+    },
+    // barcodeUserOrganisation: undefined as string,
     cookie: {
       expires: undefined as Date,
     },
@@ -39,10 +43,7 @@ describe('VerifyLinkController', () => {
   })
 
   afterEach(() => {
-    req.session.validSlmToken = false
-    req.session.slmToken = undefined as string
-    req.session.barcodeUserEmail = undefined as string
-    req.session.barcodeUserOrganisation = undefined as string
+    req.session.barcodeUser = { token: undefined, tokenValid: false, email: undefined, cjsmDetails: undefined }
     req.session.cookie = {
       expires: undefined as Date,
     }
@@ -95,7 +96,7 @@ describe('VerifyLinkController', () => {
       await verifyLinkController.verifyLink(req as unknown as Request, res as unknown as Response)
 
       expect(magicLinkService.verifyLink).toHaveBeenCalledWith('some-secret', '127.0.0.1')
-      expect(req.session.slmToken).toStrictEqual('some-token')
+      expect(req.session.barcodeUser.token).toStrictEqual('some-token')
     })
 
     it('should verify the token on the session', async () => {
@@ -107,7 +108,7 @@ describe('VerifyLinkController', () => {
 
       await verifyLinkController.verifyLink(req as unknown as Request, res as unknown as Response)
 
-      expect(req.session.validSlmToken).toStrictEqual(true)
+      expect(req.session.barcodeUser.tokenValid).toStrictEqual(true)
     })
 
     it('should set token details on the session', async () => {
@@ -119,8 +120,7 @@ describe('VerifyLinkController', () => {
 
       await verifyLinkController.verifyLink(req as unknown as Request, res as unknown as Response)
 
-      expect(req.session.barcodeUserEmail).toStrictEqual('some-email')
-      expect(req.session.barcodeUserOrganisation).toStrictEqual('some-org')
+      expect(req.session.barcodeUser?.email).toStrictEqual('some-email')
     })
 
     it('should set cookie expiry from the token', async () => {

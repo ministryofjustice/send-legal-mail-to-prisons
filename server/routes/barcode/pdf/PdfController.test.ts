@@ -8,7 +8,7 @@ import CreateBarcodeService from '../../../services/barcode/CreateBarcodeService
 jest.mock('./envelopeSizeOptionValidator')
 
 const req = {
-  session: {} as SessionData,
+  session: { barcodeUser: { token: 'some-token' } } as SessionData,
   flash: jest.fn(),
   body: {},
 }
@@ -32,7 +32,7 @@ describe('PdfController', () => {
     res.render.mockReset()
     res.redirect.mockReset()
     res.renderPDF.mockReset()
-    req.session = {} as SessionData
+    req.session = { barcodeUser: { token: 'some-token' } } as SessionData
     req.flash.mockReset()
     createBarcodeService.generateBarcodeValue.mockReset()
     createBarcodeService.generateAddressAndBarcodeDataUrlImage.mockReset()

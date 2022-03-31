@@ -10,7 +10,7 @@ import validateContact from './updateContactValidator'
 jest.mock('./updateContactValidator')
 
 const req = {
-  session: { editContactForm: undefined, slmToken: 'some-token' } as SessionData,
+  session: { editContactForm: undefined, barcodeUser: { token: 'some-token' } } as SessionData,
   flash: jest.fn(),
   body: {},
   params: { contactId: 1 },
@@ -69,7 +69,7 @@ describe('EditContactController', () => {
     prisonRegisterService.getActivePrisons.mockReset()
     res.render.mockReset()
     res.redirect.mockReset()
-    req.session = { editContactForm: undefined, slmToken: 'some-token' } as SessionData
+    req.session = { editContactForm: undefined, barcodeUser: { token: 'some-token' } } as SessionData
     req.flash.mockReset()
     req.params = { contactId: 1 }
   })
