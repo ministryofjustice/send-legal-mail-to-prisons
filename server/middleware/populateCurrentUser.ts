@@ -2,8 +2,12 @@ import { RequestHandler } from 'express'
 import logger from '../../logger'
 import UserService from '../services/userService'
 import config from '../config'
+import PrisonRegisterService from '../services/prison/PrisonRegisterService'
 
-export default function populateCurrentUser(userService: UserService): RequestHandler {
+export default function populateCurrentUser(
+  userService: UserService,
+  prisonRegisterService: PrisonRegisterService
+): RequestHandler {
   return async (req, res, next) => {
     try {
       if (config.smoketest.msjSecret && req.session?.msjSmokeTestUser) {
@@ -13,6 +17,7 @@ export default function populateCurrentUser(userService: UserService): RequestHa
         const user = res.locals.user && (await userService.getUser(res.locals.user.token))
         if (user) {
           res.locals.user = { ...user, ...res.locals.user }
+          res.locals.user.prisonName = prisonRegisterService.getPrisonNameOrId(res.locals.user.activeCaseLoadId)
         } else {
           logger.info('No user available')
         }

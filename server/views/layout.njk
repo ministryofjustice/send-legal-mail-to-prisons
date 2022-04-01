@@ -13,6 +13,25 @@
     });
   </script>
 
+  {% if externalUser %}
+    <script nonce="{{ cspNonce }}" data-qa="legal-sender-ga-data">window.dataLayer.push({
+        'user': {
+          'organisation': '{{ barcodeUser.cjsmDetails.organisation }}',
+          'business_type': '{{ barcodeUser.cjsmDetails.organisationType }}',
+          'town_city': '{{ barcodeUser.cjsmDetails.townOrCity }}',
+        },
+      })</script>
+  {% endif %}
+
+  {% if not externalUser %}
+    <script nonce="{{ cspNonce }}" data-qa="mailroom-ga-data">window.dataLayer.push({
+        'user': {
+          'prison_code': '{{ user.activeCaseLoadId }}',
+          'prison_name': '{{ user.prisonName }}',
+        },
+      })</script>
+  {% endif %}
+
   {# Update analytics_storage to 'granted' if the user has accepted analytics cookies #}
   {% if gtmContainerId and (cookiesPolicy.policy === 'accept' or cookiesPolicy.policy === 'n/a') %}
     <script nonce="{{ cspNonce }}">

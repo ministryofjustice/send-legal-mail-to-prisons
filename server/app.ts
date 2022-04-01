@@ -101,7 +101,7 @@ export default function createApp(
   )
   app.use('/scan-barcode/contact-helpdesk', setupContactHelpdesk(zendeskService))
 
-  app.use('/', indexRoutes(standardRouter(userService, smokeTestStore)))
+  app.use('/', indexRoutes(standardRouter(userService, smokeTestStore, prisonRegisterService)))
   app.use('/', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_SECURITY_ANALYST']))
 
   app.use('/', setupScanBarcode(scanBarcodeService, prisonRegisterService, appInsightsClient))
