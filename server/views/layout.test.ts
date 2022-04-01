@@ -38,12 +38,12 @@ describe('Layout', () => {
 
       const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-      expect($('script[data-qa=mailroom-ga-data]').length).toStrictEqual(0)
-      expect($('script[data-qa=legal-sender-ga-data]').length).toStrictEqual(1)
-      expect($('script[data-qa=legal-sender-ga-data]').html()).toContain('window.dataLayer.push')
-      expect($('script[data-qa=legal-sender-ga-data]').html()).toContain("'organisation': 'some-org'")
-      expect($('script[data-qa=legal-sender-ga-data]').html()).toContain("'business_type': 'some-type'")
-      expect($('script[data-qa=legal-sender-ga-data]').html()).toContain("'town_city': 'some-town'")
+      const gaDataLayerScript = $('script[data-qa=ga-data-layer]')
+      expect(gaDataLayerScript.length).toStrictEqual(1)
+      expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
+      expect(gaDataLayerScript.html()).toContain("'organisation': 'some-org'")
+      expect(gaDataLayerScript.html()).toContain("'business_type': 'some-type'")
+      expect(gaDataLayerScript.html()).toContain("'town_city': 'some-town'")
     })
 
     it('should send mailroom GA data', () => {
@@ -57,11 +57,11 @@ describe('Layout', () => {
 
       const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-      expect($('script[data-qa=legal-sender-ga-data]').length).toStrictEqual(0)
-      expect($('script[data-qa=mailroom-ga-data]').length).toStrictEqual(1)
-      expect($('script[data-qa=mailroom-ga-data]').html()).toContain('window.dataLayer.push')
-      expect($('script[data-qa=mailroom-ga-data]').html()).toContain("'prison_code': 'BXI'")
-      expect($('script[data-qa=mailroom-ga-data]').html()).toContain("'prison_name': 'Brixton'")
+      const gaDataLayerScript = $('script[data-qa=ga-data-layer]')
+      expect(gaDataLayerScript.length).toStrictEqual(1)
+      expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
+      expect(gaDataLayerScript.html()).toContain("'prison_code': 'BXI'")
+      expect(gaDataLayerScript.html()).toContain("'prison_name': 'Brixton'")
     })
   })
 })

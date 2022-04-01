@@ -2,35 +2,35 @@
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
 {% block head %}
-  <script nonce="{{ cspNonce }}">
+  <script nonce="{{ cspNonce }}" data-qa="ga-data-layer">
     // Define dataLayer and the gtag function.
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+
+  {% if externalUser %}
+    window.dataLayer.push({
+        'user': {
+          'organisation': '{{ barcodeUser.cjsmDetails.organisation }}',
+          'business_type': '{{ barcodeUser.cjsmDetails.organisationType }}',
+          'town_city': '{{ barcodeUser.cjsmDetails.townOrCity }}',
+        },
+      })
+  {% endif %}
+
+  {% if not externalUser %}
+    window.dataLayer.push({
+        'user': {
+          'prison_code': '{{ user.activeCaseLoadId }}',
+          'prison_name': '{{ user.prisonName }}',
+        },
+      })
+  {% endif %}
 
     // Default analytics_storage to 'denied'.
     gtag('consent', 'default', {
       'analytics_storage': 'denied'
     });
   </script>
-
-  {% if externalUser %}
-    <script nonce="{{ cspNonce }}" data-qa="legal-sender-ga-data">window.dataLayer.push({
-        'user': {
-          'organisation': '{{ barcodeUser.cjsmDetails.organisation }}',
-          'business_type': '{{ barcodeUser.cjsmDetails.organisationType }}',
-          'town_city': '{{ barcodeUser.cjsmDetails.townOrCity }}',
-        },
-      })</script>
-  {% endif %}
-
-  {% if not externalUser %}
-    <script nonce="{{ cspNonce }}" data-qa="mailroom-ga-data">window.dataLayer.push({
-        'user': {
-          'prison_code': '{{ user.activeCaseLoadId }}',
-          'prison_name': '{{ user.prisonName }}',
-        },
-      })</script>
-  {% endif %}
 
   {# Update analytics_storage to 'granted' if the user has accepted analytics cookies #}
   {% if gtmContainerId and (cookiesPolicy.policy === 'accept' or cookiesPolicy.policy === 'n/a') %}
