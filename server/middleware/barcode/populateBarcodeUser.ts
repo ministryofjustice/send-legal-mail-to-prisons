@@ -3,7 +3,7 @@ import CjsmService from '../../services/cjsm/CjsmService'
 
 export default function populateBarcodeUser(cjsmService: CjsmService): RequestHandler {
   return async (req, res, next) => {
-    res.locals.barcodeUser = { email: req.session.barcodeUser.email }
+    res.locals.barcodeUser = req.session.barcodeUser
     if (req.session.barcodeUser.email && !req.session.barcodeUser.cjsmDetails) {
       req.session.barcodeUser.cjsmDetails = await cjsmService
         .getUserDetails(req.session.barcodeUser.token)
@@ -14,6 +14,7 @@ export default function populateBarcodeUser(cjsmService: CjsmService): RequestHa
           throw error
         })
     }
+    res.locals.barcodeUser = req.session.barcodeUser
     next()
   }
 }
