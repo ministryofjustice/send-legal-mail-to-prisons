@@ -51,7 +51,7 @@ class MockSmokeTestStore extends SmokeTestStore {
 
 class MockPrisonerRegister extends PrisonRegisterService {
   getPrisonNameOrId(prisonId: string): string {
-    return ''
+    return prisonId
   }
 }
 
