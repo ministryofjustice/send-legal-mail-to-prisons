@@ -27,6 +27,7 @@ describe('Scan Barcode Result View', () => {
     expect($('h1').text()).toEqual('Ready for final delivery')
     expect($('p').text()).toContain('Aardvark Lawyers')
     expect($('#scan-result-type').attr('data-value')).toEqual('READY_TO_DELIVER')
+    expect($('#scan-barcode-result-notification .govuk-tag').text()).toEqual('Barcode passed')
   })
 
   it('should render view for Duplicate scan', () => {
@@ -51,6 +52,7 @@ describe('Scan Barcode Result View', () => {
     expect($('.govuk-notification-banner__content p strong').text()).toContain('9:11 am on 8 December 2021 at LEI')
     expect($('li strong').text()).toContain('Aardvark Lawyers')
     expect($('#scan-result-type').attr('data-value')).toEqual('DUPLICATE')
+    expect($('#scan-barcode-result-notification .govuk-tag').text()).toEqual('Item of concern')
   })
 
   it('should render view for Random Check scan', () => {
@@ -72,6 +74,7 @@ describe('Scan Barcode Result View', () => {
     expect($('h1').text()).toEqual('Item selected for a random check')
     expect($('.govuk-notification-banner__content p').text()).toContain('Aardvark Lawyers')
     expect($('#scan-result-type').attr('data-value')).toEqual('RANDOM_CHECK')
+    expect($('#scan-barcode-result-notification .govuk-tag').text()).toEqual('Random check')
   })
 
   it('should render view for Expired scan', () => {
@@ -100,6 +103,7 @@ describe('Scan Barcode Result View', () => {
     expect($('p strong').text()).toContain(`42 days ago, on ${createdDate.format('D MMMM YYYY')}`)
     expect($('p').text()).toContain(`longer than 14 days to arrive`)
     expect($('#scan-result-type').attr('data-value')).toEqual('EXPIRED')
+    expect($('#scan-barcode-result-notification .govuk-tag').text()).toEqual('Item of concern')
   })
 
   it('should render view for invalid/not found barcode', () => {
@@ -118,6 +122,7 @@ describe('Scan Barcode Result View', () => {
 
     expect($('h1').text()).toEqual('Barcode not recognised: carry out further checks')
     expect($('#scan-result-type').attr('data-value')).toEqual('NOT_FOUND')
+    expect($('#scan-barcode-result-notification .govuk-tag').text()).toEqual('Item of concern')
   })
 
   it('should render view for user indicating a problem entering barcode', () => {
@@ -137,6 +142,7 @@ describe('Scan Barcode Result View', () => {
     expect($('h1').text()).toEqual(`Barcode doesn't scan: carry out further checks`)
     expect($('p').text()).toContain(`barcode can't be linked to an approved sender`)
     expect($('#scan-result-type').attr('data-value')).toEqual('CANNOT_ENTER_BARCODE')
+    expect($('#scan-barcode-result-notification .govuk-tag').text()).toEqual('Item of concern')
   })
 
   it('should render view for user indicating further checks are necessary', () => {
@@ -150,5 +156,6 @@ describe('Scan Barcode Result View', () => {
     expect($('h1').text()).toEqual('Item of concern: carry out further checks')
     expect($('li strong').text()).toContain('Aardvark Lawyers')
     expect($('#scan-result-type').attr('data-value')).toEqual('FURTHER_CHECKS_NEEDED')
+    expect($('#scan-barcode-result-notification .govuk-tag').text()).toEqual('Item of concern')
   })
 })
