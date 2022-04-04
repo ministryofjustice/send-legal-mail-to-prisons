@@ -7,12 +7,12 @@
 </p>
 
 <h2 class="govuk-heading-l">How to investigate</h2>
-<p>Follow your usual procedures to make sure:</p>
-<ul>
-    <li>the mail is addressed to <strong data-qa='barcode-recipient'>{{ form.errorCode.recipientName }}, {{ form.errorCode.recipientPrisonNumber if form.errorCode.recipientPrisonNumber else form.errorCode.recipientDob }}</strong></li>
-    <li>the sender, <strong data-qa='barcode-created-by'>{{ form.errorCode.createdBy }}</strong>, has a record of sending this item</li>
-    <li>the item hasn't been tampered with</li>
-    <li>there are no drugs or other contraband concealed in the item</li>
+<p>Follow your usual procedures, for example:</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>confirm the mail is addressed to <strong data-qa='barcode-recipient'>{{ form.errorCode.recipientName }}, {{ form.errorCode.recipientPrisonNumber if form.errorCode.recipientPrisonNumber else form.errorCode.recipientDob }}</strong></li>
+    <li>confirm the sender, <strong data-qa='barcode-created-by'>{{ form.errorCode.createdBy }}</strong>, has a record of sending this item</li>
+    <li>check the item has not been tampered with</li>
+    <li>make sure there are no drugs or other contraband concealed in the item</li>
 </ul>
 
 <p>If you still have concerns, report them to a security manager.</p>
