@@ -28,11 +28,10 @@
               { text: 'Name' },
               { text: 'Prison number or date of birth' },
               { text: 'Prison' },
-              { text: '' },
-              { text: '' }
+              { text: 'Editing options', classes: 'govuk-!-width-one-quarter' }
             ],
             rows: recipients | recipientTableRows,
-            attributes: { 'data-qa': 'recipients-table' }
+            attributes: { 'data-qa': 'recipients-table', id: 'review-recipients-table' }
           }) }}
 
           <p class="govuk-!-margin-top-6 govuk-!-margin-bottom-6">

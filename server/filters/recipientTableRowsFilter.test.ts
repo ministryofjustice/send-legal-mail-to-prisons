@@ -35,12 +35,9 @@ describe('recipientTableRowsFilter', () => {
         { text: 'A1234BC' },
         { text: 'HMP BRINSFORD' },
         {
-          html: '<a href="/barcode/edit-contact/1" class="govuk-link govuk-link--no-visited-state">Edit details</a>',
-          classes: 'govuk-table__cell--numeric',
-        },
-        {
-          html: '<a href="/barcode/review-recipients/remove/0" class="govuk-link govuk-link--no-visited-state">Remove</a>',
-          classes: 'govuk-table__cell--numeric',
+          html: `
+          <a href="/barcode/edit-contact/1" class="govuk-link govuk-link--no-visited-state">Edit details<span class="govuk-visually-hidden"> for John Smith</span></a>
+          <a href="/barcode/review-recipients/remove/0" class="govuk-link govuk-link--no-visited-state">Remove<span class="govuk-visually-hidden"> John Smith</span></a>`,
         },
       ],
       [
@@ -48,12 +45,9 @@ describe('recipientTableRowsFilter', () => {
         { text: 'R9831RQ' },
         { text: 'HMP BRIXTON' },
         {
-          html: '<a href="/barcode/edit-contact/2" class="govuk-link govuk-link--no-visited-state">Edit details</a>',
-          classes: 'govuk-table__cell--numeric',
-        },
-        {
-          html: '<a href="/barcode/review-recipients/remove/1" class="govuk-link govuk-link--no-visited-state">Remove</a>',
-          classes: 'govuk-table__cell--numeric',
+          html: `
+          <a href="/barcode/edit-contact/2" class="govuk-link govuk-link--no-visited-state">Edit details<span class="govuk-visually-hidden"> for Gage Hewitt</span></a>
+          <a href="/barcode/review-recipients/remove/1" class="govuk-link govuk-link--no-visited-state">Remove<span class="govuk-visually-hidden"> Gage Hewitt</span></a>`,
         },
       ],
     ])
@@ -73,12 +67,9 @@ describe('recipientTableRowsFilter', () => {
         { text: 'A1234BC' },
         { text: 'HMP BRINSFORD' },
         {
-          html: '<a href="/barcode/edit-contact/1" class="govuk-link govuk-link--no-visited-state">Edit details</a>',
-          classes: 'govuk-table__cell--numeric',
-        },
-        {
-          html: '<a href="/barcode/review-recipients/remove/0" class="govuk-link govuk-link--no-visited-state">Remove</a>',
-          classes: 'govuk-table__cell--numeric',
+          html: `
+          <a href="/barcode/edit-contact/1" class="govuk-link govuk-link--no-visited-state">Edit details<span class="govuk-visually-hidden"> for John Smith</span></a>
+          <a href="/barcode/review-recipients/remove/0" class="govuk-link govuk-link--no-visited-state">Remove<span class="govuk-visually-hidden"> John Smith</span></a>`,
         },
       ],
       [
@@ -86,12 +77,9 @@ describe('recipientTableRowsFilter', () => {
         { text: '1 January 1990' },
         { text: 'HMP BRIXTON' },
         {
-          html: '<a href="/barcode/edit-contact/2" class="govuk-link govuk-link--no-visited-state">Edit details</a>',
-          classes: 'govuk-table__cell--numeric',
-        },
-        {
-          html: '<a href="/barcode/review-recipients/remove/1" class="govuk-link govuk-link--no-visited-state">Remove</a>',
-          classes: 'govuk-table__cell--numeric',
+          html: `
+          <a href="/barcode/edit-contact/2" class="govuk-link govuk-link--no-visited-state">Edit details<span class="govuk-visually-hidden"> for Gage Hewitt</span></a>
+          <a href="/barcode/review-recipients/remove/1" class="govuk-link govuk-link--no-visited-state">Remove<span class="govuk-visually-hidden"> Gage Hewitt</span></a>`,
         },
       ],
     ])
