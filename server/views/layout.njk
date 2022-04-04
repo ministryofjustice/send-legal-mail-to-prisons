@@ -2,29 +2,10 @@
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
 {% block head %}
-  <script nonce="{{ cspNonce }}" data-qa="ga-data-layer">
+  <script nonce="{{ cspNonce }}">
     // Define dataLayer and the gtag function.
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-
-  {% if externalUser %}
-    window.dataLayer.push({
-        'user': {
-          'organisation': '{{ barcodeUser.cjsmDetails.organisation }}',
-          'business_type': '{{ barcodeUser.cjsmDetails.organisationType }}',
-          'town_city': '{{ barcodeUser.cjsmDetails.townOrCity }}',
-        },
-      })
-  {% endif %}
-
-  {% if not externalUser %}
-    window.dataLayer.push({
-        'user': {
-          'prison_code': '{{ user.activeCaseLoadId }}',
-          'prison_name': '{{ user.prisonName }}',
-        },
-      })
-  {% endif %}
 
     // Default analytics_storage to 'denied'.
     gtag('consent', 'default', {
@@ -34,10 +15,30 @@
 
   {# Update analytics_storage to 'granted' if the user has accepted analytics cookies #}
   {% if gtmContainerId and (cookiesPolicy.policy === 'accept' or cookiesPolicy.policy === 'n/a') %}
-    <script nonce="{{ cspNonce }}">
-      gtag('consent', 'update', {
+    <script nonce="{{ cspNonce }}" data-qa="ga-data-layer">
+    gtag('consent', 'update', {
       'analytics_storage': 'granted'
     });
+
+    {% if externalUser %}
+      gtag({
+          'user': {
+            'organisation': '{{ barcodeUser.cjsmDetails.organisation }}',
+            'business_type': '{{ barcodeUser.cjsmDetails.organisationType }}',
+            'town_city': '{{ barcodeUser.cjsmDetails.townOrCity }}',
+          },
+        })
+    {% endif %}
+
+    {% if not externalUser %}
+      gtag({
+          'user': {
+            'prison_code': '{{ user.activeCaseLoadId }}',
+            'prison_name': '{{ user.prisonName }}',
+          },
+        })
+    {% endif %}
+
     </script>
   {% endif %}
 
