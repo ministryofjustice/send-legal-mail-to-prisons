@@ -1,20 +1,10 @@
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 <h1 class="govuk-heading-xl">Item selected for a random check</h1>
-
-{% set html %}
-  <p>
-    For additional security this item of mail has been selected for a random check.
-    It was sent by an approved sender, <strong>{{ form.errorCode.createdBy }}</strong>.
-  </p>
-{% endset %}
-
-{{ govukNotificationBanner({
-  html: html,
-  disableAutoFocus: true,
-  classes: 'notification barcode-random-check'
-}) }}
+<p>
+  For additional security this item of mail has been selected for a random check.
+  It was sent by an approved sender, <strong>{{ form.errorCode.createdBy }}</strong>.
+</p>
 
 <h3 class="govuk-heading-m">How to deal with the item</h3>
 <p>Check the item for drugs or any other contraband using your usual procedures. For example, use any of the following:</p>

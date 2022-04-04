@@ -1,17 +1,7 @@
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 <h1 class="govuk-heading-xl">Barcode doesn't scan: carry out further checks</h1>
-
-{% set html %}
-  <p>You need to investigate this item because the barcode can't be linked to an approved sender.</p>
-{% endset %}
-
-{{ govukNotificationBanner({
-  html: html,
-  disableAutoFocus: true,
-  classes: 'notification barcode-doesnt-scan'
-}) }}
+<p>You need to investigate this item because the barcode can't be linked to an approved sender.</p>
 
 <h2 class="govuk-heading-l">How to investigate</h2>
 <p>Follow your usual procedures to make sure:</p>

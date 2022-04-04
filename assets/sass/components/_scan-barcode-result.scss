@@ -9,22 +9,4 @@
     padding: 7px 10px 6px 10px;
     margin-right: 10px;
   }
-
-  .govuk-notification-banner__header {
-    height: 25px;
-
-    h2.govuk-notification-banner__title {
-      @extend .govuk-visually-hidden
-    }
-  }
-
-  .success {
-    .govuk-notification-banner__content p {
-      // hook class to enable styling of success banner such as applying green tick
-    }
-  }
-
-  .notification {
-    // hook class to enable styling of notification banners
-  }
 }

@@ -49,7 +49,7 @@ describe('Scan Barcode Result View', () => {
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('h1').text()).toEqual('Barcode already scanned: carry out further checks')
-    expect($('.govuk-notification-banner__content p strong').text()).toContain('9:11 am on 8 December 2021 at LEI')
+    expect($('#scan-barcode-result-notification p strong').text()).toContain('9:11 am on 8 December 2021 at LEI')
     expect($('li strong').text()).toContain('Aardvark Lawyers')
     expect($('#scan-result-type').attr('data-value')).toEqual('DUPLICATE')
     expect($('#scan-barcode-result-notification .govuk-tag').text()).toEqual('Item of concern')
@@ -72,7 +72,7 @@ describe('Scan Barcode Result View', () => {
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('h1').text()).toEqual('Item selected for a random check')
-    expect($('.govuk-notification-banner__content p').text()).toContain('Aardvark Lawyers')
+    expect($('#scan-barcode-result-notification p').text()).toContain('Aardvark Lawyers')
     expect($('#scan-result-type').attr('data-value')).toEqual('RANDOM_CHECK')
     expect($('#scan-barcode-result-notification .govuk-tag').text()).toEqual('Random check')
   })

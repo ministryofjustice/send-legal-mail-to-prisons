@@ -1,17 +1,7 @@
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 <h1 class="govuk-heading-xl">Item of concern: carry out further checks</h1>
-
-{% set html %}
-  <p>You have concerns about this item of mail.</p>
-{% endset %}
-
-{{ govukNotificationBanner({
-  html: html,
-  disableAutoFocus: true,
-  classes: 'notification barcode-further-checks'
-}) }}
+<p>You have concerns about this item of mail.</p>
 
 <h2 class="govuk-heading-l">How to investigate</h2>
 <p>Follow your usual procedures to make sure:</p>

@@ -1,22 +1,12 @@
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 <h1 class="govuk-heading-xl">Barcode expired: carry out further checks</h1>
-
-{% set html %}
-  <p>
-    This barcode was created <strong>{{ form.errorCode.createdDate | calculateDaysSinceCreation }} days ago, on {{ form.errorCode.createdDate | formatDateForResultsPage }}</strong>.
-  </p>
-  <p>
-    Because this item of mail took longer than {{ form.errorCode.barcodeExpiryDays }} days to arrive you need to investigate further.
-  </p>
-{% endset %}
-
-{{ govukNotificationBanner({
-  html: html,
-  disableAutoFocus: true,
-  classes: 'notification barcode-expired'
-}) }}
+<p>
+  This barcode was created <strong>{{ form.errorCode.createdDate | calculateDaysSinceCreation }} days ago, on {{ form.errorCode.createdDate | formatDateForResultsPage }}</strong>.
+</p>
+<p>
+  Because this item of mail took longer than {{ form.errorCode.barcodeExpiryDays }} days to arrive you need to investigate further.
+</p>
 
 <h2 class="govuk-heading-l">How to investigate</h2>
 <p>Follow your usual procedures to make sure:</p>
