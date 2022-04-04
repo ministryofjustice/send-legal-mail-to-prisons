@@ -2,23 +2,10 @@
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
 {% block head %}
-  <script nonce="{{ cspNonce }}">
+  <script nonce="{{ cspNonce }}" data-qa="ga-data-layer">
     // Define dataLayer and the gtag function.
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-
-    // Default analytics_storage to 'denied'.
-    gtag('consent', 'default', {
-      'analytics_storage': 'denied'
-    });
-  </script>
-
-  {# Update analytics_storage to 'granted' if the user has accepted analytics cookies #}
-  {% if gtmContainerId and (cookiesPolicy.policy === 'accept' or cookiesPolicy.policy === 'n/a') %}
-    <script nonce="{{ cspNonce }}" data-qa="ga-data-layer">
-    gtag('consent', 'update', {
-      'analytics_storage': 'granted'
-    });
 
     {% if externalUser %}
       gtag({
@@ -39,6 +26,18 @@
         })
     {% endif %}
 
+    // Default analytics_storage to 'denied'.
+    gtag('consent', 'default', {
+      'analytics_storage': 'denied'
+    });
+  </script>
+
+  {# Update analytics_storage to 'granted' if the user has accepted analytics cookies #}
+  {% if gtmContainerId and (cookiesPolicy.policy === 'accept' or cookiesPolicy.policy === 'n/a') %}
+    <script nonce="{{ cspNonce }}">
+    gtag('consent', 'update', {
+      'analytics_storage': 'granted'
+    });
     </script>
   {% endif %}
 
