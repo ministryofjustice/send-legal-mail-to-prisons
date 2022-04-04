@@ -1,4 +1,4 @@
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 <h1 class="govuk-heading-xl">Item selected for a random check</h1>
 <p>
@@ -6,7 +6,7 @@
   It was sent by an approved sender, <strong>{{ form.errorCode.createdBy }}</strong>.
 </p>
 
-<h3 class="govuk-heading-m">How to deal with the item</h3>
+<h2 class="govuk-heading-m">How to deal with the item</h2>
 <p>Check the item for drugs or any other contraband using your usual procedures. For example, use any of the following:</p>
 <ul>
     <li>trace detection equipment</li>
@@ -15,14 +15,6 @@
 </ul>
 
 <p>If you have concerns about the item, report them to a security manager.</p>
-{% set html %}
-  <p>Do not open any item of Rule 39 mail without both:</p>
-  <ul>
-    <li>permission from a governor</li>
-    <li>the recipient being present</li>
-  </ul>
-{% endset %}
-
-{{ govukInsetText({
-  html: html
+{{ govukWarningText({
+  text: 'Do not open any item of Rule 39 mail without permission from a governor and the recipient being present.'
 }) }}

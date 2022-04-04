@@ -1,4 +1,4 @@
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 <h1 class="govuk-heading-xl">Barcode doesn't scan: carry out further checks</h1>
 <p>You need to investigate this item because the barcode can't be linked to an approved sender.</p>
@@ -11,14 +11,6 @@
 </ul>
 
 <p>If you still have concerns, report them to a security manager.</p>
-{% set html %}
-  <p>Do not open any item of Rule 39 mail without both:</p>
-  <ul>
-    <li>permission from a governor</li>
-    <li>the recipient being present</li>
-  </ul>
-{% endset %}
-
-{{ govukInsetText({
-  html: html
+{{ govukWarningText({
+  text: 'Do not open any item of Rule 39 mail without permission from a governor and the recipient being present.'
 }) }}
