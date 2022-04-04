@@ -2,7 +2,7 @@
 
   <span id="scan-result-type" class="govuk-!-display-none" data-value="{{ 'READY_TO_DELIVER' if not params.resultType else params.resultType }}"></span>
 
-  <div class="govuk-!-margin-bottom-4">
+  <div class="status-group">
     {% if params.resultType == null %}
       <strong class="govuk-tag govuk-tag--green">Barcode passed</strong>
     {% elif params.resultType == 'RANDOM_CHECK' %}
