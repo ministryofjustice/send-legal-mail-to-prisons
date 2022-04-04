@@ -15,13 +15,10 @@ export default function recipientTableRowsFilter(recipients: Array<Recipient>): 
       },
       { text: recipient.prisonAddress.premise }, // Column 3 - Prison name
       {
-        html: `<a href="/barcode/edit-contact/${recipient.contactId}" class="govuk-link govuk-link--no-visited-state">Edit details</a>`,
-        classes: 'govuk-table__cell--numeric',
-      }, // Column 4 - Edit recipient details link
-      {
-        html: `<a href="/barcode/review-recipients/remove/${idx}" class="govuk-link govuk-link--no-visited-state">Remove</a>`,
-        classes: 'govuk-table__cell--numeric',
-      } // Column 5 - Remove recipient link
+        html: `
+          <a href="/barcode/edit-contact/${recipient.contactId}" class="govuk-link govuk-link--no-visited-state">Edit details<span class="govuk-visually-hidden"> for ${recipient.prisonerName}</span></a>
+          <a href="/barcode/review-recipients/remove/${idx}" class="govuk-link govuk-link--no-visited-state">Remove<span class="govuk-visually-hidden"> ${recipient.prisonerName}</span></a>`,
+      } // Column 4 - Editing options links
     )
   })
 }

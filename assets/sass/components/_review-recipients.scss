@@ -1,0 +1,9 @@
+#review-recipients-table {
+  thead th:last-of-type, tr td:last-of-type {
+    text-align: right;
+  }
+  tr td:last-of-type a {
+    display: inline-block;
+    padding-left: 15px;
+  }
+}

@@ -21,20 +21,20 @@ export default class ReviewRecipientsPage extends Page {
   }
 
   removeRecipient = (recipientNumber: number): ReviewRecipientsPage => {
-    // Get row `recipientNumber` from the table, then get its 5th td cell to click the link within it
+    // Get row `recipientNumber` from the table, then get its last td cell (Editing options), then click the 2nd link within it
     this.recipientsTableBodyRows()
       .eq(recipientNumber - 1)
-      .find(`td:nth-of-type(4) a`)
+      .find('td:last-of-type a:nth-of-type(2)')
       .click()
     return Page.verifyOnPage(ReviewRecipientsPage)
   }
 
   editContact = (recipientNumber: number): EditContactDetails => {
-    // Get row `recipientNumber` from the table, then get its 4th td cell to click the link within it
+    // Get row `recipientNumber` from the table, then get its last td cell (Editing options), then click the 1st link within it
     cy.task('stubGetContact', 1)
     this.recipientsTableBodyRows()
       .eq(recipientNumber - 1)
-      .find(`td:nth-of-type(3) a`)
+      .find('td:last-of-type a:nth-of-type(1)')
       .click()
     return Page.verifyOnPage(EditContactDetails)
   }
