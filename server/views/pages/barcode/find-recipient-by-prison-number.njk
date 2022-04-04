@@ -19,7 +19,7 @@
     {% endif %}
 
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
+      <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Enter a prison number</h1>
         <p>The details you provide will be used to address your mail.</p>
 
@@ -27,38 +27,37 @@
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
           {% call govukFieldset({ }) %}
-            <div class="moj-search">
-              {{ govukInput({
-                label: {
-                  text: "Enter the recipient's prison number",
-                  classes: "govuk-visually-hidden",
-                  isPageHeading: false
-                },
-                hint: {
-                  text: "Example prison number: A1234BC"
-                },
-                attributes: {
-                  autofocus: '',
-                  autocomplete: 'off'
-                },
-                id: "prisonNumber",
-                name: "prisonNumber",
-                value: form.prisonNumber,
-                errorMessage: errors | findError('prisonNumber')
-              }) }}
+            {{ govukInput({
+              label: {
+                text: "Enter the recipient's prison number",
+                classes: "govuk-visually-hidden",
+                isPageHeading: false
+              },
+              hint: {
+                text: "Example prison number: A1234BC"
+              },
+              attributes: {
+                autofocus: '',
+                autocomplete: 'off'
+              },
+              classes: "govuk-input govuk-input--width-10",
+              id: "prisonNumber",
+              name: "prisonNumber",
+              value: form.prisonNumber,
+              errorMessage: errors | findError('prisonNumber')
+            }) }}
 
-              {{ govukButton({
-                text: "Enter",
-                preventDoubleClick: true,
-                classes: 'moj-search__button'
-              }) }}
-            </div>
+            <p class="govuk-!-margin-top-6">
+              <a href="/barcode/find-recipient/by-prisoner-name" class="govuk-link" data-qa="by-prisoner-name-link">I don't have their prison number</a>
+            </p>
+
+            {{ govukButton({
+              text: "Continue",
+              preventDoubleClick: true
+            }) }}
+
           {% endcall %}
         </form>
-
-        <p class="govuk-!-margin-top-6">
-          <a href="/barcode/find-recipient/by-prisoner-name" class="govuk-link" data-qa="by-prisoner-name-link">I don't have their prison number</a>
-        </p>
 
       </div>
     </div>

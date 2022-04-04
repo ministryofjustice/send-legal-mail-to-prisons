@@ -19,40 +19,38 @@
     {% endif %}
 
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
+      <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Enter a full name</h1>
 
         <form id="find-recipient-by-prisoner-name-form" action="/barcode/find-recipient/by-prisoner-name" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
           {% call govukFieldset({ }) %}
-            <div class="moj-search">
-              {{ govukInput({
-                label: {
-                  text: "Enter the recipient's full name",
-                  classes: "govuk-visually-hidden",
-                  isPageHeading: false
-                },
-                hint: {
-                  text: "Use their first name and last name"
-                },
-                attributes: {
-                  autofocus: '',
-                  autocomplete: 'off'
-                },
-                id: "prisonerName",
-                name: "prisonerName",
-                value: form.prisonerName,
-                errorMessage: errors | findError('prisonerName')
-              }) }}
+            {{ govukInput({
+              label: {
+                text: "Enter the recipient's full name",
+                classes: "govuk-visually-hidden",
+                isPageHeading: false
+              },
+              hint: {
+                text: "Use their first name and last name"
+              },
+              attributes: {
+                autofocus: '',
+                autocomplete: 'off'
+              },
+              classes: 'govuk-input govuk-input--width-20',
+              id: "prisonerName",
+              name: "prisonerName",
+              value: form.prisonerName,
+              errorMessage: errors | findError('prisonerName')
+            }) }}
 
-              {{ govukButton({
-                text: "Enter",
-                preventDoubleClick: true,
-                classes: 'moj-search__button',
-                attributes: { 'data-qa': 'enter-button' }
-              }) }}
-            </div>
+            {{ govukButton({
+              text: "Continue",
+              preventDoubleClick: true,
+              attributes: { 'data-qa': 'enter-button' }
+            }) }}
           {% endcall %}
         </form>
 

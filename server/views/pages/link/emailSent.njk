@@ -16,23 +16,20 @@
       </div>
     </div>
 
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-row" id="link-email-sent">
       <div class="govuk-grid-column-two-thirds">
 
         {% set html %}
-          <p class="govuk-notification-banner__heading">We've sent a link to your email - {{ emailSentTo }}</p>
+          <h3 class="govuk-notification-banner__heading">We've sent a link to your email - <span>{{ emailSentTo }}</span></h3>
+          <p class="govuk-body">It can take up to 10 minutes for the link to arrive.
         {% endset %}
 
         {{ govukNotificationBanner({
           type: 'success',
           html: html
         }) }}
-      </div>
-    </div>
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <h3>What to do if you don't get the link</h3>
+        <h2 class="govuk-heading-m">What to do if you don't get the link</h2>
         <p>Check that the:
           <ul class="govuk-list govuk-list--bullet">
             <li>email address you've entered is correct - it needs to be valid for the Criminal Justice Secure Mail (CJSM) service</li>
