@@ -1,44 +1,39 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-xl">Barcode already scanned: carry out further checks</h1>
+<h1 class="govuk-heading-xl">Barcode already scanned: carry out further checks</h1>
 
-    {% set html %}
-      <p>
-        Someone scanned this barcode at <strong data-qa='original-scan'>{{ form.errorCode.scannedDate | formatDateTimeForResultsPage }} at {{ form.errorCode.scannedLocation }}</strong>.
-        It may be an illegal copy.
-      </p>
-    {% endset %}
+{% set html %}
+  <p>
+    Someone scanned this barcode at <strong data-qa='original-scan'>{{ form.errorCode.scannedDate | formatDateTimeForResultsPage }} at {{ form.errorCode.scannedLocation }}</strong>.
+    It may be an illegal copy.
+  </p>
+{% endset %}
 
-    {{ govukNotificationBanner({
-      html: html,
-      disableAutoFocus: true,
-      classes: 'notification barcode-duplicate'
-    }) }}
+{{ govukNotificationBanner({
+  html: html,
+  disableAutoFocus: true,
+  classes: 'notification barcode-duplicate'
+}) }}
 
-    <h2 class="govuk-heading-l">How to investigate</h2>
-    <p>Follow your usual procedures to make sure:</p>
-    <ul>
-        <li>the mail is addressed to <strong data-qa='barcode-recipient'>{{ form.errorCode.recipientName }}, {{ form.errorCode.recipientPrisonNumber if form.errorCode.recipientPrisonNumber else form.errorCode.recipientDob }}</strong></li>
-        <li>the sender, <strong data-qa='barcode-created-by'>{{ form.errorCode.createdBy }}</strong>, has a record of sending this item</li>
-        <li>the item hasn't been tampered with</li>
-        <li>there are no drugs or other contraband concealed in the item</li>
-    </ul>
+<h2 class="govuk-heading-l">How to investigate</h2>
+<p>Follow your usual procedures to make sure:</p>
+<ul>
+    <li>the mail is addressed to <strong data-qa='barcode-recipient'>{{ form.errorCode.recipientName }}, {{ form.errorCode.recipientPrisonNumber if form.errorCode.recipientPrisonNumber else form.errorCode.recipientDob }}</strong></li>
+    <li>the sender, <strong data-qa='barcode-created-by'>{{ form.errorCode.createdBy }}</strong>, has a record of sending this item</li>
+    <li>the item hasn't been tampered with</li>
+    <li>there are no drugs or other contraband concealed in the item</li>
+</ul>
 
-    <p>If you still have concerns, report them to a security manager.</p>
-    {% set html %}
-      <p>Do not open any item of Rule 39 mail without both:</p>
-      <ul>
-        <li>permission from a governor</li>
-        <li>the recipient being present</li>
-      </ul>
-    {% endset %}
+<p>If you still have concerns, report them to a security manager.</p>
+{% set html %}
+  <p>Do not open any item of Rule 39 mail without both:</p>
+  <ul>
+    <li>permission from a governor</li>
+    <li>the recipient being present</li>
+  </ul>
+{% endset %}
 
-    {{ govukInsetText({
-      html: html
-    }) }}
-
-  </div>
-</div>
+{{ govukInsetText({
+  html: html
+}) }}

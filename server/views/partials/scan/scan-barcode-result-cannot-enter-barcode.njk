@@ -1,39 +1,34 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-xl">Barcode doesn't scan: carry out further checks</h1>
+<h1 class="govuk-heading-xl">Barcode doesn't scan: carry out further checks</h1>
 
-    {% set html %}
-      <p>You need to investigate this item because the barcode can't be linked to an approved sender.</p>
-    {% endset %}
+{% set html %}
+  <p>You need to investigate this item because the barcode can't be linked to an approved sender.</p>
+{% endset %}
 
-    {{ govukNotificationBanner({
-      html: html,
-      disableAutoFocus: true,
-      classes: 'notification barcode-doesnt-scan'
-    }) }}
+{{ govukNotificationBanner({
+  html: html,
+  disableAutoFocus: true,
+  classes: 'notification barcode-doesnt-scan'
+}) }}
 
-    <h2 class="govuk-heading-l">How to investigate</h2>
-    <p>Follow your usual procedures to make sure:</p>
-    <ul>
-        <li>the item hasn't been tampered with</li>
-        <li>there are no drugs or other contraband concealed in the item</li>
-    </ul>
+<h2 class="govuk-heading-l">How to investigate</h2>
+<p>Follow your usual procedures to make sure:</p>
+<ul>
+    <li>the item hasn't been tampered with</li>
+    <li>there are no drugs or other contraband concealed in the item</li>
+</ul>
 
-    <p>If you still have concerns, report them to a security manager.</p>
-    {% set html %}
-      <p>Do not open any item of Rule 39 mail without both:</p>
-      <ul>
-        <li>permission from a governor</li>
-        <li>the recipient being present</li>
-      </ul>
-    {% endset %}
+<p>If you still have concerns, report them to a security manager.</p>
+{% set html %}
+  <p>Do not open any item of Rule 39 mail without both:</p>
+  <ul>
+    <li>permission from a governor</li>
+    <li>the recipient being present</li>
+  </ul>
+{% endset %}
 
-    {{ govukInsetText({
-      html: html
-    }) }}
-
-  </div>
-</div>
+{{ govukInsetText({
+  html: html
+}) }}

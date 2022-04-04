@@ -1,40 +1,35 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-xl">Item of concern: carry out further checks</h1>
+<h1 class="govuk-heading-xl">Item of concern: carry out further checks</h1>
 
-    {% set html %}
-      <p>You have concerns about this item of mail.</p>
-    {% endset %}
+{% set html %}
+  <p>You have concerns about this item of mail.</p>
+{% endset %}
 
-    {{ govukNotificationBanner({
-      html: html,
-      disableAutoFocus: true,
-      classes: 'notification barcode-further-checks'
-    }) }}
+{{ govukNotificationBanner({
+  html: html,
+  disableAutoFocus: true,
+  classes: 'notification barcode-further-checks'
+}) }}
 
-    <h2 class="govuk-heading-l">How to investigate</h2>
-    <p>Follow your usual procedures to make sure:</p>
-    <ul>
-        <li>that the sender, <strong>{{ form.createdBy }}</strong>, has a record of sending this item</li>
-        <li>the item hasn't been tampered with</li>
-        <li>there are no drugs or other contraband concealed in the item</li>
-    </ul>
+<h2 class="govuk-heading-l">How to investigate</h2>
+<p>Follow your usual procedures to make sure:</p>
+<ul>
+    <li>that the sender, <strong>{{ form.createdBy }}</strong>, has a record of sending this item</li>
+    <li>the item hasn't been tampered with</li>
+    <li>there are no drugs or other contraband concealed in the item</li>
+</ul>
 
-    <p>If you still have concerns, report them to a security manager.</p>
-    {% set html %}
-      <p>Do not open any item of Rule 39 mail without both:</p>
-      <ul>
-        <li>permission from a governor</li>
-        <li>the recipient being present</li>
-      </ul>
-    {% endset %}
+<p>If you still have concerns, report them to a security manager.</p>
+{% set html %}
+  <p>Do not open any item of Rule 39 mail without both:</p>
+  <ul>
+    <li>permission from a governor</li>
+    <li>the recipient being present</li>
+  </ul>
+{% endset %}
 
-    {{ govukInsetText({
-      html: html
-    }) }}
-
-  </div>
-</div>
+{{ govukInsetText({
+  html: html
+}) }}
