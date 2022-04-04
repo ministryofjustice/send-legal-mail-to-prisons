@@ -3,6 +3,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "components/scan/scan-barcode-result-tag.njk" import scanBarcodeResultTag %}
 
 {% set pageTitle = applicationName + " - Result of scanning a barcode" %}
 {% set pageId = 'scan-barcode-result' %}
@@ -19,32 +20,40 @@
     {% endif %}
 
     <section id="scan-barcode-result-notification">
-      {% if form.errorCode == null %}
-        {% include "partials/scan/scan-barcode-result-ok.njk" %}
-      {% endif %}
-      {% if form.errorCode.code == 'DUPLICATE' %}
-        {% include "partials/scan/scan-barcode-result-duplicate.njk" %}
-      {% endif %}
-      {% if form.errorCode.code == 'RANDOM_CHECK' %}
-        {% include "partials/scan/scan-barcode-result-random-check.njk" %}
-      {% endif %}
-      {% if form.errorCode.code == 'EXPIRED' %}
-        {% include "partials/scan/scan-barcode-result-expired.njk" %}
-      {% endif %}
-      {% if form.errorCode.code == 'NOT_FOUND' %}
-        {% include "partials/scan/scan-barcode-result-not-found.njk" %}
-      {% endif %}
-      {% if form.errorCode.code == 'CANNOT_ENTER_BARCODE' %}
-        {% include "partials/scan/scan-barcode-result-cannot-enter-barcode.njk" %}
-      {% endif %}
-      {% if form.errorCode.code == 'FURTHER_CHECKS_NEEDED' %}
-        {% include "partials/scan/scan-barcode-result-further-checks-needed.njk" %}
-      {% endif %}
-      <span id="scan-result-type" data-value="{{ 'READY_TO_DELIVER' if not form.errorCode.code else form.errorCode.code }}" />
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+          {{ scanBarcodeResultTag({
+            resultType: form.errorCode.code
+          }) }}
+
+          {% if form.errorCode == null %}
+            {% include "partials/scan/scan-barcode-result-ok.njk" %}
+          {% endif %}
+          {% if form.errorCode.code == 'DUPLICATE' %}
+            {% include "partials/scan/scan-barcode-result-duplicate.njk" %}
+          {% endif %}
+          {% if form.errorCode.code == 'RANDOM_CHECK' %}
+            {% include "partials/scan/scan-barcode-result-random-check.njk" %}
+          {% endif %}
+          {% if form.errorCode.code == 'EXPIRED' %}
+            {% include "partials/scan/scan-barcode-result-expired.njk" %}
+          {% endif %}
+          {% if form.errorCode.code == 'NOT_FOUND' %}
+            {% include "partials/scan/scan-barcode-result-not-found.njk" %}
+          {% endif %}
+          {% if form.errorCode.code == 'CANNOT_ENTER_BARCODE' %}
+            {% include "partials/scan/scan-barcode-result-cannot-enter-barcode.njk" %}
+          {% endif %}
+          {% if form.errorCode.code == 'FURTHER_CHECKS_NEEDED' %}
+            {% include "partials/scan/scan-barcode-result-further-checks-needed.njk" %}
+          {% endif %}
+        </div>
+      </div>
     </section>
 
     <div class="govuk-grid-row govuk-!-margin-top-5">
-      <div class="govuk-grid-column-full">
+      <div class="govuk-grid-column-two-thirds">
 
         <div class="govuk-button-group">
           {{ govukButton({

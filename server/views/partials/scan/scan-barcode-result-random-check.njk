@@ -1,43 +1,20 @@
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-xl">Item selected for a random check</h1>
+<h1 class="govuk-heading-xl">Item selected for a random check</h1>
+<p>
+  For additional security this item of mail has been selected for a random check.
+  It was sent by an approved sender, <strong>{{ form.errorCode.createdBy }}</strong>.
+</p>
 
-    {% set html %}
-      <p>
-        For additional security this item of mail has been selected for a random check.
-        It was sent by an approved sender, <strong>{{ form.errorCode.createdBy }}</strong>.
-      </p>
-    {% endset %}
+<h2 class="govuk-heading-l">How to deal with the item</h2>
+<p>Check the item for drugs or any other contraband following your usual procedures. For example, use any of the following:</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>trace detection equipment</li>
+    <li>a dog unit</li>
+    <li>an X-ray machine</li>
+</ul>
 
-    {{ govukNotificationBanner({
-      html: html,
-      disableAutoFocus: true,
-      classes: 'notification barcode-random-check'
-    }) }}
-
-    <h3 class="govuk-heading-m">How to deal with the item</h3>
-    <p>Check the item for drugs or any other contraband using your usual procedures. For example, use any of the following:</p>
-    <ul>
-        <li>trace detection equipment</li>
-        <li>a dog unit</li>
-        <li>an X-ray machine</li>
-    </ul>
-
-    <p>If you have concerns about the item, report them to a security manager.</p>
-    {% set html %}
-      <p>Do not open any item of Rule 39 mail without both:</p>
-      <ul>
-        <li>permission from a governor</li>
-        <li>the recipient being present</li>
-      </ul>
-    {% endset %}
-
-    {{ govukInsetText({
-      html: html
-    }) }}
-
-  </div>
-</div>
+<p>If you have concerns about the item, report them to a security manager.</p>
+{{ govukWarningText({
+  text: 'Do not open any item of Rule 39 mail without permission from a governor and the recipient being present.'
+}) }}

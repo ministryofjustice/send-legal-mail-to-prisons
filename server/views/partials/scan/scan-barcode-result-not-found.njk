@@ -1,39 +1,16 @@
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-xl">Barcode not recognised: carry out further checks</h1>
+<h1 class="govuk-heading-xl">Barcode not recognised: carry out further checks</h1>
+<p>The barcode number was not recognised. It may be a forgery.</p>
 
-    {% set html %}
-      <p>The barcode number was not recognised. It may be a forgery.</p>
-    {% endset %}
+<h2 class="govuk-heading-l">How to investigate</h2>
+<p>Follow your usual procedures, for example:</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>check the item has not been tampered with</li>
+    <li>make sure there are no drugs or other contraband concealed in the item</li>
+</ul>
 
-    {{ govukNotificationBanner({
-      html: html,
-      disableAutoFocus: true,
-      classes: 'notification barcode-not-found'
-    }) }}
-
-    <h2 class="govuk-heading-l">How to investigate</h2>
-    <p>Follow your usual procedures to make sure:</p>
-    <ul>
-        <li>the item hasn't been tampered with</li>
-        <li>there are no drugs or other contraband concealed in the item</li>
-    </ul>
-
-    <p>If you still have concerns, report them to a security manager.</p>
-    {% set html %}
-      <p>Do not open any item of Rule 39 mail without both:</p>
-      <ul>
-        <li>permission from a governor</li>
-        <li>the recipient being present</li>
-      </ul>
-    {% endset %}
-
-    {{ govukInsetText({
-      html: html
-    }) }}
-
-  </div>
-</div>
+<p>If you still have concerns, report them to a security manager.</p>
+{{ govukWarningText({
+  text: 'Do not open any item of Rule 39 mail without permission from a governor and the recipient being present.'
+}) }}

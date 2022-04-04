@@ -1,20 +1,12 @@
 #scan-barcode-result-notification {
 
-  .govuk-notification-banner__header {
-    height: 25px;
-
-    h2.govuk-notification-banner__title {
-      @extend .govuk-visually-hidden
-    }
+  .status-group {
+    margin-bottom: 20px;
   }
-
-  .success {
-    .govuk-notification-banner__content p {
-      // hook class to enable styling of success banner such as applying green tick
-    }
-  }
-
-  .notification {
-    // hook class to enable styling of notification banners
+  .status-group .govuk-tag {
+    font-size: 1.1875rem;
+    line-height: 1.31579;
+    padding: 7px 10px 6px 10px;
+    margin-right: 10px;
   }
 }
