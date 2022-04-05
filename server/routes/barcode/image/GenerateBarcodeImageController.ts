@@ -25,6 +25,7 @@ export default class GenerateBarcodeImageController {
           return {
             barcodeImageUrl: await this.createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient),
             barcodeImageName: this.barcodeFilename(recipient),
+            recipientName: recipient.prisonerName,
           }
         })
       )

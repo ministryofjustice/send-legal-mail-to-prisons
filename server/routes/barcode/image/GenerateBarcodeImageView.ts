@@ -1,6 +1,7 @@
 type BarcodeImage = {
   barcodeImageUrl: string
   barcodeImageName: string
+  recipientName: string
 }
 
 export default class GenerateBarcodeImageView {
