@@ -40,9 +40,9 @@ describe('Layout', () => {
 
       const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-      const gaDataLayerScript = $('script[data-qa=ga-data-layer]')
+      const gaDataLayerScript = $('script[data-qa=gtm]')
       expect(gaDataLayerScript.length).toStrictEqual(1)
-      expect(gaDataLayerScript.html()).toContain('gtag(')
+      expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
       expect(gaDataLayerScript.html()).toContain("'organisation': 'some-org'")
       expect(gaDataLayerScript.html()).toContain("'business_type': 'some-type'")
       expect(gaDataLayerScript.html()).toContain("'town_city': 'some-town'")
@@ -61,9 +61,9 @@ describe('Layout', () => {
 
       const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-      const gaDataLayerScript = $('script[data-qa=ga-data-layer]')
+      const gaDataLayerScript = $('script[data-qa=gtm]')
       expect(gaDataLayerScript.length).toStrictEqual(1)
-      expect(gaDataLayerScript.html()).toContain('gtag(')
+      expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
       expect(gaDataLayerScript.html()).toContain("'prison_code': 'BXI'")
       expect(gaDataLayerScript.html()).toContain("'prison_name': 'Brixton'")
     })
