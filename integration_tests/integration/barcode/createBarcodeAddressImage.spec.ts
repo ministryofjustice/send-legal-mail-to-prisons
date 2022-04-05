@@ -19,6 +19,16 @@ context('Create Barcode Image', () => {
       .imageCopyButtonExists()
   })
 
+  it('should create barcode and click the copy button', () => {
+    cy.task('stubCreateBarcode')
+    Page.verifyOnPage(ChooseBarcodeOptionPage).continueToImage()
+    const generateBarcodeImagePage = Page.verifyOnPage(GenerateBarcodeImagePage)
+
+    generateBarcodeImagePage.clickCopyBarcodeButton()
+
+    generateBarcodeImagePage.imageCopyBarcodeFeedbackContainerIsVisible()
+  })
+
   it('should show an error if create barcode fails', () => {
     cy.task('stubCreateBarcodeFailure')
     const page = Page.verifyOnPage(ChooseBarcodeOptionPage)

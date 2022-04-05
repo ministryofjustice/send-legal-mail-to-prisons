@@ -6,6 +6,7 @@ import FindRecipientByPrisonNumberPage from './findRecipientByPrisonNumber'
 export default class GenerateBarcodeImagePage extends Page {
   constructor() {
     super('generate-barcode-image')
+    this.imageCopyBarcodeFeedbackContainerIsNotVisible()
   }
 
   barcodeAddressImageExists = (): GenerateBarcodeImagePage => {
@@ -25,6 +26,21 @@ export default class GenerateBarcodeImagePage extends Page {
     return this
   }
 
+  clickCopyBarcodeButton = (): GenerateBarcodeImagePage => {
+    this.imageCopyButton().click()
+    return this
+  }
+
+  imageCopyBarcodeFeedbackContainerIsNotVisible = (): GenerateBarcodeImagePage => {
+    this.imageCopyBarcodeFeedbackContainer().should('exist').and('not.be.visible')
+    return this
+  }
+
+  imageCopyBarcodeFeedbackContainerIsVisible = (): GenerateBarcodeImagePage => {
+    this.imageCopyBarcodeFeedbackContainer().should('be.visible').and('contain.text', 'Copied barcode')
+    return this
+  }
+
   clickBrowserBackButton = (): FindRecipientByPrisonNumberPage => {
     cy.go(-1)
     return Page.verifyOnPage(FindRecipientByPrisonNumberPage)
@@ -40,6 +56,8 @@ export default class GenerateBarcodeImagePage extends Page {
   imageDownloadButton = (): PageElement => cy.get('[data-qa=download-image-button]')
 
   imageCopyButton = (): PageElement => cy.get('[data-qa=copy-image-button]')
+
+  imageCopyBarcodeFeedbackContainer = (): PageElement => cy.get('[data-qa=copy-barcode-feedback-container-1]')
 
   sendMoreLegalMailLink = (): PageElement => cy.get('[data-qa=send-more-legal-mail]')
 
