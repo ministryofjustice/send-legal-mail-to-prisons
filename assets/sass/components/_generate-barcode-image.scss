@@ -8,4 +8,22 @@
   .barcode-address-copy-button {
     display: none;
   }
+
+  .copy-barcode-feedback-container {
+    margin-top: 10px;
+    color: $govuk-success-colour;
+    font-weight: bold;
+    display: none;
+
+    p, span {
+      color: currentColor;
+      font-weight: bold;
+    }
+
+    svg {
+      fill: currentColor;
+      float: left;
+      margin-right: 10px;
+    }
+  }
 }
