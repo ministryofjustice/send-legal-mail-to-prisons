@@ -631,8 +631,8 @@
     "premise": "HMP Holme House",
     "street": "Holme House Road",
     "locality": "Stockton-On-Tees",
-    "countyCode": "CLEVELAND",
-    "area": "Cleveland",
+    "countyCode": "",
+    "area": "",
     "postalCode": "TS18 2QU"
   },
   {
@@ -738,7 +738,7 @@
     "flat": "",
     "premise": "HMP Leeds",
     "street": "2 Gloucester Terrace",
-    "locality": "Leeds",
+    "locality": "Stanningley Road, Leeds",
     "countyCode": "W.YORKSHIRE",
     "area": "West Yorkshire",
     "postalCode": "LS12 2TJ"
