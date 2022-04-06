@@ -144,6 +144,15 @@ window.pageEnhancements = (($, document) => {
     })
   }
 
+  const pushGtmBarcodeCount = () => {
+    const barcodeCreateCount = $('#barcode-created-count').attr('data-value')
+    if (barcodeCreateCount) {
+      window.dataLayer.push({
+        barcodesCreatedCount: barcodeCreateCount,
+      })
+    }
+  }
+
   return {
     init: () => {
       $(() => {
@@ -153,6 +162,7 @@ window.pageEnhancements = (($, document) => {
         autoFocusBarcodeField()
         submitCookiePreferencesFormViaAjax()
         submitCookiePreferenceConfirmationFormViaAjax()
+        pushGtmBarcodeCount()
       })
     },
   }
