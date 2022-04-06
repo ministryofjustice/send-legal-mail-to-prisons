@@ -40,7 +40,7 @@ describe('Layout', () => {
 
       const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-      const gaDataLayerScript = $('script[data-qa=gtm]')
+      const gaDataLayerScript = $('script[data-qa=gtm-init]')
       expect(gaDataLayerScript.length).toStrictEqual(1)
       expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
       expect(gaDataLayerScript.html()).toContain("'organisation': 'some-org'")
@@ -61,7 +61,7 @@ describe('Layout', () => {
 
       const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-      const gaDataLayerScript = $('script[data-qa=gtm]')
+      const gaDataLayerScript = $('script[data-qa=gtm-init]')
       expect(gaDataLayerScript.length).toStrictEqual(1)
       expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
       expect(gaDataLayerScript.html()).toContain("'prison_code': 'BXI'")
