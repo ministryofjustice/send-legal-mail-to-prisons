@@ -145,10 +145,18 @@ window.pageEnhancements = (($, document) => {
   }
 
   const pushGtmBarcodeCount = () => {
-    const barcodeCreateCount = $('#barcode-created-count').attr('data-value')
-    if (barcodeCreateCount) {
+    const barcodesCreatedCount = $('#barcode-created-count').attr('data-value')
+    if (barcodesCreatedCount) {
       window.dataLayer.push({
-        barcodesCreatedCount: barcodeCreateCount,
+        barcodesCreatedCount: barcodesCreatedCount,
+      })
+    }
+  }
+  const pushGtmScannedBarcodeNumber = () => {
+    const scannedBarcodeNumber = $('#scanned-barcode-number').attr('data-value')
+    if (scannedBarcodeNumber) {
+      window.dataLayer.push({
+        scannedBarcodeNumber: scannedBarcodeNumber,
       })
     }
   }
@@ -163,6 +171,7 @@ window.pageEnhancements = (($, document) => {
         submitCookiePreferencesFormViaAjax()
         submitCookiePreferenceConfirmationFormViaAjax()
         pushGtmBarcodeCount()
+        pushGtmScannedBarcodeNumber()
       })
     },
   }
