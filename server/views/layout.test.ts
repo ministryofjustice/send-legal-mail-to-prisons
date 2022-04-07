@@ -67,5 +67,63 @@ describe('Layout', () => {
       expect(gaDataLayerScript.html()).toContain("'prison_code': 'BXI'")
       expect(gaDataLayerScript.html()).toContain("'prison_name': 'Brixton'")
     })
+
+    it('should include barcodes created count', () => {
+      viewContext = {
+        barcodeImages: [{ anything: 'anything' }, { anything: 'anything' }],
+        gtmContainerId: 'some-id',
+        cookiesPolicy: { policy: 'n/a' },
+      }
+
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+      const gaDataLayerScript = $('script[data-qa=gtm-init]')
+      expect(gaDataLayerScript.length).toStrictEqual(1)
+      expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
+      expect(gaDataLayerScript.html()).toContain("'barcodes_created_count': '2'")
+    })
+
+    it('should not include barcodes created count', () => {
+      viewContext = {
+        gtmContainerId: 'some-id',
+        cookiesPolicy: { policy: 'n/a' },
+      }
+
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+      const gaDataLayerScript = $('script[data-qa=gtm-init]')
+      expect(gaDataLayerScript.length).toStrictEqual(1)
+      expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
+      expect(gaDataLayerScript.html()).not.toContain('barcodes_created_count')
+    })
+
+    it('should include last barcode scanned', () => {
+      viewContext = {
+        form: { lastScannedBarcode: 'some-barcode' },
+        gtmContainerId: 'some-id',
+        cookiesPolicy: { policy: 'n/a' },
+      }
+
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+      const gaDataLayerScript = $('script[data-qa=gtm-init]')
+      expect(gaDataLayerScript.length).toStrictEqual(1)
+      expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
+      expect(gaDataLayerScript.html()).toContain("'scanned_barcode_number': 'some-barcode'")
+    })
+
+    it('should not include last barcode scanned', () => {
+      viewContext = {
+        gtmContainerId: 'some-id',
+        cookiesPolicy: { policy: 'n/a' },
+      }
+
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+      const gaDataLayerScript = $('script[data-qa=gtm-init]')
+      expect(gaDataLayerScript.length).toStrictEqual(1)
+      expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
+      expect(gaDataLayerScript.html()).not.toContain('scanned_barcode_number')
+    })
   })
 })
