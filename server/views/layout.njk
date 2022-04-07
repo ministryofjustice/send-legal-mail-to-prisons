@@ -34,6 +34,14 @@
         });
     {% endif %}
 
+    {% if numberOfCoversheets %}
+      window.dataLayer.push({
+          'user': {
+            'barcodes_created_count': '{{ numberOfCoversheets }}',
+          },
+        });
+    {% endif %}
+
     {% if form.lastScannedBarcode %}
       window.dataLayer.push({
           'user': {
