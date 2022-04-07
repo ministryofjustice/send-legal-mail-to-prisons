@@ -26,6 +26,22 @@
         });
     {% endif %}
 
+    {% if barcodeImages | length %}
+      window.dataLayer.push({
+          'user': {
+            'barcodes_created_count': '{{ barcodeImages | length }}',
+          },
+        });
+    {% endif %}
+
+    {% if form.lastScannedBarcode %}
+      window.dataLayer.push({
+          'user': {
+            'scanned_barcode_number': '{{ form.lastScannedBarcode }}',
+          },
+        });
+    {% endif %}
+
     // Default analytics_storage to 'denied'.
     gtag('consent', 'default', {
       'analytics_storage': 'denied'
