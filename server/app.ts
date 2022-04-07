@@ -78,7 +78,7 @@ export default function createApp(
   app.get('/privacy-policy', (req, res) => res.render('pages/privacy-policy/privacy-policy'))
   app.use('/start', setupLegalSenderStartPage())
   app.use('/link', requestLinkAuthorised())
-  app.use('/link', setUpLink(app, magicLinkService))
+  app.use('/link', setUpLink(app, magicLinkService, appInsightsClient))
   app.use('/contact-helpdesk', setupContactHelpdesk(zendeskService))
 
   // authenticated with createBarcodeToken

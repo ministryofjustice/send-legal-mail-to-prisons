@@ -3,6 +3,7 @@ import { JsonWebTokenError, verify } from 'jsonwebtoken'
 import type { CjsmUserDetails } from 'sendLegalMailApiClient'
 import VerifyLinkController from './VerifyLinkController'
 import MagicLinkService from '../../services/link/MagicLinkService'
+import AppInsightsService from '../../services/AppInsightsService'
 
 jest.mock('jsonwebtoken')
 
@@ -32,13 +33,19 @@ const res = {
 const magicLinkService = {
   verifyLink: jest.fn(),
 }
+const appInsightsClient = {
+  trackEvent: jest.fn(),
+}
 
 describe('VerifyLinkController', () => {
   let verifyLinkController: VerifyLinkController
   let mockVerify: jest.MockedFunction<typeof verify>
 
   beforeEach(() => {
-    verifyLinkController = new VerifyLinkController(magicLinkService as unknown as MagicLinkService)
+    verifyLinkController = new VerifyLinkController(
+      magicLinkService as unknown as MagicLinkService,
+      appInsightsClient as unknown as AppInsightsService
+    )
     mockVerify = verify as jest.MockedFunction<typeof verify>
   })
 
@@ -145,6 +152,29 @@ describe('VerifyLinkController', () => {
       await verifyLinkController.verifyLink(req as unknown as Request, res as unknown as Response)
 
       expect(req.session.regenerate).toHaveBeenCalled()
+    })
+
+    it('should redirect to find recipient if the user is already logged in', async () => {
+      req.session.barcodeUser = {
+        token: 'a-valid-token',
+        tokenValid: true,
+        email: 'some.user@some.solicitors.cjsm.net',
+        cjsmDetails: {
+          userId: 'some.user@some.solicitors.cjsm.net',
+          organisation: 'Some Solicitors Ltd',
+          organisationType: 'Barristers',
+          townOrCity: 'London',
+        },
+      }
+      req.query.secret = 'some-secret'
+
+      await verifyLinkController.verifyLink(req as unknown as Request, res as unknown as Response)
+
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
+      expect(magicLinkService.verifyLink).not.toHaveBeenCalled()
+      expect(appInsightsClient.trackEvent).toHaveBeenCalledWith('duplicateMagicLinkClick', {
+        username: 'some.user@some.solicitors.cjsm.net',
+      })
     })
   })
 })
