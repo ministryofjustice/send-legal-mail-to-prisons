@@ -144,6 +144,23 @@ window.pageEnhancements = (($, document) => {
     })
   }
 
+  const pushGtmBarcodeCount = () => {
+    const barcodesCreatedCount = $('#barcode-created-count').attr('data-value')
+    if (barcodesCreatedCount) {
+      window.dataLayer.push({
+        barcodesCreatedCount: barcodesCreatedCount,
+      })
+    }
+  }
+  const pushGtmScannedBarcodeNumber = () => {
+    const scannedBarcodeNumber = $('#scanned-barcode-number').attr('data-value')
+    if (scannedBarcodeNumber) {
+      window.dataLayer.push({
+        scannedBarcodeNumber: scannedBarcodeNumber,
+      })
+    }
+  }
+
   return {
     init: () => {
       $(() => {
@@ -153,6 +170,8 @@ window.pageEnhancements = (($, document) => {
         autoFocusBarcodeField()
         submitCookiePreferencesFormViaAjax()
         submitCookiePreferenceConfirmationFormViaAjax()
+        pushGtmBarcodeCount()
+        pushGtmScannedBarcodeNumber()
       })
     },
   }
