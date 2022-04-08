@@ -1,4 +1,4 @@
-import type { EditContactForm, RecipientForm } from 'forms'
+import type { EditContactForm, RecipientForm, RequestOneTimeCodeForm } from 'forms'
 import type { CjsmUserDetails } from 'sendLegalMailApiClient'
 import {
   BarcodeEntryForm,
@@ -20,6 +20,7 @@ declare module 'express-session' {
     returnTo: string
     nowInMinutes: number
     requestLinkForm: RequestLinkForm
+    requestOneTimeCodeForm: RequestOneTimeCodeForm
     findRecipientByPrisonNumberForm: FindRecipientByPrisonNumberForm
     createNewContactByPrisonNumberForm: CreateNewContactByPrisonNumberForm
     barcodeEntryForm: BarcodeEntryForm
