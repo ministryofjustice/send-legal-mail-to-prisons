@@ -2,11 +2,20 @@ import { Request, Response } from 'express'
 import { JwtPayload, verify, VerifyErrors } from 'jsonwebtoken'
 import MagicLinkService from '../../services/link/MagicLinkService'
 import config from '../../config'
+import AppInsightsService from '../../services/AppInsightsService'
 
 export default class VerifyLinkController {
-  constructor(private readonly magicLinkService: MagicLinkService) {}
+  constructor(
+    private readonly magicLinkService: MagicLinkService,
+    private readonly appInsightsClient: AppInsightsService
+  ) {}
 
   async verifyLink(req: Request, res: Response): Promise<void> {
+    if (this.legalSenderUserAlreadyLoggedInWithAValidToken(req)) {
+      this.appInsightsClient.trackEvent('duplicateMagicLinkClick', { username: req.session.barcodeUser.email })
+      return res.redirect('/barcode/find-recipient')
+    }
+
     const secret = req.query.secret as string
     if (!secret) {
       return res.redirect('request-link')
@@ -49,5 +58,9 @@ export default class VerifyLinkController {
       })
       return res.redirect('/barcode/find-recipient')
     })
+  }
+
+  private legalSenderUserAlreadyLoggedInWithAValidToken(req: Request): boolean {
+    return req.session.barcodeUser?.email && req.session.barcodeUser?.token && req.session.barcodeUser?.tokenValid
   }
 }

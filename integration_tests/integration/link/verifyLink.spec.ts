@@ -39,14 +39,13 @@ context('Verify Link', () => {
     Page.verifyOnPage(RequestLinkPage).hasErrorContaining('Request a new one')
   })
 
-  it('should redirect to Request Link page if using a magic link for the second time', () => {
+  it('should Find Recipient page if using a magic link for the second time within an active session', () => {
     cy.visit('/link/verify-link?secret=a-valid-secret')
     Page.verifyOnPage(FindRecipientByPrisonNumberPage)
-    cy.task('stubVerifyLinkNotFoundFailure')
 
     cy.visit('/link/verify-link?secret=a-valid-secret')
 
-    Page.verifyOnPage(RequestLinkPage).hasErrorContaining('Request a new one')
+    Page.verifyOnPage(FindRecipientByPrisonNumberPage).hasNoErrors()
   })
 
   it('should redirect to Request Link page if using an expired magic link', () => {
