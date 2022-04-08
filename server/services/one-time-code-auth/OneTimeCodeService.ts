@@ -9,11 +9,11 @@ export default class OneTimeCodeService {
     return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, hmppsToken, null, sourceIp)
   }
 
-  async requestOneTimeCode(email: string, sourceIp: string): Promise<unknown> {
+  async requestOneTimeCode(_email: string, _sourceIp: string): Promise<unknown> {
     return null
   }
 
-  async verifyOneTimeCode(secret: string, sourceIp: string): Promise<string> {
+  async verifyOneTimeCode(_secret: string, _sourceIp: string): Promise<string> {
     return null
   }
 }

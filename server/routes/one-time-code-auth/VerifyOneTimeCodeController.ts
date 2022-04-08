@@ -4,7 +4,7 @@ import OneTimeCodeService from '../../services/one-time-code-auth/OneTimeCodeSer
 export default class VerifyOneTimeCodeController {
   constructor(private readonly oneTimeCodeService: OneTimeCodeService) {}
 
-  async verifyOneTimeCode(req: Request, res: Response): Promise<void> {
+  async verifyOneTimeCode(_req: Request, _res: Response): Promise<void> {
     return null
   }
 }
