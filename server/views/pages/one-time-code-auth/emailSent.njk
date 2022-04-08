@@ -1,0 +1,56 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% set pageTitle = applicationName + " - Sign in code email sent" %}
+{% set pageId = 'one-time-code-email-sent' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+    {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: 'There is a problem',
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Now check your emails</h1>
+        <h2>TODO - Design and Content Team to weave their magic here</h2>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row" id="link-email-sent">
+      <div class="govuk-grid-column-two-thirds">
+
+        {% set html %}
+          <h3 class="govuk-notification-banner__heading">We've sent a code to your email - <span>{{ emailSentTo }}</span></h3>
+          <p class="govuk-body">It can take up to 10 minutes for the link to arrive.
+        {% endset %}
+
+        {{ govukNotificationBanner({
+          type: 'success',
+          html: html
+        }) }}
+
+        <h2 class="govuk-heading-m">What to do if you don't get the code</h2>
+        <p>Check that the:
+          <ul class="govuk-list govuk-list--bullet">
+            <li>email address you've entered is correct - it needs to be valid for the Criminal Justice Secure Mail (CJSM) service</li>
+            <li>link hasn't gone to your 'spam' or 'junk' folder
+          </ul>
+        </p>
+
+        <p>
+            <a href="request-code" class="govuk-link" data-qa="request-sign-in-link">Enter your email again</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

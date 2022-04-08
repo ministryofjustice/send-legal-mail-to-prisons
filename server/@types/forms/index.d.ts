@@ -7,6 +7,10 @@ declare module 'forms' {
     email?: string
   }
 
+  export interface RequestOneTimeCodeForm {
+    email?: string
+  }
+
   export interface FindRecipientByPrisonNumberForm {
     prisonNumber?: string
   }

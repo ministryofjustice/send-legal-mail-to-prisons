@@ -40,10 +40,15 @@ import setUpLink from './middleware/link/setUpLink'
 import SmokeTestStore from './data/cache/SmokeTestStore'
 import setupSmokeTest from './middleware/smoketest/SmokeTestMiddleware'
 import CjsmService from './services/cjsm/CjsmService'
+import config from './config'
+import requestOneTimeCodeAuthorised from './middleware/one-time-code-auth/requestOneTimeCodeAuthorised'
+import setUpOneTimeCode from './middleware/one-time-code-auth/setUpOneTimeCode'
+import OneTimeCodeService from './services/one-time-code-auth/OneTimeCodeService'
 
 export default function createApp(
   userService: UserService,
   magicLinkService: MagicLinkService,
+  oneTimeCodeService: OneTimeCodeService,
   scanBarcodeService: ScanBarcodeService,
   createBarcodeService: CreateBarcodeService,
   prisonRegisterService: PrisonRegisterService,
@@ -77,9 +82,15 @@ export default function createApp(
   // no authentication
   app.get('/privacy-policy', (req, res) => res.render('pages/privacy-policy/privacy-policy'))
   app.use('/start', setupLegalSenderStartPage())
-  app.use('/link', requestLinkAuthorised())
-  app.use('/link', setUpLink(app, magicLinkService, appInsightsClient))
   app.use('/contact-helpdesk', setupContactHelpdesk(zendeskService))
+
+  if (config.featureFlags.lsjOneTimeCodeAuthEnabled) {
+    app.use('/oneTimeCode', requestOneTimeCodeAuthorised())
+    app.use('/oneTimeCode', setUpOneTimeCode(app, oneTimeCodeService))
+  } else {
+    app.use('/link', requestLinkAuthorised())
+    app.use('/link', setUpLink(app, magicLinkService, appInsightsClient))
+  }
 
   // authenticated with createBarcodeToken
   app.use('/barcode', barcodeAuthorisationMiddleware())

@@ -11,7 +11,7 @@ export default function setupContactHelpdesk(zendeskService: ZendeskService): Ro
 
   router.get('/', (req, res) => contactHelpdeskController.getContactHelpdeskView(req, res))
 
-  if (config.fileUploadsEnabled) {
+  if (config.featureFlags.fileUploadsEnabled) {
     const upload = multer({ dest: 'uploads/', limits: { files: 1, fileSize: MAX_FILE_SIZE } })
     router.post('/', upload.single('screenshot'), (req, res) =>
       contactHelpdeskController.submitContactHelpdesk(req, res)

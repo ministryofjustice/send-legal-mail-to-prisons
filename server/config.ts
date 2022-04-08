@@ -121,6 +121,7 @@ export default {
   slmContainerId: get('SLM_TAG_MANAGER_CONTAINER_ID', null),
   checkRule39ContainerId: get('CHECK_RULE39_MAIL_TAG_MANAGER_CONTAINER_ID', null),
   magicLinkValidityDuration: Number(get('MAGIC_LINK_VALIDITY_DURATION_IN_MINUTES', 60)),
+  oneTimeCodeValidityDuration: Number(get('ONE_TIME_CODE_VALIDITY_DURATION_IN_MINUTES', 60)),
   supportedPrisons: get('SUPPORTED_PRISONS', ''),
   coversheetPdf: {
     printDebugInfo: toBoolean(get('COVERSHEET_PRINT_DEBUG', false)),
@@ -136,9 +137,12 @@ export default {
     legalSenderJourney: get('LEGAL_SENDER_PHASE_BANNER_LINK', 'https://eu.surveymonkey.com/r/SendLegalMail'),
     mailRoomJourney: get('MAIL_ROOM_PHASE_BANNER_LINK', 'https://eu.surveymonkey.com/r/CheckRule39Mail'),
   },
-  fileUploadsEnabled: toBoolean(get('FILE_UPLOADS_ENABLED', false)),
   smoketest: {
     msjSecret: get('APP_SMOKETEST_MSJSECRET', null),
     lsjSecret: get('APP_SMOKETEST_LSJSECRET', null),
+  },
+  featureFlags: {
+    fileUploadsEnabled: toBoolean(get('FILE_UPLOADS_ENABLED', false)),
+    lsjOneTimeCodeAuthEnabled: toBoolean(get('ONE_TIME_CODE_AUTH_ENABLED', false)),
   },
 }
