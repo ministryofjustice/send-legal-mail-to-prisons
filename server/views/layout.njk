@@ -7,48 +7,32 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
 
+    let user = {};
+
     {% if externalUser %}
-      window.dataLayer.push({
-          'user': {
-            'organisation': '{{ barcodeUser.cjsmDetails.organisation }}',
-            'business_type': '{{ barcodeUser.cjsmDetails.organisationType }}',
-            'town_city': '{{ barcodeUser.cjsmDetails.townOrCity }}',
-          },
-        });
+      user.organisation = '{{ barcodeUser.cjsmDetails.organisation }}';
+      user.business_type = '{{ barcodeUser.cjsmDetails.organisationType }}';
+      user.town_city = '{{ barcodeUser.cjsmDetails.townOrCity }}';
     {% endif %}
 
     {% if not externalUser %}
-      window.dataLayer.push({
-          'user': {
-            'prison_code': '{{ user.activeCaseLoadId }}',
-            'prison_name': '{{ user.prisonName }}',
-          },
-        });
+      user.prison_code = '{{ user.activeCaseLoadId }}';
+      user.prison_name = '{{ user.prisonName }}';
     {% endif %}
 
     {% if barcodeImages | length %}
-      window.dataLayer.push({
-          'user': {
-            'barcodes_created_count': '{{ barcodeImages | length }}',
-          },
-        });
+      user.barcodes_created_count = '{{ barcodeImages | length }}';
     {% endif %}
 
     {% if numberOfCoversheets %}
-      window.dataLayer.push({
-          'user': {
-            'barcodes_created_count': '{{ numberOfCoversheets }}',
-          },
-        });
+      user.barcodes_created_count = '{{ numberOfCoversheets }}';
     {% endif %}
 
     {% if form.lastScannedBarcode %}
-      window.dataLayer.push({
-          'user': {
-            'scanned_barcode_number': '{{ form.lastScannedBarcode }}',
-          },
-        });
+      user.scanned_barcode_number = '{{ form.lastScannedBarcode }}';
     {% endif %}
+
+    window.dataLayer.push({ user: user });
 
     // Default analytics_storage to 'denied'.
     gtag('consent', 'default', {
