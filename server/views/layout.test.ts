@@ -42,10 +42,11 @@ describe('Layout', () => {
 
       const gaDataLayerScript = $('script[data-qa=gtm-init]')
       expect(gaDataLayerScript.length).toStrictEqual(1)
-      expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
-      expect(gaDataLayerScript.html()).toContain("'organisation': 'some-org'")
-      expect(gaDataLayerScript.html()).toContain("'business_type': 'some-type'")
-      expect(gaDataLayerScript.html()).toContain("'town_city': 'some-town'")
+      expect(gaDataLayerScript.html()).toContain('let user = {};')
+      expect(gaDataLayerScript.html()).toContain('window.dataLayer.push({ user: user });')
+      expect(gaDataLayerScript.html()).toContain("user.organisation = 'some-org'")
+      expect(gaDataLayerScript.html()).toContain("user.business_type = 'some-type'")
+      expect(gaDataLayerScript.html()).toContain("user.town_city = 'some-town'")
     })
 
     it('should send mailroom GA data', () => {
@@ -63,9 +64,8 @@ describe('Layout', () => {
 
       const gaDataLayerScript = $('script[data-qa=gtm-init]')
       expect(gaDataLayerScript.length).toStrictEqual(1)
-      expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
-      expect(gaDataLayerScript.html()).toContain("'prison_code': 'BXI'")
-      expect(gaDataLayerScript.html()).toContain("'prison_name': 'Brixton'")
+      expect(gaDataLayerScript.html()).toContain("user.prison_code = 'BXI'")
+      expect(gaDataLayerScript.html()).toContain("user.prison_name = 'Brixton'")
     })
 
     it('should include barcodes created count', () => {
@@ -79,8 +79,7 @@ describe('Layout', () => {
 
       const gaDataLayerScript = $('script[data-qa=gtm-init]')
       expect(gaDataLayerScript.length).toStrictEqual(1)
-      expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
-      expect(gaDataLayerScript.html()).toContain("'barcodes_created_count': '2'")
+      expect(gaDataLayerScript.html()).toContain("user.barcodes_created_count = '2'")
     })
 
     it('should not include barcodes created count', () => {
@@ -93,8 +92,7 @@ describe('Layout', () => {
 
       const gaDataLayerScript = $('script[data-qa=gtm-init]')
       expect(gaDataLayerScript.length).toStrictEqual(1)
-      expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
-      expect(gaDataLayerScript.html()).not.toContain('barcodes_created_count')
+      expect(gaDataLayerScript.html()).not.toContain('user.barcodes_created_count')
     })
 
     it('should include last barcode scanned', () => {
@@ -108,8 +106,7 @@ describe('Layout', () => {
 
       const gaDataLayerScript = $('script[data-qa=gtm-init]')
       expect(gaDataLayerScript.length).toStrictEqual(1)
-      expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
-      expect(gaDataLayerScript.html()).toContain("'scanned_barcode_number': 'some-barcode'")
+      expect(gaDataLayerScript.html()).toContain("user.scanned_barcode_number = 'some-barcode'")
     })
 
     it('should not include last barcode scanned', () => {
@@ -122,8 +119,7 @@ describe('Layout', () => {
 
       const gaDataLayerScript = $('script[data-qa=gtm-init]')
       expect(gaDataLayerScript.length).toStrictEqual(1)
-      expect(gaDataLayerScript.html()).toContain('window.dataLayer.push')
-      expect(gaDataLayerScript.html()).not.toContain('scanned_barcode_number')
+      expect(gaDataLayerScript.html()).not.toContain('user.scanned_barcode_number')
     })
   })
 })
