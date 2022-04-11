@@ -6,6 +6,7 @@ import express from 'express'
 import app from '../../index'
 import config from '../../config'
 import mockHmppsAuth from './mock-hmpps-auth'
+import legalSenderJourneyAuthenticationStartPage from '../../middleware/legalSenderJourneyAuthenticationStartPage'
 
 jest.mock('redis', () => jest.requireActual('redis-mock'))
 
@@ -15,6 +16,7 @@ export default class SuperTestWrapper {
   mockedSendLegalMailApi = nock(config.apis.sendLegalMail.url)
 
   constructor() {
+    config.featureFlags.lsjOneTimeCodeAuthEnabled = false
     const application: express.Application = app()
     this.request = request.agent(application)
     this.request //
@@ -33,7 +35,7 @@ export default class SuperTestWrapper {
 
   unauthenticated = async () => {
     mockHmppsAuth()
-    await this.request.get('/link/request-link?force=true') // log out legal sender user
+    await this.request.get(`${legalSenderJourneyAuthenticationStartPage()}?force=true`) // log out legal sender user
     nock.cleanAll()
   }
 
