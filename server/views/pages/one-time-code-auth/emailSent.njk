@@ -2,6 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 
 {% set pageTitle = applicationName + " - Sign in code email sent" %}
@@ -37,6 +38,35 @@
           type: 'success',
           html: html
         }) }}
+
+
+        <form id="code-form" action="verify-code" method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+          {% call govukFieldset({ }) %}
+            {{ govukInput({
+              label: {
+                text: 'Enter the code from your email',
+                classes: 'govuk-label–s'
+              },
+              hint: {
+                text: 'For example, ABCD'
+              },
+              id: "code",
+              name: "code",
+              value: form.code,
+              spellcheck: false,
+              errorMessage: errors | findError('code')
+            }) }}
+            <div class="govuk-button-group">
+              {{ govukButton({
+                text: "Submit",
+                attributes: { 'data-qa': 'submit-code-button' }
+              }) }}
+            </div>
+          {% endcall %}
+
+        </form>
 
         <h2 class="govuk-heading-m">What to do if you don't get the code</h2>
         <p>Check that the:
