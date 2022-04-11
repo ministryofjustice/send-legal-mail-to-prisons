@@ -44,6 +44,7 @@ import config from './config'
 import requestOneTimeCodeAuthorised from './middleware/one-time-code-auth/requestOneTimeCodeAuthorised'
 import setUpOneTimeCode from './middleware/one-time-code-auth/setUpOneTimeCode'
 import OneTimeCodeService from './services/one-time-code-auth/OneTimeCodeService'
+import legalSenderJourneyAuthenticationStartPage from './middleware/legalSenderJourneyAuthenticationStartPage'
 
 export default function createApp(
   userService: UserService,
@@ -83,6 +84,9 @@ export default function createApp(
   app.get('/privacy-policy', (req, res) => res.render('pages/privacy-policy/privacy-policy'))
   app.use('/start', setupLegalSenderStartPage())
   app.use('/contact-helpdesk', setupContactHelpdesk(zendeskService))
+  app.use('/legal-sender/sign-out', (req, res) =>
+    res.redirect(`${legalSenderJourneyAuthenticationStartPage()}?force=true`)
+  )
 
   if (config.featureFlags.lsjOneTimeCodeAuthEnabled) {
     app.use('/oneTimeCode', requestOneTimeCodeAuthorised())
