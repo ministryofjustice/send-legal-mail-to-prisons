@@ -6,6 +6,7 @@ import config from '../config'
 import generateOauthClientToken from './clientCredentials'
 import type { TokenVerifier } from '../data/tokenVerification'
 import SmokeTestStore from '../data/cache/SmokeTestStore'
+import legalSenderJourneyAuthenticationStartPage from '../middleware/legalSenderJourneyAuthenticationStartPage'
 
 passport.serializeUser((user, done) => {
   // Not used but required for Passport
@@ -56,7 +57,7 @@ const authenticationMiddleware: AuthenticationMiddleware = (verifyToken, smokeTe
     }
     req.session.returnTo = req.originalUrl
     if (res.locals.externalUser) {
-      return res.redirect('/link/request-link')
+      return res.redirect(legalSenderJourneyAuthenticationStartPage())
     }
     return res.redirect('/sign-in')
   }

@@ -4,11 +4,12 @@ import { verify } from 'jsonwebtoken'
 import createError from 'http-errors'
 import config from '../../config'
 import logger from '../../../logger'
+import legalSenderJourneyAuthenticationStartPage from '../legalSenderJourneyAuthenticationStartPage'
 
 export default function barcodeAuthorisationMiddleware(): RequestHandler {
   return (req, res, next) => {
     if (!req.session.barcodeUser?.token || !req.session.barcodeUser?.tokenValid) {
-      return res.redirect('/link/request-link')
+      return res.redirect(legalSenderJourneyAuthenticationStartPage())
     }
 
     return verify(

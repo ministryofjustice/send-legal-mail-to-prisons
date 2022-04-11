@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express'
 import type { HTTPError } from 'superagent'
 import logger from '../logger'
+import legalSenderJourneyAuthenticationStartPage from './middleware/legalSenderJourneyAuthenticationStartPage'
 
 export default function createErrorHandler(production: boolean) {
   return (error: HTTPError, req: Request, res: Response, next: NextFunction): void => {
@@ -9,7 +10,7 @@ export default function createErrorHandler(production: boolean) {
     if (error.status === 401 || error.status === 403) {
       logger.info('Logging user out')
       if (res.locals.externalUser) {
-        return res.redirect('/link/request-link')
+        return res.redirect(legalSenderJourneyAuthenticationStartPage())
       }
       return res.redirect('/sign-out')
     }

@@ -8,6 +8,14 @@ export interface paths {
     get: operations['getContact']
     put: operations['updateContact']
   }
+  '/oneTimeCode/verify': {
+    /** Verifies a one time code and swaps it for an authentication token if valid. */
+    post: operations['verifyOneTimeCode']
+  }
+  '/oneTimeCode/email': {
+    /** Creates a one time code and sends it in an email to the CJSM email address entered by the user. */
+    post: operations['createOneTimeCode']
+  }
   '/link/verify': {
     /** Verifies a CJSM email link secret and swaps it for an authentication token if valid. */
     post: operations['verifyMagicLink']
@@ -71,6 +79,19 @@ export interface components {
       code: string
       userMessage: string
     }
+    AuthenticationRequestErrorCodes: components['schemas']['ErrorCode'] & {
+      code?: 'SESSION_ID_MANDATORY' | 'EMAIL_MANDATORY' | 'EMAIL_TOO_LONG' | 'INVALID_EMAIL' | 'INVALID_CJSM_EMAIL'
+      userMessage?: string
+    } & (
+        | components['schemas']['SessionIdMandatory']
+        | components['schemas']['EmailMandatory']
+        | components['schemas']['EmailTooLong']
+        | components['schemas']['EmailInvalid']
+        | components['schemas']['EmailInvalidCjsm']
+      ) & {
+        code: unknown
+        userMessage: unknown
+      }
     CheckBarcodeErrorCodes: components['schemas']['ErrorCode'] & {
       /** @enum {string} */
       code?: 'DUPLICATE' | 'EXPIRED' | 'RANDOM_CHECK'
@@ -139,6 +160,10 @@ export interface components {
       code: string
       userMessage: string
     }
+    SessionIdMandatory: {
+      code: string
+      userMessage: string
+    }
     /** @description The error code describing the error */
     ErrorCode: {
       /**
@@ -186,19 +211,6 @@ export interface components {
       code: string
       userMessage: string
     }
-    MagicLinkRequestErrorCodes: components['schemas']['ErrorCode'] & {
-      /** @enum {string} */
-      code?: 'EMAIL_MANDATORY' | 'EMAIL_TOO_LONG' | 'INVALID_EMAIL' | 'INVALID_CJSM_EMAIL'
-      userMessage?: string
-    } & (
-        | components['schemas']['EmailMandatory']
-        | components['schemas']['EmailTooLong']
-        | components['schemas']['EmailInvalid']
-        | components['schemas']['EmailInvalidCjsm']
-      ) & {
-        code: unknown
-        userMessage: unknown
-      }
     MalformedRequest: {
       code: string
       userMessage: string
@@ -258,6 +270,22 @@ export interface components {
        * @example A1234BC
        */
       prisonNumber?: string
+    }
+    VerifyCodeRequest: {
+      /** @description The one time code to verify */
+      code: string
+      /** @description The browser session ID */
+      sessionID: string
+    }
+    VerifyCodeResponse: {
+      /** @description The JWT */
+      token: string
+    }
+    OneTimeCodeRequest: {
+      /** @description The CJSM email address to send the one time code to */
+      email: string
+      /** @description The browser session ID */
+      sessionID: string
     }
     VerifyLinkRequest: {
       /** @description The secret to verify */
@@ -447,6 +475,62 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['ContactRequest']
+      }
+    }
+  }
+  /** Verifies a one time code and swaps it for an authentication token if valid. */
+  verifyOneTimeCode: {
+    responses: {
+      /** Authentication token created */
+      201: {
+        content: {
+          'application/json': components['schemas']['VerifyCodeResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Not found, unable to verify the one time code */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['VerifyCodeRequest']
+      }
+    }
+  }
+  /** Creates a one time code and sends it in an email to the CJSM email address entered by the user. */
+  createOneTimeCode: {
+    responses: {
+      /** One time code created and emailed */
+      201: {
+        content: {
+          'application/json': unknown
+        }
+      }
+      /** Bad request. For specific errors see the Schema for AuthenticationRequestErrorCodes */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['OneTimeCodeRequest']
       }
     }
   }
