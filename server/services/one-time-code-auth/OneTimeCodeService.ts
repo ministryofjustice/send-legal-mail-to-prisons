@@ -1,3 +1,4 @@
+import type { OneTimeCodeRequest } from 'sendLegalMailApiClient'
 import HmppsAuthClient from '../../data/hmppsAuthClient'
 import RestClient from '../../data/restClient'
 import config from '../../config'
@@ -9,8 +10,14 @@ export default class OneTimeCodeService {
     return new RestClient('Send Legal Mail API Client', config.apis.sendLegalMail, hmppsToken, null, sourceIp)
   }
 
-  async requestOneTimeCode(_email: string, _sourceIp: string): Promise<unknown> {
-    return null
+  async requestOneTimeCode(email: string, sessionID: string, sourceIp: string): Promise<unknown> {
+    const oneTimeCodeRequest: OneTimeCodeRequest = { email, sessionID }
+    return this.hmppsAuthClient.getSystemClientToken().then(hmppsToken =>
+      OneTimeCodeService.restClient(hmppsToken, sourceIp).post({
+        path: `/oneTimeCode/email`,
+        data: oneTimeCodeRequest,
+      })
+    )
   }
 
   async verifyOneTimeCode(_secret: string, _sourceIp: string): Promise<string> {
