@@ -1,4 +1,3 @@
-import RequestLinkPage from '../../pages/link/requestLink'
 import Page from '../../pages/page'
 import ScanBarcodePage from '../../pages/scan/scanBarcode'
 import ContactHelpdeskPage from '../../pages/helpdesk/contactHelpdesk'

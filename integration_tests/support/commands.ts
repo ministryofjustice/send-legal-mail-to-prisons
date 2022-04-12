@@ -9,7 +9,7 @@ Cypress.Commands.add('signIn', (options = { failOnStatusCode: true }) => {
   cy.task('getSignInUrl').then((url: string) => cy.visit(url, options))
 })
 
-Cypress.Commands.add('signInAsLegalSender', (options = {}) => {
+Cypress.Commands.add('signInAsLegalSender', () => {
   cy.task('stubAuthToken')
   cy.task('stubGetCjsmUserDetails')
 
