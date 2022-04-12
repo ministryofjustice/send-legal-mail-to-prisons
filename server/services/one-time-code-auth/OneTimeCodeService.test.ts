@@ -43,4 +43,27 @@ describe('One Time Code Service', () => {
       })
     })
   })
+
+  describe('verifyOneTimeCode', () => {
+    it('should verify a one time code', done => {
+      mockedSendLegalMailApi
+        .post('/oneTimeCode/verify', { code: 'ABCD', sessionID: '12345678' })
+        .reply(200, { token: 'a-valid-jwt' })
+
+      oneTimeCodeService.verifyOneTimeCode('ABCD', '12345678', '127.0.0.1').then(token => {
+        expect(hmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+        expect(token).toEqual('a-valid-jwt')
+        done()
+      })
+    })
+
+    it('should fail to verify a one time code given getSystemClientToken fails', done => {
+      hmppsAuthClient.getSystemClientToken.mockRejectedValue('an error getting system client token')
+
+      oneTimeCodeService.verifyOneTimeCode('ABCD', '12345678', '127.0.0.1').catch(error => {
+        expect(error).toBe('an error getting system client token')
+        done()
+      })
+    })
+  })
 })
