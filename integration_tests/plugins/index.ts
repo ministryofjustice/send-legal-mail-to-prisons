@@ -2,10 +2,14 @@ import { resetStubs } from '../mockApis/wiremock'
 
 import auth from '../mockApis/auth'
 import tokenVerification from '../mockApis/tokenVerification'
-import sendLegalMail from '../mockApis/sendLegalMail'
 import prisonRegister from '../mockApis/prisonRegister'
 import zendesk from '../mockApis/zendesk'
 import state from '../support/state'
+import oneTimeCode from '../mockApis/sendLegalMail/oneTimeCode'
+import link from '../mockApis/sendLegalMail/link'
+import barcode from '../mockApis/sendLegalMail/barcode'
+import contact from '../mockApis/sendLegalMail/contact'
+import cjsm from '../mockApis/sendLegalMail/cjsm'
 
 export default (on: (string, Record) => void): void => {
   on('task', {
@@ -22,32 +26,43 @@ export default (on: (string, Record) => void): void => {
 
     stubTokenVerificationPing: tokenVerification.stubPing,
 
-    stubRequestLink: sendLegalMail.stubRequestLink,
-    stubRequestLinkFailure: sendLegalMail.stubRequestLinkFailure,
-    stubRequestLinkNonCjsmEmailFailure: sendLegalMail.stubRequestLinkNonCjsmEmailFailure,
-    stubRequestLinkEmailTooLong: sendLegalMail.stubRequestLinkEmailTooLong,
-    stubVerifyLink: sendLegalMail.stubVerifyLink,
-    stubVerifyLinkThatWillExpireIn1SecondFromNow: sendLegalMail.stubVerifyLinkThatWillExpireIn1SecondFromNow,
-    stubVerifyLinkNotFoundFailure: sendLegalMail.stubVerifyLinkNotFoundFailure,
-    stubVerifyLinkInvalidSignatureFailure: sendLegalMail.stubVerifyLinkInvalidSignatureFailure,
+    stubRequestLink: link.stubRequestLink,
+    stubRequestLinkFailure: link.stubRequestLinkFailure,
+    stubRequestLinkNonCjsmEmailFailure: link.stubRequestLinkNonCjsmEmailFailure,
+    stubRequestLinkEmailTooLong: link.stubRequestLinkEmailTooLong,
+    stubVerifyLink: link.stubVerifyLink,
+    stubVerifyLinkThatWillExpireIn1SecondFromNow: link.stubVerifyLinkThatWillExpireIn1SecondFromNow,
+    stubVerifyLinkNotFoundFailure: link.stubVerifyLinkNotFoundFailure,
+    stubVerifyLinkInvalidSignatureFailure: link.stubVerifyLinkInvalidSignatureFailure,
 
-    stubVerifyValidBarcode: sendLegalMail.stubVerifyValidBarcode,
-    stubVerifyDuplicateBarcode: sendLegalMail.stubVerifyDuplicateBarcode,
-    stubVerifyRandomCheckBarcode: sendLegalMail.stubVerifyRandomCheckBarcode,
-    stubVerifyExpiredBarcode: sendLegalMail.stubVerifyExpiredBarcode,
-    stubVerifyNotFoundBarcode: sendLegalMail.stubVerifyNotFoundBarcode,
-    stubMoreChecksRequestedForBarcode: sendLegalMail.stubMoreChecksRequestedForBarcode,
-    stubCreateContact: sendLegalMail.stubCreateContact,
-    stubSearchContactsNone: sendLegalMail.stubSearchContactsNone,
-    stubSearchContactsOne: sendLegalMail.stubSearchContactsOne,
-    stubGetContactNone: sendLegalMail.stubGetContactNone,
-    stubGetContactOne: sendLegalMail.stubGetContactOne,
-    stubGetContact: sendLegalMail.stubGetContact,
-    stubUpdateContact: sendLegalMail.stubUpdateContact,
-    stubGetCjsmUserDetails: sendLegalMail.stubGetCjsmUserDetails,
+    stubVerifyValidBarcode: barcode.stubVerifyValidBarcode,
+    stubVerifyDuplicateBarcode: barcode.stubVerifyDuplicateBarcode,
+    stubVerifyRandomCheckBarcode: barcode.stubVerifyRandomCheckBarcode,
+    stubVerifyExpiredBarcode: barcode.stubVerifyExpiredBarcode,
+    stubVerifyNotFoundBarcode: barcode.stubVerifyNotFoundBarcode,
+    stubMoreChecksRequestedForBarcode: barcode.stubMoreChecksRequestedForBarcode,
+    stubCreateBarcode: barcode.stubCreateBarcode,
+    stubCreateBarcodeFailure: barcode.stubCreateBarcodeFailure,
 
-    stubCreateBarcode: sendLegalMail.stubCreateBarcode,
-    stubCreateBarcodeFailure: sendLegalMail.stubCreateBarcodeFailure,
+    stubCreateContact: contact.stubCreateContact,
+    stubSearchContactsNone: contact.stubSearchContactsNone,
+    stubSearchContactsOne: contact.stubSearchContactsOne,
+    stubGetContactNone: contact.stubGetContactNone,
+    stubGetContactOne: contact.stubGetContactOne,
+    stubGetContact: contact.stubGetContact,
+    stubUpdateContact: contact.stubUpdateContact,
+
+    stubGetCjsmUserDetails: cjsm.stubGetCjsmUserDetails,
+
+    stubRequestOneTimeCode: oneTimeCode.stubRequestOneTimeCode,
+    stubRequestOneTimeCodeFailure: oneTimeCode.stubRequestOneTimeCodeFailure,
+    stubRequestOneTimeCodeNonCjsmEmailFailure: oneTimeCode.stubRequestOneTimeCodeNonCjsmEmailFailure,
+    stubRequestOneTimeCodeEmailTooLong: oneTimeCode.stubRequestOneTimeCodeEmailTooLong,
+    stubVerifyOneTimeCode: oneTimeCode.stubVerifyOneTimeCode,
+    stubVerifyOneTimeCodeThatWillExpireIn1SecondFromNow:
+      oneTimeCode.stubVerifyOneTimeCodeThatWillExpireIn1SecondFromNow,
+    stubVerifyOneTimeCodeNotFoundFailure: oneTimeCode.stubVerifyOneTimeCodeNotFoundFailure,
+    stubVerifyOneTimeCodeInvalidSignatureFailure: oneTimeCode.stubVerifyOneTimeCodeInvalidSignatureFailure,
 
     stubGetPrisonRegister: prisonRegister.stubGetPrisonRegister,
 
