@@ -32,20 +32,17 @@ export default class RequestOneTimeCodeController {
       return res.redirect('request-code')
     }
 
-    return this.oneTimeCodeService
-      .requestOneTimeCode(req.session.requestOneTimeCodeForm.email, req.sessionID, req.ip)
-      .then(() => {
-        return res.redirect('email-sent')
-      })
-      .catch(error => {
-        const errorResponse: ErrorResponse = error.data
-        const errorMessage =
-          error.status === 400 &&
-          Array.of('INVALID_CJSM_EMAIL', 'EMAIL_TOO_LONG').includes(errorResponse.errorCode.code)
-            ? 'Enter an email address in the correct format'
-            : 'There was an error generating your sign in code. Try again to request a new one to sign in.'
-        req.flash('errors', [{ href: '#email', text: errorMessage }])
-        return res.redirect('request-code')
-      })
+    try {
+      await this.oneTimeCodeService.requestOneTimeCode(req.session.requestOneTimeCodeForm.email, req.sessionID, req.ip)
+      return res.redirect('email-sent')
+    } catch (error) {
+      const errorResponse: ErrorResponse = error.data
+      const errorMessage =
+        error.status === 400 && Array.of('INVALID_CJSM_EMAIL', 'EMAIL_TOO_LONG').includes(errorResponse.errorCode.code)
+          ? 'Enter an email address in the correct format'
+          : 'There was an error generating your sign in code. Try again to request a new one to sign in.'
+      req.flash('errors', [{ href: '#email', text: errorMessage }])
+      return res.redirect('request-code')
+    }
   }
 }
