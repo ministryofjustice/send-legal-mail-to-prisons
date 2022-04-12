@@ -91,6 +91,7 @@ export default function createApp(
   if (config.featureFlags.lsjOneTimeCodeAuthEnabled) {
     app.use('/oneTimeCode', requestOneTimeCodeAuthorised())
     app.use('/oneTimeCode', setUpOneTimeCode(app, oneTimeCodeService))
+    app.use('/link/request-link', (req, res) => res.redirect('/oneTimeCode/request-code'))
   } else {
     app.use('/link', requestLinkAuthorised())
     app.use('/link', setUpLink(app, magicLinkService, appInsightsClient))

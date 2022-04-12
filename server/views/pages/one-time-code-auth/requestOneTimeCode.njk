@@ -20,15 +20,10 @@
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">Request a code to sign in</h1>
-        <h2>TODO - Design and Content Team to weave their magic here</h2>
-        <p>Enter your Criminal Justice Secure Mail (CJSM) email. You'll receive an email containing a one time passcode to the service in your inbox.</p>
-        <p>The code will expire {{ oneTimeCodeValidityDuration }} minutes after you request it.</p>
-      </div>
-    </div>
+        <h1 class="govuk-heading-xl">Sign in with your CJSM email address</h1>
+        <p>Use your CJSM (Criminal Justice Secure Mail) email address to sign in. You'll receive an email containing a code.</p>
+        <p>When you've entered the code you'll stay signed in for {{ lsjSessionDuration }}.
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
         <form id="email-form" action="request-code" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
@@ -39,7 +34,7 @@
                 classes: 'govuk-label–s'
               },
               hint: {
-                text: 'For example, name@myorganisation.com.cjsm.net'
+                text: 'For example name@myorganisation.com.cjsm.net'
               },
               id: "email",
               name: "email",
@@ -49,12 +44,10 @@
               autocomplete: 'email',
               errorMessage: errors | findError('email')
             }) }}
-            <div class="govuk-button-group">
-              {{ govukButton({
-                text: "Submit",
-                attributes: { 'data-qa': 'request-code-button' }
-              }) }}
-            </div>
+            {{ govukButton({
+              text: "Submit",
+              attributes: { 'data-qa': 'request-code-button' }
+            }) }}
           {% endcall %}
 
         </form>

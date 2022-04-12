@@ -9,11 +9,13 @@ export default class RequestOneTimeCodeView {
 
   get renderArgs(): {
     oneTimeCodeValidityDuration: number
+    lsjSessionDuration: string
     form: RequestLinkForm
     errors: Array<Record<string, string>>
   } {
     return {
       oneTimeCodeValidityDuration: config.oneTimeCodeValidityDuration,
+      lsjSessionDuration: `${config.lsjSessionDuration} day${config.lsjSessionDuration > 1 ? 's' : ''}`,
       form: this.requestOneTimeCodeForm,
       errors: this.errors || [],
     }

@@ -12,6 +12,7 @@ generic-service:
     PRISON_REGISTER_API_URL: "https://prison-register-dev.hmpps.service.justice.gov.uk"
     SUPPORTED_PRISONS: ""
     COVERSHEET_PRINT_DEBUG: "true"
+    LSJ_SESSION_DURATION_IN_DAYS: 1
 
   namespace_secrets:
     smoke-test:
