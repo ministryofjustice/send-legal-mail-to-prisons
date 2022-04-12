@@ -56,12 +56,7 @@ export default class FindRecipientByPrisonNumberPage extends Page {
   }
 
   static goToPage = (): FindRecipientByPrisonNumberPage => {
-    cy.task('stubAuthToken')
-    cy.task('stubRequestLink')
-    cy.task('stubGetPrisonRegister')
-    cy.task('stubVerifyLink')
-    cy.task('stubGetCjsmUserDetails')
-    cy.visit('/link/verify-link?secret=a-valid-secret')
+    cy.signInAsLegalSender()
     return Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   }
 }

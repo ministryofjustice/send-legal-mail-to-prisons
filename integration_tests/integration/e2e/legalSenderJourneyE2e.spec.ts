@@ -1,5 +1,4 @@
 import Page from '../../pages/page'
-import RequestLinkPage from '../../pages/link/requestLink'
 import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientByPrisonNumber'
 import CreateNewContactByPrisonNumberPage from '../../pages/barcode/createNewContactByPrisonNumber'
 import ReviewRecipientsPage from '../../pages/barcode/reviewRecipients'
@@ -9,14 +8,10 @@ context('Legal Sender Journey E2E', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubAuthToken')
-    cy.task('stubRequestLink')
-    cy.task('stubVerifyLink')
     cy.task('stubCreateBarcode')
 
-    // Request a magic link and click it to sign in and land on the Find Recipient By Prison Number page
-    cy.visit('/link/request-link')
-    Page.verifyOnPage(RequestLinkPage).submitFormWithValidEmailAddress('valid@email.address.cjsm.net')
-    cy.visit('/link/verify-link?secret=a-valid-secret')
+    // Sign in as a legal sender and land on the Find Recipient By Prison Number page
+    cy.signInAsLegalSender()
   })
 
   it('should allow Legal Senders to perform all actions as part of their workflow - images', () => {

@@ -40,4 +40,9 @@ export default class RequestLinkPage extends Page {
     cy.get('.govuk-error-summary__list').should('contain', partialMessage)
     cy.get('#email-error').should('contain', partialMessage)
   }
+
+  static goToPage = (): RequestLinkPage => {
+    cy.visit('/link/request-link')
+    return Page.verifyOnPage(RequestLinkPage)
+  }
 }

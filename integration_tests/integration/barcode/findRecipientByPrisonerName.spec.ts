@@ -3,16 +3,22 @@ import RequestLinkPage from '../../pages/link/requestLink'
 import FindRecipientByPrisonerNamePage from '../../pages/barcode/findRecipientByPrisonerName'
 import CreateNewContactByPrisonerNamePage from '../../pages/barcode/createNewContactByPrisonerName'
 import ChooseContactPage from '../../pages/barcode/chooseContact'
+import featureFlags from '../../support/featureFlags'
+import RequestOneTimeCodePage from '../../pages/one-time-code/requestOneTimeCode'
 
 context('Find Recipient By Prisoner Name Page', () => {
   beforeEach(() => {
     cy.task('reset')
   })
 
-  it('should redirect to Request List page if visiting without an auth token in the session', () => {
+  it('should redirect to sign in page (Request Link or Request Code) if visiting without an auth token in the session', () => {
     cy.visit('/barcode/find-recipient/by-prisoner-name')
 
-    Page.verifyOnPage(RequestLinkPage)
+    if (featureFlags.isLsjOneTimeCodeAuthEnabled()) {
+      Page.verifyOnPage(RequestOneTimeCodePage)
+    } else {
+      Page.verifyOnPage(RequestLinkPage)
+    }
   })
 
   it('should redisplay form with errors given invalid prisoner name', () => {
