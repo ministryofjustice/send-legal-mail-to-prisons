@@ -36,6 +36,7 @@ describe('RequestOneTimeCodeController', () => {
 
   beforeEach(() => {
     config.oneTimeCodeValidityDuration = 10
+    config.lsjSessionDuration = 1
   })
 
   afterEach(() => {
@@ -55,6 +56,7 @@ describe('RequestOneTimeCodeController', () => {
         errors: [],
         form: {},
         oneTimeCodeValidityDuration: 10,
+        lsjSessionDuration: '1 day',
       })
       expect(req.session.requestOneTimeCodeForm).toBeUndefined()
     })
@@ -72,6 +74,7 @@ describe('RequestOneTimeCodeController', () => {
         errors: [{ href: '#email', text: 'Enter a valid email' }],
         form: { email: 'someone@aarvark.com' },
         oneTimeCodeValidityDuration: 10,
+        lsjSessionDuration: '1 day',
       })
       expect(req.session.requestOneTimeCodeForm).toBeUndefined()
     })

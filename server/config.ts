@@ -122,6 +122,7 @@ export default {
   checkRule39ContainerId: get('CHECK_RULE39_MAIL_TAG_MANAGER_CONTAINER_ID', null),
   magicLinkValidityDuration: Number(get('MAGIC_LINK_VALIDITY_DURATION_IN_MINUTES', 60)),
   oneTimeCodeValidityDuration: Number(get('ONE_TIME_CODE_VALIDITY_DURATION_IN_MINUTES', 30)),
+  lsjSessionDuration: Number(get('LSJ_SESSION_DURATION_IN_DAYS', 7)),
   supportedPrisons: get('SUPPORTED_PRISONS', ''),
   coversheetPdf: {
     printDebugInfo: toBoolean(get('COVERSHEET_PRINT_DEBUG', false)),

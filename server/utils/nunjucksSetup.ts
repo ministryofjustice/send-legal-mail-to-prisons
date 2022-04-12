@@ -20,7 +20,14 @@ export default function nunjucksSetup(app: express.Express): void {
 
   app.locals.asset_path = '/assets/'
   app.use((req, res, next) => {
-    const externalUrls = ['/link', '/barcode', '/contact-helpdesk', '/cookies-policy', '/privacy-policy']
+    const externalUrls = [
+      '/link',
+      '/oneTimeCode',
+      '/barcode',
+      '/contact-helpdesk',
+      '/cookies-policy',
+      '/privacy-policy',
+    ]
     const externalUser = externalUrls.some(externalUrl => req.url.startsWith(externalUrl))
     res.locals.externalUser = externalUser
     app.locals.externalUser = externalUser
