@@ -11,6 +11,10 @@ declare module 'forms' {
     email?: string
   }
 
+  export interface VerifyOneTimeCodeForm {
+    code?: string
+  }
+
   export interface FindRecipientByPrisonNumberForm {
     prisonNumber?: string
   }
