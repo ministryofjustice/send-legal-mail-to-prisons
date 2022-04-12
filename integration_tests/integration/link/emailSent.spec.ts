@@ -1,9 +1,10 @@
+import { skipOn } from '@cypress/skip-test'
 import Page from '../../pages/page'
 import RequestLinkPage from '../../pages/link/requestLink'
 import EmailSentPage from '../../pages/link/emailSent'
 import featureFlags from '../../support/featureFlags'
 
-if (!featureFlags.isLsjOneTimeCodeAuthEnabled()) {
+skipOn(featureFlags.isLsjOneTimeCodeAuthEnabled(), () =>
   context('Link Email Sent Page', () => {
     beforeEach(() => {
       cy.task('reset')
@@ -31,4 +32,4 @@ if (!featureFlags.isLsjOneTimeCodeAuthEnabled()) {
       Page.verifyOnPage(RequestLinkPage)
     })
   })
-}
+)

@@ -1,9 +1,10 @@
+import { skipOn } from '@cypress/skip-test'
 import Page from '../../pages/page'
 import RequestLinkPage from '../../pages/link/requestLink'
 import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientByPrisonNumber'
 import featureFlags from '../../support/featureFlags'
 
-if (!featureFlags.isLsjOneTimeCodeAuthEnabled()) {
+skipOn(featureFlags.isLsjOneTimeCodeAuthEnabled(), () =>
   context('Verify Link', () => {
     beforeEach(() => {
       cy.task('reset')
@@ -69,4 +70,4 @@ if (!featureFlags.isLsjOneTimeCodeAuthEnabled()) {
       Page.verifyOnPage(RequestLinkPage).hasNoErrors()
     })
   })
-}
+)
