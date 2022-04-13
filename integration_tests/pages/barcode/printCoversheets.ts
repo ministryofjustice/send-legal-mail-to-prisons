@@ -29,7 +29,7 @@ export default class PrintCoversheetsPage extends Page {
 
   sendMoreLegalMailLink = (): PageElement => cy.get('[data-qa=send-more-legal-mail]')
 
-  smokeTestBarcode = (): PageElement => cy.get('p[data-qa=smoke-test-barcode]').invoke('text')
+  smokeTestBarcode = (): PageElement => cy.get('[data-qa=smoke-test-barcode]').invoke('text')
 
   static goToPage = (): PrintCoversheetsPage => SelectEnvelopeSizePage.goToPage().submitHavingSelectedDlEnvelopeSize()
 }

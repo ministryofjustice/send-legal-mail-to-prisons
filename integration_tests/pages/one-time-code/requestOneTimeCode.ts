@@ -1,17 +1,15 @@
 import Page, { PageElement } from '../page'
-// eslint-disable-next-line import/no-cycle
-import EmailSentPage from './emailSent'
 
 export default class RequestOneTimeCodePage extends Page {
   constructor() {
     super('request-one-time-code')
   }
 
-  submitFormWithValidEmailAddress = (email: string, expectNextPage = true): EmailSentPage | RequestOneTimeCodePage => {
+  submitFormWithValidEmailAddress<T>(T, email: string): T {
     this.emailField().type(email)
 
     this.submitButton().click()
-    return expectNextPage ? Page.verifyOnPage(EmailSentPage) : Page.verifyOnPage(RequestOneTimeCodePage)
+    return Page.verifyOnPage(T)
   }
 
   submitFormWithInvalidEmailAddress = (email: string): RequestOneTimeCodePage => {

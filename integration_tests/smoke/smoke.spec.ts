@@ -1,16 +1,13 @@
 import Page from '../pages/page'
-import RequestLinkPage from '../pages/link/requestLink'
 import ReviewRecipientsPage from '../pages/barcode/reviewRecipients'
 import generateRandomPrisonNumber from './prisonNumberGenerator'
 import IndexPage from '../pages'
+import FindRecipientByPrisonNumberPage from '../pages/barcode/findRecipientByPrisonNumber'
 
 context('Smoke test', () => {
   it('should create a barcode', () => {
-    cy.visit(`${Cypress.env('LSJ_URL')}/link/request-link`)
-    let requestLinkPage = Page.verifyOnPage(RequestLinkPage)
-    requestLinkPage = requestLinkPage.clickCookieAction(RequestLinkPage, 'reject')
-    requestLinkPage = requestLinkPage.clickCookieAction(RequestLinkPage, 'hide')
-    const findRecipientPage = requestLinkPage.submitFormWithSmokeTestUser(Cypress.env('APP_SMOKETEST_LSJSECRET'))
+    cy.signInAsSmokeTestLegalSender()
+    const findRecipientPage = Page.verifyOnPage(FindRecipientByPrisonNumberPage)
 
     const createContactPage = findRecipientPage //
       .submitWithPrisonNumber(generateRandomPrisonNumber())

@@ -61,9 +61,7 @@
     </div>
 
     {% if smokeTestBarcode %}
-    <div class="govuk-visually-hidden">
-      <p data-qa='smoke-test-barcode'>{{ smokeTestBarcode }}</p>
-    </div>
+      <span class="govuk-!-display-none" data-qa="smoke-test-barcode">{{ smokeTestBarcode }}</span>
     {% endif %}
   </section>
 
