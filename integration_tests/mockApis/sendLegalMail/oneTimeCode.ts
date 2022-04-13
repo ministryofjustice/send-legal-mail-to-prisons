@@ -11,7 +11,7 @@ const stubRequestOneTimeCode = (): SuperAgentRequest =>
     request: {
       method: 'POST',
       urlPattern: '/send-legal-mail/oneTimeCode/email',
-      bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }],
+      bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }, { matchesJsonPath: '$[?(@.sessionID =~ /.*/i)]' }],
       headers: {
         'x-slm-client-ip': { matches: '.+' },
       },
@@ -29,7 +29,7 @@ const stubRequestOneTimeCodeFailure = (): SuperAgentRequest =>
     request: {
       method: 'POST',
       urlPattern: '/send-legal-mail/oneTimeCode/email',
-      bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }],
+      bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }, { matchesJsonPath: '$[?(@.sessionID =~ /.*/i)]' }],
       headers: {
         'x-slm-client-ip': { matches: '.+' },
       },
@@ -47,7 +47,7 @@ const stubRequestOneTimeCodeNonCjsmEmailFailure = (): SuperAgentRequest =>
     request: {
       method: 'POST',
       urlPattern: '/send-legal-mail/oneTimeCode/email',
-      bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }],
+      bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }, { matchesJsonPath: '$[?(@.sessionID =~ /.*/i)]' }],
       headers: {
         'x-slm-client-ip': { matches: '.+' },
       },
@@ -72,7 +72,7 @@ const stubRequestOneTimeCodeEmailTooLong = (): SuperAgentRequest =>
     request: {
       method: 'POST',
       urlPattern: '/send-legal-mail/oneTimeCode/email',
-      bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }],
+      bodyPatterns: [{ matchesJsonPath: '$[?(@.email =~ /.*/i)]' }, { matchesJsonPath: '$[?(@.sessionID =~ /.*/i)]' }],
       headers: {
         'x-slm-client-ip': { matches: '.+' },
       },

@@ -1,9 +1,9 @@
-import RequestLinkPage from '../../pages/link/requestLink'
 import Page from '../../pages/page'
 import ScanBarcodePage from '../../pages/scan/scanBarcode'
 import ContactHelpdeskPage from '../../pages/helpdesk/contactHelpdesk'
 import ContactHelpdeskConfirmationPage from '../../pages/helpdesk/contactHelpdeskConfirmation'
 import AuthorisationErrorPage from '../../pages/authorisationError'
+import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientByPrisonNumber'
 
 context('Contact Helpdesk', () => {
   let contactHelpdeskPage: ContactHelpdeskPage
@@ -11,10 +11,11 @@ context('Contact Helpdesk', () => {
     {
       journey: 'Legal Sender',
       setupFunction: () => {
-        cy.visit('/link/request-link')
-        const requestLinkPage = Page.verifyOnPage(RequestLinkPage)
-        contactHelpdeskPage = requestLinkPage.contactHelpdesk(ContactHelpdeskPage)
-        contactHelpdeskPage.referringPageIs(requestLinkPage.pageId).hasHeaderTitle('Send legal mail to prisons')
+        const findRecipientByPrisonNumberPage = FindRecipientByPrisonNumberPage.goToPage()
+        contactHelpdeskPage = findRecipientByPrisonNumberPage.contactHelpdesk(ContactHelpdeskPage)
+        contactHelpdeskPage
+          .referringPageIs(findRecipientByPrisonNumberPage.pageId)
+          .hasHeaderTitle('Send legal mail to prisons')
       },
     },
     {

@@ -23,8 +23,8 @@
     "typecheck": "tsc && tsc -p integration_tests",
     "test": "jest --runInBand --detectOpenHandles",
     "security_audit": "npx audit-ci --config audit-ci.json",
-    "int-test": "cypress run --config video=false",
-    "int-test-ui": "cypress open",
+    "int-test": "cypress run --config video=false --env $(grep ONE_TIME_CODE_AUTH_ENABLED feature.env)",
+    "int-test-ui": "cypress open --env $(grep ONE_TIME_CODE_AUTH_ENABLED feature.env)",
     "clean": "rm -rf dist build node_modules stylesheets"
   },
   "engines": {
@@ -123,6 +123,7 @@
     "superagent": "^6.1.0"
   },
   "devDependencies": {
+    "@cypress/skip-test": "^2.6.1",
     "@types/bunyan": "^1.8.7",
     "@types/bunyan-format": "^0.2.4",
     "@types/compression": "^1.7.2",
