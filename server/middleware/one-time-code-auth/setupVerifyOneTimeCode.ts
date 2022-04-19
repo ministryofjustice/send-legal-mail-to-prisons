@@ -4,7 +4,7 @@ import VerifyOneTimeCodeController from '../../routes/one-time-code-auth/VerifyO
 export default function setupVerifyOneTimeCode(verifyOneTimeCodeController: VerifyOneTimeCodeController): Router {
   const router = express.Router()
 
-  router.post('/verify-code', (req, res) => verifyOneTimeCodeController.verifyOneTimeCode(req, res))
+  router.post('/verify-code', (req, res, next) => verifyOneTimeCodeController.verifyOneTimeCode(req, res, next))
 
   return router
 }

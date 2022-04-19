@@ -1,0 +1,22 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set pageTitle = applicationName + " - Start one time code again" %}
+{% set pageId = 'one-time-code-start-again' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">You need to start again</h1>
+        <p>This is because you entered the wrong code too many times. To sign in with your CJSM email you need to <a data-qa="request-sign-in-code" class="govuk-link govuk-link--no-visited-state" href="/oneTimeCode/request-code">request a new code</a>.</p>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

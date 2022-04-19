@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { JwtPayload, verify as verifyJwt, VerifyErrors } from 'jsonwebtoken'
 import type { VerifyOneTimeCodeForm } from 'forms'
 import OneTimeCodeService from '../../services/one-time-code-auth/OneTimeCodeService'
@@ -7,7 +7,7 @@ import config from '../../config'
 export default class VerifyOneTimeCodeController {
   constructor(private readonly oneTimeCodeService: OneTimeCodeService) {}
 
-  async verifyOneTimeCode(req: Request, res: Response): Promise<void> {
+  async verifyOneTimeCode(req: Request, res: Response, next: NextFunction): Promise<void> {
     req.session.barcodeUser = { tokenValid: false, token: undefined }
     const form: VerifyOneTimeCodeForm = { ...req.body }
     if (!form?.code) {
@@ -19,10 +19,24 @@ export default class VerifyOneTimeCodeController {
     try {
       token = await this.oneTimeCodeService.verifyOneTimeCode(form.code, req.sessionID, req.ip)
     } catch (error) {
-      req.flash('errors', [
-        { href: '#email', text: 'The code you used is no longer valid. Request a new one to sign in.' },
-      ])
-      return res.redirect('/oneTimeCode/request-code')
+      switch (error.data.errorCode.code) {
+        case 'OTC_NOT_FOUND': {
+          req.flash('errors', [{ href: '#code', text: 'Enter the code we emailed you. This is 4 letters, like DNLC' }])
+          return res.redirect('/oneTimeCode/email-sent')
+        }
+        case 'OTC_SESSION_NOT_FOUND': {
+          req.flash('errors', [
+            { href: '#email', text: 'The code you used is no longer valid. Request a new one to sign in.' },
+          ])
+          return res.redirect('/oneTimeCode/request-code')
+        }
+        case 'OTC_TOO_MANY_ATTEMPTS': {
+          return res.redirect('/oneTimeCode/start-again')
+        }
+        default: {
+          return next(error)
+        }
+      }
     }
 
     try {

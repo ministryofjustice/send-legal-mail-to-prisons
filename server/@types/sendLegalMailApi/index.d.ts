@@ -80,10 +80,10 @@ export interface components {
       userMessage: string
     }
     AuthenticationRequestErrorCodes: components['schemas']['ErrorCode'] & {
+      /** @enum {string} */
       code?: 'SESSION_ID_MANDATORY' | 'EMAIL_MANDATORY' | 'EMAIL_TOO_LONG' | 'INVALID_EMAIL' | 'INVALID_CJSM_EMAIL'
       userMessage?: string
     } & (
-        | components['schemas']['SessionIdMandatory']
         | components['schemas']['EmailMandatory']
         | components['schemas']['EmailTooLong']
         | components['schemas']['EmailInvalid']
@@ -157,10 +157,6 @@ export interface components {
       userMessage: string
     }
     EmailTooLong: {
-      code: string
-      userMessage: string
-    }
-    SessionIdMandatory: {
       code: string
       userMessage: string
     }
@@ -282,7 +278,10 @@ export interface components {
       token: string
     }
     OneTimeCodeRequest: {
-      /** @description The CJSM email address to send the one time code to */
+      /**
+       * @description The CJSM email address to send the one time code to
+       * @example andrew.barret@company.com.cjsm.net
+       */
       email: string
       /** @description The browser session ID */
       sessionID: string

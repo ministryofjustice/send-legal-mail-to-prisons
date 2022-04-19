@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import type { ErrorResponse } from 'sendLegalMailApiClient'
 import RequestOneTimeCodeView from './RequestOneTimeCodeView'
 import OneTimeCodeService from '../../services/one-time-code-auth/OneTimeCodeService'
@@ -19,12 +19,12 @@ export default class RequestOneTimeCodeController {
     return res.render('pages/one-time-code-auth/requestOneTimeCode', { ...view.renderArgs })
   }
 
-  async submitOneTimeCodeRequest(req: Request, res: Response): Promise<void> {
+  async submitOneTimeCodeRequest(req: Request, res: Response, next: NextFunction): Promise<void> {
     req.session.lsjSmokeTestUser = false
     if (config.smoketest.lsjSecret && req.body.email === config.smoketest.lsjSecret) {
       req.body = { code: config.smoketest.lsjSecret }
       req.session.lsjSmokeTestUser = true
-      return this.verifyOneTimeCodeController.verifyOneTimeCode(req, res)
+      return this.verifyOneTimeCodeController.verifyOneTimeCode(req, res, next)
     }
 
     req.session.requestOneTimeCodeForm = { ...req.body }
