@@ -84,6 +84,7 @@ export interface components {
       code?: 'SESSION_ID_MANDATORY' | 'EMAIL_MANDATORY' | 'EMAIL_TOO_LONG' | 'INVALID_EMAIL' | 'INVALID_CJSM_EMAIL'
       userMessage?: string
     } & (
+        | components['schemas']['SessionIdMandatory']
         | components['schemas']['EmailMandatory']
         | components['schemas']['EmailTooLong']
         | components['schemas']['EmailInvalid']
@@ -221,6 +222,10 @@ export interface components {
        * @example Aardvark Solicitors
        */
       createdBy: string
+      code: string
+      userMessage: string
+    }
+    SessionIdMandatory: {
       code: string
       userMessage: string
     }
