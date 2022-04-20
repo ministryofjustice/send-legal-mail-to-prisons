@@ -1,0 +1,22 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set pageTitle = applicationName + " - One time code no longer valid" %}
+{% set pageId = 'one-time-code-no-longer-valid' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">The code you tried is no longer valid</h1>
+        <p>The code was sent over {{ oneTimeCodeValidityDuration }} minutes ago. Re-enter your CJSM email address to <a data-qa="request-sign-in-code" class="govuk-link govuk-link--no-visited-state" href="/oneTimeCode/request-code">request a new code</a>.</p>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
