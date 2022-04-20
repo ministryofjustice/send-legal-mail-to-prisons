@@ -1,4 +1,5 @@
 {% extends "layout.njk" %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
@@ -18,38 +19,35 @@
       }) }}
     {% endif %}
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
+    <form action="/barcode/choose-barcode-option" method="post" novalidate id="choose-barcode-option-form">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
-        <form action="/barcode/choose-barcode-option" method="post" novalidate>
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      {% call govukFieldset({ }) %}
 
-          {{ govukRadios({
-            idPrefix: "barcodeOption",
-            name: "barcodeOption",
-            fieldset: {
-              legend: {
-                text: "How do you want to print the barcodes?",
-                isPageHeading: true,
-                classes: "govuk-fieldset__legend--xl"
-              }
-            },
-            hint: {
-              text: "Each recipient's address will be displayed with the barcode. You'll need to use a window envelope."
-            },
-            items: ['image', 'coversheet'] | renderChooseBarcodeOptionRadiosFilter,
-            errorMessage: errors | findError('barcodeOption')
-          }) }}
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading">How do you want to print the barcodes?</h1>
+            </legend>
+            <p class="govuk-hint">Each recipient's address will be displayed with the barcode. You'll need to use a window envelope.</p>
+          </div>
+        </div>
 
-          {{ govukButton({
-            text: "Continue",
-            preventDoubleClick: true,
-            attributes: { 'data-qa': 'continue-button' }
-          }) }}
+        {{ govukRadios({
+          idPrefix: "barcodeOption",
+          name: "barcodeOption",
+          items: ['image', 'coversheet'] | renderChooseBarcodeOptionRadiosFilter,
+          errorMessage: errors | findError('barcodeOption')
+        }) }}
 
-        </form>
-      </div>
-    </div>
+        {{ govukButton({
+          text: "Continue",
+          preventDoubleClick: true,
+          attributes: { 'data-qa': 'continue-button' }
+        }) }}
+
+      {% endcall %}
+    </form>
   </section>
 
 {% endblock %}

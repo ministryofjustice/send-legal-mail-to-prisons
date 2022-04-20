@@ -1,0 +1,17 @@
+#choose-barcode-option-form {
+  ol {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      div {
+        display: table;
+
+        span {
+          display: table-cell;
+        }
+      }
+    }
+  }
+}
