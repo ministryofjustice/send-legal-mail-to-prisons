@@ -11,6 +11,7 @@ generic-service:
     SEND_LEGAL_MAIL_API_URL: "https://send-legal-mail-api.prison.service.justice.gov.uk"
     PRISON_REGISTER_API_URL: "https://prison-register.hmpps.service.justice.gov.uk"
     SUPPORTED_PRISONS: "SKI,LEI,SLI,HHI,RSI"
+    ONE_TIME_CODE_AUTH_ENABLED: "true"
 
 generic-prometheus-alerts:
   alertSeverity: farsight-alerts
