@@ -12,6 +12,7 @@ import renderEnvelopeSizeRadiosFilter from '../filters/renderEnvelopeSizeRadiosF
 import renderChooseBarcodeOptionRadiosFilter from '../filters/renderChooseBarcodeOptionRadiosFilter'
 import renderChooseContactRadiosFilter from '../filters/renderChooseContactRadiosFilter'
 import config from '../config'
+import pageTitleInErrorFilter from '../filters/pageTitleInErrorFilter'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -81,6 +82,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('renderEnvelopeSizeRadios', renderEnvelopeSizeRadiosFilter)
   njkEnv.addFilter('renderChooseBarcodeOptionRadiosFilter', renderChooseBarcodeOptionRadiosFilter)
   njkEnv.addFilter('renderChooseContactRadiosFilter', renderChooseContactRadiosFilter)
+  njkEnv.addFilter('pageTitleInErrorFilter', pageTitleInErrorFilter)
 
   njkEnv.addGlobal('contactHelpdeskBannerExcludedOnPages', [
     'auth-error',
