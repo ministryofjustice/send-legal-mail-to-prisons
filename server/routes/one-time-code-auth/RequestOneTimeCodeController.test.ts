@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import type { SessionData } from 'express-session'
 import RequestOneTimeCodeController from './RequestOneTimeCodeController'
 import VerifyOneTimeCodeController from './VerifyOneTimeCodeController'
@@ -24,6 +24,8 @@ const oneTimeCodeService = {
 const verifyOneTimeCodeController = {
   verifyOneTimeCode: jest.fn(),
 }
+
+const next = jest.fn()
 
 jest.mock('../../config')
 jest.mock('./RequestOneTimeCodeValidator')
@@ -90,7 +92,8 @@ describe('RequestOneTimeCodeController', () => {
 
       await requestOneTimeCodeController.submitOneTimeCodeRequest(
         req as undefined as Request,
-        res as undefined as Response
+        res as undefined as Response,
+        next as undefined as NextFunction
       )
 
       expect(oneTimeCodeService.requestOneTimeCode).toHaveBeenCalledWith(
@@ -108,7 +111,8 @@ describe('RequestOneTimeCodeController', () => {
 
       await requestOneTimeCodeController.submitOneTimeCodeRequest(
         req as undefined as Request,
-        res as undefined as Response
+        res as undefined as Response,
+        next as undefined as NextFunction
       )
 
       expect(oneTimeCodeService.requestOneTimeCode).not.toHaveBeenCalled()
@@ -123,7 +127,8 @@ describe('RequestOneTimeCodeController', () => {
 
       await requestOneTimeCodeController.submitOneTimeCodeRequest(
         req as undefined as Request,
-        res as undefined as Response
+        res as undefined as Response,
+        next as undefined as NextFunction
       )
 
       expect(oneTimeCodeService.requestOneTimeCode).toHaveBeenCalledWith(

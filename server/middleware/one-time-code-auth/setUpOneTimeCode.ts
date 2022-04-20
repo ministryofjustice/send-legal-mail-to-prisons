@@ -6,6 +6,7 @@ import RequestOneTimeCodeController from '../../routes/one-time-code-auth/Reques
 import setupOneTimeCodeEmailSent from './setupOneTimeCodeEmailSent'
 import OneTimeCodeEmailSentController from '../../routes/one-time-code-auth/OneTimeCodeEmailSentController'
 import setupVerifyOneTimeCode from './setupVerifyOneTimeCode'
+import setupStartAgain from './setupStartAgain'
 
 export default function setUpOneTimeCode(app: Express, oneTimeCodeService: OneTimeCodeService): Router {
   const router = express.Router()
@@ -16,6 +17,7 @@ export default function setUpOneTimeCode(app: Express, oneTimeCodeService: OneTi
 
   app.use('/oneTimeCode', setUpRequestOneTimeCode(requestOneTimeCodeController))
   app.use('/oneTimeCode', setupOneTimeCodeEmailSent(oneTimeCodeEmailSentController))
+  app.use('/oneTimeCode', setupStartAgain())
   app.use('/oneTimeCode', setupVerifyOneTimeCode(verifyOneTimeCodeController))
 
   return router

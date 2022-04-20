@@ -5,7 +5,9 @@ export default function setupRequestOneTimeCode(requestOneTimeCodeController: Re
   const router = express.Router()
 
   router.get('/request-code', (req, res) => requestOneTimeCodeController.getRequestOneTimeCodeView(req, res))
-  router.post('/request-code', (req, res) => requestOneTimeCodeController.submitOneTimeCodeRequest(req, res))
+  router.post('/request-code', (req, res, next) =>
+    requestOneTimeCodeController.submitOneTimeCodeRequest(req, res, next)
+  )
 
   return router
 }

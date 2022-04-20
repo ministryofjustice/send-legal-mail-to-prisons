@@ -80,6 +80,7 @@ export interface components {
       userMessage: string
     }
     AuthenticationRequestErrorCodes: components['schemas']['ErrorCode'] & {
+      /** @enum {string} */
       code?: 'SESSION_ID_MANDATORY' | 'EMAIL_MANDATORY' | 'EMAIL_TOO_LONG' | 'INVALID_EMAIL' | 'INVALID_CJSM_EMAIL'
       userMessage?: string
     } & (
@@ -160,10 +161,6 @@ export interface components {
       code: string
       userMessage: string
     }
-    SessionIdMandatory: {
-      code: string
-      userMessage: string
-    }
     /** @description The error code describing the error */
     ErrorCode: {
       /**
@@ -228,6 +225,10 @@ export interface components {
       code: string
       userMessage: string
     }
+    SessionIdMandatory: {
+      code: string
+      userMessage: string
+    }
     StandardErrorCodes: components['schemas']['ErrorCode'] & {
       /** @enum {string} */
       code?: 'AUTH' | 'DOWNSTREAM' | 'INTERNAL_ERROR' | 'MALFORMED_REQUEST' | 'NOT_FOUND'
@@ -282,7 +283,10 @@ export interface components {
       token: string
     }
     OneTimeCodeRequest: {
-      /** @description The CJSM email address to send the one time code to */
+      /**
+       * @description The CJSM email address to send the one time code to
+       * @example andrew.barret@company.com.cjsm.net
+       */
       email: string
       /** @description The browser session ID */
       sessionID: string
