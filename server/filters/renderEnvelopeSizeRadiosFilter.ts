@@ -7,11 +7,14 @@ export default function renderEnvelopeSizeRadiosFilter(
   return envelopeSizes.map(envelopeSize => {
     return {
       value: envelopeSize.key,
-      html: `<div class='${envelopeSize.key}'>
-  <span class='label'>${envelopeSize.label}</span>
-  <span class='description'>(${envelopeSize.description})</span>
-  <span class='specification'>Width: ${envelopeSize.width}mm; height: ${envelopeSize.height}mm</span>
-</div>`,
+      html: `<strong>${envelopeSize.label}</strong>`,
+      hint: {
+        html: `
+          ${envelopeSize.description}.<br/>
+          Width: ${envelopeSize.width}mm; height: ${envelopeSize.height}mm
+          <img src="/assets/images/envelope-size-${envelopeSize.key}.png" width="115px" alt/>          
+        `,
+      },
       checked: false,
     }
   })

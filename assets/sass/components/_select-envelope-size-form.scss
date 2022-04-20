@@ -1,65 +1,9 @@
 #select-envelope-size-form {
 
-  .govuk-label {
-    display: block;
-  }
-
-  .govuk-label div {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    width: 100%;
-
-    .label {
-      font-weight: bold;
-      width: 50%;
-    }
-
-    .description {
-      width: 50%;
-    }
-
-    .specification {
-      margin-left: 1rem;
-      width: 50%;
-      height: 100%;
-      position: relative;
-    }
-    .specification::before {
-      position: absolute;
-      content: ' ';
-      border: 1px solid black;
-      top: 1.6rem;
-      left: 0;
-      width: 130px;
-    }
-    .specification::after {
-      position: absolute;
-      content: ' ';
-      border: 1px dotted gray;
-      height: 20px;
-      width: 70px;
-      left: 16px;
-      top: calc(1.6rem + 20px)
-    }
-  }
-
-  .govuk-label div.dl {
-    height: calc(2rem + 60px);
-    .specification::before {
-      height: 60px;
-    }
-  }
-  .govuk-label div.c5 {
-    height: calc(2rem + 90px);
-    .specification::before {
-      height: 90px;
-    }
-  }
-  .govuk-label div.c4 {
-    height: calc(2rem + 180px);
-    .specification::before {
-      height: 180px;
+  .govuk-radios__hint {
+    img {
+      display: block;
+      margin: 15px 0 25px;
     }
   }
 }
