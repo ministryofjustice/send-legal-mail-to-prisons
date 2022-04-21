@@ -94,7 +94,7 @@
 
 {% endblock %}
 
-{% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
+{% block pageTitle %}{{pageTitle | pageTitleInErrorFilter(errors) | default(applicationName)}}{% endblock %}
 
 {% block header %}
   {% include "partials/cookies/cookie-banner.njk" %}
