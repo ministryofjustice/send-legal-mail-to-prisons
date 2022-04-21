@@ -93,4 +93,8 @@ declare module 'forms' {
     'dob-month'?: string
     'dob-year'?: string
   }
+
+  export interface ReviewRecipientsForm {
+    anotherRecipient?: 'yes' | 'no'
+  }
 }

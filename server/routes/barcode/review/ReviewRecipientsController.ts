@@ -7,9 +7,27 @@ export default class ReviewRecipientsController {
       return res.redirect('/barcode/find-recipient')
     }
     req.session.editContactForm = undefined
+    req.session.reviewRecipientsForm = req.session.reviewRecipientsForm || {}
 
-    const view = new ReviewRecipientsView(req.session.recipients, req.flash('errors'))
+    const view = new ReviewRecipientsView(req.session.recipients, req.session.reviewRecipientsForm, req.flash('errors'))
     return res.render('pages/barcode/review-recipients', { ...view.renderArgs })
+  }
+
+  async postReviewRecipientsView(req: Request, res: Response): Promise<void> {
+    req.session.reviewRecipientsForm = req.body
+
+    if (req.session.reviewRecipientsForm.anotherRecipient === 'yes') {
+      req.session.reviewRecipientsForm = undefined
+      return res.redirect('/barcode/find-recipient')
+    }
+
+    if (req.session.reviewRecipientsForm.anotherRecipient === 'no') {
+      req.session.reviewRecipientsForm = undefined
+      return res.redirect('/barcode/choose-barcode-option')
+    }
+
+    req.flash('errors', 'Select an option')
+    return res.redirect('/barcode/review-recipients')
   }
 
   async removeRecipientByIndex(req: Request, res: Response): Promise<void> {

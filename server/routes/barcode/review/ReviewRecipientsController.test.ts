@@ -7,6 +7,7 @@ const req = {
   session: {} as SessionData,
   params: {},
   flash: jest.fn(),
+  body: {},
 }
 
 const res = {
@@ -61,8 +62,53 @@ describe('ReviewRecipientsController', () => {
 
       await reviewRecipientsController.getReviewRecipientsView(req as unknown as Request, res as unknown as Response)
 
-      expect(res.render).toHaveBeenCalledWith('pages/barcode/review-recipients', { errors: [], recipients })
+      expect(res.render).toHaveBeenCalledWith('pages/barcode/review-recipients', { errors: [], form: {}, recipients })
       expect(req.session.editContactForm).toBeUndefined()
+    })
+
+    it('should pass errors into the form', async () => {
+      const recipients = [aRecipient]
+      req.session.recipients = recipients
+      req.session.editContactForm = anEditContactForm
+      req.flash.mockReturnValue([{ href: '#anotherRecipient', text: 'some-error' }])
+
+      await reviewRecipientsController.getReviewRecipientsView(req as unknown as Request, res as unknown as Response)
+
+      expect(res.render).toHaveBeenCalledWith('pages/barcode/review-recipients', {
+        errors: [{ href: '#anotherRecipient', text: 'some-error' }],
+        form: {},
+        recipients,
+      })
+      expect(req.session.editContactForm).toBeUndefined()
+    })
+  })
+
+  describe('postReviewRecipientsView', () => {
+    it('should redisplay with error if nothing selected', async () => {
+      req.session.recipients = [aRecipient]
+
+      await reviewRecipientsController.postReviewRecipientsView(req as unknown as Request, res as unknown as Response)
+
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
+      expect(req.flash).toHaveBeenCalledWith('errors', 'Select an option')
+    })
+
+    it('should redirect to find recipient if selected', async () => {
+      req.session.recipients = [aRecipient]
+      req.body = { anotherRecipient: 'yes' }
+
+      await reviewRecipientsController.postReviewRecipientsView(req as unknown as Request, res as unknown as Response)
+
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
+    })
+
+    it('should redirect to barcode option if selected', async () => {
+      req.session.recipients = [aRecipient]
+      req.body = { anotherRecipient: 'no' }
+
+      await reviewRecipientsController.postReviewRecipientsView(req as unknown as Request, res as unknown as Response)
+
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/choose-barcode-option')
     })
   })
 
