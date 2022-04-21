@@ -3,7 +3,6 @@ import type { SessionData } from 'express-session'
 import RequestOneTimeCodeController from './RequestOneTimeCodeController'
 import VerifyOneTimeCodeController from './VerifyOneTimeCodeController'
 import OneTimeCodeService from '../../services/one-time-code-auth/OneTimeCodeService'
-import config from '../../config'
 import validate from './RequestOneTimeCodeValidator'
 
 const req = {
@@ -27,7 +26,6 @@ const verifyOneTimeCodeController = {
 
 const next = jest.fn()
 
-jest.mock('../../config')
 jest.mock('./RequestOneTimeCodeValidator')
 
 describe('RequestOneTimeCodeController', () => {
@@ -35,11 +33,6 @@ describe('RequestOneTimeCodeController', () => {
     oneTimeCodeService as unknown as OneTimeCodeService,
     verifyOneTimeCodeController as unknown as VerifyOneTimeCodeController
   )
-
-  beforeEach(() => {
-    config.oneTimeCodeValidityDuration = 10
-    config.lsjSessionDuration = 1
-  })
 
   afterEach(() => {
     jest.resetAllMocks()
@@ -57,8 +50,6 @@ describe('RequestOneTimeCodeController', () => {
       expect(res.render).toHaveBeenCalledWith('pages/one-time-code-auth/requestOneTimeCode', {
         errors: [],
         form: {},
-        oneTimeCodeValidityDuration: 10,
-        lsjSessionDuration: '1 day',
       })
       expect(req.session.requestOneTimeCodeForm).toBeUndefined()
     })
@@ -75,8 +66,6 @@ describe('RequestOneTimeCodeController', () => {
       expect(res.render).toHaveBeenCalledWith('pages/one-time-code-auth/requestOneTimeCode', {
         errors: [{ href: '#email', text: 'Enter a valid email' }],
         form: { email: 'someone@aarvark.com' },
-        oneTimeCodeValidityDuration: 10,
-        lsjSessionDuration: '1 day',
       })
       expect(req.session.requestOneTimeCodeForm).toBeUndefined()
     })

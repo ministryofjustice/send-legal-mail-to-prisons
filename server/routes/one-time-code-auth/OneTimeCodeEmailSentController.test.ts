@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import type { SessionData } from 'express-session'
 import OneTimeCodeEmailSentController from './OneTimeCodeEmailSentController'
-import config from '../../config'
 
 const req = {
   session: {} as SessionData,
@@ -12,14 +11,8 @@ const res = {
   redirect: jest.fn(),
 }
 
-jest.mock('../../config')
-
 describe('OneTimeCodeEmailSentController', () => {
   const oneTimeCodeEmailSentController = new OneTimeCodeEmailSentController()
-
-  beforeEach(() => {
-    config.oneTimeCodeValidityDuration = 10
-  })
 
   afterEach(() => {
     jest.resetAllMocks()
@@ -37,7 +30,6 @@ describe('OneTimeCodeEmailSentController', () => {
       expect(res.render).toHaveBeenCalledWith('pages/one-time-code-auth/emailSent', {
         emailSentTo: 'someone@aardvark.cjsm.net',
         errors: [],
-        oneTimeCodeValidityDuration: 10,
       })
     })
 

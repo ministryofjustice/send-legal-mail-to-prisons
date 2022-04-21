@@ -6,7 +6,7 @@ import RequestOneTimeCodeController from '../../routes/one-time-code-auth/Reques
 import setupOneTimeCodeEmailSent from './setupOneTimeCodeEmailSent'
 import OneTimeCodeEmailSentController from '../../routes/one-time-code-auth/OneTimeCodeEmailSentController'
 import setupVerifyOneTimeCode from './setupVerifyOneTimeCode'
-import setupStartAgain from './setupStartAgain'
+import config from '../../config'
 
 export default function setUpOneTimeCode(app: Express, oneTimeCodeService: OneTimeCodeService): Router {
   const router = express.Router()
@@ -15,10 +15,20 @@ export default function setUpOneTimeCode(app: Express, oneTimeCodeService: OneTi
   const requestOneTimeCodeController = new RequestOneTimeCodeController(oneTimeCodeService, verifyOneTimeCodeController)
   const oneTimeCodeEmailSentController = new OneTimeCodeEmailSentController()
 
+  app.use('/oneTimeCode', (req, res, next) => {
+    res.locals.oneTimeCodeValidityDuration = config.oneTimeCodeValidityDuration
+    res.locals.lsjSessionDuration = `${config.lsjSessionDuration} day${config.lsjSessionDuration > 1 ? 's' : ''}`
+    next()
+  })
+
   app.use('/oneTimeCode', setUpRequestOneTimeCode(requestOneTimeCodeController))
   app.use('/oneTimeCode', setupOneTimeCodeEmailSent(oneTimeCodeEmailSentController))
-  app.use('/oneTimeCode', setupStartAgain())
   app.use('/oneTimeCode', setupVerifyOneTimeCode(verifyOneTimeCodeController))
+
+  router.get('/oneTimeCode/start-again', (req, res) => res.render('pages/one-time-code-auth/startAgain'))
+  router.get('/oneTimeCode/code-no-longer-valid', (req, res) =>
+    res.render('pages/one-time-code-auth/codeNoLongerValid')
+  )
 
   return router
 }

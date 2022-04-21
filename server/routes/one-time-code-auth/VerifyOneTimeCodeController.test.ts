@@ -64,7 +64,7 @@ describe('VerifyOneTimeCodeController', () => {
       )
 
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect('/barcode/find-recipient'))
+      expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
       expect(req.session.barcodeUser).toEqual({
         tokenValid: true,
         token: 'a-valid-jwt',
@@ -91,7 +91,7 @@ describe('VerifyOneTimeCodeController', () => {
       expect(req.flash).toHaveBeenCalledWith('errors', [
         { href: '#email', text: 'The code you used is no longer valid. Request a new one to sign in.' },
       ])
-      expect(res.redirect('request-code'))
+      expect(res.redirect).toHaveBeenCalledWith('/oneTimeCode/request-code')
       expect(req.session.barcodeUser).toEqual({ tokenValid: false, token: undefined })
     })
 
@@ -105,7 +105,7 @@ describe('VerifyOneTimeCodeController', () => {
       )
 
       expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#code', text: 'Enter the code from your email.' }])
-      expect(res.redirect('email-sent'))
+      expect(res.redirect).toHaveBeenCalledWith('/oneTimeCode/email-sent')
       expect(oneTimeCodeService.verifyOneTimeCode).not.toHaveBeenCalled()
       expect(req.session.barcodeUser).toEqual({ tokenValid: false, token: undefined })
     })
@@ -126,7 +126,7 @@ describe('VerifyOneTimeCodeController', () => {
       expect(req.flash).toHaveBeenCalledWith('errors', [
         { href: '#code', text: 'Enter the code we emailed you. This is 4 letters, like DNLC' },
       ])
-      expect(res.redirect('email-sent'))
+      expect(res.redirect).toHaveBeenCalledWith('/oneTimeCode/email-sent')
       expect(req.session.barcodeUser).toEqual({ tokenValid: false, token: undefined })
     })
 
@@ -143,10 +143,8 @@ describe('VerifyOneTimeCodeController', () => {
         next as undefined as NextFunction
       )
 
-      expect(req.flash).toHaveBeenCalledWith('errors', [
-        { href: '#email', text: 'The code you used is no longer valid. Request a new one to sign in.' },
-      ])
-      expect(res.redirect('request-code'))
+      expect(req.flash).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/oneTimeCode/code-no-longer-valid')
       expect(req.session.barcodeUser).toEqual({ tokenValid: false, token: undefined })
     })
 
@@ -164,7 +162,7 @@ describe('VerifyOneTimeCodeController', () => {
       )
 
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect('start-again'))
+      expect(res.redirect).toHaveBeenCalledWith('/oneTimeCode/start-again')
       expect(req.session.barcodeUser).toEqual({ tokenValid: false, token: undefined })
     })
 

@@ -25,10 +25,7 @@ export default class VerifyOneTimeCodeController {
           return res.redirect('/oneTimeCode/email-sent')
         }
         case 'OTC_SESSION_NOT_FOUND': {
-          req.flash('errors', [
-            { href: '#email', text: 'The code you used is no longer valid. Request a new one to sign in.' },
-          ])
-          return res.redirect('/oneTimeCode/request-code')
+          return res.redirect('/oneTimeCode/code-no-longer-valid')
         }
         case 'OTC_TOO_MANY_ATTEMPTS': {
           return res.redirect('/oneTimeCode/start-again')
