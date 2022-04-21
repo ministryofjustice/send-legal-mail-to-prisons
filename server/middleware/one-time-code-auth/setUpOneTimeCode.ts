@@ -6,6 +6,7 @@ import RequestOneTimeCodeController from '../../routes/one-time-code-auth/Reques
 import setupOneTimeCodeEmailSent from './setupOneTimeCodeEmailSent'
 import OneTimeCodeEmailSentController from '../../routes/one-time-code-auth/OneTimeCodeEmailSentController'
 import setupVerifyOneTimeCode from './setupVerifyOneTimeCode'
+import setupErrorPages from './setupErrorPages'
 import config from '../../config'
 
 export default function setUpOneTimeCode(app: Express, oneTimeCodeService: OneTimeCodeService): Router {
@@ -24,11 +25,7 @@ export default function setUpOneTimeCode(app: Express, oneTimeCodeService: OneTi
   app.use('/oneTimeCode', setUpRequestOneTimeCode(requestOneTimeCodeController))
   app.use('/oneTimeCode', setupOneTimeCodeEmailSent(oneTimeCodeEmailSentController))
   app.use('/oneTimeCode', setupVerifyOneTimeCode(verifyOneTimeCodeController))
-
-  router.get('/oneTimeCode/start-again', (req, res) => res.render('pages/one-time-code-auth/startAgain'))
-  router.get('/oneTimeCode/code-no-longer-valid', (req, res) =>
-    res.render('pages/one-time-code-auth/codeNoLongerValid')
-  )
+  app.use('/oneTimeCode', setupErrorPages())
 
   return router
 }
