@@ -33,6 +33,7 @@ declare module 'express-session' {
     createNewContactByPrisonerNameForm: CreateNewContactByPrisonerNameForm
     chooseContactForm: ChooseContactForm
     recipientForm: RecipientForm
+    reviewRecipientsForm: ReviewRecipientsForm
     cookiesPolicy: CookiesPolicy
     contactHelpdeskForm: ContactHelpdeskForm
     editContactForm: EditContactForm
