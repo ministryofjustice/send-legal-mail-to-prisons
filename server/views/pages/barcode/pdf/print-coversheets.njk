@@ -27,12 +27,10 @@
           <ol class="govuk-list govuk-list--number">
             <li>
               Fold each sheet in {{ 'half' if envelopeSize == 'c5' else 'thirds' }}.
-              <span>
-                <img src="/assets/images/{{ envelopeSize }}-coversheet-with-fold-lines.png" alt="Illustration of an A4 coversheet with marks showing where to fold for a {{ 'C5' if envelopeSize == 'c5' else 'DL' }} envelope" width="114px"/>
-              </span>
+              <img src="/assets/images/{{ envelopeSize }}-coversheet-with-fold-lines.png" alt="Illustration of an A4 coversheet with marks showing where to fold for a {{ 'C5' if envelopeSize == 'c5' else 'DL' }} envelope" width="114px"/>
             </li>
             <li>Insert the sheet into a window envelope. Make sure the address and barcode are visible.</li>
-          <ol>
+          </ol>
         {% endif %}
 
       </div>
