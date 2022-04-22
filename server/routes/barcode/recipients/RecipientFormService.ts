@@ -67,7 +67,7 @@ export default class RecipientFormService {
   }
 
   private async toRecipient(recipientForm: RecipientForm): Promise<Recipient> {
-    const prisonAddress = await this.prisonRegisterService.getPrisonAddress(recipientForm.prisonId)
+    const prisonAddress = await this.prisonRegisterService.getPrisonById(recipientForm.prisonId)
     return {
       prisonerName: recipientForm.prisonerName || '',
       prisonNumber: recipientForm.prisonNumber,

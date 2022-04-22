@@ -24,7 +24,7 @@ export default class CreateContactByPrisonerNameController {
 
     let activePrisons: Array<Prison>
     try {
-      activePrisons = this.prisonRegisterService.getActivePrisons()
+      activePrisons = await this.prisonRegisterService.getActivePrisonsFromPrisonRegister()
     } catch (error) {
       req.flash('errors', [{ text: 'There was an error retrieving the list of prisons' }])
       activePrisons = []

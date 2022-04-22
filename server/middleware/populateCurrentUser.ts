@@ -17,7 +17,7 @@ export default function populateCurrentUser(
         const user = res.locals.user && (await userService.getUser(res.locals.user.token))
         if (user) {
           res.locals.user = { ...user, ...res.locals.user }
-          res.locals.user.prisonName = prisonRegisterService.getPrisonNameOrId(res.locals.user.activeCaseLoadId)
+          res.locals.user.prisonName = await prisonRegisterService.getPrisonNameOrId(res.locals.user.activeCaseLoadId)
         } else {
           logger.info('No user available')
         }

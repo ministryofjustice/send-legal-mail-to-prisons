@@ -29,7 +29,7 @@ export default class EditContactController {
 
     let activePrisons: Array<Prison>
     try {
-      activePrisons = this.prisonRegisterService.getActivePrisons()
+      activePrisons = await this.prisonRegisterService.getActivePrisonsFromPrisonRegister()
     } catch (error) {
       logger.error(`Unable to load prisons due to error`, error)
       req.flash('errors', [{ text: 'There was an error retrieving the list of prisons' }])

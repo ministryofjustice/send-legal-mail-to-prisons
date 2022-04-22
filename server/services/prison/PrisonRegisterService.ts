@@ -3,7 +3,6 @@ import type { PrisonDto } from 'prisonRegisterApiClient'
 import config from '../../config'
 import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
 import RestClient from '../../data/restClient'
-import prisonAddressData from './prisonAddressData.json'
 
 export default class PrisonRegisterService {
   constructor(private readonly prisonRegisterStore: PrisonRegisterStore) {}
@@ -13,58 +12,60 @@ export default class PrisonRegisterService {
   }
 
   async getActivePrisonsFromPrisonRegister(): Promise<Array<Prison>> {
-    let activePrisons: Array<PrisonDto>
+    let activePrisons: Array<PrisonAddress>
     try {
       activePrisons = await this.getActivePrisonDtos()
     } catch (error) {
       return error
     }
 
-    return activePrisons.map(prisonDto => {
-      return {
-        id: prisonDto.prisonId,
-        name: prisonDto.prisonName,
-      }
-    })
-  }
-
-  // TODO due to bad data quality we are ignoring Prison Register for now - the plan is for Prison Register to be updated with our data when they have added the addresses on https://dsdmoj.atlassian.net/browse/HAAR-32
-  getActivePrisons(): Array<Prison> {
-    return prisonAddressData
-      .map(
-        (prisonAddress: PrisonAddress) =>
-          ({ id: prisonAddress.agencyCode, name: prisonAddress.agyDescription } as Prison)
-      )
+    return activePrisons
+      .map(prison => {
+        return {
+          id: prison.agencyCode,
+          name: prison.agyDescription,
+        }
+      })
       .sort((prison1: Prison, prison2: Prison) => (prison1.name < prison2.name ? -1 : 1))
   }
 
-  async getPrisonAddress(prisonId: string): Promise<PrisonAddress> {
-    const prisonAddress = prisonAddressData.find(row => row.agencyCode === prisonId)
-    return prisonAddress
-      ? Promise.resolve(this.strictCastToPrisonAddress(prisonAddress))
-      : Promise.reject(new Error(`PrisonAddress for prison ${prisonId} not found`))
+  async getPrisonById(prisonId: string): Promise<PrisonAddress> {
+    const prisons: Array<PrisonAddress> = await this.getActivePrisonDtos()
+    return prisons.find(prison => prison.agencyCode === prisonId)
   }
 
   /**
    * Returns the name of the prison (`premise` field from the PrisonAddress) for the specified prisonId
    * or simply the prisonId if the prison cannot be found by it's ID
    */
-  getPrisonNameOrId(prisonId: string): string {
-    const prisonAddress = prisonAddressData.find(row => row.agencyCode === prisonId)
-    return prisonAddress?.premise || prisonId
+  async getPrisonNameOrId(prisonId: string): Promise<string> {
+    const prison: PrisonAddress = await this.getPrisonById(prisonId)
+    return prison?.premise || prisonId
   }
 
-  private async retrieveAndCacheActivePrisons(): Promise<Array<PrisonDto>> {
+  private async retrieveAndCacheActivePrisons(): Promise<Array<PrisonAddress>> {
     // Retrieve prisons from the service and put the active ones in the redis store.
     const prisonDtos = (await PrisonRegisterService.restClient().get({ path: '/prisons' })) as Array<PrisonDto>
-    const activePrisons = prisonDtos.filter(prison => prison.active === true)
+    const activePrisons: Array<PrisonAddress> = prisonDtos
+      .filter(prison => prison.active === true)
+      .map(prison => {
+        const address = prison.addresses[0]
+        return {
+          agencyCode: prison.prisonId,
+          agyDescription: prison.prisonName,
+          premise: this.reformatPrisonName(prison.prisonName),
+          street: address.addressLine1,
+          locality: `${address.addressLine2}, ${address.town}`,
+          postalCode: address.postcode,
+        }
+      })
     this.prisonRegisterStore.setActivePrisons(activePrisons)
     return activePrisons
   }
 
-  private async getActivePrisonDtos(): Promise<Array<PrisonDto>> {
+  private async getActivePrisonDtos(): Promise<Array<PrisonAddress>> {
     // Retrieve the prisons from the redis store if they exist there, else get them from the service and cache them
-    let activePrisons: Array<PrisonDto>
+    let activePrisons: Array<PrisonAddress>
     try {
       activePrisons = await this.prisonRegisterStore.getActivePrisons()
     } catch (error) {
@@ -76,25 +77,13 @@ export default class PrisonRegisterService {
     return activePrisons
   }
 
-  private strictCastToPrisonAddress(source: {
-    agencyCode?: string
-    flat?: string
-    premise?: string
-    street?: string
-    locality?: string
-    countyCode?: string
-    area?: string
-    postalCode?: string
-  }): PrisonAddress {
-    return {
-      agencyCode: source.agencyCode,
-      flat: source.flat,
-      premise: source.premise,
-      street: source.street,
-      locality: source.locality,
-      countyCode: source.countyCode,
-      area: source.area,
-      postalCode: source.postalCode,
-    }
+  /**
+   * Takes a prison name in the format '<name> (<type>)' and returns as '<type> <name>'
+   * eg: 'Ashfield (HMP)' is returned as 'HMP Ashfield'
+   */
+  private reformatPrisonName(prisonName: string): string {
+    const pattern = /^(.+?) \((.+?)\)/ // 1st matching group will be the prison name, 2nd matching group will be the type from within the brackets
+    const matches = pattern.exec(prisonName)
+    return `${matches[2]} ${matches[1]}`
   }
 }

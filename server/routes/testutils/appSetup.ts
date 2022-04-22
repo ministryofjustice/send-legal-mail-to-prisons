@@ -50,7 +50,7 @@ class MockSmokeTestStore extends SmokeTestStore {
 }
 
 class MockPrisonerRegister extends PrisonRegisterService {
-  getPrisonNameOrId(prisonId: string): string {
+  async getPrisonNameOrId(prisonId: string): Promise<string> {
     return prisonId
   }
 }

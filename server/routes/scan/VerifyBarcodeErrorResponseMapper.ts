@@ -4,11 +4,11 @@ import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
 export default class VerifyBarcodeErrorResponseMapper {
   constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
 
-  mapErrorResponse = (apiErrorResponse: { data?: ErrorResponse; status?: number }): ErrorCode => {
+  mapErrorResponse = async (apiErrorResponse: { data?: ErrorResponse; status?: number }): ErrorCode => {
     const errorType = apiErrorResponse.data?.errorCode?.code
     if (errorType === 'DUPLICATE') {
       const { scannedLocation } = apiErrorResponse.data.errorCode as DuplicateErrorCode
-      const prisonName = this.prisonRegisterService.getPrisonNameOrId(scannedLocation)
+      const prisonName = await this.prisonRegisterService.getPrisonNameOrId(scannedLocation)
       return {
         ...apiErrorResponse.data.errorCode,
         scannedLocation: prisonName,

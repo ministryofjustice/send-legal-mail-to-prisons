@@ -22,7 +22,7 @@ const res = {
 }
 
 const prisonRegisterService = {
-  getActivePrisons: jest.fn(),
+  getActivePrisonsFromPrisonRegister: jest.fn(),
 }
 
 const contactService = {
@@ -46,7 +46,7 @@ describe('CreateContactByPrisonNumberController', () => {
   })
 
   afterEach(() => {
-    prisonRegisterService.getActivePrisons.mockReset()
+    prisonRegisterService.getActivePrisonsFromPrisonRegister.mockReset()
     recipientFormService.addRecipient.mockReset()
     recipientFormService.requiresPrisonNumber.mockReset()
     contactService.createContact.mockReset()
@@ -67,8 +67,7 @@ describe('CreateContactByPrisonNumberController', () => {
 
     it('should create and return view given no active prison filtering', async () => {
       config.supportedPrisons = ''
-      // TODO reinstate mockResolvedValue when we switch back to Prison Register - see PrisonRegisterService#getActivePrisons
-      prisonRegisterService.getActivePrisons.mockReturnValue([
+      prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([
         { id: 'KTI', name: 'Kennet (HMP)' },
         { id: 'ASI', name: 'Ashfield (HMP)' },
         { id: 'ACI', name: 'Altcourse (HMP)' },
@@ -97,8 +96,7 @@ describe('CreateContactByPrisonNumberController', () => {
 
     it('should create and return view given active prison filtering', async () => {
       config.supportedPrisons = 'ASI'
-      // TODO reinstate mockResolvedValue when we switch back to Prison Register - see PrisonRegisterService#getActivePrisons
-      prisonRegisterService.getActivePrisons.mockReturnValue([
+      prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([
         { id: 'KTI', name: 'Kennet (HMP)' },
         { id: 'ASI', name: 'Ashfield (HMP)' },
         { id: 'ACI', name: 'Altcourse (HMP)' },
@@ -123,9 +121,8 @@ describe('CreateContactByPrisonNumberController', () => {
       expect(req.flash).toHaveBeenCalledWith('errors')
     })
 
-    // TODO Reinstate this test when we switch back to using Prison Register - see PrisonRegisterService#getActivePrisons
-    it.skip('should create and return view with error given prison register service fails', async () => {
-      prisonRegisterService.getActivePrisons.mockRejectedValue('An error retrieving prison register')
+    it('should create and return view with error given prison register service fails', async () => {
+      prisonRegisterService.getActivePrisonsFromPrisonRegister.mockRejectedValue('An error retrieving prison register')
 
       req.session.recipientForm = { prisonNumber: 'A1234BC' }
 
@@ -133,7 +130,7 @@ describe('CreateContactByPrisonNumberController', () => {
         barcode: undefined as string,
         barcodeImageUrl: undefined as string,
         errors: [] as Array<Record<string, string>>,
-        form: {},
+        form: { prisonNumber: 'A1234BC' },
         prisonRegister: [{ value: '', text: '' }] as Array<Record<string, string>>,
       }
 

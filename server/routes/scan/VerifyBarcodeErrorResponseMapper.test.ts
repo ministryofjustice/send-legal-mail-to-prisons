@@ -16,7 +16,7 @@ describe('VerifyBarcodeErrorResponseMapper', () => {
   })
 
   describe('mapErrorResponse', () => {
-    it('should map Duplicate', () => {
+    it('should map Duplicate', async () => {
       const apiErrorCode = {
         code: 'DUPLICATE',
         userMessage: 'Barcode scanned at ACI',
@@ -34,7 +34,7 @@ describe('VerifyBarcodeErrorResponseMapper', () => {
       }
       prisonRegisterService.getPrisonNameOrId.mockReturnValue('HMP Altcourse')
 
-      const errorCode = verifyBarcodeErrorResponseMapper.mapErrorResponse(apiErrorResponse)
+      const errorCode = await verifyBarcodeErrorResponseMapper.mapErrorResponse(apiErrorResponse)
 
       expect(errorCode).toStrictEqual({
         code: 'DUPLICATE',
@@ -47,7 +47,7 @@ describe('VerifyBarcodeErrorResponseMapper', () => {
       expect(prisonRegisterService.getPrisonNameOrId).toHaveBeenCalledWith('ACI')
     })
 
-    it('should map Expired', () => {
+    it('should map Expired', async () => {
       const apiErrorCode = {
         code: 'EXPIRED',
         userMessage: 'Barcode expired',
@@ -60,12 +60,12 @@ describe('VerifyBarcodeErrorResponseMapper', () => {
         },
       }
 
-      const errorCode = verifyBarcodeErrorResponseMapper.mapErrorResponse(apiErrorResponse)
+      const errorCode = await verifyBarcodeErrorResponseMapper.mapErrorResponse(apiErrorResponse)
 
       expect(errorCode).toStrictEqual(apiErrorCode)
     })
 
-    it('should map RandomCheckErrorCode', () => {
+    it('should map RandomCheckErrorCode', async () => {
       const apiErrorCode = {
         code: 'RANDOM_CHECK',
         userMessage: 'Random check required',
@@ -78,22 +78,22 @@ describe('VerifyBarcodeErrorResponseMapper', () => {
         },
       }
 
-      const errorCode = verifyBarcodeErrorResponseMapper.mapErrorResponse(apiErrorResponse)
+      const errorCode = await verifyBarcodeErrorResponseMapper.mapErrorResponse(apiErrorResponse)
 
       expect(errorCode).toStrictEqual(apiErrorCode)
     })
 
-    it('should map NOT_FOUND', () => {
+    it('should map NOT_FOUND', async () => {
       const apiErrorResponse = {
         status: 404,
       }
 
-      const errorCode = verifyBarcodeErrorResponseMapper.mapErrorResponse(apiErrorResponse)
+      const errorCode = await verifyBarcodeErrorResponseMapper.mapErrorResponse(apiErrorResponse)
 
       expect(errorCode).toStrictEqual({ code: 'NOT_FOUND' })
     })
 
-    it('should throw error for unsupported api error code', () => {
+    it('should throw error for unsupported api error code', async () => {
       const apiErrorCode = {
         code: 'SOME_OTHER_ERROR_TYPE',
         userMessage: 'Some other error type',
@@ -106,9 +106,11 @@ describe('VerifyBarcodeErrorResponseMapper', () => {
         },
       }
 
-      expect(() => verifyBarcodeErrorResponseMapper.mapErrorResponse(apiErrorResponse)).toThrowError(
-        'Unsupported error code SOME_OTHER_ERROR_TYPE'
-      )
+      try {
+        await verifyBarcodeErrorResponseMapper.mapErrorResponse(apiErrorResponse)
+      } catch (error) {
+        expect(error).toEqual(new Error('Unsupported error code SOME_OTHER_ERROR_TYPE'))
+      }
     })
   })
 })
