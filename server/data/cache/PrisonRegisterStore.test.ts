@@ -1,5 +1,5 @@
 import { RedisClient } from 'redis'
-import type { Prison } from 'prisonTypes'
+import type { PrisonDto } from 'prisonRegisterApiClient'
 import PrisonRegisterStore from './PrisonRegisterStore'
 
 const redisClient = {
@@ -7,6 +7,57 @@ const redisClient = {
   get: jest.fn(),
   set: jest.fn(),
 }
+
+const activePrisons: Array<PrisonDto> = [
+  {
+    prisonId: 'ACI',
+    prisonName: 'Altcourse (HMP)',
+    active: true,
+    male: true,
+    female: false,
+    types: [
+      {
+        code: 'HMP',
+        description: 'Her Majesty’s Prison',
+      },
+    ],
+    addresses: [
+      {
+        id: 1,
+        addressLine1: 'Brookfield Drive',
+        addressLine2: 'Fazakerley',
+        town: 'Liverpool',
+        county: 'Lancashire',
+        postcode: 'L9 7LH',
+        country: 'England',
+      },
+    ],
+  },
+  {
+    prisonId: 'ASI',
+    prisonName: 'Ashfield (HMP)',
+    active: true,
+    male: true,
+    female: false,
+    types: [
+      {
+        code: 'HMP',
+        description: 'Her Majesty’s Prison',
+      },
+    ],
+    addresses: [
+      {
+        id: 2,
+        addressLine1: 'Shortwood Road',
+        addressLine2: 'Pucklechurch',
+        town: 'Bristol',
+        county: 'Gloucestershire',
+        postcode: 'BS16 9QJ',
+        country: 'England',
+      },
+    ],
+  },
+]
 
 describe('PrisonRegisterStore', () => {
   let prisonRegisterStore: PrisonRegisterStore
@@ -19,16 +70,11 @@ describe('PrisonRegisterStore', () => {
     jest.resetAllMocks()
   })
 
-  it('Can set active prisons', async () => {
+  it('Can set active prisons', () => {
     redisClient.set.mockImplementation((key, value, mode, durationSeconds, callback) => callback())
-    const activePrisons = [
-      { id: 'KTI', name: 'Kennet (HMP)' },
-      { id: 'ASI', name: 'Ashfield (HMP)' },
-      { id: 'ACI', name: 'Altcourse (HMP)' },
-    ]
     const durationDays = 2
 
-    await prisonRegisterStore.setActivePrisons(activePrisons, durationDays)
+    prisonRegisterStore.setActivePrisons(activePrisons, durationDays)
 
     expect(redisClient.set).toHaveBeenCalledWith(
       'activePrisons',
@@ -40,31 +86,24 @@ describe('PrisonRegisterStore', () => {
   })
 
   it('Can get active prisons given promise resolves', async () => {
-    const serializedActivePrisons =
-      '[{"id":"KTI","name":"Kennet (HMP)"},{"id":"ASI","name":"Ashfield (HMP)"},{"id":"ACI","name":"Altcourse (HMP)"}]'
+    const serializedActivePrisons = JSON.stringify(activePrisons)
     redisClient.get.mockImplementation((key, callback) => callback(null, serializedActivePrisons))
 
-    const expectedActivePrisons = [
-      { id: 'KTI', name: 'Kennet (HMP)' },
-      { id: 'ASI', name: 'Ashfield (HMP)' },
-      { id: 'ACI', name: 'Altcourse (HMP)' },
-    ]
+    const returnedActivePrisons = await prisonRegisterStore.getActivePrisons()
 
-    const activePrisons = await prisonRegisterStore.getActivePrisons()
-
-    expect(activePrisons).toStrictEqual(expectedActivePrisons)
+    expect(returnedActivePrisons).toStrictEqual(activePrisons)
     expect(redisClient.get).toHaveBeenCalledWith('activePrisons', expect.any(Function))
   })
 
-  it('Returns a resolved promise of null given there are no ective prisons in redis', async () => {
+  it('Returns a resolved promise of null given there are no active prisons in redis', async () => {
     const serializedActivePrisons: string = null
     redisClient.get.mockImplementation((key, callback) => callback(null, serializedActivePrisons))
 
-    const expectedActivePrisons: Array<Prison> = null
+    const expectedActivePrisons: Array<PrisonDto> = null
 
-    const activePrisons = await prisonRegisterStore.getActivePrisons()
+    const returnedActivePrisons = await prisonRegisterStore.getActivePrisons()
 
-    expect(activePrisons).toStrictEqual(expectedActivePrisons)
+    expect(returnedActivePrisons).toStrictEqual(expectedActivePrisons)
     expect(redisClient.get).toHaveBeenCalledWith('activePrisons', expect.any(Function))
   })
 

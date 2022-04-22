@@ -14,13 +14,45 @@ export interface paths {
     put: operations['putEmailAddressForOffenderManagementUnit']
     delete: operations['deleteEmailAddressForOffenderManagementUnit']
   }
+  '/queue-admin/retry-dlq/{dlqName}': {
+    put: operations['retryDlq']
+  }
+  '/queue-admin/retry-all-dlqs': {
+    put: operations['retryAllDlqs']
+  }
+  '/queue-admin/purge-queue/{queueName}': {
+    put: operations['purgeQueue']
+  }
+  '/prison-maintenance/id/{prisonId}': {
+    /** Updates prison information, role required is MAINTAIN_REF_DATA */
+    put: operations['updatePrison']
+  }
+  '/prison-maintenance/id/{prisonId}/address/{addressId}': {
+    /** Updates address information, role required is MAINTAIN_REF_DATA */
+    put: operations['updateAddress']
+  }
+  '/prison-maintenance': {
+    /** Adds new prison information, role required is MAINTAIN_REF_DATA */
+    post: operations['insertPrison']
+  }
+  '/queue-admin/get-dlq-messages/{dlqName}': {
+    get: operations['getDlqMessages']
+  }
   '/prisons': {
     /** All prisons */
     get: operations['getPrisons']
   }
+  '/prisons/search': {
+    /** All prisons */
+    get: operations['getPrisonsBySearchFilter']
+  }
   '/prisons/id/{prisonId}': {
     /** Information on a specific prison */
     get: operations['getPrisonFromId']
+  }
+  '/prisons/id/{prisonId}/address/{addressId}': {
+    /** Information on a specific prison address */
+    get: operations['getAddressFromId']
   }
   '/gp/prison/{prisonId}': {
     get: operations['getGpPrescriberFromPrisonId']
@@ -32,6 +64,86 @@ export interface paths {
 
 export interface components {
   schemas: {
+    Message: {
+      messageId?: string
+      receiptHandle?: string
+      body?: string
+      attributes?: { [key: string]: string }
+      messageAttributes?: {
+        [key: string]: components['schemas']['MessageAttributeValue']
+      }
+      md5OfBody?: string
+      md5OfMessageAttributes?: string
+    }
+    MessageAttributeValue: {
+      stringValue?: string
+      binaryValue?: {
+        short?: number
+        char?: string
+        int?: number
+        long?: number
+        float?: number
+        double?: number
+        direct?: boolean
+        readOnly?: boolean
+      }
+      stringListValues?: string[]
+      binaryListValues?: {
+        short?: number
+        char?: string
+        int?: number
+        long?: number
+        float?: number
+        double?: number
+        direct?: boolean
+        readOnly?: boolean
+      }[]
+      dataType?: string
+    }
+    RetryDlqResult: {
+      messagesFoundCount: number
+      messages: components['schemas']['Message'][]
+    }
+    PurgeQueueResult: {
+      messagesFoundCount: number
+    }
+    /** Prison Update Record */
+    UpdatePrisonDto: {
+      /** Name of the prison */
+      prisonName: string
+      /** Whether the prison is still active */
+      active: boolean
+      /** If this is a male prison */
+      male: boolean
+      /** If this is a female prison */
+      female: boolean
+      /** Set of types for this prison */
+      prisonTypes: ('HMP' | 'YOI' | 'STC' | 'IRC')[]
+    }
+    ErrorResponse: {
+      status: number
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
+    }
+    /** List of address for this prison */
+    AddressDto: {
+      /** Unique ID of the address */
+      id: number
+      /** Address line 1 */
+      addressLine1?: string
+      /** Address line 2 */
+      addressLine2?: string
+      /** Village/Town/City */
+      town: string
+      /** County */
+      county?: string
+      /** Postcode */
+      postcode: string
+      /** Country */
+      country: string
+    }
     /** Prison Information */
     PrisonDto: {
       /** Prison ID */
@@ -40,13 +152,54 @@ export interface components {
       prisonName: string
       /** Whether the prison is still active */
       active: boolean
+      /** Whether the prison has male prisoners */
+      male: boolean
+      /** Whether the prison has female prisoners */
+      female: boolean
+      /** List of types for this prison */
+      types: components['schemas']['PrisonTypeDto'][]
+      /** List of address for this prison */
+      addresses: components['schemas']['AddressDto'][]
     }
-    ErrorResponse: {
-      status: number
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
+    /** List of types for this prison */
+    PrisonTypeDto: {
+      /** Prison type code */
+      code: 'HMP' | 'YOI' | 'STC' | 'IRC'
+      /** Prison type description */
+      description: string
+    }
+    /** Address Update Record */
+    UpdateAddressDto: {
+      /** Address line 1 */
+      addressLine1?: string
+      /** Address line 2 */
+      addressLine2?: string
+      /** Village/Town/City */
+      town: string
+      /** County */
+      county?: string
+      /** Postcode */
+      postcode: string
+      /** Country */
+      country: string
+    }
+    /** Prison Insert Record */
+    InsertPrisonDto: {
+      /** Prison Id */
+      prisonId: string
+      /** Name of the prison */
+      prisonName: string
+      /** Whether the prison is still active */
+      active: boolean
+    }
+    DlqMessage: {
+      body: { [key: string]: { [key: string]: unknown } }
+      messageId: string
+    }
+    GetDlqResult: {
+      messagesFoundCount: number
+      messagesReturnedCount: number
+      messages: components['schemas']['DlqMessage'][]
     }
   }
 }
@@ -176,13 +329,219 @@ export interface operations {
       400: unknown
     }
   }
+  retryDlq: {
+    parameters: {
+      path: {
+        dlqName: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          '*/*': components['schemas']['RetryDlqResult']
+        }
+      }
+    }
+  }
+  retryAllDlqs: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          '*/*': components['schemas']['RetryDlqResult'][]
+        }
+      }
+    }
+  }
+  purgeQueue: {
+    parameters: {
+      path: {
+        queueName: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          '*/*': components['schemas']['PurgeQueueResult']
+        }
+      }
+    }
+  }
+  /** Updates prison information, role required is MAINTAIN_REF_DATA */
+  updatePrison: {
+    parameters: {
+      path: {
+        prisonId: string
+      }
+    }
+    responses: {
+      /** Prison Information Updated */
+      200: {
+        content: {
+          'application/json': components['schemas']['PrisonDto']
+        }
+      }
+      /** Information request to update prison */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorized to access this endpoint */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Incorrect permissions to make prison update */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Prison ID not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdatePrisonDto']
+      }
+    }
+  }
+  /** Updates address information, role required is MAINTAIN_REF_DATA */
+  updateAddress: {
+    parameters: {
+      path: {
+        prisonId: string
+        addressId: number
+      }
+    }
+    responses: {
+      /** Address Information Updated */
+      200: {
+        content: {
+          'application/json': components['schemas']['AddressDto']
+        }
+      }
+      /** Bad Information request to update address */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorized to access this endpoint */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Incorrect permissions to make address update */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Address Id not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateAddressDto']
+      }
+    }
+  }
+  /** Adds new prison information, role required is MAINTAIN_REF_DATA */
+  insertPrison: {
+    responses: {
+      /** Prison Information Inserted */
+      201: {
+        content: {
+          'application/json': components['schemas']['PrisonDto']
+        }
+      }
+      /** Information request to add prison */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorized to access this endpoint */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Incorrect permissions to make prison insert */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['InsertPrisonDto']
+      }
+    }
+  }
+  getDlqMessages: {
+    parameters: {
+      path: {
+        dlqName: string
+      }
+      query: {
+        maxMessages?: number
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          '*/*': components['schemas']['GetDlqResult']
+        }
+      }
+    }
+  }
   /** All prisons */
   getPrisons: {
     responses: {
       /** Successful Operation */
       200: {
         content: {
-          'application/json': unknown
+          'application/json': components['schemas']['PrisonDto'][]
+        }
+      }
+    }
+  }
+  /** All prisons */
+  getPrisonsBySearchFilter: {
+    parameters: {
+      query: {
+        /** Active */
+        active?: boolean
+        /** Text search */
+        textSearch?: string
+        /** Genders to filter by */
+        genders?: ('MALE' | 'FEMALE')[]
+        /** Prison type codes to filter by */
+        prisonTypeCodes?: ('HMP' | 'YOI' | 'STC' | 'IRC')[]
+      }
+    }
+    responses: {
+      /** Successful Operation */
+      200: {
+        content: {
+          'application/json': components['schemas']['PrisonDto'][]
         }
       }
     }
@@ -199,6 +558,23 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['PrisonDto']
+        }
+      }
+    }
+  }
+  /** Information on a specific prison address */
+  getAddressFromId: {
+    parameters: {
+      path: {
+        prisonId: string
+        addressId: number
+      }
+    }
+    responses: {
+      /** Successful Operation */
+      200: {
+        content: {
+          'application/json': components['schemas']['AddressDto']
         }
       }
     }
