@@ -28,7 +28,7 @@ describe('Print Coversheets View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('div.envelope.dl li').text()).toContain('Fold each sheet in thirds')
+    expect($('ol li').text()).toContain('Fold each sheet in thirds')
   })
 
   it('should show correct text given c5 envelope was selected', () => {
@@ -36,7 +36,7 @@ describe('Print Coversheets View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('div.envelope.c5 li').text()).toContain('Fold each sheet in half')
+    expect($('ol li').text()).toContain('Fold each sheet in half')
   })
 
   it('should show correct text given c4 envelope was selected', () => {
@@ -44,7 +44,7 @@ describe('Print Coversheets View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('div.envelope.c4 p').text()).not.toContain('Fold each sheet')
+    expect($('p').text()).not.toContain('Fold each sheet')
   })
 
   it('should show correct filename and number of coversheets given 1 coversheet', () => {
