@@ -1,5 +1,5 @@
 import redis from 'redis'
-import type { Prison } from 'prisonTypes'
+import type { PrisonDto } from 'prisonRegisterApiClient'
 import createRedisClient from './createRedisClient'
 import RedisStore from './RedisStore'
 
@@ -10,11 +10,11 @@ export default class PrisonRegisterStore extends RedisStore {
     super(redisClient)
   }
 
-  public async setActivePrisons(activePrisons: Array<Prison>, durationDays = 1): Promise<void> {
-    return this.setRedisAsync(ACTIVE_PRISONS, JSON.stringify(activePrisons), 'EX', durationDays * 24 * 60 * 60)
+  public setActivePrisons(activePrisons: Array<PrisonDto>, durationDays = 1) {
+    this.setRedisAsync(ACTIVE_PRISONS, JSON.stringify(activePrisons), 'EX', durationDays * 24 * 60 * 60)
   }
 
-  public async getActivePrisons(): Promise<Array<Prison>> {
-    return this.getRedisAsync(ACTIVE_PRISONS).then(serializedData => JSON.parse(serializedData) as Array<Prison>)
+  public async getActivePrisons(): Promise<Array<PrisonDto>> {
+    return this.getRedisAsync(ACTIVE_PRISONS).then(serializedData => JSON.parse(serializedData) as Array<PrisonDto>)
   }
 }

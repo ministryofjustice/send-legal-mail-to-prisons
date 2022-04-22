@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import nock from 'nock'
+import type { PrisonDto } from 'prisonRegisterApiClient'
 import type { PrisonAddress } from 'prisonTypes'
 import PrisonRegisterService from './PrisonRegisterService'
 import config from '../../config'
@@ -9,6 +10,134 @@ const prisonRegisterStore = {
   setActivePrisons: jest.fn(),
   getActivePrisons: jest.fn(),
 }
+
+const prisonDtosFromPrisonRegister: Array<PrisonDto> = [
+  {
+    prisonId: 'ALI',
+    prisonName: 'Albany (HMP)',
+    active: false,
+    male: false,
+    female: false,
+    types: [],
+    addresses: [],
+  },
+  {
+    prisonId: 'AKI',
+    prisonName: 'Acklington (HMP)',
+    active: false,
+    male: false,
+    female: false,
+    types: [],
+    addresses: [],
+  },
+  {
+    prisonId: 'KTI',
+    prisonName: 'Kennet (HMP)',
+    active: false,
+    male: false,
+    female: false,
+    types: [],
+    addresses: [],
+  },
+  {
+    prisonId: 'ACI',
+    prisonName: 'Altcourse (HMP)',
+    active: true,
+    male: true,
+    female: false,
+    types: [
+      {
+        code: 'HMP',
+        description: 'Her Majesty’s Prison',
+      },
+    ],
+    addresses: [
+      {
+        id: 1,
+        addressLine1: 'Brookfield Drive',
+        addressLine2: 'Fazakerley',
+        town: 'Liverpool',
+        county: 'Lancashire',
+        postcode: 'L9 7LH',
+        country: 'England',
+      },
+    ],
+  },
+  {
+    prisonId: 'ASI',
+    prisonName: 'Ashfield (HMP)',
+    active: true,
+    male: true,
+    female: false,
+    types: [
+      {
+        code: 'HMP',
+        description: 'Her Majesty’s Prison',
+      },
+    ],
+    addresses: [
+      {
+        id: 2,
+        addressLine1: 'Shortwood Road',
+        addressLine2: 'Pucklechurch',
+        town: 'Bristol',
+        county: 'Gloucestershire',
+        postcode: 'BS16 9QJ',
+        country: 'England',
+      },
+    ],
+  },
+]
+const activePrisonDtos: Array<PrisonDto> = [
+  {
+    prisonId: 'ACI',
+    prisonName: 'Altcourse (HMP)',
+    active: true,
+    male: true,
+    female: false,
+    types: [
+      {
+        code: 'HMP',
+        description: 'Her Majesty’s Prison',
+      },
+    ],
+    addresses: [
+      {
+        id: 1,
+        addressLine1: 'Brookfield Drive',
+        addressLine2: 'Fazakerley',
+        town: 'Liverpool',
+        county: 'Lancashire',
+        postcode: 'L9 7LH',
+        country: 'England',
+      },
+    ],
+  },
+  {
+    prisonId: 'ASI',
+    prisonName: 'Ashfield (HMP)',
+    active: true,
+    male: true,
+    female: false,
+    types: [
+      {
+        code: 'HMP',
+        description: 'Her Majesty’s Prison',
+      },
+    ],
+    addresses: [
+      {
+        id: 2,
+        addressLine1: 'Shortwood Road',
+        addressLine2: 'Pucklechurch',
+        town: 'Bristol',
+        county: 'Gloucestershire',
+        postcode: 'BS16 9QJ',
+        country: 'England',
+      },
+    ],
+  },
+]
 
 describe('Prison Register Service', () => {
   let prisonRegisterService: PrisonRegisterService
@@ -39,16 +168,9 @@ describe('Prison Register Service', () => {
 
     it('should get all active prisons from the prison register given they are not in the redis store', async () => {
       prisonRegisterStore.getActivePrisons.mockResolvedValue(null)
-      mockedPrisonRegisterApi.get('/prisons').reply(200, [
-        { prisonId: 'ALI', prisonName: 'Albany (HMP)', active: false },
-        { prisonId: 'AKI', prisonName: 'Acklington (HMP)', active: false },
-        { prisonId: 'KTI', prisonName: 'Kennet (HMP)', active: true },
-        { prisonId: 'ACI', prisonName: 'Altcourse (HMP)', active: true },
-        { prisonId: 'ASI', prisonName: 'Ashfield (HMP)', active: true },
-      ])
+      mockedPrisonRegisterApi.get('/prisons').reply(200, prisonDtosFromPrisonRegister)
 
       const expectedActivePrisons = [
-        { id: 'KTI', name: 'Kennet (HMP)' },
         { id: 'ACI', name: 'Altcourse (HMP)' },
         { id: 'ASI', name: 'Ashfield (HMP)' },
       ]
@@ -56,21 +178,14 @@ describe('Prison Register Service', () => {
       const activePrisons = await prisonRegisterService.getActivePrisonsFromPrisonRegister()
 
       expect(activePrisons).toStrictEqual(expectedActivePrisons)
-      expect(prisonRegisterStore.setActivePrisons).toHaveBeenCalledWith(expectedActivePrisons)
+      expect(prisonRegisterStore.setActivePrisons).toHaveBeenCalledWith(activePrisonDtos)
     })
 
     it('should get all active prisons from the prison register given reading from redis throws an error', async () => {
       prisonRegisterStore.getActivePrisons.mockRejectedValue('some error reading from redis')
-      mockedPrisonRegisterApi.get('/prisons').reply(200, [
-        { prisonId: 'ALI', prisonName: 'Albany (HMP)', active: false },
-        { prisonId: 'AKI', prisonName: 'Acklington (HMP)', active: false },
-        { prisonId: 'KTI', prisonName: 'Kennet (HMP)', active: true },
-        { prisonId: 'ACI', prisonName: 'Altcourse (HMP)', active: true },
-        { prisonId: 'ASI', prisonName: 'Ashfield (HMP)', active: true },
-      ])
+      mockedPrisonRegisterApi.get('/prisons').reply(200, prisonDtosFromPrisonRegister)
 
       const expectedActivePrisons = [
-        { id: 'KTI', name: 'Kennet (HMP)' },
         { id: 'ACI', name: 'Altcourse (HMP)' },
         { id: 'ASI', name: 'Ashfield (HMP)' },
       ]
@@ -78,16 +193,16 @@ describe('Prison Register Service', () => {
       const activePrisons = await prisonRegisterService.getActivePrisonsFromPrisonRegister()
 
       expect(activePrisons).toStrictEqual(expectedActivePrisons)
-      expect(prisonRegisterStore.setActivePrisons).toHaveBeenCalledWith(expectedActivePrisons)
+      expect(prisonRegisterStore.setActivePrisons).toHaveBeenCalledWith(activePrisonDtos)
     })
 
     it('should get all active prisons from the prison register store given they are already in the redis store', async () => {
+      prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisonDtos)
+
       const expectedActivePrisons = [
-        { id: 'KTI', name: 'Kennet (HMP)' },
-        { id: 'ASI', name: 'Ashfield (HMP)' },
         { id: 'ACI', name: 'Altcourse (HMP)' },
+        { id: 'ASI', name: 'Ashfield (HMP)' },
       ]
-      prisonRegisterStore.getActivePrisons.mockResolvedValue(expectedActivePrisons)
 
       const activePrisons = await prisonRegisterService.getActivePrisonsFromPrisonRegister()
 
@@ -154,14 +269,18 @@ describe('Prison Register Service', () => {
   })
 
   describe('getPrisonNameOrId', () => {
-    it('should get prison name given valid prison ID', () => {
-      const prisonName = prisonRegisterService.getPrisonNameOrId('ASI')
+    it('should get prison name given valid prison ID', async () => {
+      prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisonDtos)
+
+      const prisonName = await prisonRegisterService.getPrisonNameOrId('ASI')
 
       expect(prisonName).toBe('HMP Ashfield')
     })
 
-    it('should return prison ID given invalid prison id', () => {
-      const prisonName = prisonRegisterService.getPrisonNameOrId('XYZ')
+    it('should return prison ID given invalid prison id', async () => {
+      prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisonDtos)
+
+      const prisonName = await prisonRegisterService.getPrisonNameOrId('XYZ')
 
       expect(prisonName).toBe('XYZ')
     })

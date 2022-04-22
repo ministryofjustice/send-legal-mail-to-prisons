@@ -13,12 +13,19 @@ export default class PrisonRegisterService {
   }
 
   async getActivePrisonsFromPrisonRegister(): Promise<Array<Prison>> {
+    let activePrisons: Array<PrisonDto>
     try {
-      const activePrisons = await this.prisonRegisterStore.getActivePrisons()
-      return activePrisons || this.retrieveAndCacheActivePrisons()
+      activePrisons = await this.getActivePrisonDtos()
     } catch (error) {
-      return this.retrieveAndCacheActivePrisons()
+      return error
     }
+
+    return activePrisons.map(prisonDto => {
+      return {
+        id: prisonDto.prisonId,
+        name: prisonDto.prisonName,
+      }
+    })
   }
 
   // TODO due to bad data quality we are ignoring Prison Register for now - the plan is for Prison Register to be updated with our data when they have added the addresses on https://dsdmoj.atlassian.net/browse/HAAR-32
@@ -47,24 +54,26 @@ export default class PrisonRegisterService {
     return prisonAddress?.premise || prisonId
   }
 
-  private async retrieveAndCacheActivePrisons(): Promise<Array<Prison>> {
+  private async retrieveAndCacheActivePrisons(): Promise<Array<PrisonDto>> {
+    // Retrieve prisons from the service and put the active ones in the redis store.
+    const prisonDtos = (await PrisonRegisterService.restClient().get({ path: '/prisons' })) as Array<PrisonDto>
+    const activePrisons = prisonDtos.filter(prison => prison.active === true)
+    this.prisonRegisterStore.setActivePrisons(activePrisons)
+    return activePrisons
+  }
+
+  private async getActivePrisonDtos(): Promise<Array<PrisonDto>> {
+    // Retrieve the prisons from the redis store if they exist there, else get them from the service and cache them
+    let activePrisons: Array<PrisonDto>
     try {
-      // Active Prisons were not returned from the redis store. Retrieve them from the service and put them in the redis store.
-      const prisonDtos = (await PrisonRegisterService.restClient().get({ path: '/prisons' })) as Array<PrisonDto>
-      const activePrisons = prisonDtos
-        .filter(prison => prison.active === true)
-        .map(prisonDto => {
-          return {
-            id: prisonDto.prisonId,
-            name: prisonDto.prisonName,
-          }
-        })
-      this.prisonRegisterStore.setActivePrisons(activePrisons)
-      return activePrisons
+      activePrisons = await this.prisonRegisterStore.getActivePrisons()
     } catch (error) {
-      // There was an error calling the Prison Register API - return the error so it will be handled as part of the promise chain
-      return error
+      // no op
     }
+    if (!activePrisons) {
+      activePrisons = await this.retrieveAndCacheActivePrisons()
+    }
+    return activePrisons
   }
 
   private strictCastToPrisonAddress(source: {
