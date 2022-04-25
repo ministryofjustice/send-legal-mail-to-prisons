@@ -3,7 +3,6 @@ import type { PrisonDto } from 'prisonRegisterApiClient'
 import config from '../../config'
 import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
 import RestClient from '../../data/restClient'
-import logger from '../../../logger'
 
 export default class PrisonRegisterService {
   constructor(private readonly prisonRegisterStore: PrisonRegisterStore) {}
