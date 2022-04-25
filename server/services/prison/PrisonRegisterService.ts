@@ -1,5 +1,5 @@
 import type { Prison, PrisonAddress } from 'prisonTypes'
-import type { PrisonDto } from 'prisonRegisterApiClient'
+import type { PrisonDto, AddressDto } from 'prisonRegisterApiClient'
 import config from '../../config'
 import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
 import RestClient from '../../data/restClient'
@@ -54,9 +54,7 @@ export default class PrisonRegisterService {
           agencyCode: prison.prisonId,
           agyDescription: prison.prisonName,
           premise: this.reformatPrisonName(prison.prisonName),
-          street: address.addressLine1,
-          locality: `${address.addressLine2}, ${address.town}`,
-          postalCode: address.postcode,
+          ...this.buildAddressFields(address),
         }
       })
     this.prisonRegisterStore.setActivePrisons(activePrisons)
@@ -88,5 +86,14 @@ export default class PrisonRegisterService {
       return `${matches[2]} ${matches[1]}`
     }
     return prisonName
+  }
+
+  private buildAddressFields(address: AddressDto): { street: string; locality: string; postalCode: string } {
+    const locality = address.addressLine2 ? `${address.addressLine2}, ${address.town}` : address.town
+    return {
+      street: address.addressLine1,
+      locality,
+      postalCode: address.postcode,
+    }
   }
 }
