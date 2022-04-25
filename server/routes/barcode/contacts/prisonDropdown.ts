@@ -1,4 +1,4 @@
-import type { PrisonAddress } from 'prisonTypes'
+import type { Prison } from 'prisonTypes'
 
 export type DropDownOption = {
   value: string
@@ -7,17 +7,17 @@ export type DropDownOption = {
 }
 
 export default function getPrisonDropdown(
-  prisonRegister: Array<PrisonAddress>,
+  prisonRegister: Array<Prison>,
   selectedPrisonId?: string
 ): Array<DropDownOption> {
   return [
     { value: '', text: '' },
     ...prisonRegister
-      .map((prison: PrisonAddress) => {
+      .map((prison: Prison) => {
         return {
-          value: prison.agencyCode,
-          text: prison.agyDescription,
-          selected: prison.agencyCode === selectedPrisonId,
+          value: prison.id,
+          text: prison.name,
+          selected: prison.id === selectedPrisonId,
         }
       })
       .sort((a: DropDownOption, b: DropDownOption) => a.text.localeCompare(b.text)),

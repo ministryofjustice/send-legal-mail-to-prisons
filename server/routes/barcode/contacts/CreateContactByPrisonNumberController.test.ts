@@ -68,9 +68,9 @@ describe('CreateContactByPrisonNumberController', () => {
     it('should create and return view given no active prison filtering', async () => {
       config.supportedPrisons = ''
       prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([
-        { agencyCode: 'KTI', agyDescription: 'Kennet (HMP)' },
-        { agencyCode: 'ASI', agyDescription: 'Ashfield (HMP)' },
-        { agencyCode: 'ACI', agyDescription: 'Altcourse (HMP)' },
+        { id: 'KTI', name: 'Kennet (HMP)' },
+        { id: 'ASI', name: 'Ashfield (HMP)' },
+        { id: 'ACI', name: 'Altcourse (HMP)' },
       ])
 
       req.session.recipientForm = { prisonNumber: 'A1234BC' }
@@ -97,9 +97,9 @@ describe('CreateContactByPrisonNumberController', () => {
     it('should create and return view given active prison filtering', async () => {
       config.supportedPrisons = 'ASI'
       prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([
-        { agencyCode: 'KTI', agyDescription: 'Kennet (HMP)' },
-        { agencyCode: 'ASI', agyDescription: 'Ashfield (HMP)' },
-        { agencyCode: 'ACI', agyDescription: 'Altcourse (HMP)' },
+        { id: 'KTI', name: 'Kennet (HMP)' },
+        { id: 'ASI', name: 'Ashfield (HMP)' },
+        { id: 'ACI', name: 'Altcourse (HMP)' },
       ])
 
       req.session.recipientForm = { prisonNumber: 'A1234BC' }

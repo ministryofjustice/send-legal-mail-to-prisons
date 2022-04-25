@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import nock from 'nock'
 import type { PrisonDto } from 'prisonRegisterApiClient'
-import type { PrisonAddress } from 'prisonTypes'
+import type { Prison } from 'prisonTypes'
 import PrisonRegisterService from './PrisonRegisterService'
 import config from '../../config'
 import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
@@ -88,19 +88,19 @@ const prisonDtosFromPrisonRegister: Array<PrisonDto> = [
     ],
   },
 ]
-const activePrisons: Array<PrisonAddress> = [
+const activePrisons: Array<Prison> = [
   {
-    agencyCode: 'ACI',
-    agyDescription: 'Altcourse (HMP)',
-    premise: 'HMP Altcourse',
+    id: 'ACI',
+    name: 'Altcourse (HMP)',
+    addressName: 'HMP Altcourse',
     street: 'Brookfield Drive',
     locality: 'Fazakerley, Liverpool',
     postalCode: 'L9 7LH',
   },
   {
-    agencyCode: 'ASI',
-    agyDescription: 'Ashfield (HMP)',
-    premise: 'HMP Ashfield',
+    id: 'ASI',
+    name: 'Ashfield (HMP)',
+    addressName: 'HMP Ashfield',
     street: 'Shortwood Road',
     locality: 'Pucklechurch, Bristol',
     postalCode: 'BS16 9QJ',
@@ -176,23 +176,23 @@ describe('Prison Register Service', () => {
     })
   })
 
-  describe('getPrisonAddress', () => {
+  describe('getPrison', () => {
     it('should get prison address given prison exists', async () => {
       prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisons)
       const prisonId = 'ASI'
 
-      const expectedPrisonAddress: PrisonAddress = {
-        agencyCode: 'ASI',
-        agyDescription: 'Ashfield (HMP)',
-        premise: 'HMP Ashfield',
+      const expectedPrison: Prison = {
+        id: 'ASI',
+        name: 'Ashfield (HMP)',
+        addressName: 'HMP Ashfield',
         street: 'Shortwood Road',
         locality: 'Pucklechurch, Bristol',
         postalCode: 'BS16 9QJ',
       }
 
-      const prisonAddress: PrisonAddress = await prisonRegisterService.getPrisonAddress(prisonId)
+      const prison: Prison = await prisonRegisterService.getPrison(prisonId)
 
-      expect(prisonAddress).toStrictEqual(expectedPrisonAddress)
+      expect(prison).toStrictEqual(expectedPrison)
     })
 
     it('should not get prison address given prison does not exist', async () => {
@@ -200,9 +200,9 @@ describe('Prison Register Service', () => {
       const prisonId = 'XYZ'
 
       try {
-        await prisonRegisterService.getPrisonAddress(prisonId)
+        await prisonRegisterService.getPrison(prisonId)
       } catch (error) {
-        expect(error).toStrictEqual(new Error('PrisonAddress for prison XYZ not found'))
+        expect(error).toStrictEqual(new Error('Prison for prison XYZ not found'))
       }
     })
   })

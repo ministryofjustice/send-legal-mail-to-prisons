@@ -67,12 +67,12 @@ export default class RecipientFormService {
   }
 
   private async toRecipient(recipientForm: RecipientForm): Promise<Recipient> {
-    const prisonAddress = await this.prisonRegisterService.getPrisonAddress(recipientForm.prisonId)
+    const prison = await this.prisonRegisterService.getPrison(recipientForm.prisonId)
     return {
       prisonerName: recipientForm.prisonerName || '',
       prisonNumber: recipientForm.prisonNumber,
       prisonerDob: recipientForm.prisonerDob,
-      prisonAddress,
+      prison,
       contactId: +recipientForm.contactId || undefined,
     }
   }

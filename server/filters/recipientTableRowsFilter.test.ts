@@ -1,30 +1,26 @@
-import type { PrisonAddress, Recipient } from 'prisonTypes'
+import type { Prison, Recipient } from 'prisonTypes'
 import recipientTableRowsFilter from './recipientTableRowsFilter'
 
 const HMP_BRINSFORD = {
-  flat: null,
-  premise: 'HMP BRINSFORD',
+  id: 'BSI',
+  addressName: 'HMP BRINSFORD',
   street: 'New Road',
   locality: 'Featherstone',
-  countyCode: null,
-  area: 'Featherstone Wolverhampton',
   postalCode: 'WV10 7PY',
-} as PrisonAddress
+} as Prison
 const HMP_BRIXTON = {
-  flat: null,
-  premise: 'HMP BRIXTON',
+  id: 'BXI',
+  addressName: 'HMP BRIXTON',
   street: 'P O Box 369',
   locality: 'Jebb Avenue',
-  countyCode: null,
-  area: 'Jebb Avenue London',
   postalCode: 'SW2 5XF',
-} as PrisonAddress
+} as Prison
 
 describe('recipientTableRowsFilter', () => {
   it('should filter recipients into structure suitable for rendering in a govukTable', () => {
     const recipients: Array<Recipient> = [
-      { prisonNumber: 'A1234BC', prisonerName: 'John Smith', prisonAddress: HMP_BRINSFORD, contactId: 1 },
-      { prisonNumber: 'R9831RQ', prisonerName: 'Gage Hewitt', prisonAddress: HMP_BRIXTON, contactId: 2 },
+      { prisonNumber: 'A1234BC', prisonerName: 'John Smith', prison: HMP_BRINSFORD, contactId: 1 },
+      { prisonNumber: 'R9831RQ', prisonerName: 'Gage Hewitt', prison: HMP_BRIXTON, contactId: 2 },
     ]
 
     const tableRows = recipientTableRowsFilter(recipients)
@@ -55,8 +51,8 @@ describe('recipientTableRowsFilter', () => {
 
   it('should use prisoner DOB if prison number is missing', () => {
     const recipients: Array<Recipient> = [
-      { prisonNumber: 'A1234BC', prisonerName: 'John Smith', prisonAddress: HMP_BRINSFORD, contactId: 1 },
-      { prisonerDob: new Date(1990, 0, 1), prisonerName: 'Gage Hewitt', prisonAddress: HMP_BRIXTON, contactId: 2 },
+      { prisonNumber: 'A1234BC', prisonerName: 'John Smith', prison: HMP_BRINSFORD, contactId: 1 },
+      { prisonerDob: new Date(1990, 0, 1), prisonerName: 'Gage Hewitt', prison: HMP_BRIXTON, contactId: 2 },
     ]
 
     const tableRows = recipientTableRowsFilter(recipients)

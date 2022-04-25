@@ -1,6 +1,6 @@
 declare module 'forms' {
   import type { CheckBarcodeErrorCodes } from '../sendLegalMailApiClient'
-  import { PrisonAddress } from '../prisonTypes'
+  import { Prison } from '../prisonTypes'
   import { Contact } from '../sendLegalMailApiClient'
 
   export interface RequestLinkForm {
@@ -69,7 +69,7 @@ declare module 'forms' {
     prisonerName?: string
     prisonerDob?: Date
     prisonId?: string
-    prisonAddress?: PrisonAddress
+    prison?: Prison
     barcodeValue?: string
     searchName?: string
     contacts?: Array<Contact>

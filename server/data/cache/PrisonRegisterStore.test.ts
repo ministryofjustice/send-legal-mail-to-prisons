@@ -1,5 +1,5 @@
 import { RedisClient } from 'redis'
-import type { PrisonAddress } from 'prisonTypes'
+import type { Prison } from 'prisonTypes'
 import PrisonRegisterStore from './PrisonRegisterStore'
 
 const redisClient = {
@@ -8,19 +8,19 @@ const redisClient = {
   set: jest.fn(),
 }
 
-const activePrisons: Array<PrisonAddress> = [
+const activePrisons: Array<Prison> = [
   {
-    agencyCode: 'ACI',
-    agyDescription: 'Altcourse (HMP)',
-    premise: 'HMP Altcourse',
+    id: 'ACI',
+    name: 'Altcourse (HMP)',
+    addressName: 'HMP Altcourse',
     street: 'Brookfield Drive',
     locality: 'Fazakerley, Liverpool',
     postalCode: 'L9 7LH',
   },
   {
-    agencyCode: 'ASI',
-    agyDescription: 'Ashfield (HMP)',
-    premise: 'HMP Ashfield',
+    id: 'ASI',
+    name: 'Ashfield (HMP)',
+    addressName: 'HMP Ashfield',
     street: 'Shortwood Road',
     locality: 'Pucklechurch, Bristol',
     postalCode: 'BS16 9QJ',
@@ -67,7 +67,7 @@ describe('PrisonRegisterStore', () => {
     const serializedActivePrisons: string = null
     redisClient.get.mockImplementation((key, callback) => callback(null, serializedActivePrisons))
 
-    const expectedActivePrisons: Array<PrisonAddress> = null
+    const expectedActivePrisons: Array<Prison> = null
 
     const returnedActivePrisons = await prisonRegisterStore.getActivePrisons()
 

@@ -1,7 +1,7 @@
 import { Request } from 'express'
 import { SessionData } from 'express-session'
 import type { Contact } from 'sendLegalMailApiClient'
-import type { PrisonAddress } from 'prisonTypes'
+import type { Prison } from 'prisonTypes'
 import type { RecipientForm } from 'forms'
 import moment from 'moment'
 import RecipientFormService from './RecipientFormService'
@@ -12,7 +12,7 @@ const req = {
 }
 
 const prisonRegisterService = {
-  getPrisonAddress: jest.fn(),
+  getPrison: jest.fn(),
 }
 
 const aContact = (id = 1, prisonNumber = 'A1234BC'): Contact => {
@@ -33,9 +33,10 @@ const aContactDob = (): Contact => {
   }
 }
 
-const aPrisonAddress = (): PrisonAddress => {
+const aPrison = (): Prison => {
   return {
-    premise: 'HMP Leeds',
+    id: 'LEI',
+    addressName: 'HMP Leeds',
   }
 }
 
@@ -62,7 +63,7 @@ describe('Recipient Form Service', () => {
   })
 
   afterEach(() => {
-    prisonRegisterService.getPrisonAddress.mockReset()
+    prisonRegisterService.getPrison.mockReset()
     req.session = {} as SessionData
   })
 
@@ -140,7 +141,7 @@ describe('Recipient Form Service', () => {
 
   describe('addRecipient', () => {
     it('should add the passed recipient to the saved list', async () => {
-      prisonRegisterService.getPrisonAddress.mockReturnValue(aPrisonAddress())
+      prisonRegisterService.getPrison.mockReturnValue(aPrison())
       const recipient = aRecipientForm()
 
       await recipientFormService.addRecipient(req as unknown as Request, recipient)
@@ -148,14 +149,14 @@ describe('Recipient Form Service', () => {
       expect(req.session.recipients[0]).toEqual({
         prisonNumber: 'A1234BC',
         prisonerName: 'John Smith',
-        prisonAddress: aPrisonAddress(),
+        prison: aPrison(),
       })
       expect(req.session.recipientForm).toStrictEqual({})
-      expect(prisonRegisterService.getPrisonAddress).toHaveBeenCalledWith('LEI')
+      expect(prisonRegisterService.getPrison).toHaveBeenCalledWith('LEI')
     })
 
     it('should add a recipient from the session to the saved list', async () => {
-      prisonRegisterService.getPrisonAddress.mockReturnValue(aPrisonAddress())
+      prisonRegisterService.getPrison.mockReturnValue(aPrison())
       req.session.recipientForm = aRecipientForm()
 
       await recipientFormService.addRecipient(req as unknown as Request)
@@ -163,12 +164,12 @@ describe('Recipient Form Service', () => {
       expect(req.session.recipients[0]).toEqual({
         prisonNumber: 'A1234BC',
         prisonerName: 'John Smith',
-        prisonAddress: aPrisonAddress(),
+        prison: aPrison(),
       })
     })
 
     it('should add a recipient with DOB to the saved list', async () => {
-      prisonRegisterService.getPrisonAddress.mockReturnValue(aPrisonAddress())
+      prisonRegisterService.getPrison.mockReturnValue(aPrison())
       req.session.recipientForm = aRecipientDobForm()
 
       await recipientFormService.addRecipient(req as unknown as Request)
@@ -176,12 +177,12 @@ describe('Recipient Form Service', () => {
       expect(req.session.recipients[0]).toEqual({
         prisonerName: 'John Smith',
         prisonerDob: moment('1990-01-01', 'YYYY-MM-DD').toDate(),
-        prisonAddress: aPrisonAddress(),
+        prison: aPrison(),
       })
     })
 
     it('should throw errors from retrieving the prison address', async () => {
-      prisonRegisterService.getPrisonAddress.mockRejectedValue('some-error')
+      prisonRegisterService.getPrison.mockRejectedValue('some-error')
       req.session.recipientForm = aRecipientForm()
 
       try {
@@ -195,39 +196,39 @@ describe('Recipient Form Service', () => {
 
   describe('addContact', () => {
     it('should save contact to recipient list', async () => {
-      prisonRegisterService.getPrisonAddress.mockReturnValue(aPrisonAddress())
+      prisonRegisterService.getPrison.mockReturnValue(aPrison())
 
       await recipientFormService.addContact(req as unknown as Request, aContact())
 
       expect(req.session.recipients[0]).toEqual({
         prisonNumber: 'A1234BC',
         prisonerName: 'John Smith',
-        prisonAddress: aPrisonAddress(),
+        prison: aPrison(),
         contactId: 1,
       })
       expect(req.session.recipientForm).toStrictEqual({})
-      expect(prisonRegisterService.getPrisonAddress).toHaveBeenCalledWith('LEI')
+      expect(prisonRegisterService.getPrison).toHaveBeenCalledWith('LEI')
     })
 
     it('should save contact with DoB to recipient list', async () => {
-      prisonRegisterService.getPrisonAddress.mockReturnValue(aPrisonAddress())
+      prisonRegisterService.getPrison.mockReturnValue(aPrison())
 
       await recipientFormService.addContact(req as unknown as Request, aContactDob())
 
       expect(req.session.recipients[0]).toEqual({
         prisonerDob: moment('1990-01-01', 'YYYY-MM-DD').toDate(),
         prisonerName: 'John Smith',
-        prisonAddress: aPrisonAddress(),
+        prison: aPrison(),
         contactId: 1,
       })
       expect(req.session.recipientForm).toStrictEqual({})
-      expect(prisonRegisterService.getPrisonAddress).toHaveBeenCalledWith('LEI')
+      expect(prisonRegisterService.getPrison).toHaveBeenCalledWith('LEI')
     })
   })
 
   describe('updateContact', () => {
     it('should do nothing if contact not in recipient list', async () => {
-      prisonRegisterService.getPrisonAddress.mockReturnValue(aPrisonAddress())
+      prisonRegisterService.getPrison.mockReturnValue(aPrison())
       await recipientFormService.addContact(req as unknown as Request, aContact())
       expect(req.session.recipients.length).toEqual(1)
 
@@ -237,15 +238,15 @@ describe('Recipient Form Service', () => {
         {
           prisonNumber: 'A1234BC',
           prisonerName: 'John Smith',
-          prisonAddress: aPrisonAddress(),
+          prison: aPrison(),
           contactId: 1,
         },
       ])
-      expect(prisonRegisterService.getPrisonAddress).toHaveBeenCalledWith('LEI')
+      expect(prisonRegisterService.getPrison).toHaveBeenCalledWith('LEI')
     })
 
     it('should update recipient list with new contact details', async () => {
-      prisonRegisterService.getPrisonAddress.mockReturnValue(aPrisonAddress())
+      prisonRegisterService.getPrison.mockReturnValue(aPrison())
       await recipientFormService.addContact(req as unknown as Request, aContact())
       expect(req.session.recipients.length).toEqual(1)
 
@@ -255,14 +256,14 @@ describe('Recipient Form Service', () => {
         {
           prisonNumber: 'A5555FF',
           prisonerName: 'John Smith',
-          prisonAddress: aPrisonAddress(),
+          prison: aPrison(),
           contactId: 1,
         },
       ])
     })
 
     it('should update all occurrences of recipient with new contact details', async () => {
-      prisonRegisterService.getPrisonAddress.mockReturnValue(aPrisonAddress())
+      prisonRegisterService.getPrison.mockReturnValue(aPrison())
       await recipientFormService.addContact(req as unknown as Request, aContact())
       await recipientFormService.addContact(req as unknown as Request, aContact(2))
       await recipientFormService.addContact(req as unknown as Request, aContact())
@@ -274,19 +275,19 @@ describe('Recipient Form Service', () => {
         {
           prisonNumber: 'A5555FF',
           prisonerName: 'John Smith',
-          prisonAddress: aPrisonAddress(),
+          prison: aPrison(),
           contactId: 1,
         },
         {
           prisonNumber: 'A1234BC',
           prisonerName: 'John Smith',
-          prisonAddress: aPrisonAddress(),
+          prison: aPrison(),
           contactId: 2,
         },
         {
           prisonNumber: 'A5555FF',
           prisonerName: 'John Smith',
-          prisonAddress: aPrisonAddress(),
+          prison: aPrison(),
           contactId: 1,
         },
       ])

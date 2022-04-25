@@ -45,7 +45,7 @@ describe('PdfController', () => {
         {
           prisonerName: 'John Smith',
           prisonNumber: 'A1234BC',
-          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
         },
       ]
 
@@ -84,7 +84,7 @@ describe('PdfController', () => {
         {
           prisonerName: 'John Smith',
           prisonNumber: 'A1234BC',
-          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
         },
       ]
       req.body = {}
@@ -102,7 +102,7 @@ describe('PdfController', () => {
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           },
         ]
         req.body = { envelopeSize: 'dl' }
@@ -111,7 +111,7 @@ describe('PdfController', () => {
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
             barcodeValue: '123456789012',
           },
         ])
@@ -123,7 +123,7 @@ describe('PdfController', () => {
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
             barcodeValue: '123456789012',
           },
         ])
@@ -134,7 +134,7 @@ describe('PdfController', () => {
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           },
         ]
         req.body = { envelopeSize: 'dl' }
@@ -156,12 +156,12 @@ describe('PdfController', () => {
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           },
           {
             prisonerName: 'John Doe',
             prisonNumber: 'J3344JD',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           },
         ]
         req.body = { envelopeSize: 'dl' }
@@ -170,13 +170,13 @@ describe('PdfController', () => {
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
             barcodeValue: '123456789012',
           },
           {
             prisonerName: 'John Doe',
             prisonNumber: 'J3344JD',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
             barcodeValue: '999988887777',
           },
         ])
@@ -188,13 +188,13 @@ describe('PdfController', () => {
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
             barcodeValue: '123456789012',
           },
           {
             prisonerName: 'John Doe',
             prisonNumber: 'J3344JD',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
             barcodeValue: '999988887777',
           },
         ])
@@ -205,12 +205,12 @@ describe('PdfController', () => {
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           },
           {
             prisonerName: 'John Doe',
             prisonNumber: 'J3344JD',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           },
         ]
         createBarcodeService.addBarcodeValuesToRecipients.mockRejectedValue('An error returned from barcode API')
@@ -231,7 +231,7 @@ describe('PdfController', () => {
         {
           prisonerName: 'John Smith',
           prisonNumber: 'A1234BC',
-          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           barcodeValue: '123456789012',
         },
       ]
@@ -256,7 +256,7 @@ describe('PdfController', () => {
     })
 
     it('should redirect to select-envelope-size given no pdfForm in the session', async () => {
-      req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
+      req.session.recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prison: {} }]
       req.session.pdfForm = undefined
 
       await pdfController.getPrintCoverSheetView(req as unknown as Request, res as unknown as Response)
@@ -271,7 +271,7 @@ describe('PdfController', () => {
         {
           prisonerName: 'John Smith',
           prisonNumber: 'A1234BC',
-          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           barcodeValue: '123456789012',
         },
       ]
@@ -294,7 +294,7 @@ describe('PdfController', () => {
         {
           prisonerName: 'John Smith',
           prisonNumber: 'A1234BC',
-          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           barcodeValue: '123456789012',
         },
       ]
@@ -322,7 +322,7 @@ describe('PdfController', () => {
         {
           prisonerName: 'John Smith',
           prisonNumber: 'A1234BC',
-          prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+          prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           barcodeValue: '123456789012',
         },
       ]

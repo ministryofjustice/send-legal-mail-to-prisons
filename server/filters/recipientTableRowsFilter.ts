@@ -13,7 +13,7 @@ export default function recipientTableRowsFilter(recipients: Array<Recipient>): 
       {
         text: recipient.prisonNumber ? recipient.prisonNumber : moment(recipient.prisonerDob).format('D MMMM YYYY'), // Column 2 - Prison number or DOB
       },
-      { text: recipient.prisonAddress.premise }, // Column 3 - Prison name
+      { text: recipient.prison.addressName }, // Column 3 - Prison name
       {
         html: `
           <a href="/barcode/edit-contact/${recipient.contactId}" class="govuk-link govuk-link--no-visited-state">Edit details<span class="govuk-visually-hidden"> for ${recipient.prisonerName}</span></a>
