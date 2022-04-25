@@ -1,13 +1,13 @@
-import type { PrisonAddress } from 'prisonTypes'
+import type { Prison } from 'prisonTypes'
 import filterSupportedPrisons from './filterSupportedPrisons'
 import config from '../../../config'
 
 jest.mock('../../../config')
 
 describe('filterSupportedPrisons', () => {
-  const prisons: Array<PrisonAddress> = [
-    { agencyCode: 'AAA', agyDescription: 'A prison' },
-    { agencyCode: 'BBB', agyDescription: 'Another prison' },
+  const prisons: Array<Prison> = [
+    { id: 'AAA', name: 'A prison' },
+    { id: 'BBB', name: 'Another prison' },
   ]
 
   it('should return all active prisons if no config restriction', () => {
@@ -29,7 +29,7 @@ describe('filterSupportedPrisons', () => {
 
     const filteredPrisons = filterSupportedPrisons(prisons)
 
-    expect(filteredPrisons).toEqual([{ agencyCode: 'AAA', agyDescription: 'A prison' }])
+    expect(filteredPrisons).toEqual([{ id: 'AAA', name: 'A prison' }])
   })
 
   it('should filter multiple prisons', () => {

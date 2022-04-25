@@ -1,7 +1,7 @@
 import fs from 'fs'
 import nunjucks, { Template } from 'nunjucks'
 import cheerio from 'cheerio'
-import type { PrisonAddress, Recipient } from 'prisonTypes'
+import type { Prison, Recipient } from 'prisonTypes'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
 const snippet = fs.readFileSync('server/views/pages/barcode/review-recipients.njk')
@@ -17,17 +17,16 @@ describe('Review Recipients View', () => {
   })
 
   const HMP_BRINSFORD = {
-    flat: null,
+    id: 'BSI',
+    name: 'BRINSFORD (HMP)',
     premise: 'HMP BRINSFORD',
     street: 'New Road',
     locality: 'Featherstone',
-    countyCode: null,
-    area: 'Featherstone Wolverhampton',
     postalCode: 'WV10 7PY',
-  } as PrisonAddress
+  } as Prison
 
   const recipients: Array<Recipient> = [
-    { prisonNumber: 'A1234BC', prisonerName: 'John Smith', prisonAddress: HMP_BRINSFORD, contactId: 1 },
+    { prisonNumber: 'A1234BC', prisonerName: 'John Smith', prison: HMP_BRINSFORD, contactId: 1 },
   ]
 
   it('should render view', () => {

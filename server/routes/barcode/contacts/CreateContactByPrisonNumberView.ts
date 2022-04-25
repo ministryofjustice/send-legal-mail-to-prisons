@@ -1,11 +1,11 @@
 import type { CreateNewContactByPrisonNumberForm } from 'forms'
-import type { PrisonAddress } from 'prisonTypes'
+import type { Prison } from 'prisonTypes'
 import getPrisonDropdown, { DropDownOption } from './prisonDropdown'
 
 export default class CreateContactByPrisonNumberView {
   constructor(
     private readonly createNewContactForm: CreateNewContactByPrisonNumberForm,
-    private readonly prisonRegister: Array<PrisonAddress>,
+    private readonly prisonRegister: Array<Prison>,
     private readonly errors?: Array<Record<string, string>>
   ) {}
 

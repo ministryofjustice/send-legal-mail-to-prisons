@@ -1,13 +1,10 @@
 declare module 'prisonTypes' {
-  export type PrisonAddress = {
-    agencyCode?: string
-    agyDescription?: string
-    flat?: string
-    premise?: string
+  export type Prison = {
+    id: string
+    name?: string
+    addressName?: string
     street?: string
     locality?: string
-    countyCode?: string
-    area?: string
     postalCode?: string
   }
 
@@ -15,7 +12,7 @@ declare module 'prisonTypes' {
     prisonNumber?: string
     prisonerName: string
     prisonerDob?: Date
-    prisonAddress: PrisonAddress
+    prison: Prison
     barcodeValue?: string
     contactId?: number
   }

@@ -51,14 +51,14 @@ describe('GenerateBarcodeImageController', () => {
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           },
         ]
         createBarcodeService.addBarcodeValuesToRecipients.mockResolvedValue([
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
             barcodeValue: '123456789012',
           },
         ])
@@ -84,7 +84,7 @@ describe('GenerateBarcodeImageController', () => {
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           },
         ]
         createBarcodeService.addBarcodeValuesToRecipients.mockRejectedValue('An error returned from barcode API')
@@ -102,14 +102,14 @@ describe('GenerateBarcodeImageController', () => {
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           },
         ]
         createBarcodeService.addBarcodeValuesToRecipients.mockResolvedValue([
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
             barcodeValue: '123456789012',
           },
         ])
@@ -130,25 +130,25 @@ describe('GenerateBarcodeImageController', () => {
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           },
           {
             prisonerName: 'John Doe',
             prisonNumber: 'J3344JD',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           },
         ]
         createBarcodeService.addBarcodeValuesToRecipients.mockResolvedValue([
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
             barcodeValue: '123456789012',
           },
           {
             prisonerName: 'John Doe',
             prisonNumber: 'J3344JD',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
             barcodeValue: '999988887777',
           },
         ])
@@ -181,12 +181,12 @@ describe('GenerateBarcodeImageController', () => {
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           },
           {
             prisonerName: 'John Doe',
             prisonNumber: 'J3344JD',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           },
         ]
         createBarcodeService.addBarcodeValuesToRecipients.mockRejectedValue('An error returned from barcode API')
@@ -204,25 +204,25 @@ describe('GenerateBarcodeImageController', () => {
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           },
           {
             prisonerName: 'John Doe',
             prisonNumber: 'J3344JD',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
           },
         ]
         createBarcodeService.addBarcodeValuesToRecipients.mockResolvedValue([
           {
             prisonerName: 'John Smith',
             prisonNumber: 'A1234BC',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
             barcodeValue: '123456789012',
           },
           {
             prisonerName: 'John Doe',
             prisonNumber: 'J3344JD',
-            prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+            prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
             barcodeValue: '999988887777',
           },
         ])

@@ -1,4 +1,4 @@
-import type { PrisonAddress } from 'prisonTypes'
+import type { Prison } from 'prisonTypes'
 import type { PrisonDto, AddressDto } from 'prisonRegisterApiClient'
 import config from '../../config'
 import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
@@ -11,44 +11,41 @@ export default class PrisonRegisterService {
     return new RestClient('Prison Register API Client', config.apis.prisonRegister)
   }
 
-  async getActivePrisonsFromPrisonRegister(): Promise<Array<PrisonAddress>> {
-    let activePrisons: Array<PrisonAddress>
+  async getActivePrisonsFromPrisonRegister(): Promise<Array<Prison>> {
+    let activePrisons: Array<Prison>
     try {
-      activePrisons = await this.getActivePrisonDtos()
+      activePrisons = await this.getActivePrisons()
     } catch (error) {
       return error
     }
-
-    return activePrisons.sort((prison1: PrisonAddress, prison2: PrisonAddress) =>
-      prison1.agyDescription < prison2.agyDescription ? -1 : 1
-    )
+    return activePrisons.sort((prison1: Prison, prison2: Prison) => (prison1.name < prison2.name ? -1 : 1))
   }
 
-  async getPrisonAddress(prisonId: string): Promise<PrisonAddress> {
-    const prisons: Array<PrisonAddress> = await this.getActivePrisonDtos()
-    return prisons.find(prison => prison.agencyCode === prisonId)
+  async getPrison(prisonId: string): Promise<Prison> {
+    const prisons: Array<Prison> = await this.getActivePrisons()
+    return prisons.find(prison => prison.id === prisonId)
   }
 
   /**
-   * Returns the name of the prison (`premise` field from the PrisonAddress) for the specified prisonId
+   * Returns the name of the prison for the specified prisonId
    * or simply the prisonId if the prison cannot be found by it's ID
    */
   async getPrisonNameOrId(prisonId: string): Promise<string> {
-    const prison: PrisonAddress = await this.getPrisonAddress(prisonId)
-    return prison?.premise || prisonId
+    const prison: Prison = await this.getPrison(prisonId)
+    return prison?.addressName || prisonId
   }
 
-  private async retrieveAndCacheActivePrisons(): Promise<Array<PrisonAddress>> {
+  private async retrieveAndCacheActivePrisons(): Promise<Array<Prison>> {
     // Retrieve prisons from the service and put the active ones in the redis store.
     const prisonDtos = (await PrisonRegisterService.restClient().get({ path: '/prisons' })) as Array<PrisonDto>
-    const activePrisons: Array<PrisonAddress> = prisonDtos
+    const activePrisons: Array<Prison> = prisonDtos
       .filter(prison => prison.active === true)
       .map(prison => {
         const address = prison.addresses[0]
         return {
-          agencyCode: prison.prisonId,
-          agyDescription: prison.prisonName,
-          premise: this.reformatPrisonName(prison.prisonName),
+          id: prison.prisonId,
+          name: prison.prisonName,
+          addressName: this.reformatPrisonName(prison.prisonName),
           ...this.buildAddressFields(address),
         }
       })
@@ -56,9 +53,9 @@ export default class PrisonRegisterService {
     return activePrisons
   }
 
-  private async getActivePrisonDtos(): Promise<Array<PrisonAddress>> {
+  private async getActivePrisons(): Promise<Array<Prison>> {
     // Retrieve the prisons from the redis store if they exist there, else get them from the service and cache them
-    let activePrisons: Array<PrisonAddress>
+    let activePrisons: Array<Prison>
     try {
       activePrisons = await this.prisonRegisterStore.getActivePrisons()
     } catch (error) {

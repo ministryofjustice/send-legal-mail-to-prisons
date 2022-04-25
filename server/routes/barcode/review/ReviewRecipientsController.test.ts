@@ -28,7 +28,7 @@ const anEditContactForm = {
 const aRecipient = {
   prisonerName: 'John Smith',
   prisonNumber: 'A1234BC',
-  prisonAddress: { premise: 'HMP Somewhere', postalCode: 'AA1 1AA' },
+  prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
 }
 
 describe('ReviewRecipientsController', () => {
@@ -123,7 +123,7 @@ describe('ReviewRecipientsController', () => {
 
     Array.of('not a number', null, undefined, '-1', '2').forEach(recipientIdx => {
       it(`should redirect to review-recipients without modifying recipients given an invalid recipient index - ${recipientIdx}`, async () => {
-        const recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} }]
+        const recipients = [{ prisonerName: 'John Smith', prisonNumber: 'A1234BC', prison: {} }]
         req.session.recipients = recipients
         req.params = { recipientIdx }
 
@@ -136,9 +136,9 @@ describe('ReviewRecipientsController', () => {
 
     it(`should redirect to review-recipients and modify recipients given a recipient index`, async () => {
       const recipients = [
-        { prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} },
-        { prisonerName: 'Jane Doe', prisonNumber: 'R9876JD', prisonAddress: {} },
-        { prisonerName: 'Fred Bloggs', prisonNumber: 'D3281FB', prisonAddress: {} },
+        { prisonerName: 'John Smith', prisonNumber: 'A1234BC', prison: {} },
+        { prisonerName: 'Jane Doe', prisonNumber: 'R9876JD', prison: {} },
+        { prisonerName: 'Fred Bloggs', prisonNumber: 'D3281FB', prison: {} },
       ]
       req.session.recipients = recipients
       req.params = { recipientIdx: '1' }
@@ -147,8 +147,8 @@ describe('ReviewRecipientsController', () => {
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
       expect(req.session.recipients).toStrictEqual([
-        { prisonerName: 'John Smith', prisonNumber: 'A1234BC', prisonAddress: {} },
-        { prisonerName: 'Fred Bloggs', prisonNumber: 'D3281FB', prisonAddress: {} },
+        { prisonerName: 'John Smith', prisonNumber: 'A1234BC', prison: {} },
+        { prisonerName: 'Fred Bloggs', prisonNumber: 'D3281FB', prison: {} },
       ])
     })
   })

@@ -46,7 +46,7 @@ export default class CreateBarcodeService {
     try {
       const requestBody: CreateBarcodeRequest = {
         prisonerName: recipient.prisonerName,
-        prisonId: recipient.prisonAddress.agencyCode,
+        prisonId: recipient.prison.id,
         prisonNumber: recipient.prisonNumber,
         dob: recipient.prisonerDob ? moment(recipient.prisonerDob).format('YYYY-MM-DD') : undefined,
         contactId: recipient.contactId,
@@ -142,12 +142,12 @@ export default class CreateBarcodeService {
 
   formatAddressContent(recipient: Recipient): Array<string> {
     const name = recipient.prisonerName
-    const address = { ...recipient.prisonAddress }
+    const address = { ...recipient.prison }
     if (name.length <= 30) {
       return Array.of(
         name,
         recipient.prisonNumber ? recipient.prisonNumber : moment(recipient.prisonerDob).format('DD-MM-YYYY'),
-        address.premise,
+        address.addressName,
         address.street,
         address.locality,
         address.postalCode
@@ -164,6 +164,6 @@ export default class CreateBarcodeService {
     // Return address including 2 lines of names but without street
     const name1 = `${name.substring(0, name1length)}${lineBreakChar}`.trim()
     const name2 = name.substring(name1length, name.length).trim()
-    return Array.of(name1, name2, recipient.prisonNumber, address.premise, address.locality, address.postalCode)
+    return Array.of(name1, name2, recipient.prisonNumber, address.addressName, address.locality, address.postalCode)
   }
 }

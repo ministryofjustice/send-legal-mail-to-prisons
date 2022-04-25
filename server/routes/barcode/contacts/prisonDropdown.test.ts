@@ -3,9 +3,9 @@ import getPrisonDropdown from './prisonDropdown'
 describe('getPrisonDropdown', () => {
   it('should return dropdown in alphabetical order', () => {
     const activePrisons = [
-      { agencyCode: 'KTI', agyDescription: 'Kennet (HMP)' },
-      { agencyCode: 'ASI', agyDescription: 'Ashfield (HMP)' },
-      { agencyCode: 'ACI', agyDescription: 'Altcourse (HMP)' },
+      { id: 'KTI', name: 'Kennet (HMP)' },
+      { id: 'ASI', name: 'Ashfield (HMP)' },
+      { id: 'ACI', name: 'Altcourse (HMP)' },
     ]
 
     const dropdown = getPrisonDropdown(activePrisons)
@@ -20,9 +20,9 @@ describe('getPrisonDropdown', () => {
 
   it('should dropdown with selected prison id', () => {
     const activePrisons = [
-      { agencyCode: 'KTI', agyDescription: 'Kennet (HMP)' },
-      { agencyCode: 'ASI', agyDescription: 'Ashfield (HMP)' },
-      { agencyCode: 'ACI', agyDescription: 'Altcourse (HMP)' },
+      { id: 'KTI', name: 'Kennet (HMP)' },
+      { id: 'ASI', name: 'Ashfield (HMP)' },
+      { id: 'ACI', name: 'Altcourse (HMP)' },
     ]
 
     const dropdown = getPrisonDropdown(activePrisons, 'ASI')

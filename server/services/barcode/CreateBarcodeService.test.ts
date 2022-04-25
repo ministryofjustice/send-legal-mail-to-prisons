@@ -28,9 +28,9 @@ describe('CreateBarcodeService', () => {
       const recipient: Recipient = {
         prisonNumber: 'A1234BC',
         prisonerName: 'John Smith',
-        prisonAddress: {
-          agencyCode: 'BSI',
-          premise: 'HMP BRINSFORD',
+        prison: {
+          id: 'BSI',
+          addressName: 'HMP BRINSFORD',
           postalCode: 'WV10 7PY',
         },
         contactId: 123,
@@ -53,9 +53,9 @@ describe('CreateBarcodeService', () => {
       const recipient: Recipient = {
         prisonNumber: 'A1234BC',
         prisonerName: 'John Smith',
-        prisonAddress: {
-          agencyCode: 'BSI',
-          premise: 'HMP BRINSFORD',
+        prison: {
+          id: 'BSI',
+          addressName: 'HMP BRINSFORD',
           postalCode: 'WV10 7PY',
         },
         contactId: 123,
@@ -83,8 +83,9 @@ describe('CreateBarcodeService', () => {
       const recipient = {
         prisonNumber: 'A1234BC',
         prisonerName: 'John Smith',
-        prisonAddress: {
-          premise: 'HMP BRINSFORD',
+        prison: {
+          id: 'BSI',
+          addressName: 'HMP BRINSFORD',
           street: 'New Road',
           locality: 'Featherstone',
           area: 'Featherstone Wolverhampton',
@@ -107,8 +108,9 @@ describe('CreateBarcodeService', () => {
       const recipient = {
         prisonNumber: 'A1234BC',
         prisonerName: 'John Smith',
-        prisonAddress: {
-          premise: 'HMP BRINSFORD',
+        prison: {
+          id: 'BSI',
+          addressName: 'HMP BRINSFORD',
           street: 'New Road',
           locality: 'Featherstone',
           area: 'Featherstone Wolverhampton',
@@ -139,9 +141,9 @@ describe('CreateBarcodeService', () => {
         {
           prisonNumber: 'A1234BC',
           prisonerName: 'John Smith',
-          prisonAddress: {
-            agencyCode: 'BSI',
-            premise: 'HMP BRINSFORD',
+          prison: {
+            id: 'BSI',
+            addressName: 'HMP BRINSFORD',
             postalCode: 'WV10 7PY',
           },
           contactId: 1,
@@ -149,9 +151,9 @@ describe('CreateBarcodeService', () => {
         {
           prisonNumber: 'A5566JD',
           prisonerName: 'Jane Doe',
-          prisonAddress: {
-            agencyCode: 'BLI',
-            premise: 'HMP Bristol',
+          prison: {
+            id: 'BLI',
+            addressName: 'HMP Bristol',
             postalCode: 'BS1 1AA',
           },
           barcodeValue: '121212121212',
@@ -160,9 +162,9 @@ describe('CreateBarcodeService', () => {
         {
           prisonerName: 'Fred Bloggs',
           prisonerDob: moment('1980-03-15').toDate(),
-          prisonAddress: {
-            agencyCode: 'BLI',
-            premise: 'HMP Bristol',
+          prison: {
+            id: 'BLI',
+            addressName: 'HMP Bristol',
             postalCode: 'BS1 1AA',
           },
           contactId: 3,
@@ -195,9 +197,9 @@ describe('CreateBarcodeService', () => {
         {
           prisonNumber: 'A1234BC',
           prisonerName: 'John Smith',
-          prisonAddress: {
-            agencyCode: 'BSI',
-            premise: 'HMP BRINSFORD',
+          prison: {
+            id: 'BSI',
+            addressName: 'HMP BRINSFORD',
             postalCode: 'WV10 7PY',
           },
           barcodeValue: '123456789012',
@@ -206,9 +208,9 @@ describe('CreateBarcodeService', () => {
         {
           prisonNumber: 'A5566JD',
           prisonerName: 'Jane Doe',
-          prisonAddress: {
-            agencyCode: 'BLI',
-            premise: 'HMP Bristol',
+          prison: {
+            id: 'BLI',
+            addressName: 'HMP Bristol',
             postalCode: 'BS1 1AA',
           },
           barcodeValue: '121212121212',
@@ -217,9 +219,9 @@ describe('CreateBarcodeService', () => {
         {
           prisonerName: 'Fred Bloggs',
           prisonerDob: moment('1980-03-15').toDate(),
-          prisonAddress: {
-            agencyCode: 'BLI',
-            premise: 'HMP Bristol',
+          prison: {
+            id: 'BLI',
+            addressName: 'HMP Bristol',
             postalCode: 'BS1 1AA',
           },
           barcodeValue: '098765432109',
@@ -233,9 +235,9 @@ describe('CreateBarcodeService', () => {
         {
           prisonNumber: 'A1234BC',
           prisonerName: 'John Smith',
-          prisonAddress: {
-            agencyCode: 'BSI',
-            premise: 'HMP BRINSFORD',
+          prison: {
+            id: 'BSI',
+            addressName: 'HMP BRINSFORD',
             postalCode: 'WV10 7PY',
           },
           contactId: 1,
@@ -243,9 +245,9 @@ describe('CreateBarcodeService', () => {
         {
           prisonNumber: 'Q9876TY',
           prisonerName: 'Fred Bloggs',
-          prisonAddress: {
-            agencyCode: 'BLI',
-            premise: 'HMP Bristol',
+          prison: {
+            id: 'BLI',
+            addressName: 'HMP Bristol',
             postalCode: 'BS1 1AA',
           },
           contactId: 2,
@@ -280,8 +282,9 @@ describe('CreateBarcodeService', () => {
   describe('formatAddressContent', () => {
     const defaultAddress = {
       prisonNumber: 'A1234BC',
-      prisonAddress: {
-        premise: 'HMP Somewhere',
+      prison: {
+        id: 'BSI',
+        addressName: 'HMP Somewhere',
         street: 'A Street',
         locality: 'Town',
         postCode: 'SW1 1SW',
@@ -397,7 +400,7 @@ describe('CreateBarcodeService', () => {
       const address = createBarcodeService.formatAddressContent({
         prisonerName: 'John Smith',
         prisonerDob: new Date(1990, 0, 1),
-        prisonAddress: defaultAddress.prisonAddress,
+        prison: defaultAddress.prison,
       })
 
       expect(address[1]).toStrictEqual('01-01-1990')

@@ -81,9 +81,7 @@ describe('EditContactController', () => {
     })
 
     it('should render contact details', async () => {
-      prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([
-        { agencyCode: 'KTI', agyDescription: 'Kennet (HMP)' },
-      ])
+      prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([{ id: 'KTI', name: 'Kennet (HMP)' }])
       contactService.getContactById.mockReturnValue(aContact)
 
       await editContactController.getEditContact(req as unknown as Request, res as unknown as Response)
@@ -110,9 +108,7 @@ describe('EditContactController', () => {
     })
 
     it('should render contact details while editing', async () => {
-      prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([
-        { agencyCode: 'KTI', agyDescription: 'Kennet (HMP)' },
-      ])
+      prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([{ id: 'KTI', name: 'Kennet (HMP)' }])
       req.session.editContactForm = anEditContactForm
       req.body['dob-day'] = '19'
       req.body['dob-month'] = '1'
@@ -142,9 +138,7 @@ describe('EditContactController', () => {
     })
 
     it('should not select prison', async () => {
-      prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([
-        { agencyCode: 'KTI', agyDescription: 'Kennet (HMP)' },
-      ])
+      prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([{ id: 'KTI', name: 'Kennet (HMP)' }])
       contactService.getContactById.mockReturnValue({ ...aContact, prisonId: '' })
 
       await editContactController.getEditContact(req as unknown as Request, res as unknown as Response)

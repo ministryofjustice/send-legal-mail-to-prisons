@@ -6,9 +6,9 @@ describe('CreateContactByPrisonNumberView', () => {
     const createNewContactForm = {} as CreateNewContactByPrisonNumberForm
     const errors: Record<string, string>[] = []
     const activePrisons = [
-      { agencyCode: 'KTI', agyDescription: 'Kennet (HMP)' },
-      { agencyCode: 'ASI', agyDescription: 'Ashfield (HMP)' },
-      { agencyCode: 'ACI', agyDescription: 'Altcourse (HMP)' },
+      { id: 'KTI', name: 'Kennet (HMP)' },
+      { id: 'ASI', name: 'Ashfield (HMP)' },
+      { id: 'ACI', name: 'Altcourse (HMP)' },
     ]
 
     const view = new CreateContactByPrisonNumberView(createNewContactForm, activePrisons, errors)
@@ -27,9 +27,9 @@ describe('CreateContactByPrisonNumberView', () => {
     const createNewContactForm = { prisonId: 'ASI' } as CreateNewContactByPrisonNumberForm
     const errors: Record<string, string>[] = []
     const activePrisons = [
-      { agencyCode: 'KTI', agyDescription: 'Kennet (HMP)' },
-      { agencyCode: 'ASI', agyDescription: 'Ashfield (HMP)' },
-      { agencyCode: 'ACI', agyDescription: 'Altcourse (HMP)' },
+      { id: 'KTI', name: 'Kennet (HMP)' },
+      { id: 'ASI', name: 'Ashfield (HMP)' },
+      { id: 'ACI', name: 'Altcourse (HMP)' },
     ]
 
     const view = new CreateContactByPrisonNumberView(createNewContactForm, activePrisons, errors)
