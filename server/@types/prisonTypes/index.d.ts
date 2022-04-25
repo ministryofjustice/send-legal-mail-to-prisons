@@ -1,9 +1,4 @@
 declare module 'prisonTypes' {
-  export type Prison = {
-    id: string
-    name: string
-  }
-
   export type PrisonAddress = {
     agencyCode?: string
     agyDescription?: string
