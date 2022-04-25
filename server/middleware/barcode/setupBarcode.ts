@@ -74,6 +74,7 @@ export default function setUpCreateBarcode(
   )
 
   router.get('/review-recipients', (req, res) => reviewRecipientsController.getReviewRecipientsView(req, res))
+  router.post('/review-recipients', (req, res) => reviewRecipientsController.postReviewRecipientsView(req, res))
   router.get('/review-recipients/remove/:recipientIdx', (req, res) =>
     reviewRecipientsController.removeRecipientByIndex(req, res)
   )

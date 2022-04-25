@@ -90,7 +90,7 @@ describe('ReviewRecipientsController', () => {
       await reviewRecipientsController.postReviewRecipientsView(req as unknown as Request, res as unknown as Response)
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/review-recipients')
-      expect(req.flash).toHaveBeenCalledWith('errors', 'Select an option')
+      expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#anotherRecipient', text: 'Select an option' }])
     })
 
     it('should redirect to find recipient if selected', async () => {
