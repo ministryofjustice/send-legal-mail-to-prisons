@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import type { Prison } from 'prisonTypes'
+import type { PrisonAddress } from 'prisonTypes'
 import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import CreateContactByPrisonerNameView from './CreateContactByPrisonerNameView'
 import validateNewContact from './newContactByPrisonerNameValidator'
@@ -22,7 +22,7 @@ export default class CreateContactByPrisonerNameController {
       return res.redirect(redirect)
     }
 
-    let activePrisons: Array<Prison>
+    let activePrisons: Array<PrisonAddress>
     try {
       activePrisons = await this.prisonRegisterService.getActivePrisonsFromPrisonRegister()
     } catch (error) {

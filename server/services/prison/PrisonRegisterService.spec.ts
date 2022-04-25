@@ -138,14 +138,9 @@ describe('Prison Register Service', () => {
       prisonRegisterStore.getActivePrisons.mockResolvedValue(null)
       mockedPrisonRegisterApi.get('/prisons').reply(200, prisonDtosFromPrisonRegister)
 
-      const expectedActivePrisons = [
-        { id: 'ACI', name: 'Altcourse (HMP)' },
-        { id: 'ASI', name: 'Ashfield (HMP)' },
-      ]
-
       const returnedActivePrisons = await prisonRegisterService.getActivePrisonsFromPrisonRegister()
 
-      expect(returnedActivePrisons).toStrictEqual(expectedActivePrisons)
+      expect(returnedActivePrisons).toStrictEqual(activePrisons)
       expect(prisonRegisterStore.setActivePrisons).toHaveBeenCalledWith(activePrisons)
     })
 
@@ -153,28 +148,18 @@ describe('Prison Register Service', () => {
       prisonRegisterStore.getActivePrisons.mockRejectedValue('some error reading from redis')
       mockedPrisonRegisterApi.get('/prisons').reply(200, prisonDtosFromPrisonRegister)
 
-      const expectedActivePrisons = [
-        { id: 'ACI', name: 'Altcourse (HMP)' },
-        { id: 'ASI', name: 'Ashfield (HMP)' },
-      ]
-
       const returnedActivePrisons = await prisonRegisterService.getActivePrisonsFromPrisonRegister()
 
-      expect(returnedActivePrisons).toStrictEqual(expectedActivePrisons)
+      expect(returnedActivePrisons).toStrictEqual(activePrisons)
       expect(prisonRegisterStore.setActivePrisons).toHaveBeenCalledWith(activePrisons)
     })
 
     it('should get all active prisons from the prison register store given they are already in the redis store', async () => {
       prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisons)
 
-      const expectedActivePrisons = [
-        { id: 'ACI', name: 'Altcourse (HMP)' },
-        { id: 'ASI', name: 'Ashfield (HMP)' },
-      ]
-
       const returnedActivePrisons = await prisonRegisterService.getActivePrisonsFromPrisonRegister()
 
-      expect(returnedActivePrisons).toStrictEqual(expectedActivePrisons)
+      expect(returnedActivePrisons).toStrictEqual(activePrisons)
       expect(prisonRegisterStore.setActivePrisons).not.toHaveBeenCalled()
     })
 
