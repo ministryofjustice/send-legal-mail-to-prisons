@@ -88,54 +88,22 @@ const prisonDtosFromPrisonRegister: Array<PrisonDto> = [
     ],
   },
 ]
-const activePrisonDtos: Array<PrisonDto> = [
+const activePrisons: Array<PrisonAddress> = [
   {
-    prisonId: 'ACI',
-    prisonName: 'Altcourse (HMP)',
-    active: true,
-    male: true,
-    female: false,
-    types: [
-      {
-        code: 'HMP',
-        description: 'Her Majesty’s Prison',
-      },
-    ],
-    addresses: [
-      {
-        id: 1,
-        addressLine1: 'Brookfield Drive',
-        addressLine2: 'Fazakerley',
-        town: 'Liverpool',
-        county: 'Lancashire',
-        postcode: 'L9 7LH',
-        country: 'England',
-      },
-    ],
+    agencyCode: 'ACI',
+    agyDescription: 'Altcourse (HMP)',
+    premise: 'HMP Altcourse',
+    street: 'Brookfield Drive',
+    locality: 'Fazakerley, Liverpool',
+    postalCode: 'L9 7LH',
   },
   {
-    prisonId: 'ASI',
-    prisonName: 'Ashfield (HMP)',
-    active: true,
-    male: true,
-    female: false,
-    types: [
-      {
-        code: 'HMP',
-        description: 'Her Majesty’s Prison',
-      },
-    ],
-    addresses: [
-      {
-        id: 2,
-        addressLine1: 'Shortwood Road',
-        addressLine2: 'Pucklechurch',
-        town: 'Bristol',
-        county: 'Gloucestershire',
-        postcode: 'BS16 9QJ',
-        country: 'England',
-      },
-    ],
+    agencyCode: 'ASI',
+    agyDescription: 'Ashfield (HMP)',
+    premise: 'HMP Ashfield',
+    street: 'Shortwood Road',
+    locality: 'Pucklechurch, Bristol',
+    postalCode: 'BS16 9QJ',
   },
 ]
 
@@ -175,10 +143,10 @@ describe('Prison Register Service', () => {
         { id: 'ASI', name: 'Ashfield (HMP)' },
       ]
 
-      const activePrisons = await prisonRegisterService.getActivePrisonsFromPrisonRegister()
+      const returnedActivePrisons = await prisonRegisterService.getActivePrisonsFromPrisonRegister()
 
-      expect(activePrisons).toStrictEqual(expectedActivePrisons)
-      expect(prisonRegisterStore.setActivePrisons).toHaveBeenCalledWith(activePrisonDtos)
+      expect(returnedActivePrisons).toStrictEqual(expectedActivePrisons)
+      expect(prisonRegisterStore.setActivePrisons).toHaveBeenCalledWith(activePrisons)
     })
 
     it('should get all active prisons from the prison register given reading from redis throws an error', async () => {
@@ -190,23 +158,23 @@ describe('Prison Register Service', () => {
         { id: 'ASI', name: 'Ashfield (HMP)' },
       ]
 
-      const activePrisons = await prisonRegisterService.getActivePrisonsFromPrisonRegister()
+      const returnedActivePrisons = await prisonRegisterService.getActivePrisonsFromPrisonRegister()
 
-      expect(activePrisons).toStrictEqual(expectedActivePrisons)
-      expect(prisonRegisterStore.setActivePrisons).toHaveBeenCalledWith(activePrisonDtos)
+      expect(returnedActivePrisons).toStrictEqual(expectedActivePrisons)
+      expect(prisonRegisterStore.setActivePrisons).toHaveBeenCalledWith(activePrisons)
     })
 
     it('should get all active prisons from the prison register store given they are already in the redis store', async () => {
-      prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisonDtos)
+      prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisons)
 
       const expectedActivePrisons = [
         { id: 'ACI', name: 'Altcourse (HMP)' },
         { id: 'ASI', name: 'Ashfield (HMP)' },
       ]
 
-      const activePrisons = await prisonRegisterService.getActivePrisonsFromPrisonRegister()
+      const returnedActivePrisons = await prisonRegisterService.getActivePrisonsFromPrisonRegister()
 
-      expect(activePrisons).toStrictEqual(expectedActivePrisons)
+      expect(returnedActivePrisons).toStrictEqual(expectedActivePrisons)
       expect(prisonRegisterStore.setActivePrisons).not.toHaveBeenCalled()
     })
 
@@ -223,32 +191,17 @@ describe('Prison Register Service', () => {
     })
   })
 
-  describe('getActivePrisons', () => {
-    it('should get all active prisons from the prison register given they are not in the redis store', async () => {
-      const activePrisons = prisonRegisterService.getActivePrisons()
-
-      const firstPrison = activePrisons.find(prison => prison.id === 'ACI')
-      const somePrison = activePrisons.find(prison => prison.id === 'HDI')
-      const lastPrison = activePrisons.find(prison => prison.id === 'WMI')
-
-      expect(firstPrison.name).toStrictEqual('Altcourse (HMP)')
-      expect(somePrison.name).toStrictEqual('Hatfield (HMP/YOI)')
-      expect(lastPrison.name).toStrictEqual('Wymott (HMP)')
-    })
-  })
-
   describe('getPrisonAddress', () => {
     it('should get prison address given prison exists', async () => {
+      prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisons)
       const prisonId = 'ASI'
 
       const expectedPrisonAddress: PrisonAddress = {
         agencyCode: 'ASI',
-        flat: '',
+        agyDescription: 'Ashfield (HMP)',
         premise: 'HMP Ashfield',
         street: 'Shortwood Road',
-        locality: 'Pucklechurch',
-        countyCode: '',
-        area: 'Bristol',
+        locality: 'Pucklechurch, Bristol',
         postalCode: 'BS16 9QJ',
       }
 
@@ -258,6 +211,7 @@ describe('Prison Register Service', () => {
     })
 
     it('should not get prison address given prison does not exist', async () => {
+      prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisons)
       const prisonId = 'XYZ'
 
       try {
@@ -270,7 +224,7 @@ describe('Prison Register Service', () => {
 
   describe('getPrisonNameOrId', () => {
     it('should get prison name given valid prison ID', async () => {
-      prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisonDtos)
+      prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisons)
 
       const prisonName = await prisonRegisterService.getPrisonNameOrId('ASI')
 
@@ -278,7 +232,7 @@ describe('Prison Register Service', () => {
     })
 
     it('should return prison ID given invalid prison id', async () => {
-      prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisonDtos)
+      prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisons)
 
       const prisonName = await prisonRegisterService.getPrisonNameOrId('XYZ')
 

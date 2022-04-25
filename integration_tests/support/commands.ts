@@ -6,6 +6,7 @@ import Page from '../pages/page'
 import FindRecipientByPrisonNumberPage from '../pages/barcode/findRecipientByPrisonNumber'
 
 Cypress.Commands.add('signIn', (options = { failOnStatusCode: true }) => {
+  cy.task('stubGetPrisonRegister')
   cy.request(`/`)
   cy.task('getSignInUrl').then((url: string) => cy.visit(url, options))
 })
@@ -13,6 +14,7 @@ Cypress.Commands.add('signIn', (options = { failOnStatusCode: true }) => {
 Cypress.Commands.add('signInAsLegalSender', () => {
   cy.task('stubAuthToken')
   cy.task('stubGetCjsmUserDetails')
+  cy.task('stubGetPrisonRegister')
 
   if (!featureFlags.isLsjOneTimeCodeAuthEnabled()) {
     // Sign in as LSJ with magic link

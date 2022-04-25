@@ -1,5 +1,5 @@
 import { RedisClient } from 'redis'
-import type { PrisonDto } from 'prisonRegisterApiClient'
+import type { PrisonAddress } from 'prisonTypes'
 import PrisonRegisterStore from './PrisonRegisterStore'
 
 const redisClient = {
@@ -8,54 +8,22 @@ const redisClient = {
   set: jest.fn(),
 }
 
-const activePrisons: Array<PrisonDto> = [
+const activePrisons: Array<PrisonAddress> = [
   {
-    prisonId: 'ACI',
-    prisonName: 'Altcourse (HMP)',
-    active: true,
-    male: true,
-    female: false,
-    types: [
-      {
-        code: 'HMP',
-        description: 'Her Majesty’s Prison',
-      },
-    ],
-    addresses: [
-      {
-        id: 1,
-        addressLine1: 'Brookfield Drive',
-        addressLine2: 'Fazakerley',
-        town: 'Liverpool',
-        county: 'Lancashire',
-        postcode: 'L9 7LH',
-        country: 'England',
-      },
-    ],
+    agencyCode: 'ACI',
+    agyDescription: 'Altcourse (HMP)',
+    premise: 'HMP Altcourse',
+    street: 'Brookfield Drive',
+    locality: 'Fazakerley, Liverpool',
+    postalCode: 'L9 7LH',
   },
   {
-    prisonId: 'ASI',
-    prisonName: 'Ashfield (HMP)',
-    active: true,
-    male: true,
-    female: false,
-    types: [
-      {
-        code: 'HMP',
-        description: 'Her Majesty’s Prison',
-      },
-    ],
-    addresses: [
-      {
-        id: 2,
-        addressLine1: 'Shortwood Road',
-        addressLine2: 'Pucklechurch',
-        town: 'Bristol',
-        county: 'Gloucestershire',
-        postcode: 'BS16 9QJ',
-        country: 'England',
-      },
-    ],
+    agencyCode: 'ASI',
+    agyDescription: 'Ashfield (HMP)',
+    premise: 'HMP Ashfield',
+    street: 'Shortwood Road',
+    locality: 'Pucklechurch, Bristol',
+    postalCode: 'BS16 9QJ',
   },
 ]
 
@@ -99,7 +67,7 @@ describe('PrisonRegisterStore', () => {
     const serializedActivePrisons: string = null
     redisClient.get.mockImplementation((key, callback) => callback(null, serializedActivePrisons))
 
-    const expectedActivePrisons: Array<PrisonDto> = null
+    const expectedActivePrisons: Array<PrisonAddress> = null
 
     const returnedActivePrisons = await prisonRegisterStore.getActivePrisons()
 
