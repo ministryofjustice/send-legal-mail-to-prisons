@@ -11,11 +11,18 @@ export default class ReviewRecipientsPage extends Page {
   }
 
   prepareBarcodes = (): ChooseBarcodeOptionPage => {
-    this.prepareBarcodesButton().click()
+    this.selectAnotherRecipientNo().click()
+    this.continueButton().click()
     return Page.verifyOnPage(ChooseBarcodeOptionPage)
   }
 
   addAnotherRecipient = (): FindRecipientByPrisonNumberPage => {
+    this.selectAnotherRecipientYes().click()
+    this.continueButton().click()
+    return Page.verifyOnPage(FindRecipientByPrisonNumberPage)
+  }
+
+  addFirstRecipient = (): FindRecipientByPrisonNumberPage => {
     this.addAnotherRecipientButton().click()
     return Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   }
@@ -68,9 +75,13 @@ export default class ReviewRecipientsPage extends Page {
 
   recipientsTableBodyRows = (): PageElement => this.recipientsTable().find('.govuk-table__body tr')
 
-  addAnotherRecipientButton = (): PageElement => cy.get('[data-qa=add-another-recipient]')
+  selectAnotherRecipientYes = (): PageElement => cy.get('input[name=anotherRecipient][value=yes]')
 
-  prepareBarcodesButton = (): PageElement => cy.get('[data-qa=prepare-barcodes-button]')
+  selectAnotherRecipientNo = (): PageElement => cy.get('input[name=anotherRecipient][value=no]')
+
+  continueButton = (): PageElement => cy.get('button[data-qa="continue-button"]')
+
+  addAnotherRecipientButton = (): PageElement => cy.get('[data-qa=add-another-recipient]')
 
   static goToPage = (): ReviewRecipientsPage => CreateNewContactByPrisonNumberPage.goToPage().submitWithValidValues()
 }

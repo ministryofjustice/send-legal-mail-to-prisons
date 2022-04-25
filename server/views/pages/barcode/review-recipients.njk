@@ -2,6 +2,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set pageTitle = applicationName + " - Review recipients" %}
 {% set pageId = 'review-recipients' %}
@@ -34,15 +35,41 @@
             attributes: { 'data-qa': 'recipients-table', id: 'review-recipients-table' }
           }) }}
 
-          <p class="govuk-!-margin-top-6 govuk-!-margin-bottom-6">
-            <a href="/barcode/find-recipient" class="govuk-link govuk-link--no-visited-state" data-qa="add-another-recipient">Add another recipient</a>
-          </p>
+          <form id="another-recipient-form" action="/barcode/review-recipients" method="post" novalidate>
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+            {{ govukRadios({
+              idPrefix: "anotherRecipient",
+              name: "anotherRecipient",
+              fieldset: {
+                legend: {
+                  text: "Do you want to add another recipient?",
+                  classes: "govuk-fieldset__legend--m"
+                }
+              },
+              classes: "govuk-radios--inline",
+              items: [
+                {
+                  value: "yes",
+                  text: "Yes",
+                  checked: form.anotherRecipient === 'yes',
+                  attributes: { 'data-qa': 'another-recipient-yes' }
+                },
+                {
+                  value: "no",
+                  text: "No",
+                  checked: form.anotherRecipient === 'no',
+                  attributes: { 'data-qa': 'another-recipient-no' }
+                }
+              ],
+              errorMessage: errors | findError('anotherRecipient')
+            }) }}
 
-          {{ govukButton({
-            text: 'Prepare barcodes',
-            href: '/barcode/choose-barcode-option',
-            attributes: { 'data-qa': 'prepare-barcodes-button' }
-          }) }}
+            {{ govukButton({
+              text: 'Continue',
+              preventDoubleClick: true,
+              attributes: { 'data-qa': 'continue-button' }
+            }) }}
+          </form>
 
         {% else %}
           <p class="govuk-!-margin-bottom-6">

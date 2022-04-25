@@ -78,7 +78,7 @@ NODE_ENV=development
 SESSION_SECRET=anything
 PORT=3000
 SEND_LEGAL_MAIL_API_URL=http://localhost:8080
-PRISON_REGISTER_API_URL=http://localhost:8103
+PRISON_REGISTER_API_URL=https://prison-register-dev.hmpps.service.justice.gov.uk
 ```
 
 And then, to build the assets and start the app with nodemon:

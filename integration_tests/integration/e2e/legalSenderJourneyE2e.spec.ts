@@ -28,7 +28,7 @@ context('Legal Sender Journey E2E', () => {
     reviewRecipientsPage.hasNoRecipients()
 
     // Add a recipient by prison number where the recipient is a contact
-    findRecipientByPrisonNumberPage = reviewRecipientsPage.addAnotherRecipient()
+    findRecipientByPrisonNumberPage = reviewRecipientsPage.addFirstRecipient()
     reviewRecipientsPage = findRecipientByPrisonNumberPage.submitWithKnownPrisonNumber() // H4567IJ
     reviewRecipientsPage.hasRecipientNamesExactly('Gage Hewitt')
 
