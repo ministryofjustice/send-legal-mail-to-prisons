@@ -3,6 +3,7 @@ import type { PrisonDto } from 'prisonRegisterApiClient'
 import config from '../../config'
 import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
 import RestClient from '../../data/restClient'
+import logger from '../../../logger'
 
 export default class PrisonRegisterService {
   constructor(private readonly prisonRegisterStore: PrisonRegisterStore) {}
@@ -84,6 +85,9 @@ export default class PrisonRegisterService {
   private reformatPrisonName(prisonName: string): string {
     const pattern = /^(.+?) \((.+?)\)/ // 1st matching group will be the prison name, 2nd matching group will be the type from within the brackets
     const matches = pattern.exec(prisonName)
-    return `${matches[2]} ${matches[1]}`
+    if (matches && matches.length > 1) {
+      return `${matches[2]} ${matches[1]}`
+    }
+    return prisonName
   }
 }
