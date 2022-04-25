@@ -26,7 +26,7 @@ export default class ReviewRecipientsController {
       return res.redirect('/barcode/choose-barcode-option')
     }
 
-    req.flash('errors', 'Select an option')
+    req.flash('errors', [{ href: '#anotherRecipient', text: 'Select an option' }])
     return res.redirect('/barcode/review-recipients')
   }
 
