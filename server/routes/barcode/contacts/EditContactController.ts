@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import type { Prison } from 'prisonTypes'
+import type { PrisonAddress } from 'prisonTypes'
 import moment from 'moment'
 import type { Contact } from 'sendLegalMailApiClient'
 import type { EditContactForm } from 'forms'
@@ -27,7 +27,7 @@ export default class EditContactController {
       return res.redirect('/barcode/review-recipients')
     }
 
-    let activePrisons: Array<Prison>
+    let activePrisons: Array<PrisonAddress>
     try {
       activePrisons = await this.prisonRegisterService.getActivePrisonsFromPrisonRegister()
     } catch (error) {

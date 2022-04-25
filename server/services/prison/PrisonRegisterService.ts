@@ -1,4 +1,4 @@
-import type { Prison, PrisonAddress } from 'prisonTypes'
+import type { PrisonAddress } from 'prisonTypes'
 import type { PrisonDto, AddressDto } from 'prisonRegisterApiClient'
 import config from '../../config'
 import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
@@ -11,7 +11,7 @@ export default class PrisonRegisterService {
     return new RestClient('Prison Register API Client', config.apis.prisonRegister)
   }
 
-  async getActivePrisonsFromPrisonRegister(): Promise<Array<Prison>> {
+  async getActivePrisonsFromPrisonRegister(): Promise<Array<PrisonAddress>> {
     let activePrisons: Array<PrisonAddress>
     try {
       activePrisons = await this.getActivePrisonDtos()
@@ -19,14 +19,9 @@ export default class PrisonRegisterService {
       return error
     }
 
-    return activePrisons
-      .map(prison => {
-        return {
-          id: prison.agencyCode,
-          name: prison.agyDescription,
-        }
-      })
-      .sort((prison1: Prison, prison2: Prison) => (prison1.name < prison2.name ? -1 : 1))
+    return activePrisons.sort((prison1: PrisonAddress, prison2: PrisonAddress) =>
+      prison1.agyDescription < prison2.agyDescription ? -1 : 1
+    )
   }
 
   async getPrisonAddress(prisonId: string): Promise<PrisonAddress> {
