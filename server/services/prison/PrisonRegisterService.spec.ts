@@ -191,6 +191,37 @@ describe('Prison Register Service', () => {
     })
   })
 
+  describe('getPrisonAddress', () => {
+    it('should get prison address given prison exists', async () => {
+      prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisons)
+      const prisonId = 'ASI'
+
+      const expectedPrisonAddress: PrisonAddress = {
+        agencyCode: 'ASI',
+        agyDescription: 'Ashfield (HMP)',
+        premise: 'HMP Ashfield',
+        street: 'Shortwood Road',
+        locality: 'Pucklechurch, Bristol',
+        postalCode: 'BS16 9QJ',
+      }
+
+      const prisonAddress: PrisonAddress = await prisonRegisterService.getPrisonAddress(prisonId)
+
+      expect(prisonAddress).toStrictEqual(expectedPrisonAddress)
+    })
+
+    it('should not get prison address given prison does not exist', async () => {
+      prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisons)
+      const prisonId = 'XYZ'
+
+      try {
+        await prisonRegisterService.getPrisonAddress(prisonId)
+      } catch (error) {
+        expect(error).toStrictEqual(new Error('PrisonAddress for prison XYZ not found'))
+      }
+    })
+  })
+
   describe('getPrisonNameOrId', () => {
     it('should get prison name given valid prison ID', async () => {
       prisonRegisterStore.getActivePrisons.mockResolvedValue(activePrisons)

@@ -29,7 +29,7 @@ export default class PrisonRegisterService {
       .sort((prison1: Prison, prison2: Prison) => (prison1.name < prison2.name ? -1 : 1))
   }
 
-  async getPrisonById(prisonId: string): Promise<PrisonAddress> {
+  async getPrisonAddress(prisonId: string): Promise<PrisonAddress> {
     const prisons: Array<PrisonAddress> = await this.getActivePrisonDtos()
     return prisons.find(prison => prison.agencyCode === prisonId)
   }
@@ -39,7 +39,7 @@ export default class PrisonRegisterService {
    * or simply the prisonId if the prison cannot be found by it's ID
    */
   async getPrisonNameOrId(prisonId: string): Promise<string> {
-    const prison: PrisonAddress = await this.getPrisonById(prisonId)
+    const prison: PrisonAddress = await this.getPrisonAddress(prisonId)
     return prison?.premise || prisonId
   }
 
