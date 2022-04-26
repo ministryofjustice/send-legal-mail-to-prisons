@@ -284,10 +284,11 @@ describe('CreateBarcodeService', () => {
       prisonNumber: 'A1234BC',
       prison: {
         id: 'BSI',
+        name: 'Somewhere (HMP)',
         addressName: 'HMP Somewhere',
         street: 'A Street',
         locality: 'Town',
-        postCode: 'SW1 1SW',
+        postalCode: 'SW1 1SW',
       },
     }
     it('should allow name of 30 characters or less', () => {
@@ -404,6 +405,23 @@ describe('CreateBarcodeService', () => {
       })
 
       expect(address[1]).toStrictEqual('01-01-1990')
+    })
+
+    it('should remove nulls if there are any in the address lines', () => {
+      const address = createBarcodeService.formatAddressContent({
+        prisonerName: 'John Smith',
+        prisonNumber: 'A1234BC',
+        prison: {
+          id: 'BSI',
+          name: 'Somewhere (HMP)',
+          addressName: 'HMP Somewhere',
+          street: null,
+          locality: null,
+          postalCode: 'SW1 1SW',
+        },
+      })
+
+      expect(address).toEqual(['John Smith', 'A1234BC', 'HMP Somewhere', 'SW1 1SW'])
     })
   })
 })
