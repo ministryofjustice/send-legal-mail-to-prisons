@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
 import moment from 'moment'
 import ReviewRecipientsController from './ReviewRecipientsController'
+import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 
 const req = {
   session: {} as SessionData,
@@ -31,11 +32,17 @@ const aRecipient = {
   prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
 }
 
+const prisonRegisterService = {
+  getPrison: jest.fn(),
+}
+
 describe('ReviewRecipientsController', () => {
   let reviewRecipientsController: ReviewRecipientsController
 
   beforeEach(() => {
-    reviewRecipientsController = new ReviewRecipientsController()
+    reviewRecipientsController = new ReviewRecipientsController(
+      prisonRegisterService as undefined as PrisonRegisterService
+    )
   })
 
   afterEach(() => {
@@ -44,6 +51,7 @@ describe('ReviewRecipientsController', () => {
     req.session = {} as SessionData
     req.params = {}
     req.flash.mockReset()
+    prisonRegisterService.getPrison.mockReset()
   })
 
   describe('getReviewRecipientsView', () => {
@@ -80,6 +88,44 @@ describe('ReviewRecipientsController', () => {
         recipients,
       })
       expect(req.session.editContactForm).toBeUndefined()
+    })
+
+    it('should repopulate recipients in session if at least one has no prison property', async () => {
+      const recipientWithOldPrisonAddress = {
+        prisonerName: 'John Doe',
+        prisonNumber: 'A1234ZZ',
+        prisonAddress: { agencyCode: 'DGI', agyDescription: 'Dovegate (HMP)', postalCode: 'ST14 8XR' },
+      }
+      const recipients = [aRecipient, recipientWithOldPrisonAddress]
+      req.session.recipients = recipients
+
+      prisonRegisterService.getPrison.mockResolvedValue({
+        id: 'DGI',
+        name: 'Dovegate (HMP)',
+        addressName: 'HMP Dovegate',
+        street: null,
+        locality: 'Uttoxeter',
+        postalCode: 'ST14 8XR',
+      })
+
+      await reviewRecipientsController.getReviewRecipientsView(req as unknown as Request, res as unknown as Response)
+
+      expect(prisonRegisterService.getPrison).toHaveBeenCalledWith('DGI')
+      expect(req.session.recipients).toEqual([
+        aRecipient,
+        {
+          prisonerName: 'John Doe',
+          prisonNumber: 'A1234ZZ',
+          prison: {
+            id: 'DGI',
+            name: 'Dovegate (HMP)',
+            addressName: 'HMP Dovegate',
+            street: null,
+            locality: 'Uttoxeter',
+            postalCode: 'ST14 8XR',
+          },
+        },
+      ])
     })
   })
 

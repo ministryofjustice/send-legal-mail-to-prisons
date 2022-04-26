@@ -1,13 +1,18 @@
 import { Request, Response } from 'express'
 import ReviewRecipientsView from './ReviewRecipientsView'
+import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 
 export default class ReviewRecipientsController {
+  constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
+
   async getReviewRecipientsView(req: Request, res: Response): Promise<void> {
     if (!req.session.recipients) {
       return res.redirect('/barcode/find-recipient')
     }
     req.session.editContactForm = undefined
     req.session.reviewRecipientsForm = req.session.reviewRecipientsForm || {}
+
+    await this.ensureAllRecipientsHaveAPrison(req.session.recipients, req)
 
     const view = new ReviewRecipientsView(req.session.recipients, req.session.reviewRecipientsForm, req.flash('errors'))
     return res.render('pages/barcode/review-recipients', { ...view.renderArgs })
@@ -51,5 +56,30 @@ export default class ReviewRecipientsController {
     req.session.recipients = recipients
 
     return res.redirect('/barcode/review-recipients')
+  }
+
+  // TODO - remove this function and associated tests once we are sure prison register lookups via redis has been successfully rolled out
+  async ensureAllRecipientsHaveAPrison(
+    recipients: Array<{ prison?: unknown; prisonAddress?: { agencyCode: string } }>,
+    req: Request
+  ) {
+    if (recipients.find(recipient => !recipient.prison && recipient.prisonAddress)) {
+      // At least one recipient has no populated prison but still has a prisonAddress property
+
+      req.session.recipients = await Promise.all(
+        recipients.map(async recipient => {
+          if (recipient.prison) {
+            return recipient
+          }
+
+          const newRecipient = {
+            ...recipient,
+            prison: await this.prisonRegisterService.getPrison(recipient.prisonAddress.agencyCode),
+          }
+          delete newRecipient.prisonAddress
+          return newRecipient
+        })
+      )
+    }
   }
 }

@@ -32,7 +32,7 @@ export default function setUpCreateBarcode(
     contactService,
     recipientFormService
   )
-  const reviewRecipientsController = new ReviewRecipientsController()
+  const reviewRecipientsController = new ReviewRecipientsController(prisonRegisterService)
   const chooseBarcodeOptionController = new ChooseBarcodeOptionController()
   const generateImageController = new GenerateBarcodeImageController(createBarcodeService)
   const pdfController = new PdfController(createBarcodeService)
