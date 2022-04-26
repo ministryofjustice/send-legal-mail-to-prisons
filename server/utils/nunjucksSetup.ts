@@ -31,7 +31,7 @@ export default function nunjucksSetup(app: express.Express): void {
     ]
     const externalUser =
       externalUrls.some(externalUrl => req.url.startsWith(externalUrl)) ||
-      req.hostname.toLowerCase().startsWith('send-legal-mail-to-prisons')
+      req.hostname.toLowerCase().startsWith('send-legal-mail')
     res.locals.externalUser = externalUser
     app.locals.externalUser = externalUser
 
