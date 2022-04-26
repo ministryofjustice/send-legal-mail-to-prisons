@@ -29,7 +29,9 @@ export default function nunjucksSetup(app: express.Express): void {
       '/cookies-policy',
       '/privacy-policy',
     ]
-    const externalUser = externalUrls.some(externalUrl => req.url.startsWith(externalUrl))
+    const externalUser =
+      externalUrls.some(externalUrl => req.url.startsWith(externalUrl)) ||
+      req.hostname.toLowerCase().startsWith('send-legal-mail-to-prisons')
     res.locals.externalUser = externalUser
     app.locals.externalUser = externalUser
 
