@@ -1,0 +1,18 @@
+{% extends "../layout.njk" %}
+
+{% set pageTitle = applicationName + " - Error - Page not found" %}
+{% set pageId = 'page-not-found' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">There's no page linked to that web address</h1>
+        <p>If you typed the web address, check it is correct.</p>
+        <p>If you pasted the web address, check you copied the entire address.</p>
+      </div>
+    </div>
+  </section>
+{% endblock %}
