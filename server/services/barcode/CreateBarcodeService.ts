@@ -151,7 +151,7 @@ export default class CreateBarcodeService {
         address.street,
         address.locality,
         address.postalCode
-      )
+      ).filter(addressLine => addressLine != null)
     }
     // Calculate how to split the name into 2 lines
     let name1length = Math.min(30, name.length - 4)
@@ -164,6 +164,13 @@ export default class CreateBarcodeService {
     // Return address including 2 lines of names but without street
     const name1 = `${name.substring(0, name1length)}${lineBreakChar}`.trim()
     const name2 = name.substring(name1length, name.length).trim()
-    return Array.of(name1, name2, recipient.prisonNumber, address.addressName, address.locality, address.postalCode)
+    return Array.of(
+      name1,
+      name2,
+      recipient.prisonNumber,
+      address.addressName,
+      address.locality,
+      address.postalCode
+    ).filter(addressLine => addressLine != null)
   }
 }
