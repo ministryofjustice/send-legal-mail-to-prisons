@@ -6,13 +6,12 @@ import recipientTableRowsFilter from '../filters/recipientTableRowsFilter'
 import initialiseNameFilter from '../filters/initialiseNameFilter'
 import findErrorFilter from '../filters/findErrorFilter'
 import calculateDaysSinceCreationFilter from '../filters/calculateDaysSinceCreationFilter'
-import formatDateTimeForResultsPageFilter from '../filters/formatDateTimeForResultsPageFilter'
-import formatDateForResultsPageFilter from '../filters/formatDateForResultsPageFilter'
 import renderEnvelopeSizeRadiosFilter from '../filters/renderEnvelopeSizeRadiosFilter'
 import renderChooseBarcodeOptionRadiosFilter from '../filters/renderChooseBarcodeOptionRadiosFilter'
 import renderChooseContactRadiosFilter from '../filters/renderChooseContactRadiosFilter'
 import config from '../config'
 import pageTitleInErrorFilter from '../filters/pageTitleInErrorFilter'
+import formatDateFilter from '../filters/formatDateFilter'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -77,8 +76,7 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addFilter('initialiseName', initialiseNameFilter)
   njkEnv.addFilter('findError', findErrorFilter)
-  njkEnv.addFilter('formatDateTimeForResultsPage', formatDateTimeForResultsPageFilter)
-  njkEnv.addFilter('formatDateForResultsPage', formatDateForResultsPageFilter)
+  njkEnv.addFilter('formatDate', formatDateFilter)
   njkEnv.addFilter('calculateDaysSinceCreation', calculateDaysSinceCreationFilter)
   njkEnv.addFilter('recipientTableRows', recipientTableRowsFilter)
   njkEnv.addFilter('renderEnvelopeSizeRadios', renderEnvelopeSizeRadiosFilter)
