@@ -167,7 +167,7 @@ export default class CreateBarcodeService {
     return Array.of(
       name1,
       name2,
-      recipient.prisonNumber,
+      recipient.prisonNumber ? recipient.prisonNumber : moment(recipient.prisonerDob).format('DD-MM-YYYY'),
       address.addressName,
       address.locality,
       address.postalCode
