@@ -11,8 +11,8 @@ context('Print PDF coversheet', () => {
     printCoversheetsPage = PrintCoversheetsPage.goToPage()
   })
 
-  it('should allow the PDF to be downloaded again', () => {
-    printCoversheetsPage.downloadThePdfAgain()
+  it('should allow the PDF to be downloaded', () => {
+    printCoversheetsPage.downloadThePdf()
     Page.verifyOnPage(PrintCoversheetsPage)
   })
 
