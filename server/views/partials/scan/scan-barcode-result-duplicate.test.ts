@@ -84,6 +84,6 @@ describe('Duplicate Scan Barcode Result ', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('strong[data-qa="barcode-recipient"]').text()).toContain('Joe Spice, 1990-01-31')
+    expect($('strong[data-qa="barcode-recipient"]').text()).toContain('Joe Spice, 31-01-1990')
   })
 })

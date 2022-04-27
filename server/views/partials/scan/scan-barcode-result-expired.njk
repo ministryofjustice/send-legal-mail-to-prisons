@@ -2,7 +2,7 @@
 
 <h1 class="govuk-heading-xl">Barcode expired: carry out further checks</h1>
 <p>
-  This barcode was created <strong>{{ form.errorCode.createdDate | calculateDaysSinceCreation }} days ago, on {{ form.errorCode.createdDate | formatDateForResultsPage }}</strong>.
+  This barcode was created <strong>{{ form.errorCode.createdDate | calculateDaysSinceCreation }} days ago, on {{ form.errorCode.createdDate | formatDate('D MMMM YYYY') }}</strong>.
 </p>
 <p>
   Because this item of mail took longer than {{ form.errorCode.barcodeExpiryDays }} days to arrive you need to investigate further.
