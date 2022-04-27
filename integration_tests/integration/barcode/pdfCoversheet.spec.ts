@@ -2,7 +2,7 @@ import Page from '../../pages/page'
 import PrintCoversheetsPage from '../../pages/barcode/printCoversheets'
 import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientByPrisonNumber'
 
-context.only('Print PDF coversheet', () => {
+context('Print PDF coversheet', () => {
   let printCoversheetsPage: PrintCoversheetsPage
 
   beforeEach(() => {
