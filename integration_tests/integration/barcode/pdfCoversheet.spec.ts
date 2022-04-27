@@ -2,7 +2,7 @@ import Page from '../../pages/page'
 import PrintCoversheetsPage from '../../pages/barcode/printCoversheets'
 import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientByPrisonNumber'
 
-context('Print PDF coversheet', () => {
+context.only('Print PDF coversheet', () => {
   let printCoversheetsPage: PrintCoversheetsPage
 
   beforeEach(() => {
@@ -11,8 +11,8 @@ context('Print PDF coversheet', () => {
     printCoversheetsPage = PrintCoversheetsPage.goToPage()
   })
 
-  it('should allow the PDF to be downloaded again', () => {
-    printCoversheetsPage.downloadThePdfAgain()
+  it('should allow the PDF to be downloaded', () => {
+    printCoversheetsPage.downloadThePdf()
     Page.verifyOnPage(PrintCoversheetsPage)
   })
 

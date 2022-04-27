@@ -8,7 +8,7 @@ export default class PrintCoversheetsPage extends Page {
     super('print-coversheets')
   }
 
-  downloadThePdfAgain = (): PrintCoversheetsPage => {
+  downloadThePdf = (): PrintCoversheetsPage => {
     this.downloadLink().then(link => {
       link.trigger('click')
     })
@@ -25,7 +25,7 @@ export default class PrintCoversheetsPage extends Page {
     return Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   }
 
-  downloadLink = () => cy.get('#downloadPdf')
+  downloadLink = () => cy.get('[data-qa=download-pdf-button]')
 
   sendMoreLegalMailLink = (): PageElement => cy.get('[data-qa=send-more-legal-mail]')
 

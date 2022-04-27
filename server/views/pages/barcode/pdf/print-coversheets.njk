@@ -15,9 +15,16 @@
       <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Your coversheets are downloading</h1>
 
-        <p>Your PDF file <strong>{{ filename }}</strong> with {{ numberOfCoversheets }} {{ 'coversheets' if numberOfCoversheets > 1 else 'coversheet' }} is downloading.</p>
-        <p>Check your computer's Downloads folder or wherever you usually download files.</p>
-        <p>If your download hasn't started you can <a href="/barcode/pdf/download" class="govuk-link" id="downloadPdf">download your file again</a>.</p>
+        <p>Your PDF file <strong>{{ filename }}</strong> with {{ numberOfCoversheets }} {{ 'coversheets' if numberOfCoversheets > 1 else 'coversheet' }} is ready to download.</p>
+
+        {{ govukButton({
+          text: 'Download coversheets',
+          href: "/barcode/pdf/download",
+          classes: 'govuk-button',
+          attributes: { 'data-qa': 'download-pdf-button' }
+        }) }}
+
+        <p>Your coversheets will be saved to your computer's Downloads folder or wherever you usually download files.</p>
 
         <h2 class="govuk-heading-m">When you've printed your coversheets</h2>
 

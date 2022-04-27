@@ -87,12 +87,6 @@ window.pageEnhancements = (($, document) => {
       })
   }
 
-  const autoDownloadCoversheetPdf = () => {
-    setTimeout(() => {
-      $('#print-coversheets-content #downloadPdf').each((idx, element) => element.click())
-    }, 1000)
-  }
-
   const autoFocusBarcodeField = () => {
     $('#scan-barcode-form #barcode').trigger('focus')
   }
@@ -149,7 +143,6 @@ window.pageEnhancements = (($, document) => {
       $(() => {
         convertPrisonDropdownToAutoComplete()
         enableCopyBarcodeButton()
-        autoDownloadCoversheetPdf()
         autoFocusBarcodeField()
         submitCookiePreferencesFormViaAjax()
         submitCookiePreferenceConfirmationFormViaAjax()
