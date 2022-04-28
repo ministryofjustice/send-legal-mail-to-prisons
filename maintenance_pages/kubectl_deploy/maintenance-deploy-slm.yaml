@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maintenance-page-slm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: maintenance-page-slm
+  template:
+    metadata:
+      labels:
+        app: maintenance-page-slm
+    spec:
+      containers:
+      - name: maintenance-page-slm
+        image: ministryofjustice/slm-maintenance:0.1.6
+        ports:
+        - containerPort: 8080
+        env:
+        - name: INDEX_NAME
+          value: index-slm-unscheduled.html
