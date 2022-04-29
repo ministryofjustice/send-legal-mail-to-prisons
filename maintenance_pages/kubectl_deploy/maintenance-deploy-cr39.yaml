@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maintenance-page-cr39
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: maintenance-page-cr39
+  template:
+    metadata:
+      labels:
+        app: maintenance-page-cr39
+    spec:
+      containers:
+      - name: maintenance-page-cr39
+        image: ministryofjustice/slm-maintenance:0.1.6
+        ports:
+        - containerPort: 8080
+        env:
+        - name: INDEX_NAME
+          value: index-cr39-unscheduled.html
