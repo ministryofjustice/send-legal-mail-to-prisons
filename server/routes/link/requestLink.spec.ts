@@ -72,11 +72,11 @@ describe('Request Link', () => {
     })
 
     it('should redirect to request-link page with errors given unhandled API failure', async () => {
-      mockedSendLegalMailApi.post('/link/email', { email: 'user@aardvark.com' }).reply(404)
+      mockedSendLegalMailApi.post('/link/email', { email: 'user@aardvark.com.cjsm.net' }).reply(404)
 
       const response = await superTest.request //
         .post('/link/request-link')
-        .send({ email: 'user@aardvark.com' })
+        .send({ email: 'user@aardvark.com.cjsm.net' })
 
       assertThat(response).isOk().hasPageId('request-link').hasError('error generating your sign in link')
     })
