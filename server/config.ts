@@ -143,7 +143,6 @@ export default {
     lsjSecret: get('APP_SMOKETEST_LSJSECRET', null),
   },
   featureFlags: {
-    fileUploadsEnabled: toBoolean(get('FILE_UPLOADS_ENABLED', false)),
     lsjOneTimeCodeAuthEnabled: toBoolean(get('ONE_TIME_CODE_AUTH_ENABLED', false)),
   },
 }

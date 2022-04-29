@@ -89,7 +89,6 @@ export function registerNunjucks(app?: express.Express): Environment {
     'contact-helpdesk',
     'contact-helpdesk-submitted',
   ])
-  njkEnv.addGlobal('fileUploadsEnabled', config.featureFlags.fileUploadsEnabled)
 
   return njkEnv
 }
