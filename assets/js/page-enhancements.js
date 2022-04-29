@@ -138,6 +138,15 @@ window.pageEnhancements = (($, document) => {
     })
   }
 
+  const enableClickableCards = () => {
+    document.querySelectorAll('.card--clickable').forEach(card => {
+      null !== card.querySelector('a') &&
+        card.addEventListener('click', () => {
+          card.querySelector('a').click()
+        })
+    })
+  }
+
   return {
     init: () => {
       $(() => {
@@ -146,6 +155,7 @@ window.pageEnhancements = (($, document) => {
         autoFocusBarcodeField()
         submitCookiePreferencesFormViaAjax()
         submitCookiePreferenceConfirmationFormViaAjax()
+        enableClickableCards()
       })
     },
   }
