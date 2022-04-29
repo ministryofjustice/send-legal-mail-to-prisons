@@ -29,8 +29,8 @@
     "clean": "rm -rf dist build node_modules stylesheets"
   },
   "engines": {
-    "node": "^=16.*",
-    "npm": "^=7.11.0"
+    "node": "^14",
+    "npm": "^7"
   },
   "jest": {
     "preset": "ts-jest",
