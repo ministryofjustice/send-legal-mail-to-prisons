@@ -20,7 +20,7 @@ parameters:
 executors:
   integration-test:
     docker:
-      - image: cimg/node:16.14
+      - image: cimg/node:<< pipeline.parameters.node-version >>
       - image: cimg/redis:6.2.6
     working_directory: ~/app
 
@@ -127,7 +127,7 @@ jobs:
           background: true
       - run:
           name: Run the node app.
-          command: npm run start-feature
+          command: npm run start-feature:int
           background: true
       - hmpps/wait_till_ready:
           port: 3007
