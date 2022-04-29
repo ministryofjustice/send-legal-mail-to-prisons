@@ -20,7 +20,7 @@ parameters:
 executors:
   integration-test:
     docker:
-      - image: cimg/node:<< pipeline.parameters.node-version >>
+      - image: node:16-14-bullseye-slim
       - image: cimg/redis:6.2.6
     working_directory: ~/app
 
