@@ -37,9 +37,7 @@
         }) }}
 
         {# form action deliberately empty to POST to the same url as the GET request, because we have 2 routes (legal sender and mail room) for the same page that we need to maintain #}
-        <form id="contact-helpdesk-form" action="" method="post" novalidate autocomplete="off"
-          {% if fileUploadsEnabled %} enctype="multipart/form-data" {% endif %} >
-
+        <form id="contact-helpdesk-form" action="" method="post" novalidate autocomplete="off">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
           <input type="hidden" name="pageId" value="{{ form.pageId }}" />
 
@@ -55,18 +53,6 @@
               maxlength: 500,
               errorMessage: errors | findError('problemDetail')
             }) }}
-
-            {% if fileUploadsEnabled %}
-              {{ govukFileUpload({
-                id: 'screenshot',
-                name: 'screenshot',
-                label: {
-                  text: 'Attach a screenshot (optional)'
-                },
-                attributes: { 'accept':'.jpg, .jpeg, .bmp, .png, .tif, .pdf' },
-                errorMessage: errors | findError('screenshot')
-              }) }}
-            {% endif %}
 
             {{ govukInput({
               label: {
