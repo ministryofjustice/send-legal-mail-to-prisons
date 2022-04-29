@@ -15,6 +15,7 @@ In order to deploy the maintenance page you need:
 
 In order to change the contents of the maintenance page you need:
 * access to the `ministryofjustice` Dockerhub account with push privileges to repository `slm-maintenance`
+* docker installed and signed in to the `ministryofjustice` Dockerhub account
 
 ## How to deploy a maintenance page
 
@@ -26,7 +27,7 @@ Note that this will only work if Cloud Platform's Kubernetes instance is up and 
 
 We have slightly different content depending on whether the downtime is planned (scheduled) or unplanned (unscheduled). The env var `INDEX_NAME` in the files `kubectl_deploy/maintenance-deploy-*.yaml` is used to determine which html file to use.
 
-If using the content in `index-*-scheduled.html` then you will need to set the time and date found in `<article class="main-content">`. 
+If using the content in `index-*-scheduled.html` then you will need to set the time and date found in `<article class="main-content">` and publish a new Docker image - see [How to change the maintenance page content](#how-to-change-the-maintenance-page-content). 
 
 From this directory run command:
 ```
@@ -54,3 +55,31 @@ Delete the maintenance page resources by running this command from this director
 ```
 kubectl delete -f kubectl_deploy -n send-legal-mail-to-prisons-prod
 ```
+
+## How to change the maintenance page content
+
+The maintenance pages are served from a Docker image hosted on the ministryofjustice Dockerhub org. The coordinates of the image can be found in the files `kubectl_deploy/maintenance-deploy-slm.yaml` and `kubectl_deploy/maintenance-deploy-cr39.yaml` at location `spec/template/spec/containers/image`.
+
+If you make any changes to the contents of any HTML file - for example if setting the date and time in the scheduled maintenance page - you will need to publish a new Docker image.
+
+### Publishing a new Docker image
+
+* make the change to the html files `index-*.html`
+* in a terminal login to your ministryofjustice Dockerhub account with command `docker login`
+* work out the next version number for the image - probably just a patch or minor version update
+* from this directory rebuild the Docker image with command `docker build . -t ministryofjustice/slm-maintenance:<new-version-number>`
+* push the image to Dockerhub with command `docker push ministryofjustice/slm-maintenance:<new-version-number>`
+
+
+You can now update the image version in files `kubectl_deploy/maintenance-deploy-slm.yaml` and `kubectl_deploy/maintenance-deploy-cr39.yaml` before deploying your maintenance pages.
+
+### Testing a new Docker image locally
+
+Before pushing the new version you might want to test locally to check it works as expected.
+
+To run the image locally run command:
+```
+docker run -it -p 8080:80 ministryofjustice/slm-maintenance:<your-image-version-number> --env INDEX_NAME=<the-html-file-to-serve>
+```
+
+Then go to URL http://localhost:8080 to see the page. 
