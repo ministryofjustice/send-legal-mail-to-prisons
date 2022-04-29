@@ -19,7 +19,7 @@ export default function validate(form: RequestLinkForm, req: Request): boolean {
 }
 
 function validateEmail(email: string) {
-  const re =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  return re.test(email.toLowerCase())
+  const emailRegExp = /^[\w!#$%&’*+/=?`'{|}~^-]+(?:\.[\w!#$%&’*+/=?`'{|}~^-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$/
+  const cjsmRegExp = /^.+[@.]cjsm\.net$/
+  return emailRegExp.test(email.toLowerCase()) && cjsmRegExp.test(email.toLowerCase())
 }

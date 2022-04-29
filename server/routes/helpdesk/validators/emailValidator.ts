@@ -1,5 +1,4 @@
-const EMAIL_PATTERN =
-  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+const EMAIL_PATTERN = /^[\w!#$%&’*+/=?`'{|}~^-]+(?:\.[\w!#$%&’*+/=?`'{|}~^-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$/
 const CJSM_NET_EMAIL = /^.+[@.]cjsm\.net$/i
 
 export default function validateEmail(email?: string): Array<string> {
