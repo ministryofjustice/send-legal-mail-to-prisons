@@ -177,27 +177,27 @@ the various App Insights tables / data sources. The `operation_Id` can be used a
 understand the user journey or behaviour.
 
 ### Obtaining the `operation_Id`
-The following query can be used to show all requests for the `/link/verify` API endpoint that have failed, sorted by
+The following query can be used to show all requests for the `/oneTimeCode/verify` API endpoint that have failed, sorted by
 timestamp and showing the `operation_Id`:
 ```
 requests
 | where cloud_RoleName == 'send-legal-mail-to-prisons-api'
-| where name == 'POST /link/verify'
+| where name == 'POST /oneTimeCode/verify'
 | where success == 'False'
 | project timestamp, name, resultCode, operation_Id
 | order by timestamp desc 
 ```
 It might return:
 ```
-timestamp [UTC]            name               resultCode  operation_Id
-3/3/2022, 1:31:55.668 PM   POST /link/verify  404         e32191a9b4464d3ab7cb781ada74c484
-3/2/2022, 4:21:50.339 PM   POST /link/verify  404         9f073edae6be406fa3ae0c4a0a7c7451
-3/2/2022, 1:31:51.738 PM   POST /link/verify  404         0242e48653dd4ebe8e43c69422b85736
-3/2/2022, 1:25:52.193 PM   POST /link/verify  404         ffd6f247ce354b80845fb8e6d4df5474
-3/2/2022, 1:23:17.463 PM   POST /link/verify  404         a842871a74a44d35991a275ef8de9b91
-3/2/2022, 12:03:34.780 PM  POST /link/verify  404         4bdb0eecd4bb4d17a4532e5517679177
-3/2/2022, 11:27:51.660 AM  POST /link/verify  404         8510fe92197d4991ba25c955a0b86bb4
-3/1/2022, 4:07:58.473 PM   POST /link/verify  404         ae381bd10b9d470ea793107634278834
+timestamp [UTC]            name                      resultCode  operation_Id
+3/3/2022, 1:31:55.668 PM   POST /oneTimeCode/verify  404         e32191a9b4464d3ab7cb781ada74c484
+3/2/2022, 4:21:50.339 PM   POST /oneTimeCode/verify  404         9f073edae6be406fa3ae0c4a0a7c7451
+3/2/2022, 1:31:51.738 PM   POST /oneTimeCode/verify  404         0242e48653dd4ebe8e43c69422b85736
+3/2/2022, 1:25:52.193 PM   POST /oneTimeCode/verify  404         ffd6f247ce354b80845fb8e6d4df5474
+3/2/2022, 1:23:17.463 PM   POST /oneTimeCode/verify  404         a842871a74a44d35991a275ef8de9b91
+3/2/2022, 12:03:34.780 PM  POST /oneTimeCode/verify  404         4bdb0eecd4bb4d17a4532e5517679177
+3/2/2022, 11:27:51.660 AM  POST /oneTimeCode/verify  404         8510fe92197d4991ba25c955a0b86bb4
+3/1/2022, 4:07:58.473 PM   POST /oneTimeCode/verify  404         ae381bd10b9d470ea793107634278834
 ```
 
 ### Obtaining the user journey with an `operation_Id`
@@ -226,16 +226,16 @@ Requests to static resources in the `/assets/`path are filtered out, and then re
 the request timestamp.
 ```
 timestamp [UTC]	           url	                                         method  resultCode
-3/2/2022, 4:21:50.433 PM   /link/request-link                            GET     200
-3/2/2022, 4:21:50.323 PM   /link/verify-link?secret=<redacted>           GET     302
-3/2/2022, 11:48:27.423 AM  /link/email-sent?showCookieConfirmation=true  GET     200
+3/2/2022, 4:21:50.433 PM   /oneTimeCode/request-code                     GET     200
+3/2/2022, 4:21:50.323 PM   /oneTimeCode/verify-code                      GET     302
+3/2/2022, 11:48:27.423 AM  /oneTimeCode/email-sent?showCookieConfirmatio GET     200
 3/2/2022, 11:48:27.366 AM  /cookies-policy/preferences                   POST    302
-3/2/2022, 11:47:35.873 AM  /link/email-sent                              GET     200
-3/2/2022, 11:47:33.979 AM  /link/request-link                            POST    302
+3/2/2022, 11:47:35.873 AM  /oneTimeCode/email-sent                       GET     200
+3/2/2022, 11:47:33.979 AM  /oneTimeCode/request-code                     POST    302
 3/2/2022, 11:47:18.906 AM  /link/request-link                            GET     200
 3/2/2022, 11:47:06.948 AM  /start                                        GET     200
 ```
-The above tells us the user hit the start page at 11:47:06.948 and submitted (POST) a request fpr a link to sign-in at 
-11:47:33.979, but didn't click the link until 4:21:50.323. At this point the link would have expired and would be the 
-root cause of the API error we are investigating (the 404 error from `/link/verify` at 4:21:50.339). We can see the 
-user was then presented with the Request A Link page again.
+The above tells us the user hit the start page at 11:47:06.948 and submitted (POST) a request for a code to sign-in at 
+11:47:33.979, but didn't enter the code until 4:21:50.323. At this point the code would have expired and would be the 
+root cause of the API error we are investigating (the 404 error from `/oneTimeCode/verify` at 4:21:50.339). We can see the 
+user was then presented with the Request A Code page again.
