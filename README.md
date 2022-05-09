@@ -104,15 +104,15 @@ Open mailcatcher at `http://localhost:1080`. Open the first email which should c
 
 Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth sign in page. Enter credentials `SLM_MAILROOM_USER_LOCAL` / `password1234556`.
 
-### Run linter
+## Run linter
 
 `npm run lint`
 
-### Run tests
+## Run tests
 
 `npm run test`
 
-### Running integration tests
+## Running integration tests
 
 For local running, start a test db, redis, and wiremock instance by:
 
@@ -139,7 +139,15 @@ Integration tests use the [cypress test runner](https://www.cypress.io/).
 Please use the Page superclass for all page models. By default, this will run an accessibility test every time the page 
 is loaded. For further details see `integration_tests/pages/page.ts`
 
-### Dependency Checks
+## Smoke Tests
+
+Smoke tests are run in both the dev and preprod environments as part of the CircleCI build. These perform a regression test for both the legal sender and mailroom staff journeys.
+
+If these tests pass we have a high level of confidence that the most valuable user journeys are working as expected. This should help inform decisions about promoting a change to production.
+
+Further details are available in the [smoke tests README](https://github.com/ministryofjustice/send-legal-mail-to-prisons/tree/main/smoke_tests).
+
+## Dependency Checks
 
 Dependency checks are run in a nightly job on CircleCI. See job `check_outdated` in `.circleci/config.yml`
 
@@ -167,7 +175,81 @@ In the [CircleCI builds](https://app.circleci.com/pipelines/github/ministryofjus
 
 The unit test coverage report can be found at `test_results/jest/coverage/lcov-report/index.html`.
 
-## Querying App Insights to trace a user journey
+## Alerting and monitoring
+
+Our main APM is Application Insights which we use for monitoring our logs, metrics, requests, traces and exceptions.
+
+There are also a few useful resources in Prometheus and Grafana that are provided by the community for free. 
+
+### Application Insights
+
+As with most of HMPPS we primarily use [Application Insights](https://portal.azure.com/#@nomsdigitechoutlook.onmicrosoft.com/resource/subscriptions/a5ddf257-3b21-4ba9-a28c-ab30f751b383/resourceGroups/nomisapi-prod-rg/providers/Microsoft.Insights/components/nomisapi-prod/logs) to monitor our applications.
+
+To use App Insights you need an account creating by the DSO team.
+
+#### Saved Queries
+
+In App Insights / Logs we have a bunch of saved queries that all have the prefix `SLM_`.
+
+The value of individual queries may diminish over time but they provide great examples of how to access our monitoring data.
+
+#### Developer's Dashboard
+
+The [developer's dashboard](https://portal.azure.com/#@nomsdigitechoutlook.onmicrosoft.com/dashboard/arm/subscriptions/a5ddf257-3b21-4ba9-a28c-ab30f751b383/resourcegroups/dashboards/providers/microsoft.portal/dashboards/a97bbfa3-0c53-4ee2-b2e8-814bd813c649) was created to help us answer various questions about how our application was being used during the alpha / beta phases.
+
+It remains a useful resource as an example of how to write App Insights Logs queries. 
+
+### Community Grafana dashboards
+
+Some [generic dashboards exist in Cloud Platform](https://github.com/ministryofjustice/cloud-platform-environments/tree/main/namespaces/live.cloud-platform.service.justice.gov.uk/monitoring) that give valuable insights into our apps.
+
+These Grafana dashboards can be accessed using your GitHub account (requires membership of the ministryofjustice org).
+
+#### Golden signals dashboard
+
+The generic Golden Signals dashboard contains some basic metrics about networking and resource usage.
+
+See the prod UI dashboard [here](https://grafana.live.cloud-platform.service.justice.gov.uk/d/golden-signals/golden-signals?orgId=1&var-namespace=send-legal-mail-to-prisons-prod&var-service=send-legal-mail-to-prisons).
+
+#### Redis dashboard
+
+The [generic Redis dashboard](https://grafana.live.cloud-platform.service.justice.gov.uk/d/nK7rpiQZk/aws-elasticache-redis?var-datasource=Cloudwatch&var-region=default&var-cacheclusterId=cp-1c81317764fca743-001&var-cachenodeid=0001) contains some basic metrics about Redis. 
+
+To find the CacheClusterId for our Redis instances check Kubernetes secrets `slmtp-api-elasticache-redis` and `slmtp-ui-elasticache-redis`.
+
+#### RDS dashboard
+
+The [generic RDS dashboard](https://grafana.live.cloud-platform.service.justice.gov.uk/d/VR46pmwWk/aws-rds?orgId=1&var-datasource=Cloudwatch&var-region=default&var-dbinstanceidentifier=cloud-platform-aacf20ac20de771c) contains some basic metrics about our Postgres database running on RDS. 
+
+To find the DBInstanceIdentifier for our RDS instances check Kubernetes secret `rds-instance-output`.
+
+### Standard alerts
+
+By using the standard [HMPPS Helm charts](https://github.com/ministryofjustice/hmpps-helm-charts/tree/main/charts/generic-prometheus-alerts) we get some alerts about our apps for free.
+
+These alerts have been configured to send Slack messages to the `#farsight_alerts` channel (the alert channel is configured in `values-prod.yaml`).
+
+#### Ingress alerts
+
+The [generic ingress alerts](https://github.com/ministryofjustice/hmpps-helm-charts/blob/main/charts/generic-prometheus-alerts/templates/ingress-alerts.yaml) will notify us if we are returning 5XX errors or rate limiting any of our clients. 
+
+#### Kubernetes alerts
+
+The [generic application alerts](https://github.com/ministryofjustice/hmpps-helm-charts/blob/main/charts/generic-prometheus-alerts/templates/application-alerts.yaml) will notify us if our Kube pods are failing for various reasons, e.g. crash looping, OOM killed, pod not starting etc.
+
+### Pingdom alerts
+
+Along with most of HMPPS we use [Pingdom](https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/send-legal-mail-to-prisons-prod/resources/pingdom.tf) to monitor our production apps from outside of our network.
+
+These alerts are configured to send Slack messages to the `#dps_alerts` channel if our UI is not responding.
+
+### Performance benchmark alerts
+
+We have some alerts that are fired if the performance benchmark test for the API indicates we have introduced a performance issue. These are sent to the `#farsight_alerts` Slack channel.
+
+See the [API's performance benchmark documentation](https://github.com/ministryofjustice/send-legal-mail-to-prisons-api/tree/main/artillery#benchmark-performance-tests) for more details.
+
+### Querying App Insights to trace a user journey
 The use case for tracing the requests for a specific user journey is often based around investigating an error of some 
 sort discovered in the logs of either the API or UI. IE an error will have been seen in the logs and you want to 
 understand the user journey (requests / screens seen before and after the error) that led to the error.
@@ -176,31 +258,31 @@ Records in App Insights have an `operation_Id` field which can be used as a corr
 the various App Insights tables / data sources. The `operation_Id` can be used as the starting point to query the data to 
 understand the user journey or behaviour.
 
-### Obtaining the `operation_Id`
-The following query can be used to show all requests for the `/link/verify` API endpoint that have failed, sorted by
+#### Obtaining the `operation_Id`
+The following query can be used to show all requests for the `/oneTimeCode/verify` API endpoint that have failed, sorted by
 timestamp and showing the `operation_Id`:
 ```
 requests
 | where cloud_RoleName == 'send-legal-mail-to-prisons-api'
-| where name == 'POST /link/verify'
+| where name == 'POST /oneTimeCode/verify'
 | where success == 'False'
 | project timestamp, name, resultCode, operation_Id
 | order by timestamp desc 
 ```
 It might return:
 ```
-timestamp [UTC]            name               resultCode  operation_Id
-3/3/2022, 1:31:55.668 PM   POST /link/verify  404         e32191a9b4464d3ab7cb781ada74c484
-3/2/2022, 4:21:50.339 PM   POST /link/verify  404         9f073edae6be406fa3ae0c4a0a7c7451
-3/2/2022, 1:31:51.738 PM   POST /link/verify  404         0242e48653dd4ebe8e43c69422b85736
-3/2/2022, 1:25:52.193 PM   POST /link/verify  404         ffd6f247ce354b80845fb8e6d4df5474
-3/2/2022, 1:23:17.463 PM   POST /link/verify  404         a842871a74a44d35991a275ef8de9b91
-3/2/2022, 12:03:34.780 PM  POST /link/verify  404         4bdb0eecd4bb4d17a4532e5517679177
-3/2/2022, 11:27:51.660 AM  POST /link/verify  404         8510fe92197d4991ba25c955a0b86bb4
-3/1/2022, 4:07:58.473 PM   POST /link/verify  404         ae381bd10b9d470ea793107634278834
+timestamp [UTC]            name                      resultCode  operation_Id
+3/3/2022, 1:31:55.668 PM   POST /oneTimeCode/verify  404         e32191a9b4464d3ab7cb781ada74c484
+3/2/2022, 4:21:50.339 PM   POST /oneTimeCode/verify  404         9f073edae6be406fa3ae0c4a0a7c7451
+3/2/2022, 1:31:51.738 PM   POST /oneTimeCode/verify  404         0242e48653dd4ebe8e43c69422b85736
+3/2/2022, 1:25:52.193 PM   POST /oneTimeCode/verify  404         ffd6f247ce354b80845fb8e6d4df5474
+3/2/2022, 1:23:17.463 PM   POST /oneTimeCode/verify  404         a842871a74a44d35991a275ef8de9b91
+3/2/2022, 12:03:34.780 PM  POST /oneTimeCode/verify  404         4bdb0eecd4bb4d17a4532e5517679177
+3/2/2022, 11:27:51.660 AM  POST /oneTimeCode/verify  404         8510fe92197d4991ba25c955a0b86bb4
+3/1/2022, 4:07:58.473 PM   POST /oneTimeCode/verify  404         ae381bd10b9d470ea793107634278834
 ```
 
-### Obtaining the user journey with an `operation_Id`
+#### Obtaining the user journey with an `operation_Id`
 On the assumption you have an `operation_Id` a query can be performed to identify the specific web request and all other
 web requests associated with the same IP, therefore giving a picture of the user journey.
 
@@ -226,16 +308,16 @@ Requests to static resources in the `/assets/`path are filtered out, and then re
 the request timestamp.
 ```
 timestamp [UTC]	           url	                                         method  resultCode
-3/2/2022, 4:21:50.433 PM   /link/request-link                            GET     200
-3/2/2022, 4:21:50.323 PM   /link/verify-link?secret=<redacted>           GET     302
-3/2/2022, 11:48:27.423 AM  /link/email-sent?showCookieConfirmation=true  GET     200
+3/2/2022, 4:21:50.433 PM   /oneTimeCode/request-code                     GET     200
+3/2/2022, 4:21:50.323 PM   /oneTimeCode/verify-code                      GET     302
+3/2/2022, 11:48:27.423 AM  /oneTimeCode/email-sent?showCookieConfirmatio GET     200
 3/2/2022, 11:48:27.366 AM  /cookies-policy/preferences                   POST    302
-3/2/2022, 11:47:35.873 AM  /link/email-sent                              GET     200
-3/2/2022, 11:47:33.979 AM  /link/request-link                            POST    302
+3/2/2022, 11:47:35.873 AM  /oneTimeCode/email-sent                       GET     200
+3/2/2022, 11:47:33.979 AM  /oneTimeCode/request-code                     POST    302
 3/2/2022, 11:47:18.906 AM  /link/request-link                            GET     200
 3/2/2022, 11:47:06.948 AM  /start                                        GET     200
 ```
-The above tells us the user hit the start page at 11:47:06.948 and submitted (POST) a request fpr a link to sign-in at 
-11:47:33.979, but didn't click the link until 4:21:50.323. At this point the link would have expired and would be the 
-root cause of the API error we are investigating (the 404 error from `/link/verify` at 4:21:50.339). We can see the 
-user was then presented with the Request A Link page again.
+The above tells us the user hit the start page at 11:47:06.948 and submitted (POST) a request for a code to sign-in at 
+11:47:33.979, but didn't enter the code until 4:21:50.323. At this point the code would have expired and would be the 
+root cause of the API error we are investigating (the 404 error from `/oneTimeCode/verify` at 4:21:50.339). We can see the 
+user was then presented with the Request A Code page again.
