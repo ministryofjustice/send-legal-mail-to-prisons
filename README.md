@@ -104,15 +104,15 @@ Open mailcatcher at `http://localhost:1080`. Open the first email which should c
 
 Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth sign in page. Enter credentials `SLM_MAILROOM_USER_LOCAL` / `password1234556`.
 
-### Run linter
+## Run linter
 
 `npm run lint`
 
-### Run tests
+## Run tests
 
 `npm run test`
 
-### Running integration tests
+## Running integration tests
 
 For local running, start a test db, redis, and wiremock instance by:
 
@@ -139,7 +139,15 @@ Integration tests use the [cypress test runner](https://www.cypress.io/).
 Please use the Page superclass for all page models. By default, this will run an accessibility test every time the page 
 is loaded. For further details see `integration_tests/pages/page.ts`
 
-### Dependency Checks
+## Smoke Tests
+
+Smoke tests are run in both the dev and preprod environments as part of the CircleCI build. These perform a regression test for both the legal sender and mailroom staff journeys.
+
+If these tests pass we have a high level of confidence that the most valuable user journeys are working as expected. This should help inform decisions about promoting a change to production.
+
+Further details are available in the [smoke tests README](https://github.com/ministryofjustice/send-legal-mail-to-prisons/tree/main/smoke_tests).
+
+## Dependency Checks
 
 Dependency checks are run in a nightly job on CircleCI. See job `check_outdated` in `.circleci/config.yml`
 
