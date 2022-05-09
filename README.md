@@ -191,25 +191,25 @@ To use App Insights you need an account creating by the DSO team.
 
 In App Insights / Logs we have a bunch of saved queries that all have the prefix `SLM_`.
 
-The usage of individual queries may diminish over time but they provide great examples of how to access our monitoring data.
+The value of individual queries may diminish over time but they provide great examples of how to access our monitoring data.
 
 #### Developer's Dashboard
 
-The [developer's dashboard](https://portal.azure.com/#@nomsdigitechoutlook.onmicrosoft.com/dashboard/arm/subscriptions/a5ddf257-3b21-4ba9-a28c-ab30f751b383/resourcegroups/dashboards/providers/microsoft.portal/dashboards/a97bbfa3-0c53-4ee2-b2e8-814bd813c649) was created to help us answer various questions about how our application was being used during the alpha / beta.
+The [developer's dashboard](https://portal.azure.com/#@nomsdigitechoutlook.onmicrosoft.com/dashboard/arm/subscriptions/a5ddf257-3b21-4ba9-a28c-ab30f751b383/resourcegroups/dashboards/providers/microsoft.portal/dashboards/a97bbfa3-0c53-4ee2-b2e8-814bd813c649) was created to help us answer various questions about how our application was being used during the alpha / beta phases.
 
 It remains a useful resource as an example of how to write App Insights Logs queries. 
 
 ### Community Grafana dashboards
 
-Some [generic dashboards exist in Cloud Platform](https://github.com/ministryofjustice/cloud-platform-environments/tree/main/namespaces/live.cloud-platform.service.justice.gov.uk/monitoring) that we give valuable insights into our apps.
+Some [generic dashboards exist in Cloud Platform](https://github.com/ministryofjustice/cloud-platform-environments/tree/main/namespaces/live.cloud-platform.service.justice.gov.uk/monitoring) that give valuable insights into our apps.
 
-These Grafana dashboards can be access using your GitHub account (requires membership of the ministryofjustice org).
+These Grafana dashboards can be accessed using your GitHub account (requires membership of the ministryofjustice org).
 
 #### Golden signals dashboard
 
 The generic Golden Signals dashboard contains some basic metrics about networking and resource usage.
 
-See the prod UI dashboard [here](https://grafana.live.cloud-platform.service.justice.gov.uk/d/golden-signals/golden-signals?orgId=1&var-namespace=send-legal-mail-to-prisons-prod&var-service=send-legal-mail-to-prisons). NOTE - signin with your GitHub account.
+See the prod UI dashboard [here](https://grafana.live.cloud-platform.service.justice.gov.uk/d/golden-signals/golden-signals?orgId=1&var-namespace=send-legal-mail-to-prisons-prod&var-service=send-legal-mail-to-prisons).
 
 #### Redis dashboard
 
