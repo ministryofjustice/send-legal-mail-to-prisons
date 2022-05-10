@@ -37,6 +37,10 @@ For example in the dev environment:
 5. Given the application version you wish to rollback to, find the related revision number
 6. Rollback to that version with command `helm rollback send-legal-mail-to-prisons <revision-number>` replacing `<revision-number>` as appropriate
 
+### Architecture Decision Records
+
+Interesting or non-standard architectural decisions have been documented [here](adr/README.md).
+
 ## Imported Types
 Some types are imported from the Open API docs for send-legal-mail-to-prisons-api and prison-register.
 
