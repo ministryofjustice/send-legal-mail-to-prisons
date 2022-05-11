@@ -56,6 +56,7 @@ declare module 'forms' {
   export type RadioButtonOption = {
     value: string
     html?: string
+    hint?: { html: string }
     text?: string
     checked: boolean
   }
