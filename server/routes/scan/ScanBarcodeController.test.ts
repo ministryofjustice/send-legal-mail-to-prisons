@@ -67,6 +67,10 @@ describe('ScanBarcodeController', () => {
   })
 
   describe('submitScannedBarcode', () => {
+    req.user = { username: 'scanned-by-user' }
+    req.ip = 'some-ip'
+    req.body = { barcode: 'some-barcode' }
+
     it('should redirect to scan barcode if not valid', async () => {
       validate.mockReturnValue(false)
 
@@ -77,9 +81,6 @@ describe('ScanBarcodeController', () => {
 
     it('should call API and show positive result', async () => {
       validate.mockReturnValue(true)
-      req.user = { username: 'scanned-by-user' }
-      req.ip = 'some-ip'
-      req.body = { barcode: 'some-barcode' }
       scanBarcodeService.verifyBarcode.mockResolvedValue({ createdBy: 'created-by-user' })
 
       await scanBarcodeController.submitScannedBarcode(req as unknown as Request, res as unknown as Response)
@@ -91,9 +92,6 @@ describe('ScanBarcodeController', () => {
 
     it('should call API and show negative result', async () => {
       validate.mockReturnValue(true)
-      req.user = { username: 'scanned-by-user' }
-      req.ip = 'some-ip'
-      req.body = { barcode: 'some-barcode' }
       scanBarcodeService.verifyBarcode.mockRejectedValue({ status: 400, errorCode: { code: 'some-error' } })
       verifyBarcodeErrorResponseMapper.mapErrorResponse.mockReturnValue({
         code: 'some-error',
@@ -123,6 +121,10 @@ describe('ScanBarcodeController', () => {
   })
 
   describe('submitManualBarcode', () => {
+    req.user = { username: 'scanned-by-user' }
+    req.ip = 'some-ip'
+    req.body = { barcode: 'some-barcode' }
+
     it('should redirect to scan barcode if not valid', async () => {
       validate.mockReturnValue(false)
 
@@ -133,9 +135,6 @@ describe('ScanBarcodeController', () => {
 
     it('should call API and show positive result', async () => {
       validate.mockReturnValue(true)
-      req.user = { username: 'scanned-by-user' }
-      req.ip = 'some-ip'
-      req.body = { barcode: 'some-barcode' }
       scanBarcodeService.verifyBarcode.mockResolvedValue({ createdBy: 'created-by-user' })
 
       await scanBarcodeController.submitManualBarcode(req as unknown as Request, res as unknown as Response)
@@ -147,9 +146,6 @@ describe('ScanBarcodeController', () => {
 
     it('should call API and show negative result', async () => {
       validate.mockReturnValue(true)
-      req.user = { username: 'scanned-by-user' }
-      req.ip = 'some-ip'
-      req.body = { barcode: 'some-barcode' }
       scanBarcodeService.verifyBarcode.mockRejectedValue({ status: 400, errorCode: { code: 'some-error' } })
       verifyBarcodeErrorResponseMapper.mapErrorResponse.mockReturnValue({
         code: 'some-error',
