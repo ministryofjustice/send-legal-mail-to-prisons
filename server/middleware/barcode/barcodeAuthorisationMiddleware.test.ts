@@ -2,6 +2,7 @@ import { SessionData } from 'express-session'
 import { NextFunction, Request, Response } from 'express'
 import createError from 'http-errors'
 import barcodeAuthorisationMiddleware from './barcodeAuthorisationMiddleware'
+import config from '../../config'
 
 jest.mock('http-errors')
 
@@ -17,6 +18,7 @@ describe('barcodeAuthorisationMiddleware', () => {
   } as unknown as Response
 
   const next = jest.fn() as NextFunction
+  config.featureFlags.lsjOneTimeCodeAuthEnabled = true
 
   afterEach(() => {
     jest.clearAllMocks()
