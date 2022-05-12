@@ -8,13 +8,13 @@ describe('Select envelope size', () => {
     await superTest.cleanAll()
   })
 
-  it('should redirect to request a link given user is not authenticated', async () => {
+  it('should redirect to request one time code given user is not authenticated', async () => {
     await superTest.unauthenticated()
 
     const response = await superTest.request //
       .get('/barcode/pdf/select-envelope-size')
 
-    assertThat(response).isOk().hasPageId('request-link').hasNoErrors()
+    assertThat(response).isOk().hasPageId('request-one-time-code').hasNoErrors()
   })
 
   it('should redirect to find recipient by prison number given no recipients have been added', async () => {
