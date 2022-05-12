@@ -11,7 +11,7 @@ jest.mock('../validators/prisonNumberValidator')
 jest.mock('../validators/prisonerNameValidator')
 
 const req = {
-  session: { barcodeUser: { token: 'some-token' } } as SessionData,
+  session: { barcodeUser: { token: 'some-token', tokenValid: true } } as SessionData,
   flash: jest.fn(),
   body: {},
   ip: '127.0.0.1',
@@ -47,10 +47,8 @@ describe('FindRecipientController', () => {
   )
 
   afterEach(() => {
-    recipientFormService.resetForm.mockReset()
-    res.render.mockReset()
-    res.redirect.mockReset()
-    req.session = { barcodeUser: { token: 'some-token' } } as SessionData
+    jest.resetAllMocks()
+    req.session.barcodeUser = { token: 'some-token', tokenValid: true }
   })
 
   describe('submitFindByPrisonNumber', () => {
@@ -183,10 +181,45 @@ describe('FindRecipientController', () => {
       req.session.recipientForm = {}
       req.body = { prisonerName: ' John Smith ' }
       mockPrisonerNameValidator.mockReturnValue([])
+      contactService.searchContacts.mockReturnValue([aContact()])
 
       await findRecipientController.submitFindByPrisonerName(req as unknown as Request, res as unknown as Response)
 
       expect(req.session.recipientForm.prisonerName).toEqual('John Smith')
+    })
+  })
+
+  describe('getFindRecipientByPrisonNumberView', () => {
+    it('should render the form', async () => {
+      req.session.findRecipientByPrisonNumberForm = { prisonNumber: 'some-prison-number' }
+      req.flash.mockReturnValue([{ href: '#prisonNumber', text: 'some-error' }])
+
+      await findRecipientController.getFindRecipientByPrisonNumberView(
+        req as unknown as Request,
+        res as unknown as Response
+      )
+
+      expect(res.render).toHaveBeenCalledWith('pages/barcode/find-recipient-by-prison-number', {
+        form: { prisonNumber: 'some-prison-number' },
+        errors: [{ href: '#prisonNumber', text: 'some-error' }],
+      })
+    })
+  })
+
+  describe('getFindRecipientByPrisonerNameView', () => {
+    it('should render the form', async () => {
+      req.session.findRecipientByPrisonerNameForm = { prisonerName: 'some-name' }
+      req.flash.mockReturnValue([{ href: '#prisonerName', text: 'some-name' }])
+
+      await findRecipientController.getFindRecipientByPrisonerNameView(
+        req as unknown as Request,
+        res as unknown as Response
+      )
+
+      expect(res.render).toHaveBeenCalledWith('pages/barcode/find-recipient-by-prisoner-name', {
+        form: { prisonerName: 'some-name' },
+        errors: [{ href: '#prisonerName', text: 'some-name' }],
+      })
     })
   })
 })
