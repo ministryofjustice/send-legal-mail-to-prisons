@@ -3,9 +3,9 @@ import nunjucks, { Template } from 'nunjucks'
 import cheerio from 'cheerio'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
-const snippet = fs.readFileSync('server/views/pages/barcode/create-new-contact-by-prisoner-name.njk')
+const snippet = fs.readFileSync('server/views/pages/barcode/create-new-contact-by-prison-number.njk')
 
-describe('Create New Contact By Prisoner Name View', () => {
+describe('Create New Contact By Prison Number View', () => {
   let compiledTemplate: Template
   let viewContext: Record<string, unknown>
 
@@ -20,45 +20,39 @@ describe('Create New Contact By Prisoner Name View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#create-new-contact-by-prisoner-name').length).toStrictEqual(1)
+    expect($('#create-new-contact-by-prison-number').length).toStrictEqual(1)
   })
 
-  describe('prisoner DOB', () => {
-    it('should display dob input', () => {
-      viewContext = {
-        errors: [],
-        form: { 'prisonerDob-day': '27', 'prisonerDob-month': '03', 'prisonerDob-year': '1997' },
-      }
+  describe('Prison Number', () => {
+    it('should display prison number', () => {
+      viewContext = { form: { prisonNumber: 'some-prison-number' }, errors: [] }
 
       const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-      expect($('#prisonerDob-day').val()).toStrictEqual('27')
-      expect($('#prisonerDob-month').val()).toStrictEqual('03')
-      expect($('#prisonerDob-year').val()).toStrictEqual('1997')
-    })
-
-    it('should set correct widths for dob input', () => {
-      viewContext = { errors: [] }
-
-      const $ = cheerio.load(compiledTemplate.render(viewContext))
-
-      expect($('#prisonerDob-day').attr('class')).toContain('govuk-input--width-2')
-      expect($('#prisonerDob-month').attr('class')).toContain('govuk-input--width-2')
-      expect($('#prisonerDob-year').attr('class')).toContain('govuk-input--width-4')
-    })
-
-    it('should highlight dob errors in all inputs', () => {
-      viewContext = { errors: [{ href: '#prisonerDob', text: 'some-error' }] }
-
-      const $ = cheerio.load(compiledTemplate.render(viewContext))
-
-      expect($('div.govuk-error-summary').find('a[href="#prisonerDob"]').text()).toEqual('some-error')
-      expect($('#prisonerDob-error').text()).toContain('some-error')
-      expect($('#prisonerDob-day').attr('class')).toContain('govuk-input--error')
+      expect($('#create-new-contact-form').find('p:first').text()).toContain('some-prison-number')
     })
   })
 
-  describe('prison', () => {
+  describe('Prisoner name', () => {
+    it('should display prisoner name', () => {
+      viewContext = { form: { prisonerName: 'some-prisoner-name' }, errors: [] }
+
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+      expect($('#prisonerName').val()).toEqual('some-prisoner-name')
+    })
+
+    it('should display errors ', () => {
+      viewContext = { errors: [{ href: '#prisonerName', text: 'some-error' }] }
+
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+      expect($('div.govuk-error-summary').find('a[href="#prisonerName"]').text()).toEqual('some-error')
+      expect($('#prisonerName-error').text()).toContain('some-error')
+    })
+  })
+
+  describe('Prison', () => {
     it('should display selected prison', () => {
       viewContext = {
         errors: [],
@@ -87,20 +81,6 @@ describe('Create New Contact By Prisoner Name View', () => {
 
       expect($('div.govuk-error-summary').find('a[href="#prisonId"]').text()).toEqual('some-error')
       expect($('#prisonId-error').text()).toContain('some-error')
-    })
-  })
-
-  describe('prisoner name', () => {
-    it('should display prisoner name', () => {
-      viewContext = {
-        errors: [],
-        form: { prisonerName: 'some-prisoner' },
-      }
-
-      const $ = cheerio.load(compiledTemplate.render(viewContext))
-
-      expect($('p[data-qa="add-details"]').text()).toContain('some-prisoner')
-      expect($('h2[data-qa="locate"]').text()).toContain('some-prisoner')
     })
   })
 

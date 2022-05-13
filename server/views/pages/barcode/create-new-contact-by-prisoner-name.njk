@@ -76,7 +76,8 @@
 
             {{ govukButton({
               text: "Save",
-              preventDoubleClick: true
+              preventDoubleClick: true,
+              attributes: { 'data-qa': 'save-button' }
             }) }}
 
           {% endcall %}
