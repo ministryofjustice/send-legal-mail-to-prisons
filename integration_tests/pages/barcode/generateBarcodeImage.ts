@@ -51,11 +51,11 @@ export default class GenerateBarcodeImagePage extends Page {
     return Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   }
 
-  barcodeAddressImage = (): PageElement => cy.get('img.barcode-address-image')
+  barcodeAddressImage = (): PageElement => cy.get('img.barcode-address-image:first')
 
-  imageDownloadButton = (): PageElement => cy.get('[data-qa=download-image-button]')
+  imageDownloadButton = (): PageElement => cy.get('[data-qa=download-image-button]:first')
 
-  imageCopyButton = (): PageElement => cy.get('[data-qa=copy-image-button]')
+  imageCopyButton = (): PageElement => cy.get('[data-qa=copy-image-button]:first')
 
   imageCopyBarcodeFeedbackContainer = (): PageElement => cy.get('[data-qa=copy-barcode-feedback-container-1]')
 
