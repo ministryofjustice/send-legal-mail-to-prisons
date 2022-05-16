@@ -22,8 +22,8 @@
       <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Enter the code to confirm your CJSM email address</h1>
 
-        <p>We've sent a code to <strong>{{ emailSentTo }}</strong></p>
-        <p>The code will expire in {{ oneTimeCodeValidityDuration }} minutes.</p>
+        <p data-qa="email-sent-to">We've sent a code to <strong>{{ emailSentTo }}</strong></p>
+        <p data-qa="code-expiry">The code will expire in {{ oneTimeCodeValidityDuration }} minutes.</p>
 
         <form id="code-form" action="verify-code" method="post" novalidate autocomplete="off">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
