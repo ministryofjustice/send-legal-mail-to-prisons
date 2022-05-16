@@ -50,7 +50,8 @@
             <div class="govuk-button-group">
               {{ govukButton({
                 text: 'Submit barcode number',
-                classes: 'govuk-visually-hidden'
+                classes: 'govuk-visually-hidden',
+                attributes: { 'data-qa': 'submit-barcode-button' }
               }) }}
             </div>
           {% endcall %}
