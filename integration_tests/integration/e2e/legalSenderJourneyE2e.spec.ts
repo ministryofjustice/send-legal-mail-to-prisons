@@ -82,6 +82,15 @@ context('Legal Sender Journey E2E', () => {
 
     // Choose the image option
     chooseBarcodeOptionPage.continueToImage()
+
+    // Download the image and start again
     Page.verifyOnPage(GenerateBarcodeImagePage)
+      .barcodeAddressImageExists()
+      .imageDownloadButtonExists(/SendLegalMail-Gage-Hewitt-\d{4}-\d{2}-\d{2}\.png/)
+      .imageCopyButtonExists()
+      .clickCopyBarcodeButton()
+      .imageCopyBarcodeFeedbackContainerIsVisible()
+      .sendMoreLegalMail()
+    Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   })
 })

@@ -10,25 +10,6 @@ context('Create Barcode Image', () => {
     ChooseBarcodeOptionPage.goToPage()
   })
 
-  it('should create barcode', () => {
-    cy.task('stubCreateBarcode')
-    Page.verifyOnPage(ChooseBarcodeOptionPage).continueToImage()
-    Page.verifyOnPage(GenerateBarcodeImagePage)
-      .barcodeAddressImageExists()
-      .imageDownloadButtonExists(/SendLegalMail-Gage-Hewitt-\d{4}-\d{2}-\d{2}\.png/)
-      .imageCopyButtonExists()
-  })
-
-  it('should create barcode and click the copy button', () => {
-    cy.task('stubCreateBarcode')
-    Page.verifyOnPage(ChooseBarcodeOptionPage).continueToImage()
-    const generateBarcodeImagePage = Page.verifyOnPage(GenerateBarcodeImagePage)
-
-    generateBarcodeImagePage.clickCopyBarcodeButton()
-
-    generateBarcodeImagePage.imageCopyBarcodeFeedbackContainerIsVisible()
-  })
-
   it('should show an error if create barcode fails', () => {
     cy.task('stubCreateBarcodeFailure')
     const page = Page.verifyOnPage(ChooseBarcodeOptionPage)
@@ -48,19 +29,5 @@ context('Create Barcode Image', () => {
 
     const page = Page.verifyOnPage(ChooseBarcodeOptionPage)
     page.continueToImageErrors().hasErrorContaining('error generating the barcode')
-  })
-
-  it('should restart the journey if the user chooses to send more legal mail on the barcodes screen', () => {
-    cy.task('stubCreateBarcode')
-    const generateBarcodeImagePage = Page.verifyOnPage(ChooseBarcodeOptionPage).continueToImage()
-    generateBarcodeImagePage.sendMoreLegalMail()
-    Page.verifyOnPage(FindRecipientByPrisonNumberPage)
-  })
-
-  it('should restart the journey if the user clicks the browser Back button', () => {
-    cy.task('stubCreateBarcode')
-    const generateBarcodeImagePage = Page.verifyOnPage(ChooseBarcodeOptionPage).continueToImage()
-    generateBarcodeImagePage.clickBrowserBackButton()
-    Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   })
 })
