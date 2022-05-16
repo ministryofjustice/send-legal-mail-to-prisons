@@ -3,7 +3,7 @@ import nunjucks, { Template } from 'nunjucks'
 import cheerio from 'cheerio'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
-const snippet = fs.readFileSync('server/views/pages/one-time-code-auth/requestOnetimeCode.njk')
+const snippet = fs.readFileSync('server/views/pages/one-time-code-auth/requestOneTimeCode.njk')
 
 describe('Request one time code view', () => {
   let compiledTemplate: Template
