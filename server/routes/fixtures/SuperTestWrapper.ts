@@ -64,6 +64,28 @@ export default class SuperTestWrapper {
     })
   }
 
+  mockContactNameExists = (name: string) => {
+    nock(config.apis.sendLegalMail.url)
+      .get(`/contacts?name=${name}`)
+      .reply(200, [
+        {
+          id: 1,
+          prisonerName: name,
+          prisonId: 'LEI',
+          dob: '1990-01-02',
+        },
+      ])
+  }
+
+  mockContactNumberExists = (prisonNumber: string) => {
+    nock(config.apis.sendLegalMail.url).get(`/contact/prisonNumber/${prisonNumber}`).reply(200, {
+      id: 1,
+      prisonerName: 'any name',
+      prisonId: 'LEI',
+      prisonNumber,
+    })
+  }
+
   cleanAll = async () => {
     nock.cleanAll()
   }
