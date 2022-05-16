@@ -1,8 +1,6 @@
 import Page from '../../pages/page'
-import GenerateBarcodeImagePage from '../../pages/barcode/generateBarcodeImage'
 import ChooseBarcodeOptionPage from '../../pages/barcode/chooseBarcodeOption'
 import ReviewRecipientsPage from '../../pages/barcode/reviewRecipients'
-import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientByPrisonNumber'
 
 context('Create Barcode Image', () => {
   beforeEach(() => {
