@@ -22,7 +22,7 @@
       <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Sign in with your CJSM email address</h1>
         <p>Use your CJSM (Criminal Justice Secure Mail) email address to sign in. You'll receive an email containing a code.</p>
-        <p>When you've entered the code you'll stay signed in for {{ lsjSessionDuration }}.
+        <p data-qa="session-duration">When you've entered the code you'll stay signed in for {{ lsjSessionDuration }}.
 
         <form id="email-form" action="request-code" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
