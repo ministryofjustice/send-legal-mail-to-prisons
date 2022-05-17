@@ -7,6 +7,7 @@ import app from '../../index'
 import config from '../../config'
 import mockHmppsAuth from './mock-hmpps-auth'
 import legalSenderJourneyAuthenticationStartPage from '../../middleware/legalSenderJourneyAuthenticationStartPage'
+import mockPrisonRegister from './mock-prison-register'
 
 jest.mock('redis', () => jest.requireActual('redis-mock'))
 
@@ -26,6 +27,7 @@ export default class SuperTestWrapper {
 
   authenticateAsLegalSenderUser = async () => {
     mockHmppsAuth()
+    mockPrisonRegister()
     this.mockVerifyCode()
     this.mockCjsmUser()
 
