@@ -30,13 +30,11 @@ export default class SuperTestWrapper {
     this.mockCjsmUser()
 
     await this.request.post('/oneTimeCode/verify-code').send({ code: 'some-code' })
-    nock.cleanAll()
   }
 
   unauthenticated = async () => {
     mockHmppsAuth()
     await this.request.get(`${legalSenderJourneyAuthenticationStartPage()}?force=true`) // log out legal sender user
-    nock.cleanAll()
   }
 
   mockCjsmUser = () => {

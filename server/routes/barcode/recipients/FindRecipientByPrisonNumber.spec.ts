@@ -1,12 +1,14 @@
 import SuperTestWrapper from '../../fixtures/SuperTestWrapper'
 import mockHmppsAuth from '../../fixtures/mock-hmpps-auth'
 import assertThat from '../../fixtures/supertest-assertions'
+import mockPrisonRegister from '../../fixtures/mock-prison-register'
 
 describe('Find recipient by prison number', () => {
   const superTest = new SuperTestWrapper()
 
   beforeEach(() => {
     mockHmppsAuth()
+    mockPrisonRegister()
   })
 
   afterEach(async () => {
