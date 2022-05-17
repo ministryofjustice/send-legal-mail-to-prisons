@@ -34,6 +34,7 @@ describe('Find recipient by prisoner name', () => {
 
   it('should accept new contact name and redirect to create contact page', async () => {
     await superTest.authenticateAsLegalSenderUser()
+    await superTest.mockContactNameNotFound('some-name')
     await superTest.request.get('/barcode/find-recipient/by-prison-number')
     await superTest.request.get('/barcode/find-recipient/by-prisoner-name')
 

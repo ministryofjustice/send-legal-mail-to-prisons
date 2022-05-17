@@ -23,11 +23,11 @@ export default class SuperTestWrapper {
     this.request //
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .redirects(1)
+    mockPrisonRegister()
   }
 
   authenticateAsLegalSenderUser = async () => {
     mockHmppsAuth()
-    mockPrisonRegister()
     this.mockVerifyCode()
     this.mockCjsmUser()
 
@@ -79,6 +79,10 @@ export default class SuperTestWrapper {
       ])
   }
 
+  mockContactNameNotFound = (name: string) => {
+    nock(config.apis.sendLegalMail.url).get(`/contacts?name=${name}`).reply(404)
+  }
+
   mockContactNumberExists = (prisonNumber: string) => {
     nock(config.apis.sendLegalMail.url).get(`/contact/prisonNumber/${prisonNumber}`).reply(200, {
       id: 1,
@@ -86,6 +90,10 @@ export default class SuperTestWrapper {
       prisonId: 'LEI',
       prisonNumber,
     })
+  }
+
+  mockContactNumberNotFound = (prisonNumber: string) => {
+    nock(config.apis.sendLegalMail.url).get(`/contact/prisonNumber/${prisonNumber}`).reply(404)
   }
 
   cleanAll = async () => {

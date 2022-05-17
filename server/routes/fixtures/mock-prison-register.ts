@@ -4,7 +4,7 @@ import config from '../../config'
 
 export default function mockPrisonRegister() {
   const mockedPrisonRegisterApi = nock(config.apis.prisonRegister.url)
-  mockedPrisonRegisterApi.post('/prison').reply(200, [
+  mockedPrisonRegisterApi.get('/prisons').reply(200, [
     {
       prisonId: 'ALI',
       prisonName: 'Albany (HMP)',
