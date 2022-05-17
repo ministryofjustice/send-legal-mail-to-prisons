@@ -69,31 +69,6 @@ context('Scan Barcode Page', () => {
     scanBarcodeResultPage.hasMainHeading('Barcode already scanned: carry out further checks')
   })
 
-  it('should render barcode results page given form submitted with barcode that has been selected for a random check', () => {
-    cy.task('stubVerifyRandomCheckBarcode')
-    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
-    cy.signIn()
-    cy.visit('/scan-barcode')
-    const scanBarcodePage = Page.verifyOnPage(ScanBarcodePage)
-
-    const scanBarcodeResultPage: ScanBarcodeResultPage =
-      scanBarcodePage.submitFormWithBarcodeThatWillBeSelectedForARandomCheck()
-
-    scanBarcodeResultPage.hasMainHeading('Item selected for a random check')
-  })
-
-  it('should render barcode results page given form submitted with barcode that has expired', () => {
-    cy.task('stubVerifyExpiredBarcode')
-    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
-    cy.signIn()
-    cy.visit('/scan-barcode')
-    const scanBarcodePage = Page.verifyOnPage(ScanBarcodePage)
-
-    const scanBarcodeResultPage: ScanBarcodeResultPage = scanBarcodePage.submitFormWithBarcodeThatHasExpired()
-
-    scanBarcodeResultPage.hasMainHeading('Barcode expired: carry out further checks')
-  })
-
   it('should render barcode results page given form submitted with barcode that cannot be found', () => {
     cy.task('stubVerifyNotFoundBarcode')
     cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
@@ -104,27 +79,5 @@ context('Scan Barcode Page', () => {
     const scanBarcodeResultPage: ScanBarcodeResultPage = scanBarcodePage.submitFormWithBarcodeThatDoesNotExist()
 
     scanBarcodeResultPage.hasMainHeading('Barcode not recognised: carry out further checks')
-  })
-
-  it('should redisplay form with errors given form submitted with invalid barcode', () => {
-    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
-    cy.signIn()
-    cy.visit('/scan-barcode')
-    const scanBarcodePage = Page.verifyOnPage(ScanBarcodePage)
-
-    scanBarcodePage.submitFormWithBarcodeThatFailsValidation()
-
-    scanBarcodePage.hasErrorContaining('12 digits')
-  })
-
-  it('should redisplay form with errors given form submitted with empty barcode', () => {
-    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
-    cy.signIn()
-    cy.visit('/scan-barcode')
-    const scanBarcodePage = Page.verifyOnPage(ScanBarcodePage)
-
-    scanBarcodePage.submitFormWithEmptyBarcode()
-
-    scanBarcodePage.hasErrorContaining('Enter a barcode')
   })
 })

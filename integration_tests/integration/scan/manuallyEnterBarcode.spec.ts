@@ -62,31 +62,6 @@ context('Manual Barcode Entry Page', () => {
     scanBarcodeResultPage.hasMainHeading('Barcode already scanned: carry out further checks')
   })
 
-  it('should render barcode results page given form submitted with barcode that has been selected for a random check', () => {
-    cy.task('stubVerifyRandomCheckBarcode')
-    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
-    cy.signIn()
-    cy.visit('/manually-enter-barcode')
-    const manualBarcodeEntryPage = Page.verifyOnPage(ManualBarcodeEntryPage)
-
-    const scanBarcodeResultPage: ScanBarcodeResultPage =
-      manualBarcodeEntryPage.submitFormWithBarcodeThatWillBeSelectedForARandomCheck()
-
-    scanBarcodeResultPage.hasMainHeading('Item selected for a random check')
-  })
-
-  it('should render barcode results page given form submitted with barcode that has expired', () => {
-    cy.task('stubVerifyExpiredBarcode')
-    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
-    cy.signIn()
-    cy.visit('/manually-enter-barcode')
-    const manualBarcodeEntryPage = Page.verifyOnPage(ManualBarcodeEntryPage)
-
-    const scanBarcodeResultPage: ScanBarcodeResultPage = manualBarcodeEntryPage.submitFormWithBarcodeThatHasExpired()
-
-    scanBarcodeResultPage.hasMainHeading('Barcode expired: carry out further checks')
-  })
-
   it('should render barcode results page given form submitted with barcode that cannot be found', () => {
     cy.task('stubVerifyNotFoundBarcode')
     cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
@@ -108,27 +83,5 @@ context('Manual Barcode Entry Page', () => {
     manualBarcodeEntryPage.problemEnteringBarcode()
 
     Page.verifyOnPage(ScanBarcodeResultPage)
-  })
-
-  it('should redisplay form with errors given form submitted with invalid barcode', () => {
-    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
-    cy.signIn()
-    cy.visit('/manually-enter-barcode')
-    const manualBarcodeEntryPage = Page.verifyOnPage(ManualBarcodeEntryPage)
-
-    manualBarcodeEntryPage.submitFormWithBarcodeThatFailsValidation()
-
-    manualBarcodeEntryPage.hasErrorContaining('12 digits')
-  })
-
-  it('should redisplay form with errors given form submitted with empty barcode', () => {
-    cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
-    cy.signIn()
-    cy.visit('/manually-enter-barcode')
-    const manualBarcodeEntryPage = Page.verifyOnPage(ManualBarcodeEntryPage)
-
-    manualBarcodeEntryPage.submitFormWithEmptyBarcode()
-
-    manualBarcodeEntryPage.hasErrorContaining('Enter a barcode')
   })
 })

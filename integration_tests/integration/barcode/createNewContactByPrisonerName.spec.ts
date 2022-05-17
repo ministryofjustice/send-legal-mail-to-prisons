@@ -21,12 +21,6 @@ context('Create New Contact By Prisoner Name Page', () => {
     Page.verifyOnPage(ReviewRecipientsPage)
   })
 
-  it('should show error if prisoner dob not entered', () => {
-    CreateNewContactByPrisonerNamePage.goToPage().typeAheadAValidPrison().submitForm(CreateNewContactByPrisonerNamePage)
-
-    Page.verifyOnPage(CreateNewContactByPrisonerNamePage).hasPrisonerDobErrorContaining('Enter a date')
-  })
-
   it('should show error if invalid prisoner dob entered', () => {
     CreateNewContactByPrisonerNamePage.goToPage()
       .typeAheadAValidPrison()
@@ -36,16 +30,5 @@ context('Create New Contact By Prisoner Name Page', () => {
       .submitForm(CreateNewContactByPrisonerNamePage)
 
     Page.verifyOnPage(CreateNewContactByPrisonerNamePage).hasPrisonerDobErrorContaining('correct format')
-  })
-
-  it('should show error if invalid prison entered', () => {
-    CreateNewContactByPrisonerNamePage.goToPage()
-      .enterAValidPrisonerDay()
-      .enterAValidPrisonerMonth()
-      .enterAValidPrisonerYear()
-      .typeAheadAnInvalidPrison()
-      .submitForm(CreateNewContactByPrisonerNamePage)
-
-    Page.verifyOnPage(CreateNewContactByPrisonerNamePage).hasPrisonIdErrorContaining('prison name')
   })
 })
