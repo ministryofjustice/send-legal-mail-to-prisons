@@ -21,12 +21,6 @@ context('Create Barcode Image', () => {
       .imageCopyBarcodeFeedbackContainerIsVisible()
   })
 
-  it('should show an error if create barcode fails', () => {
-    cy.task('stubCreateBarcodeFailure')
-    const page = Page.verifyOnPage(ChooseBarcodeOptionPage)
-    page.continueToImageErrors().hasErrorContaining('error')
-  })
-
   it('should show an error if creating the first barcode succeeds but subsequent barcodes fail', () => {
     cy.task('stubCreateBarcode', 'Gage Hewitt')
     cy.task('stubCreateBarcodeFailure', 'Arry Ardnut')
