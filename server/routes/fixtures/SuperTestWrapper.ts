@@ -23,7 +23,6 @@ export default class SuperTestWrapper {
     this.request //
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .redirects(1)
-    mockPrisonRegister()
   }
 
   authenticateAsLegalSenderUser = async () => {
