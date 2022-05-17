@@ -15,14 +15,6 @@ context('Create New Contact By Prison Number Page', () => {
     Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   })
 
-  it('should render review-recipients given form submitted with valid data', () => {
-    const createNewContactPage = FindRecipientByPrisonNumberPage.goToPage().submitWithUnknownPrisonNumber()
-
-    createNewContactPage.submitWithValidValues()
-
-    Page.verifyOnPage(ReviewRecipientsPage)
-  })
-
   it('should find a prison when searching with HMP prefix', () => {
     const createNewContactPage = FindRecipientByPrisonNumberPage.goToPage().submitWithUnknownPrisonNumber()
 
