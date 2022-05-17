@@ -10,23 +10,15 @@ context('Create Barcode Image', () => {
     ChooseBarcodeOptionPage.goToPage()
   })
 
-  it('should create barcode', () => {
+  it('should create barcode and allow copy', () => {
     cy.task('stubCreateBarcode')
     Page.verifyOnPage(ChooseBarcodeOptionPage).continueToImage()
     Page.verifyOnPage(GenerateBarcodeImagePage)
       .barcodeAddressImageExists()
       .imageDownloadButtonExists(/SendLegalMail-Gage-Hewitt-\d{4}-\d{2}-\d{2}\.png/)
       .imageCopyButtonExists()
-  })
-
-  it('should create barcode and click the copy button', () => {
-    cy.task('stubCreateBarcode')
-    Page.verifyOnPage(ChooseBarcodeOptionPage).continueToImage()
-    const generateBarcodeImagePage = Page.verifyOnPage(GenerateBarcodeImagePage)
-
-    generateBarcodeImagePage.clickCopyBarcodeButton()
-
-    generateBarcodeImagePage.imageCopyBarcodeFeedbackContainerIsVisible()
+      .clickCopyBarcodeButton()
+      .imageCopyBarcodeFeedbackContainerIsVisible()
   })
 
   it('should show an error if create barcode fails', () => {
