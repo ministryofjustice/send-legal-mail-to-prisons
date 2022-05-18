@@ -52,12 +52,10 @@
 
             <h2 class="govuk-heading-m">Prisons you can send mail to</h2>
             <p>You can use this service to send legal or confidential mail to the following prisons:</p>
-            <ul class="govuk-list govuk-list--bullet">
-              <li>HMP Holme House</li>
-              <li>HMP Leeds</li>
-              <li>HMP Risley</li>
-              <li>HMP Stocken</li>
-              <li>HMP Swaleside</li>
+            <ul class="govuk-list govuk-list--bullet" data-qa="prisonNames">
+            {% for prisonName in prisonNames %}
+              <li>{{ prisonName }}</li>
+            {% endfor %}
             </ul>
 
           </div>
