@@ -19,15 +19,15 @@ describe('StartPageController', () => {
   prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([
     { id: 'KTI', name: 'Kennet (HMP)', addressName: 'HMP Kennet' },
     { id: 'ACI', name: 'Altcourse (HMP)', addressName: 'HMP Altcourse' },
-    { id: 'ASI', name: 'Ashfield (HMP)', addressName: 'HMP Ashfield' },
+    { id: 'ASI', name: 'Ashfield (HMP & YOI)', addressName: 'HMP & YOI Ashfield' },
   ])
 
-  it('should display all prison address names in alphabetical order', async () => {
+  it('should display all prison address names in alphabetical order by name (not type)', async () => {
     await startPageController.getStartPageView({} as unknown as Request, res as unknown as Response)
 
     expect(prisonRegisterService.getActivePrisonsFromPrisonRegister).toHaveBeenCalled()
     expect(res.render).toHaveBeenCalledWith('pages/start/legal-sender-start-page', {
-      prisonNames: ['HMP Altcourse', 'HMP Ashfield', 'HMP Kennet'],
+      prisonNames: ['HMP Altcourse', 'HMP & YOI Ashfield', 'HMP Kennet'],
     })
   })
 
@@ -37,7 +37,7 @@ describe('StartPageController', () => {
     await startPageController.getStartPageView({} as unknown as Request, res as unknown as Response)
 
     expect(res.render).toHaveBeenCalledWith('pages/start/legal-sender-start-page', {
-      prisonNames: ['HMP Ashfield', 'HMP Kennet'],
+      prisonNames: ['HMP & YOI Ashfield', 'HMP Kennet'],
     })
   })
 })
