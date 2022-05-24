@@ -32,7 +32,7 @@ const authenticationMiddleware: AuthenticationMiddleware = (verifyToken, smokeTe
         displayName: 'Smoke Test MSJ',
         activeCaseLoadId: 'SKI',
       }
-      res.locals.user.roles = ['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_SECURITY_ANALYST']
+      res.locals.user.roles = ['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_ADMIN']
     }
 
     async function checkForSmokeTestRequest() {

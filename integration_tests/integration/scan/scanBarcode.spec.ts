@@ -18,8 +18,8 @@ context('Scan Barcode Page', () => {
     Page.verifyOnPage(ScanBarcodePage)
   })
 
-  it('Logged in user with SLM_SECURITY_ANALYST role can not navigate to scan barcode page', () => {
-    cy.task('stubSignInWithRole_SLM_SECURITY_ANALYST')
+  it('Logged in user with SLM_ADMIN role can not navigate to scan barcode page', () => {
+    cy.task('stubSignInWithRole_SLM_ADMIN')
     cy.signIn()
 
     cy.visit('/scan-barcode', { failOnStatusCode: false })

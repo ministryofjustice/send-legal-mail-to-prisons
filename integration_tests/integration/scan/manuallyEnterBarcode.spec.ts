@@ -18,8 +18,8 @@ context('Manual Barcode Entry Page', () => {
     Page.verifyOnPage(ManualBarcodeEntryPage)
   })
 
-  it('Logged in user with SLM_SECURITY_ANALYST role can not navigate to manual barcode entry page', () => {
-    cy.task('stubSignInWithRole_SLM_SECURITY_ANALYST')
+  it('Logged in user with SLM_ADMIN role can not navigate to manual barcode entry page', () => {
+    cy.task('stubSignInWithRole_SLM_ADMIN')
     cy.signIn()
 
     cy.visit('/manually-enter-barcode', { failOnStatusCode: false })

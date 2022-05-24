@@ -46,6 +46,7 @@ import setUpOneTimeCode from './middleware/one-time-code-auth/setUpOneTimeCode'
 import OneTimeCodeService from './services/one-time-code-auth/OneTimeCodeService'
 import legalSenderJourneyAuthenticationStartPage from './middleware/legalSenderJourneyAuthenticationStartPage'
 import handleSlm404Errors from './middleware/handleSlm404Errors'
+import setupSupportedPrisons from './middleware/prisons/setupSupportedPrisons'
 
 export default function createApp(
   userService: UserService,
@@ -114,16 +115,14 @@ export default function createApp(
   // Contact Helpdesk (for mailroom users) *MUST* be configured here. The authorisation middleware is subtly differ to the main
   // authorisation middleware so must be defined before the / route. The route '/scan-barcode/contact-helpdesk' must also be defined
   // before the call to standardRouter to prevent 404's for non authenticated users.
-  app.use(
-    '/scan-barcode/contact-helpdesk',
-    contactHelpdeskAuthorisationMiddleware(['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_SECURITY_ANALYST'])
-  )
+  app.use('/scan-barcode/contact-helpdesk', contactHelpdeskAuthorisationMiddleware(['ROLE_SLM_SCAN_BARCODE']))
   app.use('/scan-barcode/contact-helpdesk', setupContactHelpdesk(zendeskService))
 
   app.use('/', indexRoutes(standardRouter(userService, smokeTestStore, prisonRegisterService)))
-  app.use('/', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_SECURITY_ANALYST']))
+  app.use('/', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_ADMIN']))
 
   app.use('/', setupScanBarcode(scanBarcodeService, prisonRegisterService, appInsightsClient))
+  app.use('/supported-prisons', setupSupportedPrisons())
 
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler(process.env.NODE_ENV === 'production'))
