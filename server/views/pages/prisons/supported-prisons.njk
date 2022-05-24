@@ -1,0 +1,29 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set pageTitle = applicationName + " - Manage supported prisons" %}
+{% set pageId = 'supported-prisons' %}
+
+{% block content %}
+
+  <section class="app-container govuk-body">
+    {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: 'There is a problem',
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row" id="scan-barcode-form">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Manage supported prisons - coming soon</h1>
+
+        <p>Please select which prisons legal senders can send Rule39 mail to.</p>
+
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
