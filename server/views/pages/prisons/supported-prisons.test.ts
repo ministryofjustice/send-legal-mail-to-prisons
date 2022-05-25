@@ -20,7 +20,7 @@ describe('Manage supported prisons view', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#supported-prisons').length).toStrictEqual(1)
+    expect($('#manage-supported-prisons').length).toStrictEqual(1)
   })
 
   it('should show errors', () => {
@@ -28,7 +28,35 @@ describe('Manage supported prisons view', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#supported-prisons').length).toStrictEqual(1)
     expect($('div.govuk-error-summary').text()).toContain('some-error')
+  })
+
+  it('should not display prison table if no prisons', () => {
+    viewContext = { errors: [] }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('p[data-qa=no-prisons]').length).toStrictEqual(1)
+    expect($('#manage-supported-prisons-table').length).toStrictEqual(0)
+  })
+
+  it('should display prison table', () => {
+    viewContext = { prisons: ['ABC', 'CDE'], errors: [] }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('p[data-qa=no-prisons]').length).toStrictEqual(0)
+    expect($('#manage-supported-prisons-table').length).toStrictEqual(1)
+    expect($('#manage-supported-prisons-table').find('tr').length).toStrictEqual(3)
+  })
+
+  it('should display add prison form', () => {
+    viewContext = { errors: [] }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('form[data-qa=add-prison-form]').length).toStrictEqual(1)
+    expect($('form[data-qa=add-prison-form]').find('input#addPrison').length).toStrictEqual(1)
+    expect($('form[data-qa=add-prison-form]').find('button[data-qa=add-another-prison]').length).toStrictEqual(1)
   })
 })

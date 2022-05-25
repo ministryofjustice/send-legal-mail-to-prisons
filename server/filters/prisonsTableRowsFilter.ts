@@ -1,0 +1,18 @@
+type TableCell = {
+  text?: string
+  html?: string
+}
+
+export default function prisonsTableRowsFilter(prisons: Array<string>): Array<Array<TableCell>> {
+  return prisons.map(prison => {
+    return Array.of(
+      { text: prison },
+      { text: prison },
+      {
+        html: `
+          <a href='/supported-prisons/remove/${prison}' class='govuk-link govuk-link--no-visited-state'>Remove<span class='govuk-visually-hidden'> for ${prison}</span></a>
+          `,
+      }
+    )
+  })
+}
