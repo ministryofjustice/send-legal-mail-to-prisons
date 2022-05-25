@@ -30,6 +30,14 @@ interface PutRequest {
   raw?: boolean
 }
 
+interface DeleteRequest {
+  path?: string
+  headers?: Record<string, string>
+  responseType?: string
+  data?: Record<string, unknown>
+  raw?: boolean
+}
+
 export default class RestClient {
   agent: Agent
 
@@ -89,6 +97,16 @@ export default class RestClient {
     raw = false,
   }: PutRequest = {}): Promise<unknown> {
     return this.processRequest({ path, headers, responseType, data, raw, method: 'put' })
+  }
+
+  async delete({
+    path = null,
+    headers = {},
+    responseType = '',
+    data = {},
+    raw = false,
+  }: DeleteRequest = {}): Promise<unknown> {
+    return this.processRequest({ path, headers, responseType, data, raw, method: 'delete' })
   }
 
   private async processRequest({

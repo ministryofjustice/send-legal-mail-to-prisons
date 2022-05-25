@@ -8,6 +8,10 @@ export interface paths {
     get: operations['getContact']
     put: operations['updateContact']
   }
+  '/prisons/{prisonCode}': {
+    post: operations['addSupportedPrison']
+    delete: operations['deleteSupportedPrison']
+  }
   '/oneTimeCode/verify': {
     /** Verifies a one time code and swaps it for an authentication token if valid. */
     post: operations['verifyOneTimeCode']
@@ -38,6 +42,9 @@ export interface paths {
   }
   '/barcode-stats-report': {
     post: operations['createBarcodeStatsReport']
+  }
+  '/prisons': {
+    get: operations['getSupportedPrisons']
   }
   '/contacts': {
     get: operations['searchContactsByName']
@@ -356,6 +363,10 @@ export interface components {
        */
       createdBy: string
     }
+    SupportedPrisons: {
+      /** @description The prison codes of the supported prisons */
+      supportedPrisons: string[]
+    }
     UserDetails: {
       /**
        * @description The ID of the user
@@ -479,6 +490,64 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['ContactRequest']
+      }
+    }
+  }
+  addSupportedPrison: {
+    parameters: {
+      path: {
+        prisonCode: string
+      }
+    }
+    responses: {
+      /** Supported prison created */
+      201: unknown
+      /** Unauthorised, requires a valid authentication token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires a valid authentication token with role ROLE_SLM_ADMIN */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The prison code is not recognised */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  deleteSupportedPrison: {
+    parameters: {
+      path: {
+        prisonCode: string
+      }
+    }
+    responses: {
+      /** Supported prison deleted */
+      200: unknown
+      /** Unauthorised, requires a valid authentication token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires a valid authentication token with role ROLE_SLM_ADMIN */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The prison code has never been supported */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
       }
     }
   }
@@ -744,6 +813,28 @@ export interface operations {
       201: unknown
       /** No recipients configured. Add a comma separated list of email addresses to helm values file entry env.APP_BARCODE_STATS_REPORT_RECIPIENT_EMAILS. */
       404: unknown
+    }
+  }
+  getSupportedPrisons: {
+    responses: {
+      /** Supported prisons returned */
+      200: {
+        content: {
+          'application/json': components['schemas']['SupportedPrisons']
+        }
+      }
+      /** Unauthorised, requires a valid authentication token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires a valid authentication token with role ROLE_SLM_ADMIN */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   searchContactsByName: {
