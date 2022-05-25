@@ -47,6 +47,7 @@ import OneTimeCodeService from './services/one-time-code-auth/OneTimeCodeService
 import legalSenderJourneyAuthenticationStartPage from './middleware/legalSenderJourneyAuthenticationStartPage'
 import handleSlm404Errors from './middleware/handleSlm404Errors'
 import setupSupportedPrisons from './middleware/prisons/setupSupportedPrisons'
+import SupportedPrisonsService from './services/prison/SupportedPrisonsService'
 
 export default function createApp(
   userService: UserService,
@@ -59,7 +60,8 @@ export default function createApp(
   contactService: ContactService,
   recipientFormService: RecipientFormService,
   zendeskService: ZendeskService,
-  cjsmService: CjsmService
+  cjsmService: CjsmService,
+  supportedPrisonsService: SupportedPrisonsService
 ): express.Application {
   const app = express()
 
