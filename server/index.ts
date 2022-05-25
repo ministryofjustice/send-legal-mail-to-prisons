@@ -15,7 +15,6 @@ import RecipientFormService from './routes/barcode/recipients/RecipientFormServi
 import ZendeskService from './services/helpdesk/ZendeskService'
 import CjsmService from './services/cjsm/CjsmService'
 import OneTimeCodeService from './services/one-time-code-auth/OneTimeCodeService'
-import SupportedPrisonsService from './services/prison/SupportedPrisonsService'
 
 const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application => {
   const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
@@ -30,7 +29,6 @@ const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application 
   const recipientFormService = new RecipientFormService(prisonRegisterService)
   const zendeskService = new ZendeskService()
   const cjsmService = new CjsmService()
-  const supportedPrisonsService = new SupportedPrisonsService()
 
   return createApp(
     userService,
@@ -43,8 +41,7 @@ const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application 
     contactService,
     recipientFormService,
     zendeskService,
-    cjsmService,
-    supportedPrisonsService
+    cjsmService
   )
 }
 
