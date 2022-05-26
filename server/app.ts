@@ -48,6 +48,7 @@ import legalSenderJourneyAuthenticationStartPage from './middleware/legalSenderJ
 import handleSlm404Errors from './middleware/handleSlm404Errors'
 import setupSupportedPrisons from './middleware/prisons/setupSupportedPrisons'
 import SupportedPrisonsService from './services/prison/SupportedPrisonsService'
+import PrisonService from './services/prison/PrisonService'
 
 export default function createApp(
   userService: UserService,
@@ -61,7 +62,8 @@ export default function createApp(
   recipientFormService: RecipientFormService,
   zendeskService: ZendeskService,
   cjsmService: CjsmService,
-  supportedPrisonsService: SupportedPrisonsService
+  supportedPrisonsService: SupportedPrisonsService,
+  prisonService: PrisonService
 ): express.Application {
   const app = express()
 
@@ -124,7 +126,7 @@ export default function createApp(
   app.use('/', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_ADMIN']))
 
   app.use('/', setupScanBarcode(scanBarcodeService, prisonRegisterService, appInsightsClient))
-  app.use('/supported-prisons', setupSupportedPrisons(supportedPrisonsService, prisonRegisterService))
+  app.use('/supported-prisons', setupSupportedPrisons(supportedPrisonsService, prisonService))
 
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler(process.env.NODE_ENV === 'production'))
