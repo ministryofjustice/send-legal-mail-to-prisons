@@ -41,7 +41,14 @@ describe('Manage supported prisons view', () => {
   })
 
   it('should display prison table', () => {
-    viewContext = { prisons: ['ABC', 'CDE'], errors: [] }
+    viewContext = {
+      supportedPrisons: [
+        { id: 'ABC', name: 'Prison ABC' },
+        { id: 'CDE', name: 'Prison CDE' },
+      ],
+      unsupportedPrisons: [],
+      errors: [],
+    }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
@@ -51,12 +58,20 @@ describe('Manage supported prisons view', () => {
   })
 
   it('should display add prison form', () => {
-    viewContext = { errors: [] }
+    viewContext = {
+      supportedPrisons: [],
+      unsupportedPrisons: [
+        { value: '', text: '' },
+        { value: 'ABC', text: 'Prison ABC', selected: false },
+      ],
+      errors: [],
+    }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('form[data-qa=add-prison-form]').length).toStrictEqual(1)
-    expect($('form[data-qa=add-prison-form]').find('input#addPrison').length).toStrictEqual(1)
+    expect($('form[data-qa=add-prison-form]').find('select#prisonId').length).toStrictEqual(1)
+    expect($('form[data-qa=add-prison-form]').find('select#prisonId option[value=ABC]').val()).toStrictEqual('ABC')
     expect($('form[data-qa=add-prison-form]').find('button[data-qa=add-another-prison]').length).toStrictEqual(1)
   })
 })

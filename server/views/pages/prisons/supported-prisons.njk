@@ -3,6 +3,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 
 {% set pageTitle = applicationName + " - Manage supported prisons" %}
 {% set pageId = 'manage-supported-prisons' %}
@@ -24,7 +25,7 @@
 
         <p>This is still a work in progress and does not actually change the legal sender prison lists yet.</p>
 
-        {% if prisons.length > 0 %}
+        {% if supportedPrisons.length > 0 %}
           {{ govukTable({
             firstCellIsHeader: true,
             head: [
@@ -32,7 +33,7 @@
               { text: 'Prison name' },
               { text: 'Remove', classes: 'govuk-!-width-one-quarter' }
             ],
-            rows: prisons | prisonTableRowsFilter,
+            rows: supportedPrisons | prisonTableRowsFilter,
             attributes: { id: 'manage-supported-prisons-table' }
           }) }}
 
@@ -46,23 +47,17 @@
 
         <form action="/supported-prisons/add" method="post" data-qa="add-prison-form">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-          {{ govukInput({
-            label: {
-              text: "Prison code",
-              isPageHeading: false
-            },
-            hint: {
-              text: "Example, LEI"
-            },
-            attributes: {
-              autocomplete: 'off'
-            },
-            id: "addPrison",
-            name: "addPrison",
-            value: addPrison,
-            classes: 'govuk-input--width-10',
-            errorMessage: errors | findError('prisonId')
-          }) }}
+
+            {{ govukSelect({
+              id: 'prisonId',
+              name: 'prisonId',
+              label: {
+                text: 'Name of prison'
+              },
+              items: unsupportedPrisons,
+              errorMessage: errors | findError('prisonId')
+            }) }}
+
           {{ govukButton({
             text: 'Add',
             preventDoubleClick: true,
