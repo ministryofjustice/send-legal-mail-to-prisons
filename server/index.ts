@@ -40,13 +40,11 @@ const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application 
     oneTimeCodeService,
     scanBarcodeService,
     createBarcodeService,
-    prisonRegisterService,
     appInsightsService,
     contactService,
     recipientFormService,
     zendeskService,
     cjsmService,
-    supportedPrisonsService,
     prisonService
   )
 }

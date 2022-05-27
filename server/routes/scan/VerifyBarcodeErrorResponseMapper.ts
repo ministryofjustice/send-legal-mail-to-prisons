@@ -1,14 +1,14 @@
 import type { DuplicateErrorCode, ErrorCode, ErrorResponse } from 'sendLegalMailApiClient'
-import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
+import PrisonService from '../../services/prison/PrisonService'
 
 export default class VerifyBarcodeErrorResponseMapper {
-  constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
+  constructor(private readonly prisonService: PrisonService) {}
 
   mapErrorResponse = async (apiErrorResponse: { data?: ErrorResponse; status?: number }): ErrorCode => {
     const errorType = apiErrorResponse.data?.errorCode?.code
     if (errorType === 'DUPLICATE') {
       const { scannedLocation } = apiErrorResponse.data.errorCode as DuplicateErrorCode
-      const prisonName = await this.prisonRegisterService.getPrisonNameOrId(scannedLocation)
+      const prisonName = await this.prisonService.getPrisonNameOrId(scannedLocation)
       return {
         ...apiErrorResponse.data.errorCode,
         scannedLocation: prisonName,

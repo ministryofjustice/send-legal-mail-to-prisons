@@ -3,7 +3,6 @@ import type { Prison } from 'prisonTypes'
 import moment from 'moment'
 import type { Contact } from 'sendLegalMailApiClient'
 import type { EditContactForm } from 'forms'
-import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import EditContactView from './EditContactView'
 import logger from '../../../../logger'
 import ContactService from '../../../services/contacts/ContactService'
@@ -11,10 +10,11 @@ import filterSupportedPrisons from './filterSupportedPrisons'
 import parseDob from './parseDob'
 import validateContact from './updateContactValidator'
 import RecipientFormService from '../recipients/RecipientFormService'
+import PrisonService from '../../../services/prison/PrisonService'
 
 export default class EditContactController {
   constructor(
-    private readonly prisonRegisterService: PrisonRegisterService,
+    private readonly prisonService: PrisonService,
     private readonly contactService: ContactService,
     private readonly recipientService: RecipientFormService
   ) {}
@@ -29,7 +29,7 @@ export default class EditContactController {
 
     let activePrisons: Array<Prison>
     try {
-      activePrisons = await this.prisonRegisterService.getActivePrisonsFromPrisonRegister()
+      activePrisons = await this.prisonService.getPrisons()
     } catch (error) {
       logger.error(`Unable to load prisons due to error`, error)
       req.flash('errors', [{ text: 'There was an error retrieving the list of prisons' }])

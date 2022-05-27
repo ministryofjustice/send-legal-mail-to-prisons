@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import SupportedPrisonsController from './SupportedPrisonsController'
-import SupportedPrisonsService from '../../services/prison/SupportedPrisonsService'
 import validatePrisonId from '../barcode/validators/prisonIdValidator'
 import PrisonService from '../../services/prison/PrisonService'
 
@@ -16,22 +15,16 @@ const res = {
   render: jest.fn(),
   redirect: jest.fn(),
 }
-const supportedPrisonsService = {
-  getSupportedPrisons: jest.fn(),
-  addSupportedPrison: jest.fn(),
-  removeSupportedPrison: jest.fn(),
-}
 const prisonService = {
   getPrisonsBySupported: jest.fn(),
+  addSupportedPrison: jest.fn(),
+  removeSupportedPrison: jest.fn(),
 }
 
 describe('SupportedPrisonsController', () => {
   let mockValidatePrisonId: jest.MockedFunction<typeof validatePrisonId>
 
-  const supportedPrisonsController = new SupportedPrisonsController(
-    supportedPrisonsService as unknown as SupportedPrisonsService,
-    prisonService as unknown as PrisonService
-  )
+  const supportedPrisonsController = new SupportedPrisonsController(prisonService as unknown as PrisonService)
 
   beforeEach(() => {
     mockValidatePrisonId = validatePrisonId as jest.MockedFunction<typeof validatePrisonId>
@@ -75,11 +68,11 @@ describe('SupportedPrisonsController', () => {
     it('should add a prison', async () => {
       req.body = { prisonId: 'ABC' }
       mockValidatePrisonId.mockReturnValue([])
-      supportedPrisonsService.addSupportedPrison.mockResolvedValue({})
+      prisonService.addSupportedPrison.mockResolvedValue({})
 
       await supportedPrisonsController.addSupportedPrison(req as unknown as Request, res as unknown as Response)
 
-      expect(supportedPrisonsService.addSupportedPrison).toHaveBeenCalledWith('some-token', 'ABC')
+      expect(prisonService.addSupportedPrison).toHaveBeenCalledWith('some-token', 'ABC')
       expect(res.redirect).toHaveBeenCalledWith('/supported-prisons')
       expect(req.flash).not.toHaveBeenCalled()
     })
@@ -96,7 +89,7 @@ describe('SupportedPrisonsController', () => {
     it('should show errors if add prison fails', async () => {
       req.body = { prisonId: 'ABC' }
       mockValidatePrisonId.mockReturnValue([])
-      supportedPrisonsService.addSupportedPrison.mockRejectedValue({
+      prisonService.addSupportedPrison.mockRejectedValue({
         status: 404,
         data: { errorCode: { code: 'NOT_FOUND', userMessage: 'Not Found' } },
       })
@@ -110,18 +103,18 @@ describe('SupportedPrisonsController', () => {
   describe('removeSupportedPrison', () => {
     it('should remove a prison', async () => {
       req.params = { prisonId: 'ABC' }
-      supportedPrisonsService.removeSupportedPrison.mockResolvedValue({})
+      prisonService.removeSupportedPrison.mockResolvedValue({})
 
       await supportedPrisonsController.removeSupportedPrison(req as unknown as Request, res as unknown as Response)
 
-      expect(supportedPrisonsService.removeSupportedPrison).toHaveBeenCalledWith('some-token', 'ABC')
+      expect(prisonService.removeSupportedPrison).toHaveBeenCalledWith('some-token', 'ABC')
       expect(res.redirect).toHaveBeenCalledWith('/supported-prisons')
       expect(req.flash).not.toHaveBeenCalled()
     })
 
     it('should show errors if remove prison fails', async () => {
       req.params = { prisonId: 'ABC' }
-      supportedPrisonsService.removeSupportedPrison.mockRejectedValue({
+      prisonService.removeSupportedPrison.mockRejectedValue({
         status: 404,
         data: { errorCode: { code: 'NOT_FOUND', userMessage: 'Not Found' } },
       })

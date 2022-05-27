@@ -25,7 +25,6 @@ import requestLinkAuthorised from './middleware/link/requestLinkAuthorised'
 import ScanBarcodeService from './services/scan/ScanBarcodeService'
 import CreateBarcodeService from './services/barcode/CreateBarcodeService'
 import AppInsightsService from './services/AppInsightsService'
-import PrisonRegisterService from './services/prison/PrisonRegisterService'
 import GotenbergClient from './data/gotenbergClient'
 import setupPdfRenderer from './middleware/setupPdfRenderer'
 import ContactService from './services/contacts/ContactService'
@@ -47,7 +46,6 @@ import OneTimeCodeService from './services/one-time-code-auth/OneTimeCodeService
 import legalSenderJourneyAuthenticationStartPage from './middleware/legalSenderJourneyAuthenticationStartPage'
 import handleSlm404Errors from './middleware/handleSlm404Errors'
 import setupSupportedPrisons from './middleware/prisons/setupSupportedPrisons'
-import SupportedPrisonsService from './services/prison/SupportedPrisonsService'
 import PrisonService from './services/prison/PrisonService'
 
 export default function createApp(
@@ -56,13 +54,11 @@ export default function createApp(
   oneTimeCodeService: OneTimeCodeService,
   scanBarcodeService: ScanBarcodeService,
   createBarcodeService: CreateBarcodeService,
-  prisonRegisterService: PrisonRegisterService,
   appInsightsClient: AppInsightsService,
   contactService: ContactService,
   recipientFormService: RecipientFormService,
   zendeskService: ZendeskService,
   cjsmService: CjsmService,
-  supportedPrisonsService: SupportedPrisonsService,
   prisonService: PrisonService
 ): express.Application {
   const app = express()
@@ -88,7 +84,7 @@ export default function createApp(
 
   // no authentication
   app.get('/privacy-policy', (req, res) => res.render('pages/privacy-policy/privacy-policy'))
-  app.use('/start', setupLegalSenderStartPage(prisonRegisterService))
+  app.use('/start', setupLegalSenderStartPage(prisonService))
   app.use('/contact-helpdesk', setupContactHelpdesk(zendeskService))
   app.use('/legal-sender/sign-out', (req, res) =>
     res.redirect(`${legalSenderJourneyAuthenticationStartPage()}?force=true`)
@@ -106,10 +102,7 @@ export default function createApp(
   // authenticated with createBarcodeToken
   app.use('/barcode', barcodeAuthorisationMiddleware())
   app.use('/barcode', populateBarcodeUser(cjsmService))
-  app.use(
-    '/barcode',
-    setUpCreateBarcode(createBarcodeService, prisonRegisterService, contactService, recipientFormService)
-  )
+  app.use('/barcode', setUpCreateBarcode(createBarcodeService, prisonService, contactService, recipientFormService))
 
   app.use('/', handleSlm404Errors())
 
@@ -122,11 +115,11 @@ export default function createApp(
   app.use('/scan-barcode/contact-helpdesk', contactHelpdeskAuthorisationMiddleware(['ROLE_SLM_SCAN_BARCODE']))
   app.use('/scan-barcode/contact-helpdesk', setupContactHelpdesk(zendeskService))
 
-  app.use('/', indexRoutes(standardRouter(userService, smokeTestStore, prisonRegisterService)))
+  app.use('/', indexRoutes(standardRouter(userService, smokeTestStore, prisonService)))
   app.use('/', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_ADMIN']))
 
-  app.use('/', setupScanBarcode(scanBarcodeService, prisonRegisterService, appInsightsClient))
-  app.use('/supported-prisons', setupSupportedPrisons(supportedPrisonsService, prisonService))
+  app.use('/', setupScanBarcode(scanBarcodeService, prisonService, appInsightsClient))
+  app.use('/supported-prisons', setupSupportedPrisons(prisonService))
 
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler(process.env.NODE_ENV === 'production'))

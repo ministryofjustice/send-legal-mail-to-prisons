@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import ReviewRecipientsView from './ReviewRecipientsView'
-import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
+import PrisonService from '../../../services/prison/PrisonService'
 
 export default class ReviewRecipientsController {
-  constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
+  constructor(private readonly prisonService: PrisonService) {}
 
   async getReviewRecipientsView(req: Request, res: Response): Promise<void> {
     if (!req.session.recipients) {
@@ -74,7 +74,7 @@ export default class ReviewRecipientsController {
 
           const newRecipient = {
             ...recipient,
-            prison: await this.prisonRegisterService.getPrison(recipient.prisonAddress.agencyCode),
+            prison: await this.prisonService.getPrison(recipient.prisonAddress.agencyCode),
           }
           delete newRecipient.prisonAddress
           return newRecipient

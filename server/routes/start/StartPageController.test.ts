@@ -1,22 +1,22 @@
 import { Request, Response } from 'express'
 import config from '../../config'
 import StartPageController from './StartPageController'
-import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
+import PrisonService from '../../services/prison/PrisonService'
 
 const res = {
   render: jest.fn(),
   redirect: jest.fn(),
 }
 
-const prisonRegisterService = {
-  getActivePrisonsFromPrisonRegister: jest.fn(),
+const prisonService = {
+  getPrisons: jest.fn(),
 }
 
 describe('StartPageController', () => {
-  const startPageController = new StartPageController(prisonRegisterService as unknown as PrisonRegisterService)
+  const startPageController = new StartPageController(prisonService as unknown as PrisonService)
 
   config.supportedPrisons = ''
-  prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([
+  prisonService.getPrisons.mockResolvedValue([
     { id: 'KTI', name: 'Kennet (HMP)', addressName: 'HMP Kennet' },
     { id: 'ACI', name: 'Altcourse (HMP)', addressName: 'HMP Altcourse' },
     { id: 'ASI', name: 'Ashfield (HMP & YOI)', addressName: 'HMP & YOI Ashfield' },
@@ -25,7 +25,7 @@ describe('StartPageController', () => {
   it('should display all prison address names in alphabetical order by name (not type)', async () => {
     await startPageController.getStartPageView({} as unknown as Request, res as unknown as Response)
 
-    expect(prisonRegisterService.getActivePrisonsFromPrisonRegister).toHaveBeenCalled()
+    expect(prisonService.getPrisons).toHaveBeenCalled()
     expect(res.render).toHaveBeenCalledWith('pages/start/legal-sender-start-page', {
       prisonNames: ['HMP Altcourse', 'HMP & YOI Ashfield', 'HMP Kennet'],
     })

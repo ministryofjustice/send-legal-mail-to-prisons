@@ -11,8 +11,10 @@ import standardRouter from '../standardRouter'
 import UserService from '../../services/userService'
 import * as auth from '../../authentication/auth'
 import SmokeTestStore from '../../data/cache/SmokeTestStore'
-import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
 import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
+import PrisonService from '../../services/prison/PrisonService'
+import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
+import SupportedPrisonsService from '../../services/prison/SupportedPrisonsService'
 
 const user = {
   name: 'john smith',
@@ -57,6 +59,10 @@ class MockPrisonerRegister extends PrisonRegisterService {
 
 class MockPrisonRegisterStore extends PrisonRegisterStore {}
 
+class MockSupportedPrisonsService extends SupportedPrisonsService {}
+
+class MockPrisonService extends PrisonService {}
+
 function appSetup(route: Router, production: boolean): Express {
   const app = express()
 
@@ -92,7 +98,10 @@ export default function appWithAllRoutes({ production = false }: { production?: 
       standardRouter(
         new MockUserService(),
         new MockSmokeTestStore(),
-        new MockPrisonerRegister(new MockPrisonRegisterStore())
+        new MockPrisonService(
+          new MockPrisonerRegister(new MockPrisonRegisterStore()),
+          new MockSupportedPrisonsService()
+        )
       )
     ),
     production

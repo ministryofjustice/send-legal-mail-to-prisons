@@ -2,15 +2,11 @@ import { Request, Response } from 'express'
 import SupportedPrisonsView from './SupportedPrisonsView'
 import validatePrisonId from '../barcode/validators/prisonIdValidator'
 import formatErrors from '../errorFormatter'
-import PrisonService from '../../services/prison/PrisonService'
-import SupportedPrisonsService from '../../services/prison/SupportedPrisonsService'
 import logger from '../../../logger'
+import PrisonService from '../../services/prison/PrisonService'
 
 export default class SupportedPrisonsController {
-  constructor(
-    private readonly supportedPrisonsService: SupportedPrisonsService,
-    private readonly prisonService: PrisonService
-  ) {}
+  constructor(private readonly prisonService: PrisonService) {}
 
   async getSupportedPrisonsView(req: Request, res: Response): Promise<void> {
     try {
@@ -34,7 +30,7 @@ export default class SupportedPrisonsController {
     }
 
     try {
-      await this.supportedPrisonsService.addSupportedPrison(req.user.token, req.body.prisonId)
+      await this.prisonService.addSupportedPrison(req.user.token, req.body.prisonId)
     } catch (error) {
       req.flash('errors', [{ href: '#prisonId', text: error.data.errorCode.userMessage }])
     }
@@ -44,7 +40,7 @@ export default class SupportedPrisonsController {
 
   async removeSupportedPrison(req: Request, res: Response): Promise<void> {
     try {
-      await this.supportedPrisonsService.removeSupportedPrison(req.user.token, req.params.prisonId)
+      await this.prisonService.removeSupportedPrison(req.user.token, req.params.prisonId)
     } catch (error) {
       req.flash('errors', [{ text: error.data.errorCode.userMessage }])
     }
