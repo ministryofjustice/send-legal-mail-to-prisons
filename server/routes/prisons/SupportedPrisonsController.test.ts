@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import SupportedPrisonsController from './SupportedPrisonsController'
 import SupportedPrisonsService from '../../services/prison/SupportedPrisonsService'
-import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
 import validatePrisonId from '../barcode/validators/prisonIdValidator'
+import PrisonService from '../../services/prison/PrisonService'
 
 jest.mock('../barcode/validators/prisonIdValidator')
 
@@ -21,8 +21,8 @@ const supportedPrisonsService = {
   addSupportedPrison: jest.fn(),
   removeSupportedPrison: jest.fn(),
 }
-const prisonRegisterService = {
-  getActivePrisonsFromPrisonRegister: jest.fn(),
+const prisonService = {
+  getPrisonsBySupported: jest.fn(),
 }
 
 describe('SupportedPrisonsController', () => {
@@ -30,7 +30,7 @@ describe('SupportedPrisonsController', () => {
 
   const supportedPrisonsController = new SupportedPrisonsController(
     supportedPrisonsService as unknown as SupportedPrisonsService,
-    prisonRegisterService as unknown as PrisonRegisterService
+    prisonService as unknown as PrisonService
   )
 
   beforeEach(() => {
@@ -43,11 +43,10 @@ describe('SupportedPrisonsController', () => {
 
   describe('getSupportedPrisonsView', () => {
     it('should render page', async () => {
-      supportedPrisonsService.getSupportedPrisons.mockResolvedValue({ supportedPrisons: ['ABC'] })
-      prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([
-        { id: 'ABC', name: 'Prison ABC' },
-        { id: 'CDE', name: 'Prison CDE' },
-      ])
+      prisonService.getPrisonsBySupported.mockResolvedValue({
+        supportedPrisons: [{ id: 'ABC', name: 'Prison ABC' }],
+        unsupportedPrisons: [{ id: 'CDE', name: 'Prison CDE' }],
+      })
 
       await supportedPrisonsController.getSupportedPrisonsView(req as unknown as Request, res as unknown as Response)
 
@@ -63,18 +62,12 @@ describe('SupportedPrisonsController', () => {
     })
 
     it('should display errors', async () => {
-      supportedPrisonsService.getSupportedPrisons.mockResolvedValue({ supportedPrisons: [] })
-      prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([])
-      req.flash.mockReturnValue([{ href: '#prisonId', text: 'some-error' }])
+      prisonService.getPrisonsBySupported.mockRejectedValue('some-error')
 
       await supportedPrisonsController.getSupportedPrisonsView(req as unknown as Request, res as unknown as Response)
 
-      expect(res.render).toHaveBeenCalledWith('pages/prisons/supported-prisons', {
-        supportedPrisons: [],
-        unsupportedPrisons: [{ value: '', text: '' }],
-        errors: [{ href: '#prisonId', text: 'some-error' }],
-      })
-      expect(req.flash).toHaveBeenCalledWith('errors')
+      expect(req.flash).toHaveBeenCalledWith('errors', [{ text: 'There was an error retrieving the list of prisons' }])
+      expect(res.redirect).toHaveBeenCalledWith('/supported-prisons')
     })
   })
 
