@@ -40,7 +40,7 @@ describe('PrisonService', () => {
     it('should pass on errors from the prison register service', async () => {
       prisonRegisterService.getActivePrisonsFromPrisonRegister.mockRejectedValue('some-error')
 
-      await prisonService.getSupportedPrisons('some-token').catch(error => {
+      await prisonService.getSupportedPrisons().catch(error => {
         expect(error).toEqual('some-error')
         expect(prisonRegisterService.getActivePrisonsFromPrisonRegister).toHaveBeenCalled()
       })
@@ -55,21 +55,21 @@ describe('PrisonService', () => {
         { id: 'CDE', name: 'Prison CDE' },
       ])
 
-      const supportedPrisons = await prisonService.getSupportedPrisons('some-token')
+      const supportedPrisons = await prisonService.getSupportedPrisons()
 
       expect(supportedPrisons).toEqual([{ id: 'ABC', name: 'Prison ABC' }])
       expect(prisonRegisterService.getActivePrisonsFromPrisonRegister).toHaveBeenCalled()
-      expect(supportedPrisonsService.getSupportedPrisons).toHaveBeenCalledWith('some-token')
+      expect(supportedPrisonsService.getSupportedPrisons).toHaveBeenCalled()
     })
 
     it('should pass on errors from the supported prison service', async () => {
       supportedPrisonsService.getSupportedPrisons.mockRejectedValue('some-error')
       prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([])
 
-      await prisonService.getSupportedPrisons('some-token').catch(error => {
+      await prisonService.getSupportedPrisons().catch(error => {
         expect(error).toEqual('some-error')
         expect(prisonRegisterService.getActivePrisonsFromPrisonRegister).toHaveBeenCalled()
-        expect(supportedPrisonsService.getSupportedPrisons).toHaveBeenCalledWith('some-token')
+        expect(supportedPrisonsService.getSupportedPrisons).toHaveBeenCalled()
       })
     })
 
@@ -77,10 +77,10 @@ describe('PrisonService', () => {
       supportedPrisonsService.getSupportedPrisons.mockResolvedValue([])
       prisonRegisterService.getActivePrisonsFromPrisonRegister.mockRejectedValue('some-error')
 
-      await prisonService.getSupportedPrisons('some-token').catch(error => {
+      await prisonService.getSupportedPrisons().catch(error => {
         expect(error).toEqual('some-error')
         expect(prisonRegisterService.getActivePrisonsFromPrisonRegister).toHaveBeenCalled()
-        expect(supportedPrisonsService.getSupportedPrisons).toHaveBeenCalledWith('some-token')
+        expect(supportedPrisonsService.getSupportedPrisons).toHaveBeenCalled()
       })
     })
   })
@@ -93,22 +93,22 @@ describe('PrisonService', () => {
         { id: 'CDE', name: 'Prison CDE' },
       ])
 
-      const prisonsBySupported = await prisonService.getPrisonsBySupported('some-token')
+      const prisonsBySupported = await prisonService.getPrisonsBySupported()
 
       expect(prisonsBySupported.supportedPrisons).toEqual([{ id: 'ABC', name: 'Prison ABC' }])
       expect(prisonsBySupported.unsupportedPrisons).toEqual([{ id: 'CDE', name: 'Prison CDE' }])
       expect(prisonRegisterService.getActivePrisonsFromPrisonRegister).toHaveBeenCalled()
-      expect(supportedPrisonsService.getSupportedPrisons).toHaveBeenCalledWith('some-token')
+      expect(supportedPrisonsService.getSupportedPrisons).toHaveBeenCalled()
     })
 
     it('should pass on errors from the supported prison service', async () => {
       supportedPrisonsService.getSupportedPrisons.mockRejectedValue('some-error')
       prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([])
 
-      await prisonService.getPrisonsBySupported('some-token').catch(error => {
+      await prisonService.getPrisonsBySupported().catch(error => {
         expect(error).toEqual('some-error')
         expect(prisonRegisterService.getActivePrisonsFromPrisonRegister).toHaveBeenCalled()
-        expect(supportedPrisonsService.getSupportedPrisons).toHaveBeenCalledWith('some-token')
+        expect(supportedPrisonsService.getSupportedPrisons).toHaveBeenCalled()
       })
     })
 
@@ -116,10 +116,10 @@ describe('PrisonService', () => {
       supportedPrisonsService.getSupportedPrisons.mockResolvedValue([])
       prisonRegisterService.getActivePrisonsFromPrisonRegister.mockRejectedValue('some-error')
 
-      await prisonService.getPrisonsBySupported('some-token').catch(error => {
+      await prisonService.getPrisonsBySupported().catch(error => {
         expect(error).toEqual('some-error')
         expect(prisonRegisterService.getActivePrisonsFromPrisonRegister).toHaveBeenCalled()
-        expect(supportedPrisonsService.getSupportedPrisons).toHaveBeenCalledWith('some-token')
+        expect(supportedPrisonsService.getSupportedPrisons).toHaveBeenCalled()
       })
     })
   })

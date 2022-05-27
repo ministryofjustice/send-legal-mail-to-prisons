@@ -22,7 +22,7 @@ const res = {
 }
 
 const prisonService = {
-  getPrisons: jest.fn(),
+  getSupportedPrisons: jest.fn(),
 }
 
 const contactService = {
@@ -78,12 +78,12 @@ describe('EditContactController', () => {
     })
 
     it('should render contact details', async () => {
-      prisonService.getPrisons.mockResolvedValue([{ id: 'KTI', name: 'Kennet (HMP)' }])
+      prisonService.getSupportedPrisons.mockResolvedValue([{ id: 'KTI', name: 'Kennet (HMP)' }])
       contactService.getContactById.mockReturnValue(aContact)
 
       await editContactController.getEditContact(req as unknown as Request, res as unknown as Response)
 
-      expect(prisonService.getPrisons).toHaveBeenCalled()
+      expect(prisonService.getSupportedPrisons).toHaveBeenCalled()
       expect(contactService.getContactById).toHaveBeenCalled()
       expect(res.render).toHaveBeenCalledWith('pages/barcode/edit-contact-details', {
         errors: [],
@@ -105,7 +105,7 @@ describe('EditContactController', () => {
     })
 
     it('should render contact details while editing', async () => {
-      prisonService.getPrisons.mockResolvedValue([{ id: 'KTI', name: 'Kennet (HMP)' }])
+      prisonService.getSupportedPrisons.mockResolvedValue([{ id: 'KTI', name: 'Kennet (HMP)' }])
       req.session.editContactForm = anEditContactForm
       req.body['dob-day'] = '19'
       req.body['dob-month'] = '1'
@@ -113,7 +113,7 @@ describe('EditContactController', () => {
 
       await editContactController.getEditContact(req as unknown as Request, res as unknown as Response)
 
-      expect(prisonService.getPrisons).toHaveBeenCalled()
+      expect(prisonService.getSupportedPrisons).toHaveBeenCalled()
       expect(contactService.getContactById).not.toHaveBeenCalled()
       expect(res.render).toHaveBeenCalledWith('pages/barcode/edit-contact-details', {
         errors: [],
@@ -135,12 +135,12 @@ describe('EditContactController', () => {
     })
 
     it('should not select prison', async () => {
-      prisonService.getPrisons.mockResolvedValue([{ id: 'KTI', name: 'Kennet (HMP)' }])
+      prisonService.getSupportedPrisons.mockResolvedValue([{ id: 'KTI', name: 'Kennet (HMP)' }])
       contactService.getContactById.mockReturnValue({ ...aContact, prisonId: '' })
 
       await editContactController.getEditContact(req as unknown as Request, res as unknown as Response)
 
-      expect(prisonService.getPrisons).toHaveBeenCalled()
+      expect(prisonService.getSupportedPrisons).toHaveBeenCalled()
       expect(contactService.getContactById).toHaveBeenCalled()
       expect(res.render).toHaveBeenCalledWith(
         expect.anything(),
@@ -172,7 +172,7 @@ describe('EditContactController', () => {
     })
 
     it('should return to review recipients if cannot load active prisons', async () => {
-      prisonService.getPrisons.mockRejectedValue('some-error')
+      prisonService.getSupportedPrisons.mockRejectedValue('some-error')
 
       await editContactController.getEditContact(req as unknown as Request, res as unknown as Response)
 

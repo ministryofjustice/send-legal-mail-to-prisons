@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import type { Prison } from 'prisonTypes'
 import validateNewContact from './newContactByPrisonNumberValidator'
 import CreateContactByPrisonNumberView from './CreateContactByPrisonNumberView'
-import filterSupportedPrisons from './filterSupportedPrisons'
 import ContactService from '../../../services/contacts/ContactService'
 import logger from '../../../../logger'
 import RecipientFormService from '../recipients/RecipientFormService'
@@ -21,12 +20,12 @@ export default class CreateContactByPrisonNumberController {
       return res.redirect(redirect)
     }
 
-    let activePrisons: Array<Prison>
+    let supportedPrisons: Array<Prison>
     try {
-      activePrisons = await this.prisonService.getPrisons()
+      supportedPrisons = await this.prisonService.getSupportedPrisons()
     } catch (error) {
       req.flash('errors', [{ text: 'There was an error retrieving the list of prisons' }])
-      activePrisons = []
+      supportedPrisons = []
     }
 
     const createNewContactByPrisonNumberForm = {
@@ -35,7 +34,7 @@ export default class CreateContactByPrisonNumberController {
     }
     const view = new CreateContactByPrisonNumberView(
       createNewContactByPrisonNumberForm,
-      filterSupportedPrisons(activePrisons),
+      supportedPrisons,
       req.flash('errors')
     )
     return res.render('pages/barcode/create-new-contact-by-prison-number', { ...view.renderArgs })

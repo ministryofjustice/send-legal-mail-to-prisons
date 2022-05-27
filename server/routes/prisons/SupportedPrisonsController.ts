@@ -10,7 +10,7 @@ export default class SupportedPrisonsController {
 
   async getSupportedPrisonsView(req: Request, res: Response): Promise<void> {
     try {
-      const { supportedPrisons, unsupportedPrisons } = await this.prisonService.getPrisonsBySupported(req.user.token)
+      const { supportedPrisons, unsupportedPrisons } = await this.prisonService.getPrisonsBySupported()
 
       const view = new SupportedPrisonsView(supportedPrisons, unsupportedPrisons, req.flash('errors'))
 

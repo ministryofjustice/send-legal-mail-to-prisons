@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import config from '../../config'
 import StartPageController from './StartPageController'
 import PrisonService from '../../services/prison/PrisonService'
 
@@ -9,15 +8,13 @@ const res = {
 }
 
 const prisonService = {
-  getPrisons: jest.fn(),
+  getSupportedPrisons: jest.fn(),
 }
 
 describe('StartPageController', () => {
   const startPageController = new StartPageController(prisonService as unknown as PrisonService)
 
-  config.supportedPrisons = ''
-  prisonService.getPrisons.mockResolvedValue([
-    { id: 'KTI', name: 'Kennet (HMP)', addressName: 'HMP Kennet' },
+  prisonService.getSupportedPrisons.mockResolvedValue([
     { id: 'ACI', name: 'Altcourse (HMP)', addressName: 'HMP Altcourse' },
     { id: 'ASI', name: 'Ashfield (HMP & YOI)', addressName: 'HMP & YOI Ashfield' },
   ])
@@ -25,19 +22,9 @@ describe('StartPageController', () => {
   it('should display all prison address names in alphabetical order by name (not type)', async () => {
     await startPageController.getStartPageView({} as unknown as Request, res as unknown as Response)
 
-    expect(prisonService.getPrisons).toHaveBeenCalled()
+    expect(prisonService.getSupportedPrisons).toHaveBeenCalled()
     expect(res.render).toHaveBeenCalledWith('pages/start/legal-sender-start-page', {
-      prisonNames: ['HMP Altcourse', 'HMP & YOI Ashfield', 'HMP Kennet'],
-    })
-  })
-
-  it('should filter on supported prisons', async () => {
-    config.supportedPrisons = 'KTI,ASI'
-
-    await startPageController.getStartPageView({} as unknown as Request, res as unknown as Response)
-
-    expect(res.render).toHaveBeenCalledWith('pages/start/legal-sender-start-page', {
-      prisonNames: ['HMP & YOI Ashfield', 'HMP Kennet'],
+      prisonNames: ['HMP Altcourse', 'HMP & YOI Ashfield'],
     })
   })
 })

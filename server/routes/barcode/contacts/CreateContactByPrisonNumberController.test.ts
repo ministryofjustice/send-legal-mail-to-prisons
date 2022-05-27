@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
 import CreateContactByPrisonNumberController from './CreateContactByPrisonNumberController'
-import config from '../../../config'
 import newContactValidator from './newContactByPrisonNumberValidator'
 import ContactService from '../../../services/contacts/ContactService'
 import RecipientFormService from '../recipients/RecipientFormService'
@@ -22,7 +21,7 @@ const res = {
 }
 
 const prisonService = {
-  getPrisons: jest.fn(),
+  getSupportedPrisons: jest.fn(),
 }
 
 const contactService = {
@@ -59,9 +58,8 @@ describe('CreateContactByPrisonNumberController', () => {
       expect(res.redirect).toHaveBeenCalledWith('some-redirect')
     })
 
-    it('should create and return view given no active prison filtering', async () => {
-      config.supportedPrisons = ''
-      prisonService.getPrisons.mockResolvedValue([
+    it('should create and return view', async () => {
+      prisonService.getSupportedPrisons.mockResolvedValue([
         { id: 'KTI', name: 'Kennet (HMP)' },
         { id: 'ASI', name: 'Ashfield (HMP)' },
         { id: 'ACI', name: 'Altcourse (HMP)' },
@@ -88,35 +86,8 @@ describe('CreateContactByPrisonNumberController', () => {
       expect(req.flash).toHaveBeenCalledWith('errors')
     })
 
-    it('should create and return view given active prison filtering', async () => {
-      config.supportedPrisons = 'ASI'
-      prisonService.getPrisons.mockResolvedValue([
-        { id: 'KTI', name: 'Kennet (HMP)' },
-        { id: 'ASI', name: 'Ashfield (HMP)' },
-        { id: 'ACI', name: 'Altcourse (HMP)' },
-      ])
-
-      req.session.recipientForm = { prisonNumber: 'A1234BC' }
-
-      const expectedRenderArgs = {
-        barcode: undefined as string,
-        barcodeImageUrl: undefined as string,
-        errors: [] as Array<Record<string, string>>,
-        form: { prisonNumber: 'A1234BC' },
-        prisonRegister: [
-          { value: '', text: '' },
-          { value: 'ASI', text: 'Ashfield (HMP)', selected: false },
-        ] as Array<Record<string, string>>,
-      }
-
-      await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
-
-      expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact-by-prison-number', expectedRenderArgs)
-      expect(req.flash).toHaveBeenCalledWith('errors')
-    })
-
     it('should create and return view with error given prison register service fails', async () => {
-      prisonService.getPrisons.mockRejectedValue('An error retrieving prison register')
+      prisonService.getSupportedPrisons.mockRejectedValue('An error retrieving prison register')
 
       req.session.recipientForm = { prisonNumber: 'A1234BC' }
 

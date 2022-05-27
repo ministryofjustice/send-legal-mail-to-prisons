@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
 import moment from 'moment'
-import config from '../../../config'
 import newContactValidator from './newContactByPrisonerNameValidator'
 import CreateContactByPrisonerNameController from './CreateContactByPrisonerNameController'
 import ContactService from '../../../services/contacts/ContactService'
@@ -23,7 +22,7 @@ const res = {
 }
 
 const prisonService = {
-  getPrisons: jest.fn(),
+  getSupportedPrisons: jest.fn(),
 }
 
 const contactService = {
@@ -61,9 +60,8 @@ describe('CreateContactByPrisonerNameController', () => {
       expect(res.redirect).toHaveBeenCalledWith('some-redirect')
     })
 
-    it('should create and return view given no active prison filtering', async () => {
-      config.supportedPrisons = ''
-      prisonService.getPrisons.mockResolvedValue([
+    it('should create and return view', async () => {
+      prisonService.getSupportedPrisons.mockResolvedValue([
         { id: 'KTI', name: 'Kennet (HMP)' },
         { id: 'ASI', name: 'Ashfield (HMP)' },
         { id: 'ACI', name: 'Altcourse (HMP)' },
@@ -86,39 +84,13 @@ describe('CreateContactByPrisonerNameController', () => {
 
       await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
 
-      expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact-by-prisoner-name', expectedRenderArgs)
-      expect(req.flash).toHaveBeenCalledWith('errors')
-    })
-
-    it('should create and return view given active prison filtering', async () => {
-      config.supportedPrisons = 'ASI'
-      prisonService.getPrisons.mockResolvedValue([
-        { id: 'KTI', name: 'Kennet (HMP)' },
-        { id: 'ASI', name: 'Ashfield (HMP)' },
-        { id: 'ACI', name: 'Altcourse (HMP)' },
-      ])
-
-      req.session.recipientForm = { prisonerName: 'John Smith' }
-
-      const expectedRenderArgs = {
-        barcode: undefined as string,
-        barcodeImageUrl: undefined as string,
-        errors: [] as Array<Record<string, string>>,
-        form: { prisonerName: 'John Smith' },
-        prisonRegister: [
-          { value: '', text: '' },
-          { value: 'ASI', text: 'Ashfield (HMP)', selected: false },
-        ] as Array<Record<string, string>>,
-      }
-
-      await createContactController.getCreateNewContact(req as unknown as Request, res as unknown as Response)
-
+      expect(prisonService.getSupportedPrisons).toHaveBeenCalled()
       expect(res.render).toHaveBeenCalledWith('pages/barcode/create-new-contact-by-prisoner-name', expectedRenderArgs)
       expect(req.flash).toHaveBeenCalledWith('errors')
     })
 
     it('should create and return view with error given prison register service fails', async () => {
-      prisonService.getPrisons.mockRejectedValue('An error retrieving prison register')
+      prisonService.getSupportedPrisons.mockRejectedValue('An error retrieving prison register')
 
       req.session.recipientForm = { prisonerName: 'John Smith' }
 

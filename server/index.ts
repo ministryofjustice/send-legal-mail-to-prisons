@@ -25,14 +25,15 @@ const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application 
   const oneTimeCodeService = new OneTimeCodeService(hmppsAuthClient)
   const scanBarcodeService = new ScanBarcodeService(hmppsAuthClient)
   const createBarcodeService = new CreateBarcodeService()
-  const prisonRegisterService = new PrisonRegisterService(new PrisonRegisterStore())
+  const prisonService = new PrisonService(
+    new PrisonRegisterService(new PrisonRegisterStore()),
+    new SupportedPrisonsService()
+  )
   const appInsightsService = new AppInsightsService(appInsightsTelemetryClient)
   const contactService = new ContactService()
-  const recipientFormService = new RecipientFormService(prisonRegisterService)
+  const recipientFormService = new RecipientFormService(prisonService)
   const zendeskService = new ZendeskService()
   const cjsmService = new CjsmService()
-  const supportedPrisonsService = new SupportedPrisonsService()
-  const prisonService = new PrisonService(prisonRegisterService, supportedPrisonsService)
 
   return createApp(
     userService,
