@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
 import CreateContactByPrisonNumberController from './CreateContactByPrisonNumberController'
-import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import config from '../../../config'
 import newContactValidator from './newContactByPrisonNumberValidator'
 import ContactService from '../../../services/contacts/ContactService'
 import RecipientFormService from '../recipients/RecipientFormService'
+import PrisonService from '../../../services/prison/PrisonService'
 
 jest.mock('../../../config')
 jest.mock('./newContactByPrisonNumberValidator')
@@ -21,8 +21,8 @@ const res = {
   redirect: jest.fn(),
 }
 
-const prisonRegisterService = {
-  getActivePrisonsFromPrisonRegister: jest.fn(),
+const prisonService = {
+  getPrisons: jest.fn(),
 }
 
 const contactService = {
@@ -39,21 +39,15 @@ describe('CreateContactByPrisonNumberController', () => {
 
   beforeEach(() => {
     createContactController = new CreateContactByPrisonNumberController(
-      prisonRegisterService as unknown as PrisonRegisterService,
+      prisonService as unknown as PrisonService,
       contactService as unknown as ContactService,
       recipientFormService as unknown as RecipientFormService
     )
   })
 
   afterEach(() => {
-    prisonRegisterService.getActivePrisonsFromPrisonRegister.mockReset()
-    recipientFormService.addRecipient.mockReset()
-    recipientFormService.requiresPrisonNumber.mockReset()
-    contactService.createContact.mockReset()
-    res.render.mockReset()
-    res.redirect.mockReset()
+    jest.resetAllMocks()
     req.session = { barcodeUser: { token: 'some-token' } } as SessionData
-    req.flash.mockReset()
   })
 
   describe('getCreateNewRecipientView', () => {
@@ -67,7 +61,7 @@ describe('CreateContactByPrisonNumberController', () => {
 
     it('should create and return view given no active prison filtering', async () => {
       config.supportedPrisons = ''
-      prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([
+      prisonService.getPrisons.mockResolvedValue([
         { id: 'KTI', name: 'Kennet (HMP)' },
         { id: 'ASI', name: 'Ashfield (HMP)' },
         { id: 'ACI', name: 'Altcourse (HMP)' },
@@ -96,7 +90,7 @@ describe('CreateContactByPrisonNumberController', () => {
 
     it('should create and return view given active prison filtering', async () => {
       config.supportedPrisons = 'ASI'
-      prisonRegisterService.getActivePrisonsFromPrisonRegister.mockResolvedValue([
+      prisonService.getPrisons.mockResolvedValue([
         { id: 'KTI', name: 'Kennet (HMP)' },
         { id: 'ASI', name: 'Ashfield (HMP)' },
         { id: 'ACI', name: 'Altcourse (HMP)' },
@@ -122,7 +116,7 @@ describe('CreateContactByPrisonNumberController', () => {
     })
 
     it('should create and return view with error given prison register service fails', async () => {
-      prisonRegisterService.getActivePrisonsFromPrisonRegister.mockRejectedValue('An error retrieving prison register')
+      prisonService.getPrisons.mockRejectedValue('An error retrieving prison register')
 
       req.session.recipientForm = { prisonNumber: 'A1234BC' }
 

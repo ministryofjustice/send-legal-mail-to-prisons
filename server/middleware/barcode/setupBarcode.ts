@@ -1,7 +1,6 @@
 import express, { Router } from 'express'
 import FindRecipientController from '../../routes/barcode/recipients/FindRecipientController'
 import CreateBarcodeService from '../../services/barcode/CreateBarcodeService'
-import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
 import ReviewRecipientsController from '../../routes/barcode/review/ReviewRecipientsController'
 import CreateContactByPrisonNumberController from '../../routes/barcode/contacts/CreateContactByPrisonNumberController'
 import GenerateBarcodeImageController from '../../routes/barcode/image/GenerateBarcodeImageController'
@@ -12,10 +11,11 @@ import ContactService from '../../services/contacts/ContactService'
 import RecipientFormService from '../../routes/barcode/recipients/RecipientFormService'
 import ChooseContactController from '../../routes/barcode/contacts/ChooseContactController'
 import EditContactController from '../../routes/barcode/contacts/EditContactController'
+import PrisonService from '../../services/prison/PrisonService'
 
 export default function setUpCreateBarcode(
   createBarcodeService: CreateBarcodeService,
-  prisonRegisterService: PrisonRegisterService,
+  prisonService: PrisonService,
   contactService: ContactService,
   recipientFormService: RecipientFormService
 ): Router {
@@ -23,20 +23,20 @@ export default function setUpCreateBarcode(
   const findRecipientController = new FindRecipientController(recipientFormService, contactService)
   const chooseContactController = new ChooseContactController(recipientFormService)
   const createContactByPrisonNumberController = new CreateContactByPrisonNumberController(
-    prisonRegisterService,
+    prisonService,
     contactService,
     recipientFormService
   )
   const createContactByPrisonerNameController = new CreateContactByPrisonerNameController(
-    prisonRegisterService,
+    prisonService,
     contactService,
     recipientFormService
   )
-  const reviewRecipientsController = new ReviewRecipientsController(prisonRegisterService)
+  const reviewRecipientsController = new ReviewRecipientsController(prisonService)
   const chooseBarcodeOptionController = new ChooseBarcodeOptionController()
   const generateImageController = new GenerateBarcodeImageController(createBarcodeService)
   const pdfController = new PdfController(createBarcodeService)
-  const editContactController = new EditContactController(prisonRegisterService, contactService, recipientFormService)
+  const editContactController = new EditContactController(prisonService, contactService, recipientFormService)
 
   router.get('/find-recipient', (req, res) => res.redirect('/barcode/find-recipient/by-prison-number'))
   router.get('/find-recipient/by-prison-number', (req, res) =>

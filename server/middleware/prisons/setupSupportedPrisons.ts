@@ -1,16 +1,12 @@
 import express, { Router } from 'express'
 import authorisationMiddleware from '../authorisationMiddleware'
 import SupportedPrisonsController from '../../routes/prisons/SupportedPrisonsController'
-import SupportedPrisonsService from '../../services/prison/SupportedPrisonsService'
 import PrisonService from '../../services/prison/PrisonService'
 
-export default function setupSupportedPrisons(
-  supportedPrisonsService: SupportedPrisonsService,
-  prisonService: PrisonService
-): Router {
+export default function setupSupportedPrisons(prisonService: PrisonService): Router {
   const router = express.Router()
 
-  const supportedPrisonsController = new SupportedPrisonsController(supportedPrisonsService, prisonService)
+  const supportedPrisonsController = new SupportedPrisonsController(prisonService)
 
   router.use('/', authorisationMiddleware(['ROLE_SLM_ADMIN']))
   router.get('/', (req, res) => supportedPrisonsController.getSupportedPrisonsView(req, res))

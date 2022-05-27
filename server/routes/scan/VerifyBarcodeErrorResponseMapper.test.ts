@@ -1,18 +1,18 @@
 import type { DuplicateErrorCode, RandomCheckErrorCode } from 'sendLegalMailApiClient'
-import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
 import VerifyBarcodeErrorResponseMapper from './VerifyBarcodeErrorResponseMapper'
+import PrisonService from '../../services/prison/PrisonService'
 
 describe('VerifyBarcodeErrorResponseMapper', () => {
-  const prisonRegisterService = {
+  const prisonService = {
     getPrisonNameOrId: jest.fn(),
   }
 
   const verifyBarcodeErrorResponseMapper = new VerifyBarcodeErrorResponseMapper(
-    prisonRegisterService as unknown as PrisonRegisterService
+    prisonService as unknown as PrisonService
   )
 
   afterEach(() => {
-    prisonRegisterService.getPrisonNameOrId.mockReset()
+    prisonService.getPrisonNameOrId.mockReset()
   })
 
   describe('mapErrorResponse', () => {
@@ -32,7 +32,7 @@ describe('VerifyBarcodeErrorResponseMapper', () => {
           errorCode: apiErrorCode,
         },
       }
-      prisonRegisterService.getPrisonNameOrId.mockReturnValue('HMP Altcourse')
+      prisonService.getPrisonNameOrId.mockReturnValue('HMP Altcourse')
 
       const errorCode = await verifyBarcodeErrorResponseMapper.mapErrorResponse(apiErrorResponse)
 
@@ -44,7 +44,7 @@ describe('VerifyBarcodeErrorResponseMapper', () => {
         recipientPrisonNumber: 'A1234BC',
         recipientDob: '1990-01-31',
       })
-      expect(prisonRegisterService.getPrisonNameOrId).toHaveBeenCalledWith('ACI')
+      expect(prisonService.getPrisonNameOrId).toHaveBeenCalledWith('ACI')
     })
 
     it('should map Expired', async () => {

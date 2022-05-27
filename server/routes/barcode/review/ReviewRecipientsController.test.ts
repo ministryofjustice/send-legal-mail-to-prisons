@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { SessionData } from 'express-session'
 import moment from 'moment'
 import ReviewRecipientsController from './ReviewRecipientsController'
-import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
+import PrisonService from '../../../services/prison/PrisonService'
 
 const req = {
   session: {} as SessionData,
@@ -32,7 +32,7 @@ const aRecipient = {
   prison: { addressName: 'HMP Somewhere', postalCode: 'AA1 1AA' },
 }
 
-const prisonRegisterService = {
+const prisonService = {
   getPrison: jest.fn(),
 }
 
@@ -40,18 +40,13 @@ describe('ReviewRecipientsController', () => {
   let reviewRecipientsController: ReviewRecipientsController
 
   beforeEach(() => {
-    reviewRecipientsController = new ReviewRecipientsController(
-      prisonRegisterService as undefined as PrisonRegisterService
-    )
+    reviewRecipientsController = new ReviewRecipientsController(prisonService as undefined as PrisonService)
   })
 
   afterEach(() => {
-    res.render.mockReset()
-    res.redirect.mockReset()
+    jest.resetAllMocks()
     req.session = {} as SessionData
     req.params = {}
-    req.flash.mockReset()
-    prisonRegisterService.getPrison.mockReset()
   })
 
   describe('getReviewRecipientsView', () => {
@@ -96,10 +91,9 @@ describe('ReviewRecipientsController', () => {
         prisonNumber: 'A1234ZZ',
         prisonAddress: { agencyCode: 'DGI', agyDescription: 'Dovegate (HMP)', postalCode: 'ST14 8XR' },
       }
-      const recipients = [aRecipient, recipientWithOldPrisonAddress]
-      req.session.recipients = recipients
+      req.session.recipients = [aRecipient, recipientWithOldPrisonAddress]
 
-      prisonRegisterService.getPrison.mockResolvedValue({
+      prisonService.getPrison.mockResolvedValue({
         id: 'DGI',
         name: 'Dovegate (HMP)',
         addressName: 'HMP Dovegate',
@@ -110,7 +104,7 @@ describe('ReviewRecipientsController', () => {
 
       await reviewRecipientsController.getReviewRecipientsView(req as unknown as Request, res as unknown as Response)
 
-      expect(prisonRegisterService.getPrison).toHaveBeenCalledWith('DGI')
+      expect(prisonService.getPrison).toHaveBeenCalledWith('DGI')
       expect(req.session.recipients).toEqual([
         aRecipient,
         {
@@ -181,12 +175,11 @@ describe('ReviewRecipientsController', () => {
     })
 
     it(`should redirect to review-recipients and modify recipients given a recipient index`, async () => {
-      const recipients = [
+      req.session.recipients = [
         { prisonerName: 'John Smith', prisonNumber: 'A1234BC', prison: {} },
         { prisonerName: 'Jane Doe', prisonNumber: 'R9876JD', prison: {} },
         { prisonerName: 'Fred Bloggs', prisonNumber: 'D3281FB', prison: {} },
       ]
-      req.session.recipients = recipients
       req.params = { recipientIdx: '1' }
 
       await reviewRecipientsController.removeRecipientByIndex(req as unknown as Request, res as unknown as Response)

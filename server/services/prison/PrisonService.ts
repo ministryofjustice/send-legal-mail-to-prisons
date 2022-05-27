@@ -17,6 +17,14 @@ export default class PrisonService {
     return this.prisonRegisterService.getActivePrisonsFromPrisonRegister()
   }
 
+  async getPrison(prisonId: string): Promise<Prison> {
+    return this.prisonRegisterService.getPrison(prisonId)
+  }
+
+  async getPrisonNameOrId(prisonId: string): Promise<string> {
+    return this.prisonRegisterService.getPrisonNameOrId(prisonId)
+  }
+
   async getSupportedPrisons(authToken: string): Promise<Array<Prison>> {
     const [prisons, supportedPrisonCodes] = await Promise.all([
       this.prisonRegisterService.getActivePrisonsFromPrisonRegister(),
@@ -34,6 +42,14 @@ export default class PrisonService {
       supportedPrisons: this.supportedPrisons(prisons, supportedPrisonCodes.supportedPrisons),
       unsupportedPrisons: this.unsupportedPrisons(prisons, supportedPrisonCodes.supportedPrisons),
     }
+  }
+
+  async addSupportedPrison(userToken: string, prisonId: string): Promise<unknown> {
+    return this.supportedPrisonsService.addSupportedPrison(userToken, prisonId)
+  }
+
+  async removeSupportedPrison(userToken: string, prisonId: string): Promise<unknown> {
+    return this.supportedPrisonsService.removeSupportedPrison(userToken, prisonId)
   }
 
   private supportedPrisons(allPrisons: Array<Prison>, supportedPrisonCodes: Array<string>): Array<Prison> {

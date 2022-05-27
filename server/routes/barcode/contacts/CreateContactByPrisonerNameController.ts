@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import type { Prison } from 'prisonTypes'
-import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
 import CreateContactByPrisonerNameView from './CreateContactByPrisonerNameView'
 import validateNewContact from './newContactByPrisonerNameValidator'
 import filterSupportedPrisons from './filterSupportedPrisons'
@@ -8,10 +7,11 @@ import ContactService from '../../../services/contacts/ContactService'
 import logger from '../../../../logger'
 import RecipientFormService from '../recipients/RecipientFormService'
 import parseDob from './parseDob'
+import PrisonService from '../../../services/prison/PrisonService'
 
 export default class CreateContactByPrisonerNameController {
   constructor(
-    private readonly prisonRegisterService: PrisonRegisterService,
+    private readonly prisonService: PrisonService,
     private readonly contactService: ContactService,
     private readonly recipientFormService: RecipientFormService
   ) {}
@@ -24,7 +24,7 @@ export default class CreateContactByPrisonerNameController {
 
     let activePrisons: Array<Prison>
     try {
-      activePrisons = await this.prisonRegisterService.getActivePrisonsFromPrisonRegister()
+      activePrisons = await this.prisonService.getPrisons()
     } catch (error) {
       req.flash('errors', [{ text: 'There was an error retrieving the list of prisons' }])
       activePrisons = []
