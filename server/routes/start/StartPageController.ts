@@ -8,7 +8,7 @@ export default class StartPageController {
     const supportedPrisons = await this.prisonService.getSupportedPrisons()
     const supportedPrisonNames = supportedPrisons
       .sort((a, b) => a.name.localeCompare(b.name))
-      .map(prison => prison.addressName)
+      .map(prison => prison.name)
     res.render('pages/start/legal-sender-start-page', { prisonNames: supportedPrisonNames })
   }
 }

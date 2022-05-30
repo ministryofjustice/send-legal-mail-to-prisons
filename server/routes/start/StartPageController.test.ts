@@ -15,8 +15,8 @@ describe('StartPageController', () => {
   const startPageController = new StartPageController(prisonService as unknown as PrisonService)
 
   prisonService.getSupportedPrisons.mockResolvedValue([
-    { id: 'ACI', name: 'Altcourse (HMP)', addressName: 'HMP Altcourse' },
     { id: 'ASI', name: 'Ashfield (HMP & YOI)', addressName: 'HMP & YOI Ashfield' },
+    { id: 'ACI', name: 'Altcourse (HMP)', addressName: 'HMP Altcourse' },
   ])
 
   it('should display all prison address names in alphabetical order by name (not type)', async () => {
@@ -24,7 +24,7 @@ describe('StartPageController', () => {
 
     expect(prisonService.getSupportedPrisons).toHaveBeenCalled()
     expect(res.render).toHaveBeenCalledWith('pages/start/legal-sender-start-page', {
-      prisonNames: ['HMP Altcourse', 'HMP & YOI Ashfield'],
+      prisonNames: ['Altcourse (HMP)', 'Ashfield (HMP & YOI)'],
     })
   })
 })
