@@ -17,7 +17,7 @@ export default function validateContact(editContactForm: EditContactForm): Array
     errors.push(...formatErrors('prisonNumber', validatePrisonNumber(editContactForm.prisonNumber)))
   }
   if (editContactForm.dob) {
-    errors.push(...formatErrors('dob', validatePrisonerDob(editContactForm.dob)))
+    errors.push(...formatErrors('dob-day', validatePrisonerDob(editContactForm.dob)))
   }
   return errors
 }

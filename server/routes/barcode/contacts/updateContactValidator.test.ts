@@ -76,7 +76,7 @@ describe('updateContactValidator', () => {
     mockValidatePrisonId.mockReturnValue([])
     mockValidatePrisonerDob.mockReturnValue(['some-dob-error'])
 
-    expect(validateContact(form)).toEqual([{ href: '#dob', text: 'some-dob-error' }])
+    expect(validateContact(form)).toEqual([{ href: '#dob-day', text: 'some-dob-error' }])
   })
 
   it('should return multiple errors', () => {
@@ -87,7 +87,7 @@ describe('updateContactValidator', () => {
 
     expect(validateContact(form)).toEqual([
       { href: '#prisonerName', text: 'some-name-error' },
-      { href: '#dob', text: 'some-dob-error' },
+      { href: '#dob-day', text: 'some-dob-error' },
     ])
   })
 
