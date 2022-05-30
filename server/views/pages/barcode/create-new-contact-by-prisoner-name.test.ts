@@ -48,11 +48,11 @@ describe('Create New Contact By Prisoner Name View', () => {
     })
 
     it('should highlight dob errors in all inputs', () => {
-      viewContext = { errors: [{ href: '#prisonerDob', text: 'some-error' }] }
+      viewContext = { errors: [{ href: '#prisonerDob-day', text: 'some-error' }] }
 
       const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-      expect($('div.govuk-error-summary').find('a[href="#prisonerDob"]').text()).toEqual('some-error')
+      expect($('div.govuk-error-summary').find('a[href="#prisonerDob-day"]').text()).toEqual('some-error')
       expect($('#prisonerDob-error').text()).toContain('some-error')
       expect($('#prisonerDob-day').attr('class')).toContain('govuk-input--error')
     })
