@@ -10,6 +10,7 @@ import link from '../mockApis/sendLegalMail/link'
 import barcode from '../mockApis/sendLegalMail/barcode'
 import contact from '../mockApis/sendLegalMail/contact'
 import cjsm from '../mockApis/sendLegalMail/cjsm'
+import supportedPrisons from '../mockApis/sendLegalMail/supportedPrisons'
 
 export default (on: (string, Record) => void): void => {
   on('task', {
@@ -65,6 +66,7 @@ export default (on: (string, Record) => void): void => {
     stubVerifyOneTimeCodeInvalidSignatureFailure: oneTimeCode.stubVerifyOneTimeCodeInvalidSignatureFailure,
 
     stubGetPrisonRegister: prisonRegister.stubGetPrisonRegister,
+    stubGetSupportedPrisons: supportedPrisons.stubGetSupportedPrisons,
 
     stubCreateZendeskTicket: zendesk.stubCreateZendeskTicket,
     stubCreateZendeskTicketFailure: zendesk.stubCreateZendeskTicketFailure,

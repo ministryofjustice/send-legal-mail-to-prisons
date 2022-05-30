@@ -15,6 +15,7 @@ Cypress.Commands.add('signInAsLegalSender', () => {
   cy.task('stubAuthToken')
   cy.task('stubGetCjsmUserDetails')
   cy.task('stubGetPrisonRegister')
+  cy.task('stubGetSupportedPrisons')
 
   if (!featureFlags.isLsjOneTimeCodeAuthEnabled()) {
     // Sign in as LSJ with magic link

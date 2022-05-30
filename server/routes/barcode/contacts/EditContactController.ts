@@ -6,7 +6,6 @@ import type { EditContactForm } from 'forms'
 import EditContactView from './EditContactView'
 import logger from '../../../../logger'
 import ContactService from '../../../services/contacts/ContactService'
-import filterSupportedPrisons from './filterSupportedPrisons'
 import parseDob from './parseDob'
 import validateContact from './updateContactValidator'
 import RecipientFormService from '../recipients/RecipientFormService'
@@ -27,9 +26,9 @@ export default class EditContactController {
       return res.redirect('/barcode/review-recipients')
     }
 
-    let activePrisons: Array<Prison>
+    let supportedPrisons: Array<Prison>
     try {
-      activePrisons = await this.prisonService.getPrisons()
+      supportedPrisons = await this.prisonService.getSupportedPrisons()
     } catch (error) {
       logger.error(`Unable to load prisons due to error`, error)
       req.flash('errors', [{ text: 'There was an error retrieving the list of prisons' }])
@@ -65,7 +64,7 @@ export default class EditContactController {
       }
     }
 
-    const view = new EditContactView(editContactForm, filterSupportedPrisons(activePrisons), req.flash('errors'))
+    const view = new EditContactView(editContactForm, supportedPrisons, req.flash('errors'))
 
     return res.render('pages/barcode/edit-contact-details', { ...view.renderArgs })
   }

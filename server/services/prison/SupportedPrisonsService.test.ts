@@ -18,24 +18,22 @@ describe('SupportedPrisonService', () => {
   describe('getSupportedPrisons', () => {
     it('should return supported prisons', async () => {
       mockedSendLegalMailApi //
-        .matchHeader('authorization', 'Bearer some-user-token')
         .get('/prisons')
         .reply(200, ['ABC', 'CDE'])
 
-      const prisons = await supportedPrisonsService.getSupportedPrisons('some-user-token')
+      const prisons = await supportedPrisonsService.getSupportedPrisons()
 
       expect(prisons).toStrictEqual(['ABC', 'CDE'])
       expect(mockedSendLegalMailApi.isDone()).toBe(true)
     })
 
-    it('should pass on any authentication errors', async () => {
+    it('should pass on any errors', async () => {
       mockedSendLegalMailApi //
-        .matchHeader('authorization', 'Bearer some-user-token')
         .get('/prisons')
-        .reply(401)
+        .reply(499, 'some-error')
 
-      await supportedPrisonsService.getSupportedPrisons('some-user-token').catch(error => {
-        expect(error.status).toBe(401)
+      await supportedPrisonsService.getSupportedPrisons().catch(error => {
+        expect(error.status).toBe(499)
         expect(mockedSendLegalMailApi.isDone()).toBe(true)
       })
     })

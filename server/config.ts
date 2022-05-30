@@ -123,7 +123,6 @@ export default {
   magicLinkValidityDuration: Number(get('MAGIC_LINK_VALIDITY_DURATION_IN_MINUTES', 60)),
   oneTimeCodeValidityDuration: Number(get('ONE_TIME_CODE_VALIDITY_DURATION_IN_MINUTES', 30)),
   lsjSessionDuration: Number(get('LSJ_SESSION_DURATION_IN_DAYS', 7)),
-  supportedPrisons: get('SUPPORTED_PRISONS', ''),
   coversheetPdf: {
     printDebugInfo: toBoolean(get('COVERSHEET_PRINT_DEBUG', false)),
     addressLabelWidth: get('COVERSHEET_ADDRESS_LABEL_WIDTH', '90mm'),

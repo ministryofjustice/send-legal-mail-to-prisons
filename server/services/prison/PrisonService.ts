@@ -25,18 +25,18 @@ export default class PrisonService {
     return this.prisonRegisterService.getPrisonNameOrId(prisonId)
   }
 
-  async getSupportedPrisons(authToken: string): Promise<Array<Prison>> {
+  async getSupportedPrisons(): Promise<Array<Prison>> {
     const [prisons, supportedPrisonCodes] = await Promise.all([
       this.prisonRegisterService.getActivePrisonsFromPrisonRegister(),
-      this.supportedPrisonsService.getSupportedPrisons(authToken),
+      this.supportedPrisonsService.getSupportedPrisons(),
     ])
     return this.supportedPrisons(prisons, supportedPrisonCodes.supportedPrisons)
   }
 
-  async getPrisonsBySupported(authToken: string): Promise<PrisonsBySupported> {
+  async getPrisonsBySupported(): Promise<PrisonsBySupported> {
     const [prisons, supportedPrisonCodes] = await Promise.all([
       this.prisonRegisterService.getActivePrisonsFromPrisonRegister(),
-      this.supportedPrisonsService.getSupportedPrisons(authToken),
+      this.supportedPrisonsService.getSupportedPrisons(),
     ])
     return {
       supportedPrisons: this.supportedPrisons(prisons, supportedPrisonCodes.supportedPrisons),

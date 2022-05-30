@@ -3,10 +3,10 @@ import type { Recipient } from 'prisonTypes'
 import type { Contact } from 'sendLegalMailApiClient'
 import moment from 'moment'
 import type { RecipientForm } from 'forms'
-import PrisonRegisterService from '../../../services/prison/PrisonRegisterService'
+import PrisonService from '../../../services/prison/PrisonService'
 
 export default class RecipientFormService {
-  constructor(private readonly prisonRegisterService: PrisonRegisterService) {}
+  constructor(private readonly prisonService: PrisonService) {}
 
   resetForm(req: Request) {
     req.session.recipientForm = {}
@@ -67,7 +67,7 @@ export default class RecipientFormService {
   }
 
   private async toRecipient(recipientForm: RecipientForm): Promise<Recipient> {
-    const prison = await this.prisonRegisterService.getPrison(recipientForm.prisonId)
+    const prison = await this.prisonService.getPrison(recipientForm.prisonId)
     return {
       prisonerName: recipientForm.prisonerName || '',
       prisonNumber: recipientForm.prisonNumber,
