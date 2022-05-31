@@ -62,4 +62,17 @@ describe('Print Coversheets View', () => {
 
     expect($('p').text()).toContain('file SendLegalMail-2022-02-22-2-DL.pdf with 2 coversheets ')
   })
+
+  it('should include additional text for screen readers on the download button', () => {
+    viewContext = {
+      envelopeSize: 'c4',
+      numberOfCoversheets: 2,
+      filename: 'SendLegalMail-2022-02-22-2-DL.pdf',
+      downloadButtonHtml: '<p>some-button-text</p>',
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('a[data-qa=download-pdf-button]').text()).toContain('some-button-text')
+  })
 })

@@ -243,6 +243,7 @@ describe('PdfController', () => {
         envelopeSize: 'dl',
         filename: `SendLegalMail-${moment().format('YYYY-MM-DD')}-1-DL.pdf`,
         numberOfCoversheets: 1,
+        downloadButtonHtml: expect.stringContaining('downloads pdf file'),
       })
       expect(req.session.recipients).toBeUndefined()
     })
