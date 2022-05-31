@@ -39,7 +39,7 @@ describe('newContactValidator', () => {
     mockValidatePrisonId.mockReturnValue([])
     mockValidatePrisonerDob.mockReturnValue(['Enter a date of birth'])
 
-    expect(validateNewContact(form)).toEqual([{ href: '#prisonerDob', text: 'Enter a date of birth' }])
+    expect(validateNewContact(form)).toEqual([{ href: '#prisonerDob-day', text: 'Enter a date of birth' }])
   })
 
   it('should return all errors', () => {
@@ -49,7 +49,7 @@ describe('newContactValidator', () => {
     expect(validateNewContact(form)).toEqual(
       expect.arrayContaining([
         { href: '#prisonId', text: 'Select a prison name' },
-        { href: '#prisonerDob', text: 'Enter a date of birth' },
+        { href: '#prisonerDob-day', text: 'Enter a date of birth' },
       ])
     )
   })
