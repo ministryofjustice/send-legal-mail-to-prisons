@@ -20,21 +20,18 @@
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">Enter a prison number</h1>
-        <p>The details you provide will be used to address your mail.</p>
-
         <form id="find-recipient-by-prison-number-form" action="/barcode/find-recipient/by-prison-number" method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
           {% call govukFieldset({ }) %}
             {{ govukInput({
               label: {
-                text: "Enter the recipient's prison number",
-                classes: "govuk-visually-hidden",
-                isPageHeading: false
+                text: "Enter a prison number",
+                classes: 'govuk-label--xl',
+                isPageHeading: true
               },
               hint: {
-                text: "Example prison number: A1234BC"
+                html: "The details you provide will be used to address your mail.<br><br>Example prison number: A1234BC"
               },
               attributes: {
                 autocomplete: 'off'
