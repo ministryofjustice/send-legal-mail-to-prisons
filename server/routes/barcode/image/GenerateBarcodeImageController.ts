@@ -22,10 +22,13 @@ export default class GenerateBarcodeImageController {
 
       const barcodeImages = await Promise.all(
         req.session.recipients.map(async recipient => {
+          const imageName = this.barcodeFilename(recipient)
           return {
             barcodeImageUrl: await this.createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient),
-            barcodeImageName: this.barcodeFilename(recipient),
+            barcodeImageName: imageName,
             recipientName: recipient.prisonerName,
+            copyButtonHtml: this.copyButtonHtml(recipient.prisonerName, imageName),
+            downloadButtonHtml: this.downloadButtonHtml(recipient.prisonerName, imageName),
           }
         })
       )
@@ -45,5 +48,13 @@ export default class GenerateBarcodeImageController {
   private barcodeFilename(recipient: Recipient): string {
     const today = moment().format('YYYY-MM-DD')
     return `SendLegalMail-${recipient.prisonerName}-${today}.png`.replace(/ /g, '-')
+  }
+
+  private copyButtonHtml(recipientName: string, filename: string): string {
+    return `Copy <span class="govuk-visually-hidden"> barcode image for ${recipientName} (copies PNG file ${filename} of approximate size 0.2 Megabytes to the Clipboard)</span>`
+  }
+
+  private downloadButtonHtml(recipientName: string, filename: string): string {
+    return `Download <span class="govuk-visually-hidden"> barcode image for ${recipientName} (downloads PNG file ${filename} of approximate size 0.2 Megabytes)</span>`
   }
 }

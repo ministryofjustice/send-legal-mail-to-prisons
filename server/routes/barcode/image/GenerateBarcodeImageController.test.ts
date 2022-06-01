@@ -70,6 +70,12 @@ describe('GenerateBarcodeImageController', () => {
               barcodeImageUrl: 'barcode-address-image-url',
               barcodeImageName: `SendLegalMail-John-Smith-${moment().format('YYYY-MM-DD')}.png`,
               recipientName: 'John Smith',
+              copyButtonHtml: `Copy <span class="govuk-visually-hidden"> barcode image for John Smith (copies PNG file SendLegalMail-John-Smith-${moment().format(
+                'YYYY-MM-DD'
+              )}.png of approximate size 0.2 Megabytes to the Clipboard)</span>`,
+              downloadButtonHtml: `Download <span class="govuk-visually-hidden"> barcode image for John Smith (downloads PNG file SendLegalMail-John-Smith-${moment().format(
+                'YYYY-MM-DD'
+              )}.png of approximate size 0.2 Megabytes)</span>`,
             },
           ],
         }
@@ -162,11 +168,23 @@ describe('GenerateBarcodeImageController', () => {
               barcodeImageUrl: 'john-smith-barcode-image-url',
               barcodeImageName: `SendLegalMail-John-Smith-${moment().format('YYYY-MM-DD')}.png`,
               recipientName: 'John Smith',
+              copyButtonHtml: `Copy <span class="govuk-visually-hidden"> barcode image for John Smith (copies PNG file SendLegalMail-John-Smith-${moment().format(
+                'YYYY-MM-DD'
+              )}.png of approximate size 0.2 Megabytes to the Clipboard)</span>`,
+              downloadButtonHtml: `Download <span class="govuk-visually-hidden"> barcode image for John Smith (downloads PNG file SendLegalMail-John-Smith-${moment().format(
+                'YYYY-MM-DD'
+              )}.png of approximate size 0.2 Megabytes)</span>`,
             },
             {
               barcodeImageUrl: 'john-doe-barcode-image-url',
               barcodeImageName: `SendLegalMail-John-Doe-${moment().format('YYYY-MM-DD')}.png`,
               recipientName: 'John Doe',
+              copyButtonHtml: `Copy <span class="govuk-visually-hidden"> barcode image for John Doe (copies PNG file SendLegalMail-John-Doe-${moment().format(
+                'YYYY-MM-DD'
+              )}.png of approximate size 0.2 Megabytes to the Clipboard)</span>`,
+              downloadButtonHtml: `Download <span class="govuk-visually-hidden"> barcode image for John Doe (downloads PNG file SendLegalMail-John-Doe-${moment().format(
+                'YYYY-MM-DD'
+              )}.png of approximate size 0.2 Megabytes)</span>`,
             },
           ],
         }

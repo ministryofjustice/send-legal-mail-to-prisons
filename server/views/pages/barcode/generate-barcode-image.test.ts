@@ -27,22 +27,46 @@ describe('Generate barcode image view', () => {
   })
 
   it('should display a single barcode image and buttons', () => {
-    viewContext = { barcodeImages: [{ recipientName: 'some-name', barcodeImageUrl: someImageUrl }], errors: [] }
+    viewContext = {
+      barcodeImages: [
+        {
+          barcodeImageUrl: someImageUrl,
+          barcodeImageName: 'some-image-name',
+          recipientName: 'some-name',
+          copyButtonHtml: 'some-copy-html',
+          downloadButtonHtml: 'some-download-html',
+        },
+      ],
+      errors: [],
+    }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('img.barcode-address-image').length).toStrictEqual(1)
     expect($('img.barcode-address-image').first().attr('alt')).toContain('some-name')
-    expect($('button[data-qa=copy-image-button]').html()).toContain('some-name')
-    expect($('a[data-qa=download-image-button]').html()).toContain('some-name')
+    expect($('button[data-qa=copy-image-button]').html()).toContain('some-copy-html')
+    expect($('a[data-qa=download-image-button]').html()).toContain('some-download-html')
     expect($('a[data-qa=download-image-button]').attr('href')).toEqual(someImageUrl)
+    expect($('a[data-qa=download-image-button]').attr('download')).toEqual('some-image-name')
   })
 
   it('should display multiple barcode images', () => {
     viewContext = {
       barcodeImages: [
-        { recipientName: 'some-name', barcodeImageUrl: someImageUrl },
-        { recipientName: 'another-name', barcodeImageUrl: anotherImageUrl },
+        {
+          barcodeImageUrl: someImageUrl,
+          barcodeImageName: 'some-image-name',
+          recipientName: 'some-name',
+          copyButtonHtml: 'some-copy-html',
+          downloadButtonHtml: 'some-download-html',
+        },
+        {
+          barcodeImageUrl: anotherImageUrl,
+          barcodeImageName: 'another-image-name',
+          recipientName: 'another-name',
+          copyButtonHtml: 'another-copy-html',
+          downloadButtonHtml: 'another-download-html',
+        },
       ],
       errors: [],
     }
@@ -51,9 +75,10 @@ describe('Generate barcode image view', () => {
 
     expect($('img.barcode-address-image').length).toStrictEqual(2)
     expect($('img.barcode-address-image').eq(1).attr('alt')).toContain('another-name')
-    expect($('button[data-qa=copy-image-button]').eq(1).html()).toContain('another-name')
-    expect($('a[data-qa=download-image-button]').eq(1).html()).toContain('another-name')
+    expect($('button[data-qa=copy-image-button]').eq(1).html()).toContain('another-copy-html')
+    expect($('a[data-qa=download-image-button]').eq(1).html()).toContain('another-download-html')
     expect($('a[data-qa=download-image-button]').eq(1).attr('href')).toEqual(anotherImageUrl)
+    expect($('a[data-qa=download-image-button]').eq(1).attr('download')).toEqual('another-image-name')
   })
 
   it('should display errors', () => {
