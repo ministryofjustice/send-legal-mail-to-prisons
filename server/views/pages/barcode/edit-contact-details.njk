@@ -30,7 +30,7 @@
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
           <input type="hidden" id="contactId" name="contactId" value="{{ form.contactId }}" />
 
-          {% set errorDob = errors | findError('dob') %}
+          {% set errorDob = errors | findError('dob-day') %}
           {% set dobErrorClass = " govuk-input--error" if errorDob %}
 
           {% call govukFieldset({ }) %}

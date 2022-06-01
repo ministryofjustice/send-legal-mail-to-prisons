@@ -18,7 +18,7 @@
         <p>Your PDF file <strong>{{ filename }}</strong> with {{ numberOfCoversheets }} {{ 'coversheets' if numberOfCoversheets > 1 else 'coversheet' }} is ready to download.</p>
 
         {{ govukButton({
-          text: 'Download coversheets',
+          html: downloadButtonHtml,
           href: "/barcode/pdf/download",
           classes: 'govuk-button',
           attributes: { 'data-qa': 'download-pdf-button' }

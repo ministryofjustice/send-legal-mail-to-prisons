@@ -50,19 +50,13 @@
             </p>
           </div>
           <div class="govuk-button-group govuk-!-margin-top-2">
-            {% set buttonText %}
-              Copy<span class="govuk-visually-hidden"> barcode for {{ barcodeImage.recipientName }}</span>
-            {% endset %}
             {{ govukButton({
-              html: buttonText,
+              html: barcodeImage.copyButtonHtml,
               classes: "govuk-button--secondary barcode-address-copy-button",
               attributes: { 'data-qa': 'copy-image-button' }
             }) }}
-            {% set buttonText %}
-              Download<span class="govuk-visually-hidden"> barcode for {{ barcodeImage.recipientName }}</span>
-            {% endset %}
             {{ govukButton({
-              html: buttonText,
+              html: barcodeImage.downloadButtonHtml,
               classes: "govuk-button--secondary",
               element: "a",
               href: barcodeImage.barcodeImageUrl,

@@ -110,11 +110,11 @@ describe('Edit contact details', () => {
     })
 
     it('should highlight dob errors in all inputs', () => {
-      viewContext = { errors: [{ href: '#dob', text: 'some-error' }] }
+      viewContext = { errors: [{ href: '#dob-day', text: 'some-error' }] }
 
       const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-      expect($('div.govuk-error-summary').find('a[href="#dob"]').text()).toEqual('some-error')
+      expect($('div.govuk-error-summary').find('a[href="#dob-day"]').text()).toEqual('some-error')
       expect($('#dob-error').text()).toContain('some-error')
       expect($('#dob-day').attr('class')).toContain('govuk-input--error')
     })

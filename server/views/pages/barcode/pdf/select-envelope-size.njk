@@ -18,33 +18,32 @@
       }) }}
     {% endif %}
 
-    <form id="select-envelope-size-form" action="/barcode/pdf/select-envelope-size" method="POST" novalidate>
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <form id="select-envelope-size-form" action="/barcode/pdf/select-envelope-size" method="POST" novalidate>
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
-      {% call govukFieldset({ }) %}
+            {{ govukRadios({
+              fieldset: {
+                legend: {
+                  text: 'Select envelope size',
+                  isPageHeading: true,
+                  classes: 'govuk-fieldset__legend--xl'
+                }
+              },
+              items: envelopeSizes | renderEnvelopeSizeRadios,
+              id: 'envelopeSize',
+              name: 'envelopeSize',
+              errorMessage: errors | findError('envelopeSize')
+            }) }}
 
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-two-thirds">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-              <h1 class="govuk-fieldset__heading">Select envelope size</h1>
-            </legend>
-          </div>
-        </div>
-
-        {{ govukRadios({
-          items: envelopeSizes | renderEnvelopeSizeRadios,
-          id: 'envelopeSize',
-          name: 'envelopeSize',
-          errorMessage: errors | findError('envelopeSize')
-        }) }}
-
-        {{ govukButton({
-          text: 'Continue',
-          attributes: { 'data-qa': 'continue-button' }
-        }) }}
-
-      {% endcall %}
-    </form>
+            {{ govukButton({
+              text: 'Continue',
+              attributes: { 'data-qa': 'continue-button' }
+            }) }}
+        </form>
+      </div>
+    </div>
   </section>
 
 {% endblock %}

@@ -61,6 +61,7 @@ export default class PdfController {
 
     const numberOfCoversheets = req.session.pdfRecipients.length
     const filename = this.pdfFilename(numberOfCoversheets, this.envelopeSize(req.session.pdfForm))
+    const downloadButtonHtml = this.downloadButtonHtml(filename, numberOfCoversheets)
     const { envelopeSize } = req.session.pdfForm
 
     let smokeTestBarcode: string
@@ -73,6 +74,7 @@ export default class PdfController {
       numberOfCoversheets,
       filename,
       smokeTestBarcode,
+      downloadButtonHtml,
     })
   }
 
@@ -123,6 +125,12 @@ export default class PdfController {
   private pdfFilename(numberOfCoversheets: number, envelopeSize: string): string {
     const today = moment().format('YYYY-MM-DD')
     return `SendLegalMail-${today}-${numberOfCoversheets}-${envelopeSize}.pdf`
+  }
+
+  private downloadButtonHtml(filename: string, numberOfCoversheets: number): string {
+    return `Download coversheets <span class="govuk-visually-hidden"> (downloads pdf file ${filename} of approximate size ${
+      numberOfCoversheets * 0.2
+    } Megabytes)</span>`
   }
 
   private envelopeSize(pdfForm: PdfForm): string {
