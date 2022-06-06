@@ -15,15 +15,9 @@ parameters:
 
   node-version:
     type: string
-    default: 14.17-browsers
+    default: 16.15-browsers
 
 executors:
-  integration-test:
-    docker:
-      - image: cimg/node:<< pipeline.parameters.node-version >>
-      - image: cimg/redis:6.2.6
-    working_directory: ~/app
-
   smoke-test:
     docker:
       - image: cypress/included:8.7.0
@@ -38,7 +32,7 @@ jobs:
       - checkout
       - run:
           name: Update npm
-          command: 'sudo npm install -g npm@latest'
+          command: 'npm install -g npm@latest'
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
@@ -110,7 +104,10 @@ jobs:
           path: test_results/jest/coverage
 
   integration_test:
-    executor: integration-test
+    executor:
+      name: hmpps/node_redis
+      node_tag: << pipeline.parameters.node-version >>
+      redis_tag: "6.2"
     steps:
       - checkout
       - attach_workspace:
