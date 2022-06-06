@@ -9,7 +9,7 @@ export default function renderChooseBarcodeOptionRadiosFilter(values: Array<stri
         html: `        
           <img src='/assets/images/print-barcodes-image.png' alt='' width='94px'/>
           <details class='govuk-details' data-module='govuk-details'>
-            <summary class='govuk-details__summary'><span class='govuk-details__summary-text'>How it works</span></summary>            
+            <summary class='govuk-details__summary'><span class='govuk-details__summary-text'>How it works <span class='govuk-visually-hidden'> (printing as part of your own document)</span></span></summary>            
             <div class="govuk-details__text">
               <ol class="govuk-grid-row">
                 <li class="govuk-grid-column-one-third">
@@ -43,7 +43,7 @@ export default function renderChooseBarcodeOptionRadiosFilter(values: Array<stri
         html: `
           <img src='/assets/images/print-barcodes-coversheet.png' alt='' width='94px'/>
           <details class='govuk-details' data-module='govuk-details'>
-            <summary class='govuk-details__summary'><span class='govuk-details__summary-text'>How it works</span></summary>            
+            <summary class='govuk-details__summary'><span class='govuk-details__summary-text'>How it works <span class='govuk-visually-hidden'> (printing on a separate piece of paper)</span></span></summary>            
             <div class="govuk-details__text">
               <ol class="govuk-grid-row">
                 <li class="govuk-grid-column-one-third">
