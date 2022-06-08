@@ -4,7 +4,7 @@
 A Typescript application to allow creating and scanning barcodes for legal mail (aka rule39 mail).
 
 ### Team
-This application is in development by the Farsight Consulting team `Send legal mail to prisons`. They can be contacted on MOJ Slack channel `#prisoner_transactions_team`.
+This application is currently being rolled out in a Public Beta. The project is currently looking for a new owner.
 
 ### Health
 The application has a health endpoint found at `/health` which indicates if the app is running and is healthy.
@@ -61,20 +61,24 @@ The easiest way to run the app is to use docker compose to create the service an
 
 `docker-compose up`
 
+Note that this will require running up the API first. See the [API Readme](https://github.com/ministryofjustice/send-legal-mail-to-prisons-api#running-the-app).
+
+See `http://localhost:3000/health` to check the app is running.
+
 ### Dependencies
 The app requires: 
 * hmpps-auth - for authentication
 * nomis-user-roles-api - for authentication
 * redis - session store and token caching
-* prison-register - for returning details of prisons
+* gotenberg - for creating pdfs
 
 ### Running the app for development
 
 To start the main services excluding the example typescript template app: 
 
-`docker-compose up redis hmpps-auth nomis-user-roles-api prison-register`
+`docker-compose up redis hmpps-auth nomis-user-roles-api gotenberg`
 
-Install dependencies using `npm install`, ensuring you are using >= `Node v14.x`
+Install dependencies using `npm install`, ensuring you are using >= `Node v16.x`
 
 Create a `.env` which should override environment variables required to run locally:
 ```properties
@@ -86,6 +90,7 @@ SESSION_SECRET=anything
 PORT=3000
 SEND_LEGAL_MAIL_API_URL=http://localhost:8080
 PRISON_REGISTER_API_URL=https://prison-register-dev.hmpps.service.justice.gov.uk
+ONE_TIME_CODE_AUTH_ENABLED=true
 ```
 
 And then, to build the assets and start the app with nodemon:
@@ -100,13 +105,17 @@ See the [API Readme](https://github.com/ministryofjustice/send-legal-mail-to-pri
 
 #### How do I sign is as a legal mail sender?
 
-Visit URL `http://localhost:3000/barcode/find-recipient` which should redirect to the `Request a link to sign in` page. Enter any email address that ends with `cjsm.net`.
+Visit URL `http://localhost:3000/barcode/find-recipient` which should redirect to the `Request a code to sign in` page. Enter any email address that ends with `cjsm.net`.
 
 Open mailcatcher at `http://localhost:1080`. Open the first email which should contain a link - click on the link and you will be signed in.
 
 #### How do I sign in as a mailroom staff user?
 
 Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth sign in page. Enter credentials `SLM_MAILROOM_USER_LOCAL` / `password1234556`.
+
+#### How do I sign in as an admin user?
+
+Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth sign in page. Enter credentials `SLM_ADMIN` / `password1234556`.
 
 ## Run linter
 
