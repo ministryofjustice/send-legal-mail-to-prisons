@@ -1,5 +1,5 @@
-import { RedisClient } from 'redis'
 import { Request } from 'express'
+import { RedisClient } from './RedisClient'
 import SmokeTestStore from './SmokeTestStore'
 import config from '../../config'
 
@@ -8,6 +8,8 @@ const redisClient = {
   get: jest.fn(),
   set: jest.fn(),
   del: jest.fn(),
+  connect: jest.fn(),
+  isOpen: jest.fn(),
 }
 
 const req = {
@@ -27,25 +29,17 @@ describe('SmokeTestStore', () => {
   })
 
   it('should set the smoke test secret', async () => {
-    redisClient.set.mockImplementation((key, value, mode, durationSeconds, callback) => callback())
-
     await smokeTestStore.setSmokeTestSecret('some-secret')
 
-    expect(redisClient.set).toHaveBeenCalledWith(
-      'smokeTest',
-      'some-secret',
-      'EX',
-      expect.any(Number),
-      expect.any(Function)
-    )
+    expect(redisClient.set).toHaveBeenCalledWith('smokeTest', 'some-secret', { EX: expect.any(Number) })
   })
 
   it('should get and delete the smoke test secret', async () => {
-    redisClient.get.mockImplementation((key, callback) => callback(null, 'some-secret'))
+    redisClient.get.mockResolvedValue('some-secret')
 
     const secret = await smokeTestStore.getSmokeTestSecret()
 
-    expect(redisClient.get).toHaveBeenCalledWith('smokeTest', expect.any(Function))
+    expect(redisClient.get).toHaveBeenCalledWith('smokeTest')
     expect(redisClient.del).toHaveBeenCalledWith('smokeTest')
     expect(secret).toBe('some-secret')
   })
@@ -53,12 +47,11 @@ describe('SmokeTestStore', () => {
   it('should start a smoke test', async () => {
     config.smoketest.msjSecret = 'some-secret'
     req.body = { msjSecret: 'some-secret' }
-    redisClient.set.mockImplementation((key, value, mode, durationSeconds, callback) => callback())
 
     const secret = await smokeTestStore.startSmokeTest(req as unknown as Request)
 
     expect(secret).toHaveLength(40)
-    expect(redisClient.set).toHaveBeenCalledWith('smokeTest', secret, 'EX', expect.any(Number), expect.any(Function))
+    expect(redisClient.set).toHaveBeenCalledWith('smokeTest', secret, { EX: expect.any(Number) })
   })
 
   it('should not start a smoke test if the secret is incorrect', async () => {

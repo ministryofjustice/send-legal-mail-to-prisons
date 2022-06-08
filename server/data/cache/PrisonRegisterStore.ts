@@ -1,20 +1,19 @@
-import redis from 'redis'
 import type { Prison } from 'prisonTypes'
-import createRedisClient from './createRedisClient'
 import RedisStore from './RedisStore'
+import { createRedisClient, RedisClient } from './RedisClient'
 
-const ACTIVE_PRISONS = 'activePrisons'
+const KEY = 'prisonRegister:activePrisons'
 
 export default class PrisonRegisterStore extends RedisStore {
-  constructor(redisClient: redis.RedisClient = createRedisClient('prisonRegister:')) {
+  constructor(redisClient: RedisClient = createRedisClient()) {
     super(redisClient)
   }
 
-  public setActivePrisons(activePrisons: Array<Prison>, durationDays = 1) {
-    this.setRedisAsync(ACTIVE_PRISONS, JSON.stringify(activePrisons), 'EX', durationDays * 24 * 60 * 60)
+  public async setActivePrisons(activePrisons: Array<Prison>, durationDays = 1) {
+    await this.setEntry(KEY, JSON.stringify(activePrisons), durationDays * 24 * 60 * 60)
   }
 
   public async getActivePrisons(): Promise<Array<Prison>> {
-    return this.getRedisAsync(ACTIVE_PRISONS).then(serializedData => JSON.parse(serializedData) as Array<Prison>)
+    return this.getEntry(KEY).then(serializedData => JSON.parse(serializedData) as Array<Prison>)
   }
 }

@@ -94,5 +94,6 @@ export default class SuperTestWrapper {
 
   cleanAll = async () => {
     nock.cleanAll()
+    jest.resetAllMocks()
   }
 }
