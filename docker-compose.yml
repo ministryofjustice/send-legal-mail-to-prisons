@@ -1,6 +1,28 @@
 version: '3.1'
 services:
 
+  app:
+    image: quay.io/hmpps/send-legal-mail-to-prisons
+    networks:
+      - hmpps
+    container_name: send-legal-mail-to-prisons
+    depends_on: [redis]
+    ports:
+      - "3000:3000"
+    environment:
+      - HMPPS_AUTH_EXTERNAL_URL=http://localhost:9090/auth
+      - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
+      - TOKEN_VERIFICATION_API_URL=https://token-verification-api-dev.prison.service.justice.gov.uk
+      - TOKEN_VERIFICATION_ENABLED=false
+      - NODE_ENV=development
+      - SESSION_SECRET=anything
+      - PORT=3000
+      - SEND_LEGAL_MAIL_API_URL=http://host.docker.internal:8080
+      - PRISON_REGISTER_API_URL=https://prison-register-dev.hmpps.service.justice.gov.uk
+      - ONE_TIME_CODE_AUTH_ENABLED=true
+      - REDIS_HOST=redis
+      - GOTENBERG_API_URL=http://gotenberg:3000
+
   redis:
     image: 'bitnami/redis:5.0'
     networks:
@@ -53,21 +75,6 @@ services:
       - DEFAULT_WAIT_TIMEOUT=30
     healthcheck:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/ping' ]
-
-  app:
-    build: .
-    networks:
-      - hmpps
-    depends_on: [redis]
-    ports:
-      - "3000:3000"
-    environment:
-      - REDIS_HOST=redis
-      - HMPPS_AUTH_EXTERNAL_URL=http://localhost:9090/auth
-      - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
-      # These will need to match new creds in the seed auth service auth
-      - API_CLIENT_ID=client-id
-      - API_CLIENT_SECRET=client-secret
 
 networks:
   hmpps:
