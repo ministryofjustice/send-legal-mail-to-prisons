@@ -115,7 +115,7 @@ Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth si
 
 #### How do I sign in as an admin user?
 
-Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth sign in page. Enter credentials `SLM_ADMIN` / `password1234556`.
+Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth sign in page. Enter credentials `SLM_ADMIN_LOCAL` / `password1234556`.
 
 ## Run linter
 
@@ -334,3 +334,101 @@ The above tells us the user hit the start page at 11:47:06.948 and submitted (PO
 11:47:33.979, but didn't enter the code until 4:21:50.323. At this point the code would have expired and would be the 
 root cause of the API error we are investigating (the 404 error from `/oneTimeCode/verify` at 4:21:50.339). We can see the 
 user was then presented with the Request A Code page again.
+
+## Troubleshooting Performance Issues
+
+### How to recognise performance issues?
+
+Performance issues are likely to manifest to the user as either the site running very slowly or responding with errors.
+
+From a technical perspective this is likely to result in health checks failing, an increase in the number of 5XX errors or pods restarting frequently. We have alerts for all of these scenarios which are sent to Slack.
+
+Check the [Golden signals dashboard](#golden-signals-dashboard) for both the UI and the API. This should give you a good overview of the error rates, latency, availability and pod restarts and help you diagnose when the problems started occurring.
+
+### How to find the cause of performance issues?
+
+#### Deployments
+
+Check is if a recent deployment coincides with the start of the performance issues. 
+
+In the Golden signals dashboard turn on the `service pod creation` button to give a visual indicator of deployments. Try [rolling back](#rolling-back-the-application) any helm releases that coincide with the start of the performance issues. If that works the problem was probably introduced by recent code changes which should be investigated.
+
+#### Upstream dependencies
+
+It's not unusual for HMPPS Auth to cause wider performance issues within HMPPS as it is a single point of failure. For example, Service X spams Auth preventing it from responding to other services causing a cascade of service failures.
+
+Check the [DPS Monitor (vpn required)](https://dps-monitor.prison.service.justice.gov.uk/health) to see if other services are being affected. Check the [Auth health page](https://sign-in.hmpps.service.justice.gov.uk/auth/health) to make sure it's up. Look around on Slack to see if other people are reporting problems.
+
+In this situation we are reliant on the `#hmpps-auth-audit-registers` team to investigate. If the outage looks like it will not be fixed quickly consider [turning on the maintenance pages](#maintenance-pages).
+
+#### Database problems
+
+Though projected volumes seem unlikely to cause database issues initially, this may become an issue over time.
+
+##### AWS Cloudwatch Metrics
+
+Check the [RDS dashboard](#rds-dashboard) to look for any anomalies. Some help understanding the meaning of each metric can be found in [AWS documentation](https://aws.amazon.com/blogs/database/making-better-decisions-about-amazon-rds-with-amazon-cloudwatch-metrics/).
+
+For example, a low `FreeStorageSpace` might indicate this needs increasing with a [larger instance class](https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/send-legal-mail-to-prisons-prod/resources/rds.tf#L13)
+
+##### Micrometer Metrics
+
+There are also some metrics collected from Spring in Application Insights Log Analytics which are useful for checking how the connection pool is performing. Run the following [query](https://portal.azure.com#@747381f4-e81f-4a43-bf68-ced6a1e14edf/blade/Microsoft_Azure_Monitoring_Logs/LogsBlade/resourceId/%2Fsubscriptions%2Fa5ddf257-3b21-4ba9-a28c-ab30f751b383%2FresourceGroups%2Fnomisapi-prod-rg%2Fproviders%2Fmicrosoft.insights%2Fcomponents%2Fnomisapi-prod/source/LogsBlade.AnalyticsShareLinkToQuery/q/H4sIAAAAAAAAA2XLsQ0CMQwAwJ4prDRfeYQfAQoWQCaxiMGJX7Zf3zA8oqGhPl3dI22cOV1qnN5wdHaGqra329WULzQY1hWW4NlQ%252BUGKg0QxDTeXsBlImyy%252FOr8hkjzjkOxQnu1eC5j%252FS5cXuZQP0SMMCoMAAAA%253D/timespan/P1D) to see what metrics are available:
+```Kusto Query Language
+customMetrics
+| where cloud_RoleName == 'send-legal-mail-to-prisons-api'
+| where name startswith "jdbc" or name startswith "hikari"
+```
+For example, if `hikaricp_connections_pending` is constantly high you may need to consider tweaking the [hikari connection pool configuration](https://github.com/brettwooldridge/HikariCP#gear-configuration-knobs-baby) in your `application.yml` configuration properties.
+
+##### App Insights Dependencies
+
+Application Insights Log Analytics collects metrics from the JDBC drivers which may give some clues to badly performing queries. Run the following [query](https://portal.azure.com#@747381f4-e81f-4a43-bf68-ced6a1e14edf/blade/Microsoft_Azure_Monitoring_Logs/LogsBlade/resourceId/%2Fsubscriptions%2Fa5ddf257-3b21-4ba9-a28c-ab30f751b383%2FresourceGroups%2Fnomisapi-prod-rg%2Fproviders%2Fmicrosoft.insights%2Fcomponents%2Fnomisapi-prod/source/LogsBlade.AnalyticsShareLinkToQuery/q/H4sIAAAAAAAAAz3LwQmAMAwF0LtT9NZTRugKHlxAiv3UQmxiUxHB4RUE7%252B8lKGpCXQpsuN25osEtLEeaJ2GMcYMLwXl7FTFyZNpiYepC2opJNYpa%252FF%252F7pV9QsZ4bbGf%252FAB%252BcKB9kAAAA/timespan/P1D) to see the metrics available:
+```Kusto Query Language
+dependencies
+| where cloud_RoleName == 'send-legal-mail-to-prisons-api'
+| where type == 'postgresql'
+```
+For example, if you notice that a particular query has a very high `duration` you may need to add an index to help its performance.
+
+#### Redis cache problems
+
+Though projected volumes seem unlikely to cause cache issues initially, this may become an issue if volumes increase.
+
+##### AWS Cloudwatch Metrics
+
+Check the [Redis dashboard](#redis-dashboard) to look for any anomalies. Some help understanding the metrics can be found in [AWS documentation](https://aws.amazon.com/blogs/database/monitoring-best-practices-with-amazon-elasticache-for-redis-using-amazon-cloudwatch/).
+
+For example, if CPUUtilization is consistently high you may need to consider switching to a [larger instance class](https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/send-legal-mail-to-prisons-prod/resources/elasticache-ui.tf#L14). 
+
+##### Micrometer Metrics
+
+There are also some metrics collected from Spring in Application Insights Log Analytics which are useful for checking the cache is performing. Run the following [query](https://portal.azure.com#@747381f4-e81f-4a43-bf68-ced6a1e14edf/blade/Microsoft_Azure_Monitoring_Logs/LogsBlade/resourceId/%2Fsubscriptions%2Fa5ddf257-3b21-4ba9-a28c-ab30f751b383%2FresourceGroups%2Fnomisapi-prod-rg%2Fproviders%2Fmicrosoft.insights%2Fcomponents%2Fnomisapi-prod/source/LogsBlade.AnalyticsShareLinkToQuery/q/H4sIAAAAAAAAAz3LsQ3DMAwEwD5TsFPFETxCUmSBgJAfNgFKFEQKbjJ8kMbXX12R3p7IqTUeX7pOTFA1X%252Fvn7YaXNNC2UQn0nQ2HGDdR43QeU8N7sAwtd%252B3%252FECkz49I8qRgyV0X5AUVpgEFqAAAA/timespan/P1D) to see what metrics are available:
+```Kusto Query Language
+customMetrics
+| where cloud_RoleName == 'send-legal-mail-to-prisons-api'
+| where name startswith 'lettuce'
+```
+Some help understanding the metrics collected can be found in the [lettuce documentation](https://lettuce.io/core/release/reference/index.html#command.latency.metrics.micrometer).
+
+##### App Insights Dependencies
+
+Application Insights Log Analytics collects metrics from Redis which may give some clues. Run the following [query](https://portal.azure.com#@747381f4-e81f-4a43-bf68-ced6a1e14edf/blade/Microsoft_Azure_Monitoring_Logs/LogsBlade/resourceId/%2Fsubscriptions%2Fa5ddf257-3b21-4ba9-a28c-ab30f751b383%2FresourceGroups%2Fnomisapi-prod-rg%2Fproviders%2Fmicrosoft.insights%2Fcomponents%2Fnomisapi-prod/source/LogsBlade.AnalyticsShareLinkToQuery/q/H4sIAAAAAAAAAz3LPQqAMAwG0N1TZOuUI%252FQKDl5ASvuhgfSHpiKCh1cQ3N9LaCgJJQpsuunc0UFR65HWpSrmkEHek7NXsWILyjmI8qjculgtxqGJ%252B%252Bu42hc6kph7AArIo01fAAAA/timespan/P1D) to see the metrics available:
+```Kusto Query Language
+dependencies
+| where cloud_RoleName == 'send-legal-mail-to-prisons-api'
+| where type == 'redis'
+```
+For example, if lots of queries have `success=False` we may be suffering from connection issues.
+
+#### JVM problems
+
+There could be problems with the JVM used in the API, such as running out of threads or memory.
+
+Various JVM related metrics are pushed to Application Insights by Spring/Micrometer. Run the following [query](https://portal.azure.com#@747381f4-e81f-4a43-bf68-ced6a1e14edf/blade/Microsoft_Azure_Monitoring_Logs/LogsBlade/resourceId/%2Fsubscriptions%2Fa5ddf257-3b21-4ba9-a28c-ab30f751b383%2FresourceGroups%2Fnomisapi-prod-rg%2Fproviders%2Fmicrosoft.insights%2Fcomponents%2Fnomisapi-prod/source/LogsBlade.AnalyticsShareLinkToQuery/q/H4sIAAAAAAAAAz3LsQ2AQAgAwN4piI0VIziCFi5gyEsUwz%252FmQW0c3th4%252FaXTw%252FLAUSV588C9cWVIaucyT6Y8Umboe%252Bicy4LKKylmEsUwPKq4FUc6pPtr%252BYIH1fBbYoN2v3L7Ajaf6OtmAAAA/timespan/P1D) to see what metrics are available:
+```Kusto Query Language
+customMetrics
+| where cloud_RoleName == 'send-legal-mail-to-prisons-api'
+| where name startswith "jvm"
+```
+For example, if the memory usage is consistently high you may need to increase the memory allocated in the `helm_dploy/send-legal-mail-to-prisons-api/values.yaml` file env var `JAVA_OPTS`.
