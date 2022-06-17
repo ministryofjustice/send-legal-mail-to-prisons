@@ -142,6 +142,7 @@ jobs:
           path: integration_tests/screenshots
 
   run_smoke_test:
+    circleci_ip_ranges: true
     executor: smoke-test
     parameters:
       env:

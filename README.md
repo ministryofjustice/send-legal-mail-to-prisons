@@ -160,6 +160,14 @@ If these tests pass we have a high level of confidence that the most valuable us
 
 Further details are available in the [smoke tests README](https://github.com/ministryofjustice/send-legal-mail-to-prisons/tree/main/smoke_tests).
 
+### :warning: Failing Smoke Tests - Circle CI IPs?
+
+For the smoke tests to work on dev and preprod we added [Circle IP ranges](https://circleci.com/docs/2.0/ip-ranges) to our ingress allow lists.
+
+If the smoke tests fail with a 403 then this is possibly because the list of allowed IPs has changed.
+
+Check the `allowlist` config in `helm_deploy/values-dev.yaml` and `helm_deploy/values-preprod.yaml` and compare them to the [Circle CI IP ranges](https://circleci.com/docs/2.0/ip-ranges#list-of-ip-address-ranges).
+
 ## Dependency Checks
 
 Dependency checks are run in a nightly job on CircleCI. See job `check_outdated` in `.circleci/config.yml`
