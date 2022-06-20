@@ -16,7 +16,7 @@ The application has a ping endpoint found at `/ping` which indicates that the ap
 If the application needs planned (or unplanned!) downtime we have a method for displaying maintenance pages for both Send legal mail and Check Rule39 mail. See the guide at `maintenance_pages/README.md`.
 
 ### Build
-<em>Requires membership of Github team `farsight-devs`</em>
+<em>Requires membership of Github team `book-a-prison-visit`</em>
 
 The application is built on [CircleCI](https://app.circleci.com/pipelines/github/ministryofjustice/send-legal-mail-to-prisons).
 
@@ -27,7 +27,7 @@ The application version currently running can be found on the `/health` endpoint
 
 * <em>Requires CLI tools `kubectl` and `helm`</em>
 * <em>Requires access to Cloud Platform Kubernetes `live` cluster</em>
-* <em>Requires membership of Github team `farsight-devs`</em>
+* <em>Requires membership of Github team `book-a-prison-visit`</em>
 
 For example in the dev environment:
 1. Set the Kube context with command `kubectl config use-context live.cloud-platform.service.justice.gov.uk`
@@ -248,7 +248,7 @@ To find the DBInstanceIdentifier for our RDS instances check Kubernetes secret `
 
 By using the standard [HMPPS Helm charts](https://github.com/ministryofjustice/hmpps-helm-charts/tree/main/charts/generic-prometheus-alerts) we get some alerts about our apps for free.
 
-These alerts have been configured to send Slack messages to the `#farsight_alerts` channel (the alert channel is configured in `values-prod.yaml`).
+These alerts have been configured to send Slack messages to the `#send-legal-mail-alerts` channel (the alert channel is configured in `values-prod.yaml`).
 
 #### Ingress alerts
 
@@ -262,11 +262,11 @@ The [generic application alerts](https://github.com/ministryofjustice/hmpps-helm
 
 Along with most of HMPPS we use [Pingdom](https://github.com/ministryofjustice/cloud-platform-environments/blob/main/namespaces/live.cloud-platform.service.justice.gov.uk/send-legal-mail-to-prisons-prod/resources/pingdom.tf) to monitor our production apps from outside of our network.
 
-These alerts are configured to send Slack messages to the `#dps_alerts` channel if our UI is not responding.
+These alerts are configured to send Slack messages to the `#send-legal-mail-alerts` channel if our UI is not responding.
 
 ### Performance benchmark alerts
 
-We have some alerts that are fired if the performance benchmark test for the API indicates we have introduced a performance issue. These are sent to the `#farsight_alerts` Slack channel.
+We have some alerts that are fired if the performance benchmark test for the API indicates we have introduced a performance issue. These are sent to the `#send-legal-mail-alerts` Slack channel.
 
 See the [API's performance benchmark documentation](https://github.com/ministryofjustice/send-legal-mail-to-prisons-api/tree/main/artillery#benchmark-performance-tests) for more details.
 

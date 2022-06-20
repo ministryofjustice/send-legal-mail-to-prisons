@@ -13,7 +13,7 @@ generic-service:
     ONE_TIME_CODE_AUTH_ENABLED: "true"
 
 generic-prometheus-alerts:
-  alertSeverity: farsight-alerts
+  alertSeverity: send-legal-mail-alerts
 
 ingress:
   internalHost: check-rule39-mail.prison.service.justice.gov.uk
