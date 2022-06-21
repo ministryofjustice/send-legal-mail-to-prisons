@@ -10,7 +10,7 @@ The method used to host a maintenance page is largely borrowed from the [Cloud P
 
 In order to deploy the maintenance page you need:
 * access to the Cloud Platform `live` Kubernetes cluster
-* access to the Kubernetes namespace `send-legal-mail-to-prisons-prod` (e.g. you must be a member of GitHub group `farsight-devs`)
+* access to the Kubernetes namespace `send-legal-mail-to-prisons-prod` (e.g. you must be a member of GitHub group `book-a-prison-visit`)
 * kubectl installed and configured to access the Cloud Platform `live` Kubernetes cluster
 
 In order to change the contents of the maintenance page you need:
