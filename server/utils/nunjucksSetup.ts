@@ -25,6 +25,7 @@ export default function nunjucksSetup(app: express.Express): void {
       '/link',
       '/oneTimeCode',
       '/barcode',
+      '/accessibility-statement',
       '/contact-helpdesk',
       '/cookies-policy',
       '/privacy-policy',

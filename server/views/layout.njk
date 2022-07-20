@@ -154,6 +154,7 @@
   {% set footerItems = [{ href: "/cookies-policy", text: "Cookies" }] %}
   {% if externalUser %}
     {% set footerItems = (footerItems.unshift({ href: "/privacy-policy", text: "Privacy policy" }), footerItems) %}
+    {% set footerItems = (footerItems.push({ href: "/accessibility-statement", text: "Accessibility statement" }), footerItems) %}
   {% endif %}
 
   {{ govukFooter({
