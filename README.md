@@ -111,11 +111,11 @@ Open mailcatcher at `http://localhost:1080`. Open the first email which should c
 
 #### How do I sign in as a mailroom staff user?
 
-Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth sign in page. Enter credentials `SLM_MAILROOM_USER_LOCAL` / `password1234556`.
+Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth sign in page. Enter credentials `SLM_MAILROOM_USER_LOCAL` / `password123456`.
 
 #### How do I sign in as an admin user?
 
-Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth sign in page. Enter credentials `SLM_ADMIN_LOCAL` / `password1234556`.
+Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth sign in page. Enter credentials `SLM_ADMIN_LOCAL` / `password123456`.
 
 ## Run linter
 
