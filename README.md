@@ -78,7 +78,7 @@ To start the main services excluding the example typescript template app:
 
 `docker-compose up redis hmpps-auth nomis-user-roles-api gotenberg`
 
-Install dependencies using `npm install`, ensuring you are using >= `Node v16.x`
+Install dependencies using `npm install`, ensuring you are using >= `Node v16.x`. If you have an M1 MacBook you may need to run the following `brew` command before `canvas` will install: `brew install pkg-config cairo pango libpng jpeg giflib librsvg`
 
 Create a `.env` which should override environment variables required to run locally:
 ```properties
