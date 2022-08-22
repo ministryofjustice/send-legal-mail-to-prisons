@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: check-rule39-mail
@@ -26,11 +26,14 @@ spec:
     http:
       paths:
         - path: /
+          pathType: ImplementationSpecific
           backend:
-            serviceName: send-legal-mail-to-prisons
-            servicePort: http
+            service:
+              name: send-legal-mail-to-prisons
+              port:
+                name: http
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: send-legal-mail-to-prisons
@@ -62,6 +65,9 @@ spec:
       http:
         paths:
             - path: /
+              pathType: ImplementationSpecific
               backend:
-                serviceName: send-legal-mail-to-prisons
-                servicePort: http
+                service:
+                  name: send-legal-mail-to-prisons
+                  port:
+                    name: http
