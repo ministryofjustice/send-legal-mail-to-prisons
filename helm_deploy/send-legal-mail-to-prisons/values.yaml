@@ -11,6 +11,8 @@ generic-service:
 
   ingress:
     enabled: false
+    v1_2_enabled: true
+    v0_47_enabled: true
 
   livenessProbe:
     httpGet:
