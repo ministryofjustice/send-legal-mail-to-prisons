@@ -62,4 +62,6 @@ ingress:
   internalHost: check-rule39-mail-dev.prison.service.justice.gov.uk
   externalHost: send-legal-mail-dev.prison.service.justice.gov.uk
   internalSetIdentifier: check-rule39-mail-send-legal-mail-to-prisons-dev-green
+  internalSetV12Identifier: check-rule39-mail-v1-2-send-legal-mail-to-prisons-dev-green
   externalSetIdentifier: send-legal-mail-to-prisons-send-legal-mail-to-prisons-dev-green
+  externalSetV12Identifier: send-legal-mail-to-prisons-v1-2-send-legal-mail-to-prisons-dev-green
