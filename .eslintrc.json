@@ -5,7 +5,7 @@
     "jest": true
   },
 
-  "plugins": ["import"],
+  "plugins": ["import", "no-only-tests"],
 
   "settings": {
     "import/parsers": {
@@ -96,6 +96,7 @@
       }
     ],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/*.test.js", "**/*.test.ts"] }],
+    "no-only-tests/no-only-tests": "error",
     "prettier/prettier": [
       "error",
       {
