@@ -85,7 +85,7 @@ export default function createApp(
   // no authentication
   app.get('/privacy-policy', (req, res) => res.render('pages/privacy-policy/privacy-policy'))
   app.get('/accessibility-statement', (req, res) => res.render('pages/accessibility-statement/accessibility-statement'))
-  app.use('/start', setupLegalSenderStartPage(prisonService))
+  app.use('/start', setupLegalSenderStartPage())
   app.use('/contact-helpdesk', setupContactHelpdesk(zendeskService))
   app.use('/legal-sender/sign-out', (req, res) =>
     res.redirect(`${legalSenderJourneyAuthenticationStartPage()}?force=true`)

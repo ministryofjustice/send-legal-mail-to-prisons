@@ -7,7 +7,6 @@ const snippet = fs.readFileSync('server/views/pages/start/legal-sender-start-pag
 
 describe('Legal Sender Start Page View', () => {
   let compiledTemplate: Template
-  let viewContext: Record<string, unknown>
 
   const njkEnv = registerNunjucks()
 
@@ -21,12 +20,11 @@ describe('Legal Sender Start Page View', () => {
     expect($('#legal-sender-start').length).toStrictEqual(1)
   })
 
-  it('should show supported prison names', () => {
-    viewContext = { prisonNames: ['some-prison', 'another-prison'] }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
-
-    expect($('[data-qa=prisonNames]').html()).toContain('some-prison')
-    expect($('[data-qa=prisonNames]').html()).toContain('another-prison')
+  it('should show updated any prison supported text instead of prison names', () => {
+    const $ = cheerio.load(compiledTemplate.render({}))
+    expect($('[data-qa="prisons"]').text()).toEqual('Prisons you can send mail to')
+    expect($('[data-qa="prisons"] + p').text()).toEqual(
+      'You can use this service to send legal or confidential mail to any prison across the estate, including the private prison estate.'
+    )
   })
 })

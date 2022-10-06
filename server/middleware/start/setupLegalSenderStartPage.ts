@@ -1,10 +1,9 @@
 import express, { Router } from 'express'
 import StartPageController from '../../routes/start/StartPageController'
-import PrisonService from '../../services/prison/PrisonService'
 
-export default function setupLegalSenderStartPage(prisonService: PrisonService): Router {
+export default function setupLegalSenderStartPage(): Router {
   const router = express.Router()
-  const startPageController = new StartPageController(prisonService)
+  const startPageController = new StartPageController()
 
   router.get('/', (req, res) => startPageController.getStartPageView(req, res))
 
