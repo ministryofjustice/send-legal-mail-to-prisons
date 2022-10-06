@@ -22,9 +22,8 @@ describe('Legal Sender Start Page View', () => {
 
   it('should show updated any prison supported text instead of prison names', () => {
     const $ = cheerio.load(compiledTemplate.render({}))
-    const startNowHrefSelector = 'a[href="/oneTimeCode/request-code"]'
-    expect($(startNowHrefSelector).next('h2').text()).toEqual('Prisons you can send mail to')
-    expect($(startNowHrefSelector).next('h2').next('p').text()).toEqual(
+    expect($('[data-qa="prisons"]').text()).toEqual('Prisons you can send mail to')
+    expect($('[data-qa="prisons"] + p').text()).toEqual(
       'You can use this service to send legal or confidential mail to any prison across the estate, including the private prison estate.'
     )
   })
