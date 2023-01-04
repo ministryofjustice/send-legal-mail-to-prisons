@@ -30,7 +30,7 @@ describe('CjsmService', () => {
       expect(userDetails).toStrictEqual(expectedResponse)
     })
 
-    it('should return not found', async done => {
+    it('should return not found', () => {
       const expectedError = {
         status: 404,
         errorCode: {
@@ -40,9 +40,8 @@ describe('CjsmService', () => {
       }
       mockedSendLegalMailApi.get('/cjsm/user/me').reply(404, expectedError)
 
-      cjsmService.getUserDetails('some-token').catch(error => {
-        expect(JSON.parse(error.text)).toStrictEqual(expectedError)
-        done()
+      return cjsmService.getUserDetails('some-token').catch(async error => {
+        await expect(JSON.parse(error.text)).toStrictEqual(expectedError)
       })
     })
   })
