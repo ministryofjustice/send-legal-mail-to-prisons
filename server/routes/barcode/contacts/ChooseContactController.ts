@@ -24,7 +24,7 @@ export default class ChooseContactController {
     }
 
     req.session.chooseContactForm = { ...req.body }
-    const contactId = +req.session.chooseContactForm?.contactId || 0
+    const contactId = +(req.session.chooseContactForm?.contactId || 0)
     if (!contactId) {
       req.flash('errors', [{ href: '#contactOption', text: 'Select an option' }])
       return res.redirect('/barcode/find-recipient/choose-contact')
