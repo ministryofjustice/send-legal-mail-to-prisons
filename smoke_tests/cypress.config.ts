@@ -20,7 +20,6 @@ export default defineConfig({
         getSmokeTestBarcode: state.getSmokeTestBarcode,
       })
     },
-    baseUrl: 'http://localhost:3000',
     excludeSpecPattern: '**/!(*.cy).ts',
     specPattern: 'smoke/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'support/index.ts',

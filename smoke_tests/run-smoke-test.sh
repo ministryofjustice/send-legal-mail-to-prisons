@@ -43,7 +43,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 DIR=/tmp/slm-smoke-test-$ENV
-rmdir $DIR 2>/dev/null
+rm -rfv $DIR 2>/dev/null
 mkdir -p $DIR
 cp -r ../integration_tests/* $DIR
 cp cypress.config.ts package.json reporter-config.json run-smoke-test.sh $DIR
