@@ -4,7 +4,7 @@ declare namespace Cypress {
      * Custom command to signIn as a DPS user. Set failOnStatusCode to false if you expect and non 200 return code
      * @example cy.signIn({ failOnStatusCode: boolean })
      */
-    signIn<S = unknown>(options?: { failOnStatusCode: false }): Chainable<S>
+    signIn(options?: { failOnStatusCode: boolean }): Chainable<AUTWindow>
 
     /**
      * Custom command to sign in as a Legal Sender
