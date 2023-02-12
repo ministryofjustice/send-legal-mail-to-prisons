@@ -47,6 +47,7 @@ import legalSenderJourneyAuthenticationStartPage from './middleware/legalSenderJ
 import handleSlm404Errors from './middleware/handleSlm404Errors'
 import setupSupportedPrisons from './middleware/prisons/setupSupportedPrisons'
 import PrisonService from './services/prison/PrisonService'
+import { createRedisClient } from './data/cache/redisClient'
 
 export default function createApp(
   userService: UserService,
@@ -76,7 +77,8 @@ export default function createApp(
   app.use(setupPdfRenderer(new GotenbergClient()))
   nunjucksSetup(app)
 
-  const smokeTestStore = new SmokeTestStore()
+  const redisClient = createRedisClient({ legacyMode: false })
+  const smokeTestStore = new SmokeTestStore(redisClient)
   app.use(setupSmokeTest(smokeTestStore))
 
   app.use(setupCsrf())
