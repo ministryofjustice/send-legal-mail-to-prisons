@@ -91,6 +91,7 @@ PORT=3000
 SEND_LEGAL_MAIL_API_URL=http://localhost:8080
 PRISON_REGISTER_API_URL=https://prison-register-dev.hmpps.service.justice.gov.uk
 ONE_TIME_CODE_AUTH_ENABLED=true
+REDIS_HOST=localhost
 ```
 
 And then, to build the assets and start the app with nodemon:
