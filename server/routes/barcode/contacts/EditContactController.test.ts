@@ -12,7 +12,7 @@ jest.mock('./updateContactValidator')
 const req = {
   session: { editContactForm: undefined, barcodeUser: { token: 'some-token' } } as SessionData,
   flash: jest.fn(),
-  body: {},
+  body: {} as Record<string, unknown>,
   params: { contactId: 1 },
   ip: '127.0.0.1',
 }
