@@ -8,7 +8,7 @@ import type SmokeTestStore from '../data/cache/SmokeTestStore'
 const req = {
   session: {} as SessionData,
   isAuthenticated: jest.fn(),
-  query: [] as string[],
+  query: {} as Record<string, unknown>,
   originalUrl: 'some-original-url',
   user: { authSource: 'some-authsource' },
 }

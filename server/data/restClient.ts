@@ -116,7 +116,7 @@ export default class RestClient {
     query = undefined,
     data = undefined,
     raw = false,
-    method = undefined,
+    method = undefined as 'get' | 'post' | 'put' | 'delete',
   } = {}): Promise<unknown> {
     this.logRequest(method.toUpperCase(), path)
 
