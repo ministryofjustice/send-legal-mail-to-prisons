@@ -102,7 +102,7 @@
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
     "bwip-js": "^3.3.0",
-    "canvas": "^2.11.0",
+    "canvas": "^2.11.2",
     "compression": "^1.7.4",
     "connect-flash": "^0.1.1",
     "connect-redis": "^6.0.0",
@@ -152,8 +152,8 @@
     "@types/redis": "^2.8.32",
     "@types/superagent": "^4.1.16",
     "@types/supertest": "^2.0.12",
-    "@typescript-eslint/eslint-plugin": "^5.57.0",
-    "@typescript-eslint/parser": "^5.57.0",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
     "audit-ci": "^6.6.1",
     "axe-core": "^4.6.3",
     "cheerio": "^1.0.0-rc.12",
@@ -164,8 +164,8 @@
     "eslint": "^8.37.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-import-resolver-typescript": "^3.5.3",
-    "eslint-plugin-cypress": "^2.13.1",
+    "eslint-import-resolver-typescript": "^3.5.4",
+    "eslint-plugin-cypress": "^2.13.2",
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-no-only-tests": "^3.1.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -182,7 +182,7 @@
     "redis-mock": "^0.56.3",
     "sass": "^1.60.0",
     "supertest": "^6.3.3",
-    "ts-jest": "^29.0.5",
-    "typescript": "^5.0.2"
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.3"
   }
 }
