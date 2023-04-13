@@ -134,8 +134,14 @@ export default {
     yOffsetC4: get('COVERSHEET_C4_OFFSET_Y', '67mm'),
   },
   phaseBannerLink: {
-    legalSenderJourney: get('LEGAL_SENDER_PHASE_BANNER_LINK', 'https://eu.surveymonkey.com/r/SendLegalMail'),
-    mailRoomJourney: get('MAIL_ROOM_PHASE_BANNER_LINK', 'https://eu.surveymonkey.com/r/CheckRule39Mail'),
+    legalSenderJourney: get(
+      'LEGAL_SENDER_PHASE_BANNER_LINK',
+      'https://send-legal-mail-to-prisons.form.service.justice.gov.uk/'
+    ),
+    mailRoomJourney: get(
+      'MAIL_ROOM_PHASE_BANNER_LINK',
+      'https://send-legal-mail-to-prisons.form.service.justice.gov.uk/'
+    ),
   },
   smoketest: {
     msjSecret: get('APP_SMOKETEST_MSJSECRET', null),
