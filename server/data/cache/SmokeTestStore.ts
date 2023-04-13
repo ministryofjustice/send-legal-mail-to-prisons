@@ -9,7 +9,7 @@ import config from '../../config'
 export default class SmokeTestStore {
   private readonly prefix = 'smokeTest:'
 
-  private readonly key = 'smokeTest:'
+  private readonly key = 'smokeTest'
 
   constructor(private readonly client: RedisClient) {
     client.on('error', error => {
@@ -36,7 +36,6 @@ export default class SmokeTestStore {
   }
 
   public async startSmokeTest(req: Request): Promise<string> {
-    await this.ensureConnected()
     if (!req.body?.msjSecret || !config.smoketest.msjSecret) return ''
     const secret = req.body.msjSecret
     if (secret === config.smoketest.msjSecret) {
