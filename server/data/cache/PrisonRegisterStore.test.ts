@@ -1,11 +1,12 @@
-import { RedisClient } from 'redis'
 import type { Prison } from 'prisonTypes'
+import type { RedisClient } from '../redisClient'
 import PrisonRegisterStore from './PrisonRegisterStore'
 
 const redisClient = {
   on: jest.fn(),
   get: jest.fn(),
   set: jest.fn(),
+  connect: jest.fn(),
 }
 
 const activePrisons: Array<Prison> = [

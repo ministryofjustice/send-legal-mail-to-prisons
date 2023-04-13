@@ -1,14 +1,15 @@
-import { RedisClient } from 'redis'
 import { Request } from 'express'
+import type { RedisClient } from '../redisClient'
 import SmokeTestStore from './SmokeTestStore'
 import config from '../../config'
 
 const redisClient = {
-  on: jest.fn(),
   get: jest.fn(),
   set: jest.fn(),
-  del: jest.fn(),
-}
+  on: jest.fn(),
+  connect: jest.fn(),
+  isOpen: true,
+} as unknown as jest.Mocked<RedisClient>
 
 const req = {
   body: {},
@@ -27,7 +28,7 @@ describe('SmokeTestStore', () => {
   })
 
   it('should set the smoke test secret', async () => {
-    redisClient.set.mockImplementation((key, value, mode, durationSeconds, callback) => callback())
+    redisClient.set.mockImplementation((key, value, { EX: durationSeconds }) => undefined)
 
     await smokeTestStore.setSmokeTestSecret('some-secret')
 

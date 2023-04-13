@@ -1,13 +1,15 @@
-import { RedisClient } from 'redis'
+import { RedisClient } from '../redisClient'
 import TokenStore from './TokenStore'
 
 const redisClient = {
-  on: jest.fn(),
   get: jest.fn(),
   set: jest.fn(),
-}
+  on: jest.fn(),
+  connect: jest.fn(),
+  isOpen: true,
+} as unknown as jest.Mocked<RedisClient>
 
-describe('TokenStore', () => {
+describe('tokenStore', () => {
   let tokenStore: TokenStore
 
   beforeEach(() => {
@@ -18,30 +20,37 @@ describe('TokenStore', () => {
     jest.resetAllMocks()
   })
 
-  it('Can retrieve token given promise resolves', async () => {
-    redisClient.get.mockImplementation((key, callback) => callback(null, 'token-1'))
+  describe('get token', () => {
+    it('Can retrieve token', async () => {
+      redisClient.get.mockResolvedValue('token-1')
 
-    const token = await tokenStore.getToken('user-1')
-    expect(token).toBe('token-1')
-    expect(redisClient.get).toHaveBeenCalledWith('user-1', expect.any(Function))
-  })
+      await expect(tokenStore.getToken('user-1')).resolves.toBe('token-1')
 
-  it('Fails to retrieve token given promise rejects', async () => {
-    redisClient.get.mockImplementation((key, callback) => callback('some error', null))
+      expect(redisClient.get).toHaveBeenCalledWith('systemToken:user-1')
+    })
 
-    try {
+    it('Connects when no connection calling getToken', async () => {
+      ;(redisClient as unknown as Record<string, boolean>).isOpen = false
+
       await tokenStore.getToken('user-1')
-    } catch (error) {
-      expect(error).toBe('some error')
-      expect(redisClient.get).toHaveBeenCalledWith('user-1', expect.any(Function))
-    }
+
+      expect(redisClient.connect).toHaveBeenCalledWith()
+    })
   })
 
-  it('Can set token', async () => {
-    redisClient.set.mockImplementation((key, value, mode, durationSeconds, callback) => callback())
+  describe('set token', () => {
+    it('Can set token', async () => {
+      await tokenStore.setToken('user-1', 'token-1', 10)
 
-    await tokenStore.setToken('user-1', 'token-1', 10)
+      expect(redisClient.set).toHaveBeenCalledWith('systemToken:user-1', 'token-1', { EX: 10 })
+    })
 
-    expect(redisClient.set).toHaveBeenCalledWith('user-1', 'token-1', 'EX', 10, expect.any(Function))
+    it('Connects when no connection calling set token', async () => {
+      ;(redisClient as unknown as Record<string, boolean>).isOpen = false
+
+      await tokenStore.setToken('user-1', 'token-1', 10)
+
+      expect(redisClient.connect).toHaveBeenCalledWith()
+    })
   })
 })
