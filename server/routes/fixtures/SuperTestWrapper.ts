@@ -3,12 +3,15 @@ import request from 'supertest'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import nock from 'nock'
 import express from 'express'
+import redis from '../testutils/redisV4Mock'
 import app from '../../index'
 import config from '../../config'
 import mockHmppsAuth from './mock-hmpps-auth'
 import legalSenderJourneyAuthenticationStartPage from '../../middleware/legalSenderJourneyAuthenticationStartPage'
 
-jest.mock('redis', () => jest.requireActual('redis-mock'))
+jest.mock('redis', () => redis)
+
+// jest.mock('redis', () => jest.requireActual('redis-mock'))
 
 export default class SuperTestWrapper {
   request: request.SuperAgentTest

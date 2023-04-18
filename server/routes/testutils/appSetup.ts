@@ -15,6 +15,7 @@ import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
 import PrisonService from '../../services/prison/PrisonService'
 import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
 import SupportedPrisonsService from '../../services/prison/SupportedPrisonsService'
+import { RedisClient } from '../../data/redisClient'
 
 const user = {
   name: 'john smith',
@@ -24,6 +25,14 @@ const user = {
   displayName: 'John Smith',
   activeCaseLoadId: 'BXI',
 }
+
+const redisClient = {
+  get: jest.fn(),
+  set: jest.fn(),
+  on: jest.fn(),
+  connect: jest.fn(),
+  isOpen: true,
+} as unknown as jest.Mocked<RedisClient>
 
 class MockUserService extends UserService {
   constructor() {
@@ -97,9 +106,9 @@ export default function appWithAllRoutes({ production = false }: { production?: 
     allRoutes(
       standardRouter(
         new MockUserService(),
-        new MockSmokeTestStore(),
+        new MockSmokeTestStore(redisClient as unknown as RedisClient),
         new MockPrisonService(
-          new MockPrisonerRegister(new MockPrisonRegisterStore()),
+          new MockPrisonerRegister(new MockPrisonRegisterStore(redisClient as unknown as RedisClient)),
           new MockSupportedPrisonsService()
         )
       )
