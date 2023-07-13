@@ -34,6 +34,7 @@
       ],
       "rules": {
         "@typescript-eslint/no-use-before-define": 0,
+        "no-empty-function": ["error", { "allow": ["constructors"] }],
         "class-methods-use-this": 0,
         "no-useless-constructor": 0,
         "@typescript-eslint/no-unused-vars": [
