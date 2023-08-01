@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
+import path from 'path'
 import nunjucks, { Environment } from 'nunjucks'
 import express from 'express'
-import path from 'path'
 import recipientTableRowsFilter from '../filters/recipientTableRowsFilter'
 import initialiseNameFilter from '../filters/initialiseNameFilter'
 import findErrorFilter from '../filters/findErrorFilter'

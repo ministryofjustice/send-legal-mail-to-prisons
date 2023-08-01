@@ -1,6 +1,6 @@
+import crypto from 'crypto'
 import { Request } from 'express'
 import redis from 'redis'
-import crypto from 'crypto'
 import createRedisClient from './createRedisClient'
 import RedisStore from './RedisStore'
 import config from '../../config'
