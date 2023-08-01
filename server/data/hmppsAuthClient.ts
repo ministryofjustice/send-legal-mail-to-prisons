@@ -1,5 +1,5 @@
-import superagent from 'superagent'
 import querystring from 'querystring'
+import superagent from 'superagent'
 
 import logger from '../../logger'
 import config from '../config'
