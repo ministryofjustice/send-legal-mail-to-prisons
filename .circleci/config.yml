@@ -24,7 +24,7 @@ parameters:
 
   node-version:
     type: string
-    default: 18.15-browsers
+    default: 18.17-browsers
 
 executors:
   smoke-test:
@@ -67,7 +67,6 @@ jobs:
             - build
             - dist
             - assets
-            - .cache/Cypress
 
   check_outdated:
     executor:

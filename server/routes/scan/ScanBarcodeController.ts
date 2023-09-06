@@ -104,9 +104,8 @@ export default class ScanBarcodeController {
         req.session.barcodeEntryForm.createdBy = checkBarcodeResponse.createdBy
       })
       .catch(async errorResponse => {
-        req.session.barcodeEntryForm.errorCode = await this.verifyBarcodeErrorResponseMapper.mapErrorResponse(
-          errorResponse
-        )
+        req.session.barcodeEntryForm.errorCode =
+          await this.verifyBarcodeErrorResponseMapper.mapErrorResponse(errorResponse)
       })
   }
 
