@@ -16,8 +16,8 @@ generic-service:
     annotations:
       nginx.ingress.kubernetes.io/configuration-snippet: |
         location / {
-        return 301 $scheme://$host/barcode/find-recipient;
-      }
+          return 301 $scheme://$host/barcode/find-recipient;
+        }
 
   livenessProbe:
     httpGet:
