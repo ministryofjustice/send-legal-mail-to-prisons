@@ -190,9 +190,9 @@ workflows:
       - unit_test:
           requires:
             - build
-      #- integration_test:
-        #  requires:
-        #    - build
+      - integration_test:
+          requires:
+            - build
       - hmpps/helm_lint:
           name: helm_lint
       - hmpps/build_docker:
@@ -204,7 +204,7 @@ workflows:
           requires:
             - helm_lint
             - unit_test
-            #- integration_test
+            - integration_test
             - build_docker
       - hmpps/deploy_env:
           <<: *feature_branch
@@ -222,7 +222,7 @@ workflows:
           requires:
             - helm_lint
             - unit_test
-            #- integration_test
+            - integration_test
             - build_docker
       - run_smoke_test:
           name: smoke_test_dev
