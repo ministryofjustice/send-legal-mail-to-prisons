@@ -13,6 +13,11 @@ generic-service:
     enabled: true
     host: app-hostname.local    # override per environment
     tlsSecretName: send-legal-mail-cert
+    annotations:
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        location / {
+        return 301 $scheme://$host/barcode/find-recipient;
+      }
 
   livenessProbe:
     httpGet:

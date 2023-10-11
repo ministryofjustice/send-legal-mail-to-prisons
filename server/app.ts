@@ -44,6 +44,7 @@ import requestOneTimeCodeAuthorised from './middleware/one-time-code-auth/reques
 import setUpOneTimeCode from './middleware/one-time-code-auth/setUpOneTimeCode'
 import OneTimeCodeService from './services/one-time-code-auth/OneTimeCodeService'
 import legalSenderJourneyAuthenticationStartPage from './middleware/legalSenderJourneyAuthenticationStartPage'
+import handleSlm404Errors from './middleware/handleSlm404Errors'
 import setupSupportedPrisons from './middleware/prisons/setupSupportedPrisons'
 import PrisonService from './services/prison/PrisonService'
 
@@ -104,7 +105,7 @@ export default function createApp(
   app.use('/barcode', populateBarcodeUser(cjsmService))
   app.use('/barcode', setUpCreateBarcode(createBarcodeService, prisonService, contactService, recipientFormService))
 
-  app.use('/', (req, res) => res.redirect('/oneTimeCode/request-code'))
+  app.use('/', handleSlm404Errors())
 
   // authenticated by passport / HMPPS Auth
   app.use('/', setUpAuthentication())
