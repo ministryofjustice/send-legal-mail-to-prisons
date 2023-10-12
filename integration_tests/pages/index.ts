@@ -3,7 +3,7 @@ import ScanBarcodePage from './scan/scanBarcode'
 
 export default class IndexPage extends Page {
   constructor() {
-    super('index-page')
+    super('index-page', { expectHelpdeskLink: false })
   }
 
   containsTile(tileTitle: string): IndexPage {

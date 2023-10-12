@@ -4,7 +4,7 @@ import ScanAnotherBarcodePage from './scanAnotherBarcode'
 
 export default class ScanBarcodeResultPage extends Page {
   constructor() {
-    super('scan-barcode-result')
+    super('scan-barcode-result', { expectHelpdeskLink: false })
   }
 
   clickFurtherChecksNecessary = (): ScanBarcodeResultPage => {
