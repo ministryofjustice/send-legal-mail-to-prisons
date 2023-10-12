@@ -10,7 +10,14 @@ generic-service:
     port: 3000
 
   ingress:
-    enabled: false
+    enabled: true
+    host: app-hostname.local    # override per environment
+    tlsSecretName: send-legal-mail-cert
+    annotations:
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        location = / {
+          return 301 $scheme://$host/barcode/find-recipient;
+        }
 
   livenessProbe:
     httpGet:
@@ -94,7 +101,3 @@ gotenberg:
 
 generic-prometheus-alerts:
   targetApplication: send-legal-mail-to-prisons
-
-ingress:
-  internalCertSecret: check-rule39-mail-cert
-  externalCertSecret: send-legal-mail-cert
