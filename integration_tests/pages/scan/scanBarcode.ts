@@ -5,7 +5,7 @@ import ManualBarcodeEntryPage from './manualBarcodeEntry'
 
 export default class ScanBarcodePage extends Page {
   constructor() {
-    super('scan-barcode')
+    super('scan-barcode', { expectHelpdeskLink: false })
     this.barcodeFieldIsFocussed()
   }
 

@@ -5,7 +5,7 @@ import barcodes from '../../mockApis/barcodes'
 
 export default class ManualBarcodeEntryPage extends Page {
   constructor() {
-    super('manually-enter-barcode')
+    super('manually-enter-barcode', { expectHelpdeskLink: false })
   }
 
   setBarcode = (value: string): ManualBarcodeEntryPage => {
