@@ -1,8 +1,6 @@
 import Page from '../../pages/page'
-import ScanBarcodePage from '../../pages/scan/scanBarcode'
 import ContactHelpdeskPage from '../../pages/helpdesk/contactHelpdesk'
 import ContactHelpdeskConfirmationPage from '../../pages/helpdesk/contactHelpdeskConfirmation'
-import AuthorisationErrorPage from '../../pages/authorisationError'
 import FindRecipientByPrisonNumberPage from '../../pages/barcode/findRecipientByPrisonNumber'
 
 context('Contact Helpdesk', () => {
@@ -16,18 +14,6 @@ context('Contact Helpdesk', () => {
         contactHelpdeskPage
           .referringPageIs(findRecipientByPrisonNumberPage.pageId)
           .hasHeaderTitle('Send legal mail to prisons')
-      },
-    },
-    {
-      journey: 'Mail Room',
-      setupFunction: () => {
-        cy.task('stubAuthUser')
-        cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
-        cy.signIn()
-        cy.visit('/scan-barcode')
-        const scanBarcodePage = Page.verifyOnPage(ScanBarcodePage)
-        contactHelpdeskPage = scanBarcodePage.contactHelpdesk(ContactHelpdeskPage)
-        contactHelpdeskPage.referringPageIs(scanBarcodePage.pageId).hasHeaderTitle('Check Rule 39 mail')
       },
     },
   ]
@@ -62,23 +48,5 @@ context('Contact Helpdesk', () => {
         contactHelpdeskPage.hasErrorContaining('problem sending your message')
       })
     })
-  })
-
-  it('should display authError page given unauthenticated user', () => {
-    cy.task('reset')
-    cy.visit('/scan-barcode/contact-helpdesk', { failOnStatusCode: false })
-
-    Page.verifyOnPage(AuthorisationErrorPage)
-  })
-
-  it('should display authError page given authenticated user without any of the SLM roles', () => {
-    cy.task('reset')
-    cy.task('stubSignIn')
-    cy.task('stubAuthUser')
-    cy.signIn()
-
-    cy.visit('/scan-barcode/contact-helpdesk', { failOnStatusCode: false })
-
-    Page.verifyOnPage(AuthorisationErrorPage)
   })
 })

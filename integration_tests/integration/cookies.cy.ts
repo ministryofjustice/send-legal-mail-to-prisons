@@ -1,7 +1,6 @@
 import Page from '../pages/page'
 import CookiesPolicyPage from '../pages/cookiesPolicy'
 import FindRecipientByPrisonNumberPage from '../pages/barcode/findRecipientByPrisonNumber'
-import ScanBarcodePage from '../pages/scan/scanBarcode'
 
 context('Cookies', () => {
   beforeEach(() => {
@@ -78,18 +77,6 @@ context('Cookies', () => {
       // Accept and acknowledge cookies in the banner
       page.clickCookieAction(FindRecipientByPrisonNumberPage, 'accept')
       page.clickCookieAction(FindRecipientByPrisonNumberPage, 'hide')
-      page.doesntHaveCookieBanner()
-    })
-  })
-
-  describe('Scan barcode', () => {
-    it('should not show cookie banner on internal pages', () => {
-      cy.task('stubAuthUser')
-      cy.task('stubSignInWithRole_SLM_SCAN_BARCODE')
-      cy.signIn()
-      cy.visit('/scan-barcode')
-
-      const page = Page.verifyOnPage(ScanBarcodePage)
       page.doesntHaveCookieBanner()
     })
   })
