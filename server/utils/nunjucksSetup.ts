@@ -21,28 +21,15 @@ export default function nunjucksSetup(app: express.Express): void {
 
   app.locals.asset_path = '/assets/'
   app.use((req, res, next) => {
-    const externalUrls = [
-      '/link',
-      '/oneTimeCode',
-      '/barcode',
-      '/accessibility-statement',
-      '/contact-helpdesk',
-      '/cookies-policy',
-      '/privacy-policy',
-    ]
-    const externalUser =
-      externalUrls.some(externalUrl => req.url.startsWith(externalUrl)) ||
-      req.hostname.toLowerCase().startsWith('send-legal-mail')
+    const externalUser = true
     res.locals.externalUser = externalUser
     app.locals.externalUser = externalUser
 
-    app.locals.applicationName = externalUser ? 'Send legal mail to prisons' : 'Check Rule 39 mail'
-    app.locals.gtmContainerId = externalUser ? config.slmContainerId : config.checkRule39ContainerId
+    app.locals.applicationName = 'Send legal mail to prisons'
+    app.locals.gtmContainerId = config.slmContainerId
 
     // Set the values for the phase banner links from config
-    app.locals.phaseBannerLink = externalUser
-      ? config.phaseBannerLink.legalSenderJourney
-      : config.phaseBannerLink.mailRoomJourney
+    app.locals.phaseBannerLink = config.phaseBannerLink.legalSenderJourney
     next()
   })
 

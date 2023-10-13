@@ -3,26 +3,19 @@ import express from 'express'
 import createError from 'http-errors'
 
 import cookieParser from 'cookie-parser'
-import indexRoutes from './routes'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
-import standardRouter from './routes/standardRouter'
-import type UserService from './services/userService'
 
 import setUpWebSession from './middleware/setUpWebSession'
 import setUpStaticResources from './middleware/setUpStaticResources'
 import setUpWebSecurity from './middleware/setUpWebSecurity'
-import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
-import authorisationMiddleware from './middleware/authorisationMiddleware'
 import MagicLinkService from './services/link/MagicLinkService'
 import barcodeAuthorisationMiddleware from './middleware/barcode/barcodeAuthorisationMiddleware'
 import setUpCreateBarcode from './middleware/barcode/setupBarcode'
 import populateBarcodeUser from './middleware/barcode/populateBarcodeUser'
-import setupScanBarcode from './middleware/scan/setupScanBarcode'
 import requestLinkAuthorised from './middleware/link/requestLinkAuthorised'
-import ScanBarcodeService from './services/scan/ScanBarcodeService'
 import CreateBarcodeService from './services/barcode/CreateBarcodeService'
 import AppInsightsService from './services/AppInsightsService'
 import GotenbergClient from './data/gotenbergClient'
@@ -34,7 +27,6 @@ import setupCookiesPolicy from './middleware/cookies/setupCookiesPolicy'
 import setupCsrf from './middleware/setupCsrf'
 import setupLegalSenderStartPage from './middleware/start/setupLegalSenderStartPage'
 import ZendeskService from './services/helpdesk/ZendeskService'
-import contactHelpdeskAuthorisationMiddleware from './middleware/helpdesk/contactHelpdeskAuthorisationMiddleware'
 import setUpLink from './middleware/link/setUpLink'
 import SmokeTestStore from './data/cache/SmokeTestStore'
 import setupSmokeTest from './middleware/smoketest/SmokeTestMiddleware'
@@ -44,15 +36,11 @@ import requestOneTimeCodeAuthorised from './middleware/one-time-code-auth/reques
 import setUpOneTimeCode from './middleware/one-time-code-auth/setUpOneTimeCode'
 import OneTimeCodeService from './services/one-time-code-auth/OneTimeCodeService'
 import legalSenderJourneyAuthenticationStartPage from './middleware/legalSenderJourneyAuthenticationStartPage'
-import handleSlm404Errors from './middleware/handleSlm404Errors'
-import setupSupportedPrisons from './middleware/prisons/setupSupportedPrisons'
 import PrisonService from './services/prison/PrisonService'
 
 export default function createApp(
-  userService: UserService,
   magicLinkService: MagicLinkService,
   oneTimeCodeService: OneTimeCodeService,
-  scanBarcodeService: ScanBarcodeService,
   createBarcodeService: CreateBarcodeService,
   appInsightsClient: AppInsightsService,
   contactService: ContactService,
@@ -104,23 +92,6 @@ export default function createApp(
   app.use('/barcode', barcodeAuthorisationMiddleware())
   app.use('/barcode', populateBarcodeUser(cjsmService))
   app.use('/barcode', setUpCreateBarcode(createBarcodeService, prisonService, contactService, recipientFormService))
-
-  app.use('/', handleSlm404Errors())
-
-  // authenticated by passport / HMPPS Auth
-  app.use('/', setUpAuthentication())
-
-  // Contact Helpdesk (for mailroom users) *MUST* be configured here. The authorisation middleware is subtly differ to the main
-  // authorisation middleware so must be defined before the / route. The route '/scan-barcode/contact-helpdesk' must also be defined
-  // before the call to standardRouter to prevent 404's for non authenticated users.
-  app.use('/scan-barcode/contact-helpdesk', contactHelpdeskAuthorisationMiddleware(['ROLE_SLM_SCAN_BARCODE']))
-  app.use('/scan-barcode/contact-helpdesk', setupContactHelpdesk(zendeskService))
-
-  app.use('/', indexRoutes(standardRouter(userService, smokeTestStore, prisonService)))
-  app.use('/', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_ADMIN']))
-
-  app.use('/', setupScanBarcode(scanBarcodeService, prisonService, appInsightsClient))
-  app.use('/supported-prisons', setupSupportedPrisons(prisonService))
 
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler(process.env.NODE_ENV === 'production'))

@@ -2,10 +2,8 @@ import express from 'express'
 import { TelemetryClient } from 'applicationinsights'
 import createApp from './app'
 import HmppsAuthClient from './data/hmppsAuthClient'
-import UserService from './services/userService'
 import TokenStore from './data/cache/TokenStore'
 import MagicLinkService from './services/link/MagicLinkService'
-import ScanBarcodeService from './services/scan/ScanBarcodeService'
 import CreateBarcodeService from './services/barcode/CreateBarcodeService'
 import AppInsightsService from './services/AppInsightsService'
 import PrisonRegisterService from './services/prison/PrisonRegisterService'
@@ -20,10 +18,8 @@ import PrisonService from './services/prison/PrisonService'
 
 const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application => {
   const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
-  const userService = new UserService(hmppsAuthClient)
   const magicLinkService = new MagicLinkService(hmppsAuthClient)
   const oneTimeCodeService = new OneTimeCodeService(hmppsAuthClient)
-  const scanBarcodeService = new ScanBarcodeService(hmppsAuthClient)
   const createBarcodeService = new CreateBarcodeService()
   const prisonService = new PrisonService(
     new PrisonRegisterService(new PrisonRegisterStore()),
@@ -36,10 +32,8 @@ const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application 
   const cjsmService = new CjsmService()
 
   return createApp(
-    userService,
     magicLinkService,
     oneTimeCodeService,
-    scanBarcodeService,
     createBarcodeService,
     appInsightsService,
     contactService,
