@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express'
-import jwtDecode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 
 export default function populateCurrentUserRoles(): RequestHandler {
   return async (req, res, next) => {
