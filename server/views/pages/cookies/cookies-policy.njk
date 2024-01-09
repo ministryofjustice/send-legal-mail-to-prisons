@@ -98,8 +98,6 @@
       {% from "govuk/components/radios/macro.njk" import govukRadios %}
       {% from "govuk/components/button/macro.njk" import govukButton %}
 
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
           <form action="/cookies-policy" method="post" novalidate>
             <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
             {{ govukRadios({
@@ -133,8 +131,6 @@
               attributes: { 'data-qa': 'save-cookies' }
             }) }}
           </form>
-        </div>
-      </div>
 
       <p class="govuk-body">Google Analytics sets the following cookies:</p>
       {% from "govuk/components/table/macro.njk" import govukTable %}
