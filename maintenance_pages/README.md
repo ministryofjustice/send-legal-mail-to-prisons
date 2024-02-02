@@ -37,19 +37,18 @@ This will create pods called `maintenance-page-slm` and `maintenance-page-cr39` 
 
 ### Redirecting traffic to the maintenance page
 
-To redirect traffic to the maintenance page we need to point both the SLM and CR39 ingresses to the maintenance page services.
+To redirect traffic to your maintenance page, change the serviceName (look for service: name:) field in your current ingress to point to maintenance-page-slm and redeploy the ingress. 
 
-This involves changing the value of `spec/rules/http/paths/backend/serviceName` in file `helm_deploy/send-legal-mail-to-prisons/templates/ingress.yaml` for both ingresses.
+The following command can be used to update the ingress - 
+kubectl edit  ingress <slm-public-ingress-name> -n <namespace>
 
-The ingress named `check-rule39-mail` should change `serviceName` to `maintenance-page-cr39-svc` and the ingress named `send-legal-mail-to-prisons` should change `serviceName` to `maintenance-page-slm-svc`. The changes will be applied when the application is redeployed.
-
-Advanced Kubernetes users may wish to just edit the ingresses in place but be aware that a redeployment of the application will override manual updates.
+By changing the current ingress you can ensure that you do not incur any downtime.
 
 ### Cleaning up
 
 When the service is back up we need to point the ingresses back to the application service and remove the maintenance page services.
 
-Reverse the changes previously made to the ingress files using the same method as before. Both ingresses should have `serviceName: send-legal-mail-to-prisons`.
+Reverse the changes previously made to the ingress files using the same method as before. The serviceName post this change should be restored to send-legal-mail-to-prisons.
 
 Delete the maintenance page resources by running this command from this directory:
 ```
