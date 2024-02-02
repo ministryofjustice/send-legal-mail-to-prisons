@@ -37,9 +37,10 @@ This will create pods called `maintenance-page-slm` and `maintenance-page-cr39` 
 
 ### Redirecting traffic to the maintenance page
 
-To redirect traffic to your maintenance page, change the serviceName (look for service: name:) field in your current ingress to point to maintenance-page-slm and redeploy the ingress. 
+To redirect traffic to your maintenance page, change the serviceName (look for service: name: instead of serviceName) field in your current ingress to point to `maintenance-page-slm-svc` and redeploy the ingress. 
 To get the ingresses for slm use the following command - 
 kubectl get ingresses -n <slm-namepsace>
+
 The following command can be used to update the ingress - 
 kubectl edit  ingress <slm-public-ingress-name> -n <slm-namespace>
 
