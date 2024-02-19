@@ -1,4 +1,4 @@
-# send-legal-mail-to-prisons
+# Send legal mail to prisons
 
 ## About
 A Typescript application to allow creating and scanning barcodes for legal mail (aka rule39 mail).
