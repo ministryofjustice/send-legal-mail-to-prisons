@@ -73,14 +73,7 @@
   {# End Google Tag Manager #}
   {% endif %}
 
-  <!--[if !IE 8]><!-->
   <link href="/assets/stylesheets/application.css?{{ version }}" rel="stylesheet"/>
-  <!--<![endif]-->
-
-  <!--[if lt IE 9]>
-  <link href="/assets/stylesheets/application-ie8.css?{{ version }}" rel="stylesheet"/>
-  <script src="/assets/js/html5shiv-3.7.3.min.js" nonce="{{ cspNonce }}"></script>
-  <![endif]-->
 
   <script src="/assets/js/jquery.min.js" nonce="{{ cspNonce }}"></script>
 
@@ -120,7 +113,7 @@
         role: "complementary"
       },
       tag: {
-        text: "beta"
+        text: "Beta"
       },
       html: 'Leave <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="'+ phaseBannerLink +'">feedback<span class="govuk-visually-hidden"> (opens in new tab)</span></a> to help us improve this new service.'
     }) }}
@@ -167,9 +160,8 @@
 {% block bodyEnd %}
   {# Run JavaScript at end of the
   <body>, to avoid blocking the initial render. #}
-  <script src="/assets/govuk/all.js" nonce="{{ cspNonce }}"></script>
+  <script type="module" src="/assets/govukFrontendInit.js"  nonce="{{ cspNonce }}"></script>
   <script src="/assets/moj/all.js" nonce="{{ cspNonce }}"></script>
-  <script src="/assets/govukFrontendInit.js" nonce="{{ cspNonce }}"></script>
   <script src="/assets/mojFrontendInit.js" nonce="{{ cspNonce }}"></script>
   {% block pageScripts %}{% endblock %}
 {% endblock %}
