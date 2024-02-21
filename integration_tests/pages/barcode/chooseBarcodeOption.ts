@@ -10,19 +10,19 @@ export default class ChooseBarcodeOptionPage extends Page {
   }
 
   continueToImage = (): GenerateBarcodeImagePage => {
-    this.selectImage().check({ force: true })
+    this.selectImage().check()
     this.continueButton().click()
     return Page.verifyOnPage(GenerateBarcodeImagePage)
   }
 
   continueToCoversheet = (): SelectEnvelopeSizePage => {
-    this.selectCoversheet().check({ force: true })
+    this.selectCoversheet().check()
     this.continueButton().click()
     return Page.verifyOnPage(SelectEnvelopeSizePage)
   }
 
   continueToImageErrors = (): ChooseBarcodeOptionPage => {
-    this.selectImage().check({ force: true })
+    this.selectImage().check()
     this.continueButton().click()
     return Page.verifyOnPage(ChooseBarcodeOptionPage)
   }

@@ -10,13 +10,13 @@ export default class ChooseContactPage extends Page {
   }
 
   submitForFirstContact = (): ReviewRecipientsPage => {
-    this.selectFirstContact().check({ force: true })
+    this.selectFirstContact().check()
     this.continueButton().click()
     return Page.verifyOnPage(ReviewRecipientsPage)
   }
 
   submitForNewContact = (): CreateNewContactByPrisonerNamePage => {
-    this.selectNewContact().check({ force: true })
+    this.selectNewContact().check()
     this.continueButton().click()
     return Page.verifyOnPage(CreateNewContactByPrisonerNamePage)
   }
