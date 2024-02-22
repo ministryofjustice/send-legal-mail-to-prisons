@@ -22,20 +22,15 @@
       <a href="#" class="govuk-header__link govuk-header__service-name">
         {{ applicationName }}
       </a>
-        {% if user %}
+        {% if barcodeUser %}
           <nav aria-label="Menu" class="govuk-header__navigation">
-            <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" hidden>
-              Menu
-            </button>
+            <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" hidden>Menu</button>
             <ul id="navigation" class="govuk-header__navigation-list">
               <li class="govuk-header__navigation-item">
-                  <a data-qa="manageDetails" class="govuk-header__link" href="/account-details" data-test="manage-account-link" target="_blank" rel="noopener noreferrer">
-                    <span data-qa="header-user-name">{{ user.displayName | initialiseName }}</span>
-                    <span class="govuk-header__link">Manage your details</span>
-                  </a>
+                <span data-qa="header-user-name">{{ barcodeUser.email }}</span>
               </li>
               <li class="govuk-header__navigation-item">
-                  <a data-qa="signOut" class="govuk-header__link" href="/sign-out">Sign out</a>
+                  <a data-qa="signOut" class="govuk-header__link" href="/legal-sender/sign-out">Sign out</a>
               </li>
             </ul>
           </nav>
