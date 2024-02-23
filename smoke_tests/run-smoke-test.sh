@@ -55,11 +55,11 @@ export CYPRESS_APP_SMOKETEST_LSJSECRET=$LSJ_SECRET
 export CYPRESS_APP_SMOKETEST_MSJSECRET=$MSJ_SECRET
 export CYPRESS_LSJ_URL=$LSJ_URL
 export CYPRESS_MSJ_URL=$MSJ_URL
-export CYPRESS_APP_SMOKETEST_MSJAUTHCODE=$(curl -XPOST $MSJ_URL/getSmokeTestSecret -H 'Content-Type: application/json' -d "{ \"msjSecret\": \"$MSJ_SECRET\" }" | jq -r '.token')
+export CYPRESS_APP_SMOKETEST_MSJAUTHCODE=$(wget --header="Content-Type: application/json" --post-data='{ \"msjSecret\": \"$MSJ_SECRET\" }' --output-document - $MSJ_URL/getSmokeTestSecret | jq -r '.token')
 
 # Determine whether the deployed environment that we are about to run the smoke tests against has OTC enabled or not
 # We can do that by making a GET request for the magic link page - if we get a 200 then magic link is enabled, else OTC is enabled
-if [ $(curl -XGET -s -o /dev/null -w "%{http_code}" $LSJ_URL/link/request-link) == 200 ]; then
+if [ $(wget --output-document=/dev/null --quiet $LSJ_URL/link/request-link) == 200 ]; then
   export CYPRESS_ONE_TIME_CODE_AUTH_ENABLED=false
 else
   export CYPRESS_ONE_TIME_CODE_AUTH_ENABLED=true
