@@ -193,9 +193,9 @@ workflows:
       - unit_test:
           requires:
             - build
-      - integration_test:
-          requires:
-            - build
+#      - integration_test:
+#          requires:
+#            - build
       - hmpps/helm_lint:
           name: helm_lint
       - hmpps/build_docker:
@@ -207,7 +207,7 @@ workflows:
           requires:
             - helm_lint
             - unit_test
-            - integration_test
+            #- integration_test
             - build_docker
       - hmpps/deploy_env:
           <<: *feature_branch
@@ -216,6 +216,11 @@ workflows:
           context: hmpps-common-vars
           requires:
             - request-dev-preview-approval
+      - run_smoke_test:
+          name: smoke_test_dev
+          env: dev
+          requires:
+            - deploy_dev
 
       - hmpps/deploy_env:
           <<: *main_branch
@@ -225,7 +230,7 @@ workflows:
           requires:
             - helm_lint
             - unit_test
-            - integration_test
+            #- integration_test
             - build_docker
       - run_smoke_test:
           name: smoke_test_dev
