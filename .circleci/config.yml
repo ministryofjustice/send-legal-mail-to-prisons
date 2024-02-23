@@ -10,7 +10,7 @@ feature_branch: &feature_branch
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@7
+  hmpps: ministryofjustice/hmpps@8
   slack: circleci/slack@4.12.1
 
 parameters:
@@ -155,6 +155,9 @@ jobs:
         default: dev
     steps:
       - checkout
+      - run:
+          name: Install curl
+          command: apt-get update && apt-get install -y curl
       - hmpps/k8s_setup
       - run:
           name: Install jq
