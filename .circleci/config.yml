@@ -220,7 +220,7 @@ workflows:
           name: smoke_test_dev_preview
           env: dev
           requires:
-            - deploy_dev
+            - deploy_dev_preview
 
       - hmpps/deploy_env:
           <<: *main_branch
