@@ -217,7 +217,7 @@ workflows:
           requires:
             - request-dev-preview-approval
       - run_smoke_test:
-          name: smoke_test_dev
+          name: smoke_test_dev_preview
           env: dev
           requires:
             - deploy_dev
