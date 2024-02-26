@@ -158,8 +158,8 @@ jobs:
       - run:
           name: Install curl
           command: |
-            wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
-            apt-get update && apt-get install -y curl
+#            wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+            apt-get install -y curl
       - hmpps/k8s_setup
       - run:
           name: Install jq
