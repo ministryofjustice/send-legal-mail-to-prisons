@@ -167,7 +167,11 @@ jobs:
       #- hmpps/k8s_setup
       - run:
           name: Install jq
-          command: apt upgrade && apt update && apt install -y jq
+          command: |
+            apt dist-upgrade 
+            apt upgrade 
+            apt update
+            apt install -y jq
       - run:
           name: Run smoke tests in << parameters.env >>
           command: |
