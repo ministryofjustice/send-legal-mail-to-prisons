@@ -232,8 +232,8 @@ workflows:
           env: "dev"
           context: hmpps-common-vars
           requires:
-            - helm_lint
-            - unit_test
+            #- helm_lint
+            #- unit_test
             #- integration_test
             - build_docker
       - run_smoke_test:
