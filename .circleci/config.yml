@@ -155,16 +155,16 @@ jobs:
         default: dev
     steps:
       - checkout
-      - run:
-          name: Install curl
-          command: |
-            apt-get upgrade
-            apt-get update 
-            apt-get install gnupg
-            apt-get install gnupg2
-            wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
-            apt-get update && apt-get install -y curl
-      - hmpps/k8s_setup
+      #- run:
+      #          name: Install curl
+      #          command: |
+#            apt-get upgrade
+#            apt-get update
+#            apt-get install gnupg
+#            apt-get install gnupg2
+#            wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+#            apt-get update && apt-get install -y curl
+      #- hmpps/k8s_setup
       - run:
           name: Install jq
           command: apt-get update && apt-get install -y jq
@@ -207,21 +207,21 @@ workflows:
       - hmpps/build_docker:
           name: build_docker
 
-      - request-dev-preview-approval:
-          <<: *feature_branch
-          type: approval
-          requires:
+#      - request-dev-preview-approval:
+#          <<: *feature_branch
+#          type: approval
+#          requires:
             #- helm_lint
             #- unit_test
             #- integration_test
-            - build_docker
+            #- build_docker
       - hmpps/deploy_env:
           <<: *feature_branch
           name: deploy_dev_preview
           env: "dev"
           context: hmpps-common-vars
           requires:
-            - request-dev-preview-approval
+            - build_docker
       - run_smoke_test:
           name: smoke_test_dev_preview
           env: dev
