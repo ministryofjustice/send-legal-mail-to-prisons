@@ -170,7 +170,7 @@ jobs:
           command: |
             wget -q -O - https://dl.google.com/linux/linux_signing_key.pub 
             apt install sudo
-            sudo apt-key add -
+            apt-key add -
             apt dist-upgrade 
             apt upgrade 
             apt update
