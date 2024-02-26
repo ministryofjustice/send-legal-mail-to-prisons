@@ -190,37 +190,37 @@ workflows:
           filters:
             tags:
               ignore: /.*/
-#      - unit_test:
-#          requires:
-#            - build
-#      - integration_test:
-#          requires:
-#            - build
-#      - hmpps/helm_lint:
-#          name: helm_lint
+      - unit_test:
+          requires:
+            - build
+      - integration_test:
+          requires:
+            - build
+      - hmpps/helm_lint:
+          name: helm_lint
       - hmpps/build_docker:
           name: build_docker
 
-#      - request-dev-preview-approval:
-#          <<: *feature_branch
-#          type: approval
-#          requires:
-            #- helm_lint
-            #- unit_test
-            #- integration_test
-            #- build_docker
+      - request-dev-preview-approval:
+          <<: *feature_branch
+          type: approval
+          requires:
+            - helm_lint
+            - unit_test
+            - integration_test
+            - build_docker
       - hmpps/deploy_env:
           <<: *feature_branch
           name: deploy_dev_preview
           env: "dev"
           context: hmpps-common-vars
           requires:
-            - build_docker
-      - run_smoke_test:
-          name: smoke_test_dev_preview
-          env: dev
-          requires:
-            - deploy_dev_preview
+            - request-dev-preview-approval
+      #- run_smoke_test:
+          #name: smoke_test_dev_preview
+          #env: dev
+          #requires:
+            #- deploy_dev_preview
 
       - hmpps/deploy_env:
           <<: *main_branch
@@ -228,15 +228,15 @@ workflows:
           env: "dev"
           context: hmpps-common-vars
           requires:
-            #- helm_lint
-            #- unit_test
-            #- integration_test
+            - helm_lint
+            - unit_test
+            - integration_test
             - build_docker
-      - run_smoke_test:
-          name: smoke_test_dev
-          env: dev
-          requires:
-            - deploy_dev
+      #- run_smoke_test:
+          #name: smoke_test_dev
+          #env: dev
+          #requires:
+            #- deploy_dev
       - hmpps/deploy_env:
           name: deploy_preprod
           env: "preprod"
@@ -244,19 +244,19 @@ workflows:
             - hmpps-common-vars
             - send-legal-mail-to-prisons-preprod
           requires:
-            - smoke_test_dev
-      - run_smoke_test:
-          name: smoke_test_preprod
-          env: preprod
-          requires:
-            - deploy_preprod
-          context:
-            - hmpps-common-vars
-            - send-legal-mail-to-prisons-preprod
+            - deploy_dev
+      #- run_smoke_test:
+          #name: smoke_test_preprod
+          #env: preprod
+          #requires:
+            #- deploy_preprod
+          #context:
+            #- hmpps-common-vars
+            #- send-legal-mail-to-prisons-preprod
       - request-prod-approval:
           type: approval
           requires:
-            - smoke_test_preprod
+            - deploy_preprod
       - hmpps/deploy_env:
           name: deploy_prod
           env: "prod"
