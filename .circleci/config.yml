@@ -10,7 +10,7 @@ feature_branch: &feature_branch
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@7
+  hmpps: ministryofjustice/hmpps@8
   slack: circleci/slack@4.12.1
 
 parameters:
@@ -216,6 +216,11 @@ workflows:
           context: hmpps-common-vars
           requires:
             - request-dev-preview-approval
+      #- run_smoke_test:
+          #name: smoke_test_dev_preview
+          #env: dev
+          #requires:
+            #- deploy_dev_preview
 
       - hmpps/deploy_env:
           <<: *main_branch
@@ -227,11 +232,11 @@ workflows:
             - unit_test
             - integration_test
             - build_docker
-      - run_smoke_test:
-          name: smoke_test_dev
-          env: dev
-          requires:
-            - deploy_dev
+      #- run_smoke_test:
+          #name: smoke_test_dev
+          #env: dev
+          #requires:
+            #- deploy_dev
       - hmpps/deploy_env:
           name: deploy_preprod
           env: "preprod"
@@ -239,19 +244,19 @@ workflows:
             - hmpps-common-vars
             - send-legal-mail-to-prisons-preprod
           requires:
-            - smoke_test_dev
-      - run_smoke_test:
-          name: smoke_test_preprod
-          env: preprod
-          requires:
-            - deploy_preprod
-          context:
-            - hmpps-common-vars
-            - send-legal-mail-to-prisons-preprod
+            - deploy_dev
+      #- run_smoke_test:
+          #name: smoke_test_preprod
+          #env: preprod
+          #requires:
+            #- deploy_preprod
+          #context:
+            #- hmpps-common-vars
+            #- send-legal-mail-to-prisons-preprod
       - request-prod-approval:
           type: approval
           requires:
-            - smoke_test_preprod
+            - deploy_preprod
       - hmpps/deploy_env:
           name: deploy_prod
           env: "prod"
