@@ -10,7 +10,7 @@ feature_branch: &feature_branch
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@7
+  hmpps: ministryofjustice/hmpps@8
   slack: circleci/slack@4.12.1
 
 parameters:
@@ -29,7 +29,7 @@ parameters:
 executors:
   smoke-test:
     docker:
-      - image: cypress/included:12.5.1
+      - image: cypress/included:13.6.4
     working_directory: ~/tests
 
 jobs:
@@ -216,6 +216,11 @@ workflows:
           context: hmpps-common-vars
           requires:
             - request-dev-preview-approval
+      - run_smoke_test:
+          name: smoke_test_dev_preview
+          env: dev
+          requires:
+            - deploy_dev_preview
 
       - hmpps/deploy_env:
           <<: *main_branch
