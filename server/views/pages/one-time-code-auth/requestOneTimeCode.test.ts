@@ -31,6 +31,11 @@ describe('Request one time code view', () => {
     expect($('p[data-qa=session-duration]').text()).toContain('1 day')
   })
 
+  it('should display CJSM link', () => {
+    const $ = cheerio.load(compiledTemplate.render({}))
+    expect($('a[data-qa=cjsm-link]').attr('href')).toEqual('https://cjsm.justice.gov.uk/')
+  })
+
   it('should display errors', () => {
     viewContext = { errors: [{ href: '#email', text: 'some-error' }] }
 
