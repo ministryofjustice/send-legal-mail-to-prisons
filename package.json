@@ -154,7 +154,7 @@
     "@types/supertest": "^2.0.16",
     "@typescript-eslint/eslint-plugin": "^7.16.0",
     "@typescript-eslint/parser": "^7.16.0",
-    "audit-ci": "^6.6.1",
+    "audit-ci": "^7.1.0",
     "axe-core": "^4.9.1",
     "cheerio": "^1.0.0-rc.12",
     "concurrently": "^8.2.2",
