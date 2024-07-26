@@ -8,6 +8,6 @@
     "cypress-multi-reporters": "^1.6.2",
     "jsonwebtoken": "^9.0.0",
     "mocha-junit-reporter": "^2.2.0",
-    "superagent": "^8.0.9"
+    "superagent": "^9.0.2"
   }
 }
