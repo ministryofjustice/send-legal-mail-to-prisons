@@ -11,7 +11,7 @@ import legalSenderJourneyAuthenticationStartPage from '../../middleware/legalSen
 jest.mock('redis', () => jest.requireActual('redis-mock'))
 
 export default class SuperTestWrapper {
-  request: request.SuperAgentTest
+  request
 
   mockedSendLegalMailApi = nock(config.apis.sendLegalMail.url)
 
