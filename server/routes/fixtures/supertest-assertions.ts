@@ -1,6 +1,8 @@
 import * as superagent from 'superagent'
 // eslint-disable-next-line import/no-extraneous-dependencies
-import cheerio, { CheerioAPI } from 'cheerio'
+import * as cheerio from 'cheerio'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { CheerioAPI } from 'cheerio'
 
 export default function assertThat(response: superagent.Response) {
   return new SupertestAssertions(response)
