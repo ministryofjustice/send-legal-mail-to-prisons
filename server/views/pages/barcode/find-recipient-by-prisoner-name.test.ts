@@ -1,6 +1,6 @@
 import fs from 'fs'
 import nunjucks, { Template } from 'nunjucks'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
 const snippet = fs.readFileSync('server/views/pages/barcode/find-recipient-by-prisoner-name.njk')
