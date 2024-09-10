@@ -24,7 +24,7 @@ services:
       - GOTENBERG_API_URL=http://gotenberg:3000
 
   redis:
-    image: 'bitnami/redis:5.0'
+    image: 'bitnami/redis:7.2'
     networks:
       - hmpps
     container_name: redis 
@@ -63,7 +63,7 @@ services:
       - API_BASE_URL_OAUTH=http://hmpps-auth:8080/auth
 
   gotenberg:
-    image: thecodingmachine/gotenberg:6.4.3
+    image: thecodingmachine/gotenberg:6.4.4
     networks:
       - hmpps
     container_name: gotenberg
