@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import nock from 'nock'
 import moment from 'moment'
 import type { Recipient } from 'prisonTypes'
