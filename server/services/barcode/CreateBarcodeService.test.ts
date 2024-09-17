@@ -4,8 +4,6 @@ import type { Recipient } from 'prisonTypes'
 import CreateBarcodeService from './CreateBarcodeService'
 import config from '../../config'
 
-jest.mock('bwip-js')
-
 const mockBwipjsToBuffer = jest.fn()
 
 jest.mock('bwip-js', () => ({
