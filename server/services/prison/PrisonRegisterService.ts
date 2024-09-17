@@ -58,6 +58,7 @@ export default class PrisonRegisterService {
     let activePrisons: Array<Prison>
     try {
       activePrisons = await this.prisonRegisterStore.getActivePrisons()
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       // no op
     }

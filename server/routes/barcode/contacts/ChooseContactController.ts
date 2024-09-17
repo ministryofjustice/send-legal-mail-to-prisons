@@ -36,6 +36,7 @@ export default class ChooseContactController {
         await this.recipientFormService.addContact(req, contact)
         req.session.chooseContactForm = undefined
         return res.redirect('/barcode/review-recipients')
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         req.flash('errors', [{ text: 'There was a problem adding your contact. Please try again.' }])
         return res.redirect('/barcode/find-recipient/choose-contact')
