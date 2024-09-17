@@ -37,8 +37,9 @@ function addAppInfo(result: HealthCheckResult): HealthCheckResult {
 
 function getBuild() {
   try {
-    // eslint-disable-next-line import/no-unresolved,global-require
+    // eslint-disable-next-line import/no-unresolved,global-require,@typescript-eslint/no-require-imports
     return require('../../build-info.json')
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (ex) {
     return null
   }
