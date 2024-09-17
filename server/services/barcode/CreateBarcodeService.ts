@@ -1,3 +1,6 @@
+// TODO we cannot import the types for this because alttext should be a string but is typed as a boolean. See fix at https://github.com/DefinitelyTyped/DefinitelyTyped/pull/57999. When fixed run command `npm install @types/bwip-js --save-dev` and remove these comments.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import bwipjs from 'bwip-js'
 import { createCanvas, Image, registerFont } from 'canvas'
 import moment from 'moment'
