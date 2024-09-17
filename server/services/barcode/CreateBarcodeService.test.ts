@@ -1,14 +1,16 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { toBuffer } from 'bwip-js'
 import nock from 'nock'
 import moment from 'moment'
 import type { Recipient } from 'prisonTypes'
 import CreateBarcodeService from './CreateBarcodeService'
 import config from '../../config'
 
-jest.mock('bwip-js')
-const mockBwipjsToBuffer = <jest.Mock<typeof toBuffer>>toBuffer
+const mockBwipjsToBuffer = jest.fn()
+
+jest.mock('bwip-js', () => ({
+  ...jest.requireActual('bwip-js'),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  toBuffer: (args: any) => mockBwipjsToBuffer(args),
+}))
 
 describe('CreateBarcodeService', () => {
   const createBarcodeService = new CreateBarcodeService()
