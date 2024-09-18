@@ -1,5 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import request from 'supertest'
+import request, { Test } from 'supertest'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import TestAgent from 'supertest/lib/agent'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import nock from 'nock'
 import express from 'express'
@@ -11,7 +13,7 @@ import legalSenderJourneyAuthenticationStartPage from '../../middleware/legalSen
 jest.mock('redis', () => jest.requireActual('redis-mock'))
 
 export default class SuperTestWrapper {
-  request: request.SuperAgentTest
+  request: TestAgent<Test>
 
   mockedSendLegalMailApi = nock(config.apis.sendLegalMail.url)
 
