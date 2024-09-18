@@ -1,24 +1,23 @@
 import crypto from 'crypto'
 import { Request } from 'express'
-import redis from 'redis'
-import createRedisClient from './createRedisClient'
+import { createRedisClient, RedisClient } from '../redisClient'
 import RedisStore from './RedisStore'
 import config from '../../config'
 
-const SMOKE_TEST = 'smokeTest'
-
 export default class SmokeTestStore extends RedisStore {
-  constructor(redisClient: redis.RedisClient = createRedisClient(`${SMOKE_TEST}:`)) {
+  private readonly prefix = 'SMOKE_TEST:'
+
+  constructor(redisClient: RedisClient = createRedisClient()) {
     super(redisClient)
   }
 
   async setSmokeTestSecret(oneTimeSecret: string): Promise<void> {
-    return this.setRedisAsync(SMOKE_TEST, oneTimeSecret, 'EX', 60)
+    return this.setRedisAsync(this.prefix, oneTimeSecret, 'EX', 60)
   }
 
   public async getSmokeTestSecret(): Promise<string> {
-    const secret = this.getRedisAsync(SMOKE_TEST)
-    this.deleteEntry(SMOKE_TEST)
+    const secret = this.getRedisAsync(this.prefix)
+    this.deleteEntry(this.prefix)
     return secret
   }
 

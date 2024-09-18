@@ -1,7 +1,7 @@
-import { RedisClient } from 'redis'
 import { Request } from 'express'
 import SmokeTestStore from './SmokeTestStore'
 import config from '../../config'
+import { RedisClient } from '../redisClient'
 
 const redisClient = {
   on: jest.fn(),
