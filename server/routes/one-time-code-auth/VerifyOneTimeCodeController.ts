@@ -49,6 +49,7 @@ export default class VerifyOneTimeCodeController {
         Object.assign(req.session, sessionWithoutId)
       })
       return res.redirect('/barcode/find-recipient')
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       req.flash('errors', [
         { href: '#email', text: 'The code you used is no longer valid. Request a new one to sign in.' },

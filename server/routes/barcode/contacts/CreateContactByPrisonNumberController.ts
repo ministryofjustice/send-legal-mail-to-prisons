@@ -23,6 +23,7 @@ export default class CreateContactByPrisonNumberController {
     let supportedPrisons: Array<Prison>
     try {
       supportedPrisons = await this.prisonService.getSupportedPrisons()
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       req.flash('errors', [{ text: 'There was an error retrieving the list of prisons' }])
       supportedPrisons = []

@@ -69,6 +69,7 @@ export declare global {
       logout(done: (err: unknown) => void): void
       flash(type: string, message: Array<Record<string, string>>): number
       flash(message: 'errors'): Array<Record<string, string>>
+      id: string
     }
 
     interface Response {

@@ -37,6 +37,7 @@ export default class ContactHelpdeskController {
         username,
         organisation
       )
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       req.flash('errors', [{ text: 'There was a problem sending your message to the Helpdesk.' }])
       // Redirect to original url inc. query string because Legal Sender and Mail Room journeys have different urls, so can't hardcode a redirect url here

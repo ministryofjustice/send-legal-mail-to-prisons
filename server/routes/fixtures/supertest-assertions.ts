@@ -29,6 +29,7 @@ class SupertestAssertions {
     const actual = this.$('#pageId').attr('data-qa')
     try {
       expect(actual).toBe(expected)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       fail(`Expected pageId value to be ${expected} but was ${actual}`)
     }
@@ -39,6 +40,7 @@ class SupertestAssertions {
     const actual = this.$('.govuk-error-summary__list').length
     try {
       expect(actual).toBe(0)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       fail(`Expected page to have 0 error messages but had ${actual}`)
     }
@@ -54,6 +56,7 @@ class SupertestAssertions {
     const actual = this.$('.govuk-error-summary__list').text()
     try {
       expected.forEach(expectedMessage => expect(actual).toContain(expectedMessage))
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       fail(`Expected page to have error[s] containing all of [${expected}] but it did not`)
     }
@@ -64,6 +67,7 @@ class SupertestAssertions {
     const actual = this.response.statusCode
     try {
       expect(actual).toBe(expected)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       fail(`Expected a status code of ${expected} but was ${actual}`)
     }
