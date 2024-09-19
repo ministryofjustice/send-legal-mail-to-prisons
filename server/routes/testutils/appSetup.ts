@@ -4,6 +4,7 @@ import cookieSession from 'cookie-session'
 import createError from 'http-errors'
 import jwt from 'jsonwebtoken'
 
+import redis from './redisV4Mock'
 import allRoutes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
@@ -38,7 +39,7 @@ class MockUserService extends UserService {
   }
 }
 
-jest.mock('redis', () => jest.requireActual('redis-mock'))
+jest.mock('redis', () => redis)
 
 class MockSmokeTestStore extends SmokeTestStore {
   async getSmokeTestSecret(): Promise<string> {

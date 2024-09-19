@@ -45,7 +45,7 @@ describe('PrisonRegisterStore', () => {
     prisonRegisterStore.setActivePrisons(activePrisons, durationDays)
 
     expect(redisClient.set).toHaveBeenCalledWith(
-      'activePrisons',
+      'prisonRegister:activePrisons',
       JSON.stringify(activePrisons),
       'EX',
       172800, // 2 days in seconds
@@ -60,7 +60,7 @@ describe('PrisonRegisterStore', () => {
     const returnedActivePrisons = await prisonRegisterStore.getActivePrisons()
 
     expect(returnedActivePrisons).toStrictEqual(activePrisons)
-    expect(redisClient.get).toHaveBeenCalledWith('activePrisons', expect.any(Function))
+    expect(redisClient.get).toHaveBeenCalledWith('prisonRegister:activePrisons', expect.any(Function))
   })
 
   it('Returns a resolved promise of null given there are no active prisons in redis', async () => {
@@ -72,7 +72,7 @@ describe('PrisonRegisterStore', () => {
     const returnedActivePrisons = await prisonRegisterStore.getActivePrisons()
 
     expect(returnedActivePrisons).toStrictEqual(expectedActivePrisons)
-    expect(redisClient.get).toHaveBeenCalledWith('activePrisons', expect.any(Function))
+    expect(redisClient.get).toHaveBeenCalledWith('prisonRegister:activePrisons', expect.any(Function))
   })
 
   it('Fails to get active prisons given promise rejects', async () => {
@@ -82,7 +82,7 @@ describe('PrisonRegisterStore', () => {
       await prisonRegisterStore.getActivePrisons()
     } catch (error) {
       expect(error).toBe('some error')
-      expect(redisClient.get).toHaveBeenCalledWith('activePrisons', expect.any(Function))
+      expect(redisClient.get).toHaveBeenCalledWith('prisonRegister:activePrisons', expect.any(Function))
     }
   })
 })

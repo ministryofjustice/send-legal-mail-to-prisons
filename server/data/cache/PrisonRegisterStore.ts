@@ -5,7 +5,7 @@ import RedisStore from './RedisStore'
 export default class PrisonRegisterStore extends RedisStore {
   private readonly prefix = 'prisonRegister:'
 
-  private readonly ACTIVE_PRISONS = 'activePrisons:'
+  private readonly ACTIVE_PRISONS = 'activePrisons'
 
   constructor(redisClient: RedisClient = createRedisClient()) {
     super(redisClient)

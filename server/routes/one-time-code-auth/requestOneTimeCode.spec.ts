@@ -22,7 +22,7 @@ describe('Request One Time Code Integration Test', () => {
   })
 
   describe('Legal sender journey', () => {
-    it('should render page to request a code', async () => {
+    it.only('should render page to request a code', async () => {
       const response = await superTest.request //
         .get('/oneTimeCode/request-code')
 

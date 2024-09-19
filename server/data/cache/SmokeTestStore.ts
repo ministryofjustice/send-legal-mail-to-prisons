@@ -4,20 +4,22 @@ import { createRedisClient, RedisClient } from '../redisClient'
 import RedisStore from './RedisStore'
 import config from '../../config'
 
+const SMOKE_TEST = 'smokeTest'
+
 export default class SmokeTestStore extends RedisStore {
-  private readonly prefix = 'SMOKE_TEST:'
+  private readonly prefix = 'smokeTest:'
 
   constructor(redisClient: RedisClient = createRedisClient()) {
     super(redisClient)
   }
 
   async setSmokeTestSecret(oneTimeSecret: string): Promise<void> {
-    return this.setRedisAsync(this.prefix, oneTimeSecret, 'EX', 60)
+    return this.setRedisAsync(`${this.prefix}${SMOKE_TEST}`, oneTimeSecret, 'EX', 60)
   }
 
   public async getSmokeTestSecret(): Promise<string> {
-    const secret = this.getRedisAsync(this.prefix)
-    this.deleteEntry(this.prefix)
+    const secret = this.getRedisAsync(`${this.prefix}${SMOKE_TEST}`)
+    this.deleteEntry(`${this.prefix}${SMOKE_TEST}`)
     return secret
   }
 

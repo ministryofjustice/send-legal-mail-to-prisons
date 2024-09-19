@@ -32,7 +32,7 @@ describe('SmokeTestStore', () => {
     await smokeTestStore.setSmokeTestSecret('some-secret')
 
     expect(redisClient.set).toHaveBeenCalledWith(
-      'smokeTest',
+      'smokeTest:smokeTest',
       'some-secret',
       'EX',
       expect.any(Number),
@@ -45,8 +45,8 @@ describe('SmokeTestStore', () => {
 
     const secret = await smokeTestStore.getSmokeTestSecret()
 
-    expect(redisClient.get).toHaveBeenCalledWith('smokeTest', expect.any(Function))
-    expect(redisClient.del).toHaveBeenCalledWith('smokeTest')
+    expect(redisClient.get).toHaveBeenCalledWith('smokeTest:smokeTest', expect.any(Function))
+    expect(redisClient.del).toHaveBeenCalledWith('smokeTest:smokeTest')
     expect(secret).toBe('some-secret')
   })
 
@@ -58,7 +58,13 @@ describe('SmokeTestStore', () => {
     const secret = await smokeTestStore.startSmokeTest(req as unknown as Request)
 
     expect(secret).toHaveLength(40)
-    expect(redisClient.set).toHaveBeenCalledWith('smokeTest', secret, 'EX', expect.any(Number), expect.any(Function))
+    expect(redisClient.set).toHaveBeenCalledWith(
+      'smokeTest:smokeTest',
+      secret,
+      'EX',
+      expect.any(Number),
+      expect.any(Function)
+    )
   })
 
   it('should not start a smoke test if the secret is incorrect', async () => {
