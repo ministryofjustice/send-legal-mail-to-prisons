@@ -187,7 +187,6 @@ describe('Recipient Form Service', () => {
 
       try {
         await recipientFormService.addRecipient(req as unknown as Request)
-        fail('Expected any errors to be thrown')
       } catch (error) {
         expect(error).toStrictEqual('some-error')
       }

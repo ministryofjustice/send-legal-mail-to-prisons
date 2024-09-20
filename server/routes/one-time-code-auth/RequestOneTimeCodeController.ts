@@ -12,7 +12,7 @@ export default class RequestOneTimeCodeController {
     private readonly verifyOneTimeCodeController: VerifyOneTimeCodeController
   ) {}
 
-  async getRequestOneTimeCodeView(req: Request, res: Response): Promise<void> {
+  getRequestOneTimeCodeView(req: Request, res: Response): void {
     console.log('1')
     const view = new RequestOneTimeCodeView(req.session?.requestOneTimeCodeForm || {}, req.flash('errors'))
     console.log('2')

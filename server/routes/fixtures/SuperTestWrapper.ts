@@ -1,9 +1,8 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
+/* eslint-disable import/no-extraneous-dependencies */
 import request, { Test } from 'supertest'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import TestAgent from 'supertest/lib/agent'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import nock from 'nock'
+/* eslint-enable import/no-extraneous-dependencies */
 import express from 'express'
 import app from '../../index'
 import config from '../../config'

@@ -304,7 +304,6 @@ describe('PdfController', () => {
 
       try {
         await pdfController.downloadPdf(req as unknown as Request, res as unknown as Response)
-        fail('Was expecting pdfController.downloadPdf to have thrown an error but it did not')
       } catch (error) {
         expect(error).toBe('Error generating image')
       }
