@@ -1,9 +1,8 @@
 import type { RedisClient } from '../redisClient'
 
 import logger from '../../../logger'
-import TokenStoreFunctions from './tokenStoreFunctions'
 
-export default class TokenStore implements TokenStoreFunctions {
+export default class TokenStore {
   private readonly prefix = 'systemToken:'
 
   constructor(private readonly client: RedisClient) {

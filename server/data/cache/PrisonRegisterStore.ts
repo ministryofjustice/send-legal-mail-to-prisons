@@ -2,9 +2,8 @@ import type { Prison } from 'prisonTypes'
 import type { RedisClient } from '../redisClient'
 
 import logger from '../../../logger'
-import PrisonRegisterStoreFunctions from './prisonRegisterStoreFunctions'
 
-export default class PrisonRegisterStore implements PrisonRegisterStoreFunctions {
+export default class PrisonRegisterStore {
   private readonly prefix = 'prisonRegister:'
 
   private readonly ACTIVE_PRISONS = 'activePrisons'
