@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import session from 'express-session'
 import RedisStore from 'connect-redis'
 import express, { Router } from 'express'
+import flash from 'connect-flash'
 import { createRedisClient } from '../data/redisClient'
 import config from '../config'
 import logger from '../../logger'
@@ -39,6 +40,8 @@ export default function setUpWebSession(): Router {
 
     next()
   })
+
+  router.use(flash())
 
   return router
 }
