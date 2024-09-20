@@ -39,7 +39,15 @@ class MockUserService extends UserService {
   }
 }
 
-const redisClient = {
+const smokeTestRedisClient = {
+  get: jest.fn(),
+  set: jest.fn(),
+  on: jest.fn(),
+  connect: jest.fn(),
+  isOpen: true,
+} as unknown as jest.Mocked<RedisClient>
+
+const prisonRegisterRedisClient = {
   get: jest.fn(),
   set: jest.fn(),
   on: jest.fn(),
@@ -104,9 +112,9 @@ export default function appWithAllRoutes({ production = false }: { production?: 
     allRoutes(
       standardRouter(
         new MockUserService(),
-        new MockSmokeTestStore(redisClient),
+        new MockSmokeTestStore(smokeTestRedisClient),
         new MockPrisonService(
-          new MockPrisonerRegister(new MockPrisonRegisterStore(redisClient)),
+          new MockPrisonerRegister(new MockPrisonRegisterStore(prisonRegisterRedisClient)),
           new MockSupportedPrisonsService()
         )
       )

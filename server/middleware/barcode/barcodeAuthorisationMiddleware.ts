@@ -8,6 +8,7 @@ import legalSenderJourneyAuthenticationStartPage from '../legalSenderJourneyAuth
 
 export default function barcodeAuthorisationMiddleware(): RequestHandler {
   return (req, res, next) => {
+    console.log(req.session)
     if (!req.session.barcodeUser?.token || !req.session.barcodeUser?.tokenValid) {
       return res.redirect(legalSenderJourneyAuthenticationStartPage())
     }
