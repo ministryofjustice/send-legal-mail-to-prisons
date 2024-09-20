@@ -23,7 +23,7 @@ const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application 
   const oneTimeCodeService = new OneTimeCodeService(hmppsAuthClient)
   const createBarcodeService = new CreateBarcodeService()
   const prisonService = new PrisonService(
-    new PrisonRegisterService(new PrisonRegisterStore()),
+    new PrisonRegisterService(new PrisonRegisterStore(createRedisClient())),
     new SupportedPrisonsService()
   )
   const appInsightsService = new AppInsightsService(appInsightsTelemetryClient)

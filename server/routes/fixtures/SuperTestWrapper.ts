@@ -5,38 +5,24 @@ import TestAgent from 'supertest/lib/agent'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import nock from 'nock'
 import express from 'express'
-import { promisify } from 'util'
 import app from '../../index'
 import config from '../../config'
 import mockHmppsAuth from './mock-hmpps-auth'
 import legalSenderJourneyAuthenticationStartPage from '../../middleware/legalSenderJourneyAuthenticationStartPage'
 
-jest.mock('redis', () => {
-  const redisMock = jest.requireActual('redis-mock')
-  const enhancedRedisMock = {
-    ...redisMock,
-    createClient: () => {
-      const client = redisMock.createClient()
+jest.mock('../../data/redisClient', () => {
+  return {
+    createRedisClient: () => {
       return {
         connect: jest.fn().mockResolvedValue(undefined).mockRejectedValue(undefined),
         get: jest.fn(),
         set: jest.fn(),
         del: jest.fn(),
-        // hSet: promisify(client.hset).bind(client),
-        // hGet: promisify(client.hget).bind(client),
-        // hDel: promisify(client.hdel).bind(client),
-        // flushAll: promisify(client.flushall).bind(client),
-        // setEx: promisify(client.setex).bind(client),
-        // expire: promisify(client.expire).bind(client),
-        // mGet: promisify(client.mget).bind(client),
-        // pSetEx: (key: string, ms: number, value: string) => setEx(key, ms / 1000, value),
         on: jest.fn().mockReturnValue(new Error()),
-        // Add additional functions as needed...
+        isOpen: true,
       }
     },
   }
-
-  return enhancedRedisMock
 })
 
 export default class SuperTestWrapper {
