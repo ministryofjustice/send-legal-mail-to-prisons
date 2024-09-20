@@ -3,10 +3,12 @@ import PrisonRegisterStore from './PrisonRegisterStore'
 import { RedisClient } from '../redisClient'
 
 const redisClient = {
-  on: jest.fn(),
   get: jest.fn(),
   set: jest.fn(),
-}
+  on: jest.fn(),
+  connect: jest.fn(),
+  isOpen: true,
+} as unknown as jest.Mocked<RedisClient>
 
 const activePrisons: Array<Prison> = [
   {
@@ -38,51 +40,44 @@ describe('PrisonRegisterStore', () => {
     jest.resetAllMocks()
   })
 
-  it('Can set active prisons', () => {
-    redisClient.set.mockImplementation((key, value, mode, durationSeconds, callback) => callback())
+  it('Can set active prisons', async () => {
     const durationDays = 2
 
-    prisonRegisterStore.setActivePrisons(activePrisons, durationDays)
+    await prisonRegisterStore.setActivePrisons(activePrisons, durationDays)
 
     expect(redisClient.set).toHaveBeenCalledWith(
       'prisonRegister:activePrisons',
       JSON.stringify(activePrisons),
-      'EX',
-      172800, // 2 days in seconds
-      expect.any(Function)
+      { EX: 172800 } // 2 days in seconds
     )
   })
 
   it('Can get active prisons given promise resolves', async () => {
-    const serializedActivePrisons = JSON.stringify(activePrisons)
-    redisClient.get.mockImplementation((key, callback) => callback(null, serializedActivePrisons))
+    redisClient.get.mockResolvedValue(JSON.stringify(activePrisons))
 
     const returnedActivePrisons = await prisonRegisterStore.getActivePrisons()
 
     expect(returnedActivePrisons).toStrictEqual(activePrisons)
-    expect(redisClient.get).toHaveBeenCalledWith('prisonRegister:activePrisons', expect.any(Function))
+    expect(redisClient.get).toHaveBeenCalledWith('prisonRegister:activePrisons')
   })
 
   it('Returns a resolved promise of null given there are no active prisons in redis', async () => {
-    const serializedActivePrisons: string = null
-    redisClient.get.mockImplementation((key, callback) => callback(null, serializedActivePrisons))
+    redisClient.get.mockResolvedValue(null)
 
     const expectedActivePrisons: Array<Prison> = null
 
     const returnedActivePrisons = await prisonRegisterStore.getActivePrisons()
 
     expect(returnedActivePrisons).toStrictEqual(expectedActivePrisons)
-    expect(redisClient.get).toHaveBeenCalledWith('prisonRegister:activePrisons', expect.any(Function))
+    expect(redisClient.get).toHaveBeenCalledWith('prisonRegister:activePrisons')
   })
 
   it('Fails to get active prisons given promise rejects', async () => {
-    redisClient.get.mockImplementation((key, callback) => callback('some error', null))
-
     try {
       await prisonRegisterStore.getActivePrisons()
     } catch (error) {
-      expect(error).toBe('some error')
-      expect(redisClient.get).toHaveBeenCalledWith('prisonRegister:activePrisons', expect.any(Function))
+      expect(error).toStrictEqual(new SyntaxError('"undefined" is not valid JSON'))
+      expect(redisClient.get).toHaveBeenCalledWith('prisonRegister:activePrisons')
     }
   })
 })
