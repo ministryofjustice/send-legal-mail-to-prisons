@@ -12,6 +12,7 @@ export default class OneTimeCodeService {
 
   async requestOneTimeCode(email: string, sessionID: string, sourceIp: string): Promise<unknown> {
     const oneTimeCodeRequest: OneTimeCodeRequest = { email, sessionID }
+    console.log(oneTimeCodeRequest)
     return this.hmppsAuthClient.getSystemClientToken().then(hmppsToken =>
       OneTimeCodeService.restClient(hmppsToken, sourceIp).post({
         path: `/oneTimeCode/email`,
@@ -22,6 +23,7 @@ export default class OneTimeCodeService {
 
   async verifyOneTimeCode(code: string, sessionID: string, sourceIp: string): Promise<string> {
     const verifyCodeRequest: VerifyCodeRequest = { code, sessionID }
+    console.log(verifyCodeRequest)
     return this.hmppsAuthClient.getSystemClientToken().then(hmppsToken =>
       OneTimeCodeService.restClient(hmppsToken, sourceIp)
         .post({
