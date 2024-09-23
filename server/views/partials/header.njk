@@ -29,6 +29,7 @@
         {{ applicationName }}
       </a>
       </span>
+      {% if barcodeUser %}
         <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
           <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden>
             Menu
@@ -41,6 +42,7 @@
             </li>
           </ul>
         </nav>
+      {% endif %}
       </div>
     </div>
   </section>
