@@ -35,7 +35,6 @@ export default class RequestOneTimeCodeController {
       await this.oneTimeCodeService.requestOneTimeCode(req.session.requestOneTimeCodeForm.email, req.sessionID, req.ip)
       return res.redirect('email-sent')
     } catch (error) {
-      console.log(error)
       const errorResponse: ErrorResponse = error.data
       const errorMessage =
         error.status === 400 && Array.of('INVALID_CJSM_EMAIL', 'EMAIL_TOO_LONG').includes(errorResponse.errorCode.code)
