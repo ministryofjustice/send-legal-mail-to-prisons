@@ -3,7 +3,6 @@ import CjsmService from '../../services/cjsm/CjsmService'
 
 export default function populateBarcodeUser(cjsmService: CjsmService): RequestHandler {
   return async (req, res, next) => {
-    console.log('populateBarcodeUser')
     res.locals.barcodeUser = req.session.barcodeUser
     if (req.session.barcodeUser.email && !req.session.barcodeUser.cjsmDetails) {
       req.session.barcodeUser.cjsmDetails = await cjsmService

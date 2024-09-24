@@ -43,7 +43,6 @@ export default function setUpCreateBarcode(
     findRecipientController.getFindRecipientByPrisonNumberView(req, res)
   )
   router.post('/find-recipient/by-prison-number', (req, res) => {
-    console.log('hit route')
     return findRecipientController.submitFindByPrisonNumber(req, res)
   })
 

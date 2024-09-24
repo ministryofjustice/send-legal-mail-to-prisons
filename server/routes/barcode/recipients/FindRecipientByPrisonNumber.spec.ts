@@ -24,7 +24,7 @@ describe('Find recipient by prison number', () => {
 
   it.only(`should show errors`, async () => {
     await superTest.authenticateAsLegalSenderUser()
-console.log('dsfdsfdsf')
+
     const response = await superTest.request //
       .post('/barcode/find-recipient/by-prison-number')
       .send({
