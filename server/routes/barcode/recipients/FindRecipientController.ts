@@ -25,6 +25,7 @@ export default class FindRecipientController {
   }
 
   async submitFindByPrisonNumber(req: Request, res: Response): Promise<void> {
+    console.log('sdfsdf')
     req.body.prisonNumber = req.body.prisonNumber.trim().toUpperCase()
     req.session.findRecipientByPrisonNumberForm = { ...req.body }
     const errors = validatePrisonNumber(req.body.prisonNumber)

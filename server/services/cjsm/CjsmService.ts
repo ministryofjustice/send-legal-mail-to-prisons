@@ -8,6 +8,7 @@ export default class CjsmService {
   }
 
   async getUserDetails(slmToken: string): Promise<unknown> {
+    console.log('user details')
     return (await CjsmService.restClient(slmToken).get({
       path: `/cjsm/user/me`,
     })) as CjsmUserDetails

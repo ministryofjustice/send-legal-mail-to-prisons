@@ -40,6 +40,7 @@ export default class VerifyOneTimeCodeController {
       const payload = await this.verifyToken(token)
       req.session.barcodeUser.email = payload.sub
       req.session.barcodeUser.token = token
+      console.log(payload)
       req.session.barcodeUser.tokenValid = true
       // make the session expiry the same as the JWT - otherwise we lose the JWT when the session expires
       req.session.cookie.expires = new Date(payload.exp * 1000)
