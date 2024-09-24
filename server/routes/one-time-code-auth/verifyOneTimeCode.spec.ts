@@ -19,11 +19,11 @@ describe('Verify One Time Code Integration Tests', () => {
   })
 
   describe('verifyOneTimeCode - sad path', () => {
-    it.only('should redirect to request-code if no code passed', async () => {
+    it('should redirect to request-code if no code passed', async () => {
       superTest.request.redirects(2)
       const response = await superTest.request //
         .post('/oneTimeCode/verify-code')
-      // console.log(response)
+
       assertThat(response).isOk().hasPageId('request-one-time-code').hasError('code from your email')
     })
 

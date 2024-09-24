@@ -9,19 +9,23 @@ import config from '../../config'
 import mockHmppsAuth from './mock-hmpps-auth'
 import legalSenderJourneyAuthenticationStartPage from '../../middleware/legalSenderJourneyAuthenticationStartPage'
 
-jest.mock('../../data/redisClient', () => {
-  return {
-    createRedisClient: () => {
-      return {
-        connect: jest.fn().mockResolvedValue(undefined).mockRejectedValue(undefined),
-        get: jest.fn(),
-        set: jest.fn(),
-        del: jest.fn(),
-        on: jest.fn().mockReturnValue(new Error()),
-        isOpen: true,
-      }
+jest.mock('redis', () => {
+  const redisMock = jest.requireActual('redis-mock')
+  const enhancedRedisMock = {
+    ...redisMock,
+    createClient: () => {
+      const client = redisMock.createClient()
+      client.isOpen = true
+      client.connect = jest.fn().mockResolvedValue(null)
+      client.disconnect = jest.fn().mockResolvedValue(null)
+      client.get = jest.fn()
+      client.set = jest.fn()
+      client.del = jest.fn()
+      client.on = jest.fn().mockReturnValue(new Error())
+      return client
     },
   }
+  return enhancedRedisMock
 })
 
 export default class SuperTestWrapper {
@@ -31,6 +35,7 @@ export default class SuperTestWrapper {
 
   constructor() {
     config.featureFlags.lsjOneTimeCodeAuthEnabled = true
+    config.https = false
     const application: express.Application = app()
     this.request = request.agent(application)
     this.request //

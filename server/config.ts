@@ -44,6 +44,7 @@ export interface ApiConfig {
 
 export default {
   https: production,
+  production,
   staticResourceCacheDuration: 20,
   barcodeTokenPublicKey: `-----BEGIN PUBLIC KEY-----
     ${get(

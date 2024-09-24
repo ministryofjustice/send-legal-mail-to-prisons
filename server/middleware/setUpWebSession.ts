@@ -8,22 +8,22 @@ import config from '../config'
 import logger from '../../logger'
 
 export default function setUpWebSession(): Router {
-  const client = createRedisClient()
-  client.connect().catch((err: Error) => logger.error(`Error connecting to Redis`, err))
+  const sessionOptions: session.SessionOptions = {
+    cookie: { secure: config.https, sameSite: 'lax', maxAge: config.session.expiryMinutes * 60 * 1000 },
+    secret: config.session.secret,
+    resave: false, // redis implements touch so shouldn't need this
+    saveUninitialized: false,
+    rolling: true,
+  }
+
+  if (config.production) {
+    const client = createRedisClient()
+    client.connect().catch((err: Error) => logger.error(`Error connecting to Redis`, err))
+    sessionOptions.store = new RedisStore({ client })
+  }
 
   const router = express.Router()
-  router.use(
-    session({
-      store: new RedisStore({ client }),
-      cookie: { secure: config.https, sameSite: 'lax', maxAge: config.session.expiryMinutes * 60 * 1000 },
-      secret: config.session.secret,
-      resave: false, // redis implements touch so shouldn't need this
-      saveUninitialized: false,
-      rolling: true,
-    })
-  )
-
-  console.log('XXX')
+  router.use(session(sessionOptions))
 
   // Update a value in the cookie so that the set-cookie will be sent.
   // Only changes every minute so that it's not sent with every request.
