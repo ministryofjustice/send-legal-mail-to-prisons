@@ -2,7 +2,7 @@
 import nock from 'nock'
 import HmppsAuthClient from '../../data/hmppsAuthClient'
 import config from '../../config'
-import TokenStore from '../../data/cache/TokenStore'
+import type TokenStore from '../../data/cache/TokenStore'
 import OneTimeCodeService from './OneTimeCodeService'
 
 jest.mock('../../data/hmppsAuthClient')
