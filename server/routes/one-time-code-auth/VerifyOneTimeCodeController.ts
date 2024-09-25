@@ -65,7 +65,6 @@ export default class VerifyOneTimeCodeController {
         config.barcodeTokenPublicKey,
         { algorithms: ['RS256'] },
         (err: VerifyErrors, payload: JwtPayload) => {
-          console.log(err)
           if (err) {
             reject()
           } else {
