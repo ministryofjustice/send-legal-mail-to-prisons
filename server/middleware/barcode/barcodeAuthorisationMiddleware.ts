@@ -11,6 +11,7 @@ export default function barcodeAuthorisationMiddleware(): RequestHandler {
     if (!req.session.barcodeUser?.token || !req.session.barcodeUser?.tokenValid) {
       return res.redirect(legalSenderJourneyAuthenticationStartPage())
     }
+
     return verify(
       req.session.barcodeUser.token,
       config.barcodeTokenPublicKey,
