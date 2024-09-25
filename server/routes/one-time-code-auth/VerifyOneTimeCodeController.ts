@@ -37,7 +37,6 @@ export default class VerifyOneTimeCodeController {
     }
 
     try {
-      console.log(token)
       const payload = await this.verifyToken(token)
       req.session.barcodeUser.email = payload.sub
       req.session.barcodeUser.token = token
