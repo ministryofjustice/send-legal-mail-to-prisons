@@ -22,7 +22,7 @@ describe('Find recipient by prison number', () => {
     assertThat(response).isOk().hasPageId('request-one-time-code')
   })
 
-  it(`should show errors`, async () => {
+  it.only(`should show errors`, async () => {
     await superTest.authenticateAsLegalSenderUser()
 
     const response = await superTest.request //

@@ -37,6 +37,7 @@ export default class VerifyOneTimeCodeController {
     }
 
     try {
+      console.log(token)
       const payload = await this.verifyToken(token)
       req.session.barcodeUser.email = payload.sub
       req.session.barcodeUser.token = token
@@ -65,6 +66,7 @@ export default class VerifyOneTimeCodeController {
         config.barcodeTokenPublicKey,
         { algorithms: ['RS256'] },
         (err: VerifyErrors, payload: JwtPayload) => {
+          console.log(err)
           if (err) {
             reject()
           } else {
