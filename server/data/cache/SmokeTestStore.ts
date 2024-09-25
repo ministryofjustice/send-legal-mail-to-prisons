@@ -11,8 +11,9 @@ export default class SmokeTestStore {
   private readonly SMOKE_TEST = 'smokeTest'
 
   constructor(private readonly client: RedisClient) {
+    logger.info(`${this.prefix}Create RedisStore`)
     client.on('error', error => {
-      logger.error(error, `Redis error`)
+      logger.error(error, `${this.prefix}Redis error`)
     })
   }
 
