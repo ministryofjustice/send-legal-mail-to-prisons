@@ -5,7 +5,7 @@ import logger from '../../logger'
 import config from '../config'
 import generateOauthClientToken from '../authentication/clientCredentials'
 import RestClient from './restClient'
-import TokenStore from './cache/TokenStore'
+import type TokenStore from './cache/TokenStore'
 
 const timeoutSpec = config.apis.hmppsAuth.timeout
 const hmppsAuthUrl = config.apis.hmppsAuth.url

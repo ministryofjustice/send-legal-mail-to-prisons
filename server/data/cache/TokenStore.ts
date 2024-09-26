@@ -1,17 +1,30 @@
-import redis from 'redis'
-import createRedisClient from './createRedisClient'
-import RedisStore from './RedisStore'
+import type { RedisClient } from '../redisClient'
 
-export default class TokenStore extends RedisStore {
-  constructor(redisClient: redis.RedisClient = createRedisClient('systemToken:')) {
-    super(redisClient)
+import logger from '../../../logger'
+
+export default class TokenStore {
+  private readonly prefix = 'systemToken:'
+
+  constructor(private readonly client: RedisClient) {
+    logger.info(`${this.prefix}Create RedisStore`)
+    client.on('error', error => {
+      logger.error(error, `${this.prefix}Redis error`)
+    })
+  }
+
+  private async ensureConnected() {
+    if (!this.client.isOpen) {
+      await this.client.connect()
+    }
   }
 
   public async setToken(key: string, token: string, durationSeconds: number): Promise<void> {
-    return this.setRedisAsync(key, token, 'EX', durationSeconds)
+    await this.ensureConnected()
+    await this.client.set(`${this.prefix}${key}`, token, { EX: durationSeconds })
   }
 
   public async getToken(key: string): Promise<string> {
-    return this.getRedisAsync(key)
+    await this.ensureConnected()
+    return this.client.get(`${this.prefix}${key}`)
   }
 }
