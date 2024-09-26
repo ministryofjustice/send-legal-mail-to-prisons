@@ -30,7 +30,7 @@ services:
       - DISABLE_UNOCONV=1
       - DEFAULT_WAIT_TIMEOUT=30
     healthcheck:
-      test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/ping' ]
+      test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/health' ]
 
 networks:
   hmpps_int:
