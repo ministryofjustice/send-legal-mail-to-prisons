@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
 
+import { createRedisClient } from './data/redisClient'
 import setUpWebSession from './middleware/setUpWebSession'
 import setUpStaticResources from './middleware/setUpStaticResources'
 import setUpWebSecurity from './middleware/setUpWebSecurity'
@@ -64,7 +65,7 @@ export default function createApp(
   app.use(setupPdfRenderer(new GotenbergClient()))
   nunjucksSetup(app)
 
-  const smokeTestStore = new SmokeTestStore()
+  const smokeTestStore = new SmokeTestStore(createRedisClient())
   app.use(setupSmokeTest(smokeTestStore))
 
   app.use(setupCsrf())

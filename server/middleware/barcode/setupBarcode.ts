@@ -42,9 +42,9 @@ export default function setUpCreateBarcode(
   router.get('/find-recipient/by-prison-number', (req, res) =>
     findRecipientController.getFindRecipientByPrisonNumberView(req, res)
   )
-  router.post('/find-recipient/by-prison-number', (req, res) =>
+  router.post('/find-recipient/by-prison-number', (req, res) => {
     findRecipientController.submitFindByPrisonNumber(req, res)
-  )
+  })
 
   router.get('/find-recipient/by-prisoner-name', (req, res) =>
     findRecipientController.getFindRecipientByPrisonerNameView(req, res)

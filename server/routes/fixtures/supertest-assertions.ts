@@ -17,59 +17,49 @@ class SupertestAssertions {
 
   isOk = (): SupertestAssertions => {
     this.hasStatusCode(200)
+
     return this
   }
 
   isNotFound = (): SupertestAssertions => {
     this.hasStatusCode(404)
+
     return this
   }
 
   hasPageId = (expected: string): SupertestAssertions => {
     const actual = this.$('#pageId').attr('data-qa')
-    try {
-      expect(actual).toBe(expected)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
-      fail(`Expected pageId value to be ${expected} but was ${actual}`)
-    }
+
+    expect(actual).toBe(expected)
+
     return this
   }
 
   hasNoErrors = (): SupertestAssertions => {
     const actual = this.$('.govuk-error-summary__list').length
-    try {
-      expect(actual).toBe(0)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
-      fail(`Expected page to have 0 error messages but had ${actual}`)
-    }
+
+    expect(actual).toBe(0)
+
     return this
   }
 
   hasError = (expected: string): SupertestAssertions => {
     this.hasAllErrors(expected)
+
     return this
   }
 
   hasAllErrors = (...expected: string[]): SupertestAssertions => {
     const actual = this.$('.govuk-error-summary__list').text()
-    try {
-      expected.forEach(expectedMessage => expect(actual).toContain(expectedMessage))
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
-      fail(`Expected page to have error[s] containing all of [${expected}] but it did not`)
-    }
+
+    expected.forEach(expectedMessage => expect(actual).toContain(expectedMessage))
+
     return this
   }
 
   hasStatusCode = (expected: number) => {
     const actual = this.response.statusCode
-    try {
-      expect(actual).toBe(expected)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
-      fail(`Expected a status code of ${expected} but was ${actual}`)
-    }
+
+    expect(actual).toBe(expected)
   }
 }

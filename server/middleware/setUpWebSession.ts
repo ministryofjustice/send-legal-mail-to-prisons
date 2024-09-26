@@ -1,33 +1,29 @@
-import { v4 as uuidv4 } from 'uuid'
-import redis from 'redis'
+import { randomUUID } from 'crypto'
 import session from 'express-session'
-import connectRedis from 'connect-redis'
+import RedisStore from 'connect-redis'
 import express, { Router } from 'express'
 import flash from 'connect-flash'
-
+import { createRedisClient } from '../data/redisClient'
 import config from '../config'
-
-const RedisStore = connectRedis(session)
-
-const client = redis.createClient({
-  port: config.redis.port,
-  password: config.redis.password,
-  host: config.redis.host,
-  tls: config.redis.tls_enabled === 'true' ? {} : false,
-})
+import logger from '../../logger'
 
 export default function setUpWebSession(): Router {
+  const sessionOptions: session.SessionOptions = {
+    cookie: { secure: config.https, sameSite: 'lax', maxAge: config.session.expiryMinutes * 60 * 1000 },
+    secret: config.session.secret,
+    resave: false, // redis implements touch so shouldn't need this
+    saveUninitialized: false,
+    rolling: true,
+  }
+
+  if (config.production) {
+    const client = createRedisClient()
+    client.connect().catch((err: Error) => logger.error(`Error connecting to Redis`, err))
+    sessionOptions.store = new RedisStore({ client })
+  }
+
   const router = express.Router()
-  router.use(
-    session({
-      store: new RedisStore({ client }),
-      cookie: { secure: config.https, sameSite: 'lax', maxAge: config.session.expiryMinutes * 60 * 1000 },
-      secret: config.session.secret,
-      resave: false, // redis implements touch so shouldn't need this
-      saveUninitialized: false,
-      rolling: true,
-    })
-  )
+  router.use(session(sessionOptions))
 
   // Update a value in the cookie so that the set-cookie will be sent.
   // Only changes every minute so that it's not sent with every request.
@@ -39,13 +35,14 @@ export default function setUpWebSession(): Router {
   router.use((req, res, next) => {
     const headerName = 'X-Request-Id'
     const oldValue = req.get(headerName)
-    const id = oldValue === undefined ? uuidv4() : oldValue
+    const id = oldValue === undefined ? randomUUID() : oldValue
 
     res.set(headerName, id)
     req.id = id
 
     next()
   })
+
   router.use(flash())
 
   return router

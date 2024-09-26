@@ -12,10 +12,9 @@ export default class RequestOneTimeCodeController {
     private readonly verifyOneTimeCodeController: VerifyOneTimeCodeController
   ) {}
 
-  async getRequestOneTimeCodeView(req: Request, res: Response): Promise<void> {
+  getRequestOneTimeCodeView(req: Request, res: Response): void {
     const view = new RequestOneTimeCodeView(req.session?.requestOneTimeCodeForm || {}, req.flash('errors'))
     req.session.requestOneTimeCodeForm = undefined
-
     return res.render('pages/one-time-code-auth/requestOneTimeCode', { ...view.renderArgs })
   }
 

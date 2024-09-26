@@ -5,6 +5,7 @@ import createError from 'http-errors'
 import jwt from 'jsonwebtoken'
 
 import allRoutes from '../index'
+import { RedisClient } from '../../data/redisClient'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import standardRouter from '../standardRouter'
@@ -38,7 +39,21 @@ class MockUserService extends UserService {
   }
 }
 
-jest.mock('redis', () => jest.requireActual('redis-mock'))
+const smokeTestRedisClient = {
+  get: jest.fn(),
+  set: jest.fn(),
+  on: jest.fn(),
+  connect: jest.fn(),
+  isOpen: true,
+} as unknown as jest.Mocked<RedisClient>
+
+const prisonRegisterRedisClient = {
+  get: jest.fn(),
+  set: jest.fn(),
+  on: jest.fn(),
+  connect: jest.fn(),
+  isOpen: true,
+} as unknown as jest.Mocked<RedisClient>
 
 class MockSmokeTestStore extends SmokeTestStore {
   async getSmokeTestSecret(): Promise<string> {
@@ -97,9 +112,9 @@ export default function appWithAllRoutes({ production = false }: { production?: 
     allRoutes(
       standardRouter(
         new MockUserService(),
-        new MockSmokeTestStore(),
+        new MockSmokeTestStore(smokeTestRedisClient),
         new MockPrisonService(
-          new MockPrisonerRegister(new MockPrisonRegisterStore()),
+          new MockPrisonerRegister(new MockPrisonRegisterStore(prisonRegisterRedisClient)),
           new MockSupportedPrisonsService()
         )
       )

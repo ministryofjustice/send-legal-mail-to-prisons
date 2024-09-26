@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import nock from 'nock'
 import HmppsAuthClient from '../../data/hmppsAuthClient'
-import TokenStore from '../../data/cache/TokenStore'
+import type TokenStore from '../../data/cache/TokenStore'
 import MagicLinkService from './MagicLinkService'
 import config from '../../config'
 
