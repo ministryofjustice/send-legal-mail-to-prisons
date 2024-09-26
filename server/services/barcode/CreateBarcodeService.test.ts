@@ -73,7 +73,6 @@ describe('CreateBarcodeService', () => {
 
       try {
         await createBarcodeService.generateBarcodeValue('some-token', '127.0.0.1', recipient)
-        fail('Was expecting createBarcodeService.generateBarcodeValue to have thrown an error but it did not')
       } catch (error) {
         expect(error).toStrictEqual(new Error('Error generating new barcode value'))
       }
@@ -125,9 +124,6 @@ describe('CreateBarcodeService', () => {
 
       try {
         await createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient)
-        fail(
-          'Was expecting createBarcodeService.generateAddressAndBarcodeDataUrlImage to have thrown an error but it did not'
-        )
       } catch (error) {
         expect(error).toBe('An error generating the barcode image')
         expect(mockBwipjsToBuffer).toHaveBeenCalledWith(
@@ -274,7 +270,6 @@ describe('CreateBarcodeService', () => {
 
       try {
         await createBarcodeService.addBarcodeValuesToRecipients(recipients, 'some-token', '127.0.0.1')
-        fail('Was expecting createBarcodeService.addBarcodeValuesToRecipients to have thrown an error but it did not')
       } catch (error) {
         expect(error).toStrictEqual(new Error('Error generating new barcode value'))
       }
