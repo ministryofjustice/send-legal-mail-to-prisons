@@ -19,7 +19,7 @@ services:
       - "9091:8080"
 
   gotenberg:
-    image: thecodingmachine/gotenberg:6.4.4
+    image: gotenberg/gotenberg:8
     networks:
       - hmpps_int
     container_name: gotenberg
@@ -30,7 +30,7 @@ services:
       - DISABLE_UNOCONV=1
       - DEFAULT_WAIT_TIMEOUT=30
     healthcheck:
-      test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/ping' ]
+      test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/health' ]
 
 networks:
   hmpps_int:

@@ -8,7 +8,7 @@ export default class GotenbergClient {
     const { headerHtml, footerHtml, marginBottom, marginLeft, marginRight, marginTop } = options
 
     const request = superagent
-      .post(`${config.apis.gotenberg.url}/convert/html`)
+      .post(`${config.apis.gotenberg.url}/forms/chromium/convert/html`)
       .set('Content-Type', 'multi-part/form-data')
       .buffer(true)
       .attach('files', Buffer.from(html), 'index.html')
@@ -26,7 +26,7 @@ export default class GotenbergClient {
       const response = await request
       return response.body
     } catch (err) {
-      logger.error(`Error POST to gotenberg:/convert/html - {}`, err)
+      logger.error(`Error POST to gotenberg:/forms/chromium/convert/html - {}`, err)
       return undefined
     }
   }
