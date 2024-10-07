@@ -37,41 +37,51 @@
             attributes: { 'data-qa': 'recipients-table', id: 'review-recipients-table' }
           }) }}
 
-          <form id="another-recipient-form" action="/barcode/review-recipients" method="post" novalidate>
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-            {{ govukRadios({
-              idPrefix: "anotherRecipient",
-              name: "anotherRecipient",
-              fieldset: {
-                legend: {
-                  text: "Do you want to add another recipient?",
-                  classes: "govuk-fieldset__legend--m"
-                }
-              },
-              classes: "govuk-radios--inline",
-              items: [
-                {
-                  value: "yes",
-                  text: "Yes",
-                  checked: form.anotherRecipient === 'yes',
-                  attributes: { 'data-qa': 'another-recipient-yes' }
+          {% if recipients.length < 25 %}
+            <form id="another-recipient-form" action="/barcode/review-recipients" method="post" novalidate>
+              <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+              {{ govukRadios({
+                idPrefix: "anotherRecipient",
+                name: "anotherRecipient",
+                fieldset: {
+                  legend: {
+                    text: "Do you want to add another recipient?",
+                    classes: "govuk-fieldset__legend--m"
+                  }
                 },
-                {
-                  value: "no",
-                  text: "No",
-                  checked: form.anotherRecipient === 'no',
-                  attributes: { 'data-qa': 'another-recipient-no' }
-                }
-              ],
-              errorMessage: errors | findError('anotherRecipient')
-            }) }}
+                classes: "govuk-radios--inline",
+                items: [
+                  {
+                    value: "yes",
+                    text: "Yes",
+                    checked: form.anotherRecipient === 'yes',
+                    attributes: { 'data-qa': 'another-recipient-yes' }
+                  },
+                  {
+                    value: "no",
+                    text: "No",
+                    checked: form.anotherRecipient === 'no',
+                    attributes: { 'data-qa': 'another-recipient-no' }
+                  }
+                ],
+                errorMessage: errors | findError('anotherRecipient')
+              }) }}
 
-            {{ govukButton({
-              text: 'Continue',
-              preventDoubleClick: true,
-              attributes: { 'data-qa': 'continue-button' }
-            }) }}
-          </form>
+              {{ govukButton({
+                text: 'Continue',
+                preventDoubleClick: true,
+                attributes: { 'data-qa': 'continue-button' }
+              }) }}
+            </form>
+          {% else %}
+            <div class="govuk-warning-text">
+              <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+              <strong class="govuk-warning-text__text">
+                <span class="govuk-visually-hidden">Warning</span>
+                You have reached the maximum of 25 recipients and cannot add more.
+              </strong>
+            </div>
+          {% endif %}
 
         {% else %}
           <p class="govuk-!-margin-bottom-6">
@@ -82,7 +92,6 @@
             href: '/barcode/find-recipient',
             attributes: { 'data-qa': 'add-another-recipient' }
           }) }}
-
         {% endif %}
       </div>
     </div>
