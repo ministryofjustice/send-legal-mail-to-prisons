@@ -103,6 +103,7 @@ describe('Review Recipients View', () => {
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('div[data-qa=too-many-recipients]').length).toStrictEqual(1)
+    expect($('button[data-qa=continue-button]').length).toStrictEqual(1)
     expect($('a[data-qa=add-another-recipient]').length).toStrictEqual(0)
   })
 })
