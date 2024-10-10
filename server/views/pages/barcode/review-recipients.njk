@@ -67,7 +67,8 @@
                   ],
                   errorMessage: errors | findError('anotherRecipient')
                 }) }}
-              {% else  %}          
+              {% else  %}
+                <input type="hidden" name="anotherRecipient" value="no">
                 <div class="govuk-warning-text" data-qa="too-many-recipients">
                   <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
                   <strong class="govuk-warning-text__text">
