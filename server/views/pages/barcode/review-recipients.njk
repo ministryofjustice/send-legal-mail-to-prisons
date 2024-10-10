@@ -22,66 +22,78 @@
       <div class="govuk-grid-column-full">
         <h1 class="govuk-heading-xl">Review your recipients</h1>
 
-        {% if recipients.length > 0 %}
-          {{ govukTable({
-            firstCellIsHeader: true,
-            head: [
-              { text: 'Name' },
-              { text: 'Prison number or date of birth' },
-              { text: 'Prison' },
-              { text: 'Editing options', classes: 'govuk-!-width-one-quarter' }
-            ],
-            rows: recipients | recipientTableRows,
-            attributes: { 'data-qa': 'recipients-table', id: 'review-recipients-table' }
-          }) }}
+        <div class="govuk-inset-text">A total of 25 recipients can be added.</div>
 
-          <form id="another-recipient-form" action="/barcode/review-recipients" method="post" novalidate>
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-            {{ govukRadios({
-              idPrefix: "anotherRecipient",
-              name: "anotherRecipient",
-              fieldset: {
-                legend: {
-                  text: "Do you want to add another recipient?",
-                  classes: "govuk-fieldset__legend--m"
-                }
-              },
-              classes: "govuk-radios--inline",
-              items: [
-                {
-                  value: "yes",
-                  text: "Yes",
-                  checked: form.anotherRecipient === 'yes',
-                  attributes: { 'data-qa': 'another-recipient-yes' }
-                },
-                {
-                  value: "no",
-                  text: "No",
-                  checked: form.anotherRecipient === 'no',
-                  attributes: { 'data-qa': 'another-recipient-no' }
-                }
+          {% if recipients.length > 0 %}
+            {{ govukTable({
+              firstCellIsHeader: true,
+              head: [
+                { text: 'Name' },
+                { text: 'Prison number or date of birth' },
+                { text: 'Prison' },
+                { text: 'Editing options', classes: 'govuk-!-width-one-quarter' }
               ],
-              errorMessage: errors | findError('anotherRecipient')
+              rows: recipients | recipientTableRows,
+              attributes: { 'data-qa': 'recipients-table', id: 'review-recipients-table' }
             }) }}
 
+            <form id="another-recipient-form" action="/barcode/review-recipients" method="post" novalidate>
+              <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+              {% if recipients.length < 25 %}
+                {{ govukRadios({
+                  idPrefix: "anotherRecipient",
+                  name: "anotherRecipient",
+                  fieldset: {
+                    legend: {
+                      text: "Do you want to add another recipient?",
+                      classes: "govuk-fieldset__legend--m"
+                    }
+                  },
+                  classes: "govuk-radios--inline",
+                  items: [
+                    {
+                      value: "yes",
+                      text: "Yes",
+                      checked: form.anotherRecipient === 'yes',
+                      attributes: { 'data-qa': 'another-recipient-yes' }
+                    },
+                    {
+                      value: "no",
+                      text: "No",
+                      checked: form.anotherRecipient === 'no',
+                      attributes: { 'data-qa': 'another-recipient-no' }
+                    }
+                  ],
+                  errorMessage: errors | findError('anotherRecipient')
+                }) }}
+              {% else  %}
+                <input type="hidden" name="anotherRecipient" value="no">
+                <div class="govuk-warning-text" data-qa="too-many-recipients">
+                  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                  <strong class="govuk-warning-text__text">
+                    <span class="govuk-visually-hidden">Warning</span>
+                    You have reached the maximum of 25 recipients and cannot add more.
+                  </strong>
+                </div>
+              {% endif %}
+            
+              {{ govukButton({
+                text: 'Continue',
+                preventDoubleClick: true,
+                attributes: { 'data-qa': 'continue-button' }
+              }) }}
+            </form>
+          {% else %}
+            <p class="govuk-!-margin-bottom-6">
+              You have removed all recipients. You need to add at least one recipient in order to continue.
+            </p>
             {{ govukButton({
-              text: 'Continue',
-              preventDoubleClick: true,
-              attributes: { 'data-qa': 'continue-button' }
+              text: 'Add a recipient',
+              href: '/barcode/find-recipient',
+              attributes: { 'data-qa': 'add-another-recipient' }
             }) }}
-          </form>
-
-        {% else %}
-          <p class="govuk-!-margin-bottom-6">
-            You have removed all recipients. You need to add at least one recipient in order to continue.
-          </p>
-          {{ govukButton({
-            text: 'Add a recipient',
-            href: '/barcode/find-recipient',
-            attributes: { 'data-qa': 'add-another-recipient' }
-          }) }}
-
-        {% endif %}
+          {% endif %}
       </div>
     </div>
 

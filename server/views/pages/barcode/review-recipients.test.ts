@@ -29,6 +29,13 @@ describe('Review Recipients View', () => {
     { prisonNumber: 'A1234BC', prisonerName: 'John Smith', prison: HMP_BRINSFORD, contactId: 1 },
   ]
 
+  const fullRecipients: Array<Recipient> = Array(25).fill({
+    prisonNumber: 'A1234BC',
+    prisonerName: 'John Smith',
+    prison: HMP_BRINSFORD,
+    contactId: 1,
+  })
+
   it('should render view', () => {
     viewContext = { errors: [] }
 
@@ -88,5 +95,15 @@ describe('Review Recipients View', () => {
 
     expect($('#review-recipients-table').length).toStrictEqual(0)
     expect($('a[data-qa=add-another-recipient]').length).toStrictEqual(1)
+  })
+
+  it('should not show add another recipient link if 25 recipients', () => {
+    viewContext = { recipients: fullRecipients, errors: [] }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('div[data-qa=too-many-recipients]').length).toStrictEqual(1)
+    expect($('button[data-qa=continue-button]').length).toStrictEqual(1)
+    expect($('a[data-qa=add-another-recipient]').length).toStrictEqual(0)
   })
 })
