@@ -95,6 +95,38 @@
         <li>what you click on while you’re using the service</li>
       </ul>
 
+        <p class="govuk-body">Google Analytics sets the following cookies:</p>
+      {% from "govuk/components/table/macro.njk" import govukTable %}
+      {{ govukTable({
+        firstCellIsHeader: true,
+        head: [
+          {
+            text: "Name",
+            classes: 'app-custom-class'
+          },
+          {
+            text: "Purpose",
+            classes: 'app-custom-class'
+          },
+          {
+            text: "Expires",
+            classes: 'app-custom-class'
+          }
+        ],
+        rows: [
+          [
+            { text: "_ga" },
+            { text: "Checks if you’ve signed in to the service before. This helps us count how many people use the service." },
+            { text: "2 years" }
+          ],
+          [
+            { text: "_gid" },
+            { text: "Checks if you’ve signed in to the service before. This helps us count how many people use the service." },
+            { text: "24 hours" }
+          ]
+        ]
+      }) }}
+
       {% from "govuk/components/radios/macro.njk" import govukRadios %}
       {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -132,37 +164,7 @@
             }) }}
           </form>
 
-      <p class="govuk-body">Google Analytics sets the following cookies:</p>
-      {% from "govuk/components/table/macro.njk" import govukTable %}
-      {{ govukTable({
-        firstCellIsHeader: true,
-        head: [
-          {
-            text: "Name",
-            classes: 'app-custom-class'
-          },
-          {
-            text: "Purpose",
-            classes: 'app-custom-class'
-          },
-          {
-            text: "Expires",
-            classes: 'app-custom-class'
-          }
-        ],
-        rows: [
-          [
-            { text: "_ga" },
-            { text: "Checks if you’ve signed in to the service before. This helps us count how many people use the service." },
-            { text: "2 years" }
-          ],
-          [
-            { text: "_gid" },
-            { text: "Checks if you’ve signed in to the service before. This helps us count how many people use the service." },
-            { text: "24 hours" }
-          ]
-        ]
-      }) }}
+    
 
  <h3 class="govuk-heading-s">Third party cookies</h3>
       <p class="govuk-body">We use MOJ Forms to collect feedback comments. We do this to help make sure the service is meeting the needs of its users and to help us make improvements. See the <a href="https://send-legal-mail-to-prisons.form.service.justice.gov.uk/cookies" class="govuk-link">MOJ Forms cookies statement</a> for more information.</p>
