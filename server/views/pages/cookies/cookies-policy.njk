@@ -1,4 +1,7 @@
 {% extends "layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = applicationName + " - Cookies Policy" %}
 {% set pageId = 'cookies-policy' %}
@@ -29,7 +32,6 @@
       <h3 class="govuk-heading-s">Settings cookies</h3>
       <p class="govuk-body">These cookies do things like remember your preferences and the choices you make, to personalise your experience of using the service. You may see a banner when you visit the service inviting you to accept cookies or review your settings. We’ll set cookies so that your computer knows you’ve seen it and not to show it again, and also to store your settings.</p>
 
- {% from "govuk/components/table/macro.njk" import govukTable %}
       {{ govukTable({
         firstCellIsHeader: true,
         head: [
@@ -58,7 +60,6 @@
       <h3 class="govuk-heading-s">Essential cookies</h3>
       <p class="govuk-body">Essential cookies keep your information secure while you use the service. We do not need to ask permission to use them.</p>
 
- {% from "govuk/components/table/macro.njk" import govukTable %}
       {{ govukTable({
         firstCellIsHeader: true,
         head: [
@@ -96,7 +97,7 @@
       </ul>
 
         <p class="govuk-body">Google Analytics sets the following cookies:</p>
-      {% from "govuk/components/table/macro.njk" import govukTable %}
+
       {{ govukTable({
         firstCellIsHeader: true,
         head: [
@@ -126,9 +127,6 @@
           ]
         ]
       }) }}
-
-      {% from "govuk/components/radios/macro.njk" import govukRadios %}
-      {% from "govuk/components/button/macro.njk" import govukButton %}
 
           <form action="/cookies-policy" method="post" novalidate>
             <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
@@ -163,8 +161,7 @@
               attributes: { 'data-qa': 'save-cookies' }
             }) }}
           </form>
-
-    
+   
 
  <h3 class="govuk-heading-s">Third party cookies</h3>
       <p class="govuk-body">We use MOJ Forms to collect feedback comments. We do this to help make sure the service is meeting the needs of its users and to help us make improvements. See the <a href="https://send-legal-mail-to-prisons.form.service.justice.gov.uk/cookies" class="govuk-link">MOJ Forms cookies statement</a> for more information.</p>
