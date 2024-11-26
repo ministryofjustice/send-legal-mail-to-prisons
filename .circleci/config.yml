@@ -10,7 +10,7 @@ feature_branch: &feature_branch
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@8
+  hmpps: ministryofjustice/hmpps@10
   slack: circleci/slack@4.12.1
 
 parameters:
@@ -277,9 +277,6 @@ workflows:
               only:
                 - main
     jobs:
-      - check_outdated:
-          context:
-            - hmpps-common-vars
       - hmpps/npm_security_audit:
           slack_channel: << pipeline.parameters.alerts-slack-channel >>
           context:
