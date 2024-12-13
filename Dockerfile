@@ -1,5 +1,5 @@
 # Stage: base image
-FROM node:22.12-bookworm as base
+FROM node:20.18-bookworm-slim as base
 
 ARG BUILD_NUMBER=1_0_0
 ARG GIT_REF=not-available
@@ -16,8 +16,6 @@ WORKDIR /app
 
 # Cache breaking
 ENV BUILD_NUMBER ${BUILD_NUMBER:-1_0_0}
-
-RUN apt-get install build-essential libcairo2 libpango1.0 libjpeg libgif librsvg2
 
 RUN apt-get update && \
     apt-get upgrade -y && \
