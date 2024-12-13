@@ -66,7 +66,7 @@ export default class ContactService {
       .then(response => response as Contact)
       .catch(error => {
         if (error.status === 404) {
-          return undefined
+          return Promise.resolve(undefined)
         }
         throw error
       })
