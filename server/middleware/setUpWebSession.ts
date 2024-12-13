@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto'
 import session from 'express-session'
-import RedisStore from 'connect-redis'
+import { RedisStore } from 'connect-redis'
 import express, { Router } from 'express'
 import flash from 'connect-flash'
 import { createRedisClient } from '../data/redisClient'
