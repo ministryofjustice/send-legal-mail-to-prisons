@@ -26,4 +26,4 @@ generic-service:
       - circleci
 
 generic-prometheus-alerts:
-  alertSeverity: send-legal-mail-alerts
+  alertSeverity: hmpps-visits-send-legal-email-preprod
