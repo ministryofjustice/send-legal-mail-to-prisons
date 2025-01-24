@@ -31,4 +31,4 @@ gotenberg:
   replicaCount: 2
 
 generic-prometheus-alerts:
-  alertSeverity: send-legal-mail-alerts
+  alertSeverity: send-legal-mail-alerts-nonprod
