@@ -20,7 +20,7 @@ parameters:
 
   releases-slack-channel:
     type: string
-    default: send-legal-mail-alerts
+    default: visits-releases
 
   node-version:
     type: string
