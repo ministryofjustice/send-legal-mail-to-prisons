@@ -29,7 +29,7 @@ parameters:
 executors:
   smoke-test:
     docker:
-      - image: cypress/included:13.6.4
+      - image: cypress/included:13.7.0
     working_directory: ~/tests
 
 jobs:
