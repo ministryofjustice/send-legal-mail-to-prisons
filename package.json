@@ -102,7 +102,7 @@
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
     "bwip-js": "^4.5.1",
-    "canvas": "^2.11.1",
+    "canvas": "^2.11.2",
     "compression": "^1.7.5",
     "connect-flash": "^0.1.1",
     "connect-redis": "^8.0.1",
