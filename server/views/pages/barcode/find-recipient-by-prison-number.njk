@@ -31,7 +31,7 @@
                 isPageHeading: true
               },
               hint: {
-                html: "The details you provide will be used to address your mail.<br><br>Example prison number: A1234BC"
+                html: "The details you provide will be used to address your mail.<br><br>For example, A1234BC"
               },
               attributes: {
                 autocomplete: 'off'
@@ -42,6 +42,21 @@
               value: form.prisonNumber,
               errorMessage: errors | findError('prisonNumber')
             }) }}
+
+            <details class="govuk-details">
+              <summary class="govuk-details__summary">
+                  <span class="govuk-details__summary-text">
+                  Help with the prison number
+                  </span>
+              </summary>
+              <div class="govuk-details__text">
+                  This is the number given to people when they enter prison.
+                  <br><br>
+                  Their prison number stays the same if they move to another prison. 
+                  <br><br>
+                  You need to ask the prisoner for this information.
+              </div>
+            </details>
 
             <p class="govuk-!-margin-top-6">
               <a href="/barcode/find-recipient/by-prisoner-name" class="govuk-link" data-qa="by-prisoner-name-link">I don't have their prison number</a>

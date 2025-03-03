@@ -68,7 +68,7 @@
                 isPageHeading: false
               },
               hint: {
-                text: "Example, A1234BC"
+                text: "For example, A1234BC"
               },
               attributes: {
                 autocomplete: 'off'
@@ -79,6 +79,21 @@
               classes: 'govuk-input--width-10',
               errorMessage: errors | findError('prisonNumber')
             }) }}
+
+            <details class="govuk-details">
+              <summary class="govuk-details__summary">
+                  <span class="govuk-details__summary-text">
+                  Help with the prison number
+                  </span>
+              </summary>
+              <div class="govuk-details__text">
+                  This is the number given to people when they enter prison.
+                  <br><br>
+                  Their prison number stays the same if they move to another prison. 
+                  <br><br>
+                  You may need to ask the prisoner for this information.
+              </div>
+            </details>
 
             {{ govukInsetText({
               text: "If there's a prison number for your recipient you don't need to enter their date of birth."

@@ -29,7 +29,7 @@ describe('Legal Sender Start Page View', () => {
     const $ = cheerio.load(compiledTemplate.render({}))
     expect($('[data-qa="prisons"]').text()).toEqual('Prisons you can send mail to')
     expect($('[data-qa="prisons"] + p').text()).toEqual(
-      'You can use this service to send legal or confidential mail to any prison across the estate, including the private prison estate.'
+      'You can use this service to send legal or confidential mail to any prison in England and Wales, including the private prison estate.'
     )
   })
 })
