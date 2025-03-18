@@ -16,7 +16,7 @@
     "noImplicitAny": true,
     "experimentalDecorators": true,
     "typeRoots": ["./server/@types", "./node_modules/@types"]
-    },
+  },
   "exclude": [
     "node_modules",
     "assets/**/*.js",
@@ -25,7 +25,8 @@
     "test_results",
     "uploads",
     "cypress.config.ts",
-    "smoke_tests/cypress.config.ts"
+    "smoke_tests/cypress.config.ts",
+    "eslint.config.mjs"
   ],
   "include": ["**/*.js", "**/*.ts"]
 }
