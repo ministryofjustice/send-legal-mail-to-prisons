@@ -48,7 +48,7 @@ export default class CookiesPolicyController {
           { cookiesPolicy: { policy: req.body.cookies } },
           (err, html) => {
             return res.json({ partial: html })
-          }
+          },
         )
       }
     }

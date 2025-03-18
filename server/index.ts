@@ -24,7 +24,7 @@ const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application 
   const createBarcodeService = new CreateBarcodeService()
   const prisonService = new PrisonService(
     new PrisonRegisterService(new PrisonRegisterStore(createRedisClient())),
-    new SupportedPrisonsService()
+    new SupportedPrisonsService(),
   )
   const appInsightsService = new AppInsightsService(appInsightsTelemetryClient)
   const contactService = new ContactService()
@@ -41,7 +41,7 @@ const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application 
     recipientFormService,
     zendeskService,
     cjsmService,
-    prisonService
+    prisonService,
   )
 }
 

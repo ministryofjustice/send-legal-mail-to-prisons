@@ -6,7 +6,7 @@ export default class EditContactView {
   constructor(
     private readonly form: EditContactForm,
     private readonly prisonRegister: Array<Prison>,
-    private readonly errors?: Array<Record<string, string>>
+    private readonly errors?: Array<Record<string, string>>,
   ) {}
 
   get renderArgs(): {

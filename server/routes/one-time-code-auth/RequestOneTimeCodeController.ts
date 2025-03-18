@@ -9,7 +9,7 @@ import validate from './RequestOneTimeCodeValidator'
 export default class RequestOneTimeCodeController {
   constructor(
     private readonly oneTimeCodeService: OneTimeCodeService,
-    private readonly verifyOneTimeCodeController: VerifyOneTimeCodeController
+    private readonly verifyOneTimeCodeController: VerifyOneTimeCodeController,
   ) {}
 
   getRequestOneTimeCodeView(req: Request, res: Response): void {

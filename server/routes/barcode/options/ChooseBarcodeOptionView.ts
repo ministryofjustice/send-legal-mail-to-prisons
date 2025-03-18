@@ -3,7 +3,7 @@ import type { ChooseBarcodeOptionForm } from 'forms'
 export default class ChooseBarcodeOptionView {
   constructor(
     private readonly chooseBarcodeOptionForm: ChooseBarcodeOptionForm,
-    private readonly errors?: Array<Record<string, string>>
+    private readonly errors?: Array<Record<string, string>>,
   ) {}
 
   get renderArgs(): {

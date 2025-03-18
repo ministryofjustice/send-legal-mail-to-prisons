@@ -48,7 +48,7 @@ describe('PrisonRegisterStore', () => {
     expect(redisClient.set).toHaveBeenCalledWith(
       'prisonRegister:activePrisons',
       JSON.stringify(activePrisons),
-      { EX: 172800 } // 2 days in seconds
+      { EX: 172800 }, // 2 days in seconds
     )
   })
 

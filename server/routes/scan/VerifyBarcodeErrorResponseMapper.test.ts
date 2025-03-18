@@ -8,7 +8,7 @@ describe('VerifyBarcodeErrorResponseMapper', () => {
   }
 
   const verifyBarcodeErrorResponseMapper = new VerifyBarcodeErrorResponseMapper(
-    prisonService as unknown as PrisonService
+    prisonService as unknown as PrisonService,
   )
 
   afterEach(() => {

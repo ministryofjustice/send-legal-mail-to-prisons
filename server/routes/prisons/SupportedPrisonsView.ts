@@ -5,7 +5,7 @@ export default class SupportedPrisonsView {
   constructor(
     private readonly supportedPrisons: Array<Prison>,
     private readonly unsupportedPrisons: Array<Prison>,
-    private readonly errors?: Array<Record<string, string>>
+    private readonly errors?: Array<Record<string, string>>,
   ) {}
 
   get renderArgs(): {

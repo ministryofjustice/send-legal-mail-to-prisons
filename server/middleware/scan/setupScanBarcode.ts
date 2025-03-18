@@ -10,7 +10,7 @@ import asyncMiddleware from '../asyncMiddleware'
 export default function setupScanBarcode(
   scanBarcodeService: ScanBarcodeService,
   prisonService: PrisonService,
-  appInsightsClient: AppInsightsService
+  appInsightsClient: AppInsightsService,
 ): Router {
   const router = express.Router()
 
@@ -20,7 +20,7 @@ export default function setupScanBarcode(
   const scanBarcodeController = new ScanBarcodeController(
     scanBarcodeService,
     new VerifyBarcodeErrorResponseMapper(prisonService),
-    appInsightsClient
+    appInsightsClient,
   )
 
   router.use('/scan-barcode', authorisationMiddleware(['ROLE_SLM_SCAN_BARCODE']))

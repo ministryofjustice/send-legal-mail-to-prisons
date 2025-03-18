@@ -10,7 +10,7 @@ export default function setupCookiesPolicy(): Router {
   router.get('/cookies-policy', (req, res) => cookiesPolicyController.getCookiesPolicyView(req, res))
 
   router.post('/cookies-policy/preferences', (req, res) =>
-    cookiesPolicyController.submitCookiesPolicyPreferences(req, res)
+    cookiesPolicyController.submitCookiesPolicyPreferences(req, res),
   )
   router.post('/cookies-policy', (req, res) => cookiesPolicyController.submitCookiesPolicyPreferences(req, res))
 

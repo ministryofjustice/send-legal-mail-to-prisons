@@ -4,7 +4,7 @@ import config from '../../config'
 export default class RequestLinkView {
   constructor(
     private readonly requestLinkForm: RequestLinkForm,
-    private readonly errors?: Array<Record<string, string>>
+    private readonly errors?: Array<Record<string, string>>,
   ) {}
 
   get renderArgs(): {

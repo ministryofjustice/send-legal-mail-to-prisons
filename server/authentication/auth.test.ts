@@ -26,7 +26,7 @@ const verifyToken = tokenVerifier as jest.Mock
 describe('authenticationMiddleware', () => {
   const authenticationMiddleware = auth.authenticationMiddleware(
     tokenVerifier,
-    smokeTestStore as undefined as SmokeTestStore
+    smokeTestStore as undefined as SmokeTestStore,
   )
 
   beforeEach(() => {
@@ -52,7 +52,7 @@ describe('authenticationMiddleware', () => {
       await authenticationMiddleware(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(req.isAuthenticated).toHaveBeenCalled()
@@ -67,7 +67,7 @@ describe('authenticationMiddleware', () => {
       await authenticationMiddleware(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(next).not.toHaveBeenCalled()
@@ -82,7 +82,7 @@ describe('authenticationMiddleware', () => {
       await authenticationMiddleware(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(next).not.toHaveBeenCalled()
@@ -96,7 +96,7 @@ describe('authenticationMiddleware', () => {
       await authenticationMiddleware(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(next).not.toHaveBeenCalled()
@@ -120,7 +120,7 @@ describe('authenticationMiddleware', () => {
       await authenticationMiddleware(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(next).toHaveBeenCalled()
@@ -134,7 +134,7 @@ describe('authenticationMiddleware', () => {
       await authenticationMiddleware(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(next).toHaveBeenCalled()
@@ -148,7 +148,7 @@ describe('authenticationMiddleware', () => {
       await authenticationMiddleware(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(next).not.toHaveBeenCalled()

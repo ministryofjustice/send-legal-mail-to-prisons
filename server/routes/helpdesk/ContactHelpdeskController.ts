@@ -35,7 +35,7 @@ export default class ContactHelpdeskController {
         req.session.contactHelpdeskForm,
         externalUser,
         username,
-        organisation
+        organisation,
       )
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {

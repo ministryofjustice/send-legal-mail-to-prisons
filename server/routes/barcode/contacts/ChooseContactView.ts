@@ -6,7 +6,7 @@ export default class ChooseContactView {
     private readonly chooseContactForm: ChooseContactForm,
     private readonly searchName: string,
     private readonly contacts: Array<Contact>,
-    private readonly errors?: Array<Record<string, string>>
+    private readonly errors?: Array<Record<string, string>>,
   ) {}
 
   get renderArgs(): {

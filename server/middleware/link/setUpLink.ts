@@ -9,7 +9,7 @@ import AppInsightsService from '../../services/AppInsightsService'
 export default function setUpLink(
   app: Express,
   magicLinkService: MagicLinkService,
-  appInsightsClient: AppInsightsService
+  appInsightsClient: AppInsightsService,
 ): Router {
   const router = express.Router()
 

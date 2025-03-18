@@ -11,7 +11,7 @@ export default class CreateContactByPrisonNumberController {
   constructor(
     private readonly prisonService: PrisonService,
     private readonly contactService: ContactService,
-    private readonly recipientFormService: RecipientFormService
+    private readonly recipientFormService: RecipientFormService,
   ) {}
 
   async getCreateNewContact(req: Request, res: Response): Promise<void> {
@@ -36,7 +36,7 @@ export default class CreateContactByPrisonNumberController {
     const view = new CreateContactByPrisonNumberView(
       createNewContactByPrisonNumberForm,
       supportedPrisons,
-      req.flash('errors')
+      req.flash('errors'),
     )
     return res.render('pages/barcode/create-new-contact-by-prison-number', { ...view.renderArgs })
   }
@@ -64,15 +64,15 @@ export default class CreateContactByPrisonNumberController {
         req.ip,
         prisonerName,
         prisonId,
-        prisonNumber
+        prisonNumber,
       )
       recipientForm.contactId = contact.id
     } catch (error) {
       logger.error(
         `Failed to save new contact from form ${JSON.stringify(
-          req.session.createNewContactByPrisonNumberForm
+          req.session.createNewContactByPrisonNumberForm,
         )} due to error:`,
-        error
+        error,
       )
     }
 

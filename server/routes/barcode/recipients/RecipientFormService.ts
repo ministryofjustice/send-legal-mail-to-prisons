@@ -52,7 +52,7 @@ export default class RecipientFormService {
     const newRecipient = await this.toRecipient(recipientForm)
 
     req.session.recipients = req.session.recipients.map(recipient =>
-      recipient.contactId !== newRecipient.contactId ? recipient : newRecipient
+      recipient.contactId !== newRecipient.contactId ? recipient : newRecipient,
     )
   }
 

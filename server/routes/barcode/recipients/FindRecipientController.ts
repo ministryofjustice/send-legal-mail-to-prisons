@@ -11,7 +11,7 @@ import logger from '../../../../logger'
 export default class FindRecipientController {
   constructor(
     private readonly recipientFormService: RecipientFormService,
-    private readonly contactService: ContactService
+    private readonly contactService: ContactService,
   ) {}
 
   async getFindRecipientByPrisonNumberView(req: Request, res: Response): Promise<void> {
@@ -19,7 +19,7 @@ export default class FindRecipientController {
     this.recipientFormService.resetForm(req)
     const view = new FindRecipientByPrisonNumberView(
       req.session?.findRecipientByPrisonNumberForm || {},
-      req.flash('errors')
+      req.flash('errors'),
     )
     return res.render('pages/barcode/find-recipient-by-prison-number', { ...view.renderArgs })
   }
@@ -39,7 +39,7 @@ export default class FindRecipientController {
       const contact = await this.contactService.getContactByPrisonNumber(
         req.session.barcodeUser.token,
         req.ip,
-        req.session.recipientForm.prisonNumber
+        req.session.recipientForm.prisonNumber,
       )
       if (contact) {
         await this.recipientFormService.addContact(req, contact)
@@ -59,7 +59,7 @@ export default class FindRecipientController {
     this.recipientFormService.resetForm(req)
     const view = new FindRecipientByPrisonerNameView(
       req.session?.findRecipientByPrisonerNameForm || {},
-      req.flash('errors')
+      req.flash('errors'),
     )
     return res.render('pages/barcode/find-recipient-by-prisoner-name', { ...view.renderArgs })
   }
@@ -80,7 +80,7 @@ export default class FindRecipientController {
       const contacts = await this.contactService.searchContacts(
         req.session.barcodeUser.token,
         req.ip,
-        req.session.recipientForm.prisonerName
+        req.session.recipientForm.prisonerName,
       )
       if (contacts.length > 0) {
         req.session.recipientForm.contacts = contacts

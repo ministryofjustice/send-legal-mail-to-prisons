@@ -36,7 +36,7 @@ export default class PdfController {
       req.session.recipients = await this.createBarcodeService.addBarcodeValuesToRecipients(
         req.session.recipients,
         req.session.barcodeUser.token,
-        req.ip
+        req.ip,
       )
     } catch (error) {
       logger.error('An error was received when trying to assign a barcode to ', error)
@@ -90,7 +90,7 @@ export default class PdfController {
       const barcodeImages = await Promise.all(
         req.session.pdfRecipients.map(async recipient => {
           return this.createBarcodeService.generateAddressAndBarcodeDataUrlImage(recipient)
-        })
+        }),
       )
 
       const numberOfCoversheets = req.session.pdfRecipients.length
@@ -111,7 +111,7 @@ export default class PdfController {
           xOffsetC4: config.coversheetPdf.xOffsetC4,
           yOffsetC4: config.coversheetPdf.yOffsetC4,
         },
-        { filename, contentDisposition: 'attachment' }
+        { filename, contentDisposition: 'attachment' },
       )
     } catch (error) {
       logger.error('There was an error generating the barcode images for the coversheet PDF', error)

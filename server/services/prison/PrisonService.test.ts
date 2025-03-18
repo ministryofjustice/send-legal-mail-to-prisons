@@ -14,7 +14,7 @@ const prisonRegisterService = {
 describe('PrisonService', () => {
   const prisonService = new PrisonService(
     prisonRegisterService as unknown as PrisonRegisterService,
-    supportedPrisonsService as unknown as SupportedPrisonsService
+    supportedPrisonsService as unknown as SupportedPrisonsService,
   )
 
   afterEach(() => {

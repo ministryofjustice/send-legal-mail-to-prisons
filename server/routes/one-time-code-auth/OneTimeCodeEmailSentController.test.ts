@@ -24,7 +24,7 @@ describe('OneTimeCodeEmailSentController', () => {
 
       await oneTimeCodeEmailSentController.getOneTimeCodeEmailSentView(
         req as undefined as Request,
-        res as undefined as Response
+        res as undefined as Response,
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/one-time-code-auth/emailSent', {
@@ -38,7 +38,7 @@ describe('OneTimeCodeEmailSentController', () => {
 
       await oneTimeCodeEmailSentController.getOneTimeCodeEmailSentView(
         req as undefined as Request,
-        res as undefined as Response
+        res as undefined as Response,
       )
 
       expect(res.redirect).toHaveBeenCalledWith('request-code')

@@ -35,7 +35,7 @@ describe('ScanBarcodeController', () => {
   const scanBarcodeController = new ScanBarcodeController(
     scanBarcodeService as unknown as ScanBarcodeService,
     verifyBarcodeErrorResponseMapper as unknown as VerifyBarcodeErrorResponseMapper,
-    appInsightsClient as unknown as AppInsightsService
+    appInsightsClient as unknown as AppInsightsService,
   )
 
   afterEach(() => {
@@ -187,7 +187,7 @@ describe('ScanBarcodeController', () => {
       expect(scanBarcodeService.notifyMoreChecksRequested).toHaveBeenCalledWith(
         'some-barcode',
         'scanned-by-user',
-        'some-ip'
+        'some-ip',
       )
       expect(req.session.barcodeEntryForm.errorCode.code).toEqual('FURTHER_CHECKS_NEEDED')
       expect(res.redirect).toHaveBeenCalledWith('/scan-barcode/result')

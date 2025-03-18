@@ -4,7 +4,7 @@ import type { Contact } from 'sendLegalMailApiClient'
 
 export default function renderChooseContactRadiosFilter(
   searchName: string,
-  contacts: Array<Contact>
+  contacts: Array<Contact>,
 ): Array<RadioButtonOption> {
   const contactOptions = contacts.map(contact => {
     let text = contact.prisonerName

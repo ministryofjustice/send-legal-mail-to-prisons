@@ -8,7 +8,7 @@ export type DropDownOption = {
 
 export default function getPrisonDropdown(
   prisonRegister: Array<Prison>,
-  selectedPrisonId?: string
+  selectedPrisonId?: string,
 ): Array<DropDownOption> {
   return [
     { value: '', text: '' },

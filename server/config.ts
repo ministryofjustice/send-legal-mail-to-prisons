@@ -50,7 +50,7 @@ export default {
     ${get(
       'BARCODE_TOKEN_PUBLIC_KEY',
       'MIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAnKf2/0ffidVro/KXXXobH98tm3qRAOLmk/jBB/CUw/13ITvd/l0ECiT8Dq+aUAUrHK+rRDk8iCuZMD3JYQRW1NUEw9zXG408DNHZo1alDo9EoP4KIL6gV8h2AdyV0Fra3guCGuuMzF+aRbIEHNDx/NWEjOXXibTrIxXPxbEiI4yfcjLyUiusE9T7ZHlaTEDNA4zaDcY98LJs5B17l/h3Q8RYwLGlZe1HJkhi/IxeYzX6+OQZdozFWRSmJDMwJ4oAdXOnE5jLl3q6IzKYWJxkt8z8ITcXzSWLMKEqkYxBS4eO5dsWMRK8x9njtOrj8I0jppNJIDt0dwjfldXhUmLIVQABW7TdAhJsAq/RY2K1NjoQvsQpzThjrkHGRkKIAClK0N4XccwKNiTmI/wMQ5ec/6sNJYEZko4wIUAGb4u1kNJtqupwErau6jL8ffkkSBQNzoQyI5WrTaRnwOrqkgHO/W0GisMNc+RC1z/KFtO9ybRFRB21/4cHCeH7NugdEHI7AgMBAAE=',
-      requiredInProduction
+      requiredInProduction,
     )}
     -----END PUBLIC KEY-----`.replace(/^\s+/gm, ''),
   redis: {
@@ -137,11 +137,11 @@ export default {
   phaseBannerLink: {
     legalSenderJourney: get(
       'LEGAL_SENDER_PHASE_BANNER_LINK',
-      'https://send-legal-mail-to-prisons.form.service.justice.gov.uk/'
+      'https://send-legal-mail-to-prisons.form.service.justice.gov.uk/',
     ),
     mailRoomJourney: get(
       'MAIL_ROOM_PHASE_BANNER_LINK',
-      'https://send-legal-mail-to-prisons.form.service.justice.gov.uk/'
+      'https://send-legal-mail-to-prisons.form.service.justice.gov.uk/',
     ),
   },
   smoketest: {

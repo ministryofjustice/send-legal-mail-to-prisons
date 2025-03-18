@@ -10,7 +10,7 @@ export default abstract class Page {
     private readonly options: { axeTest?: boolean; expectHelpdeskLink?: boolean } = {
       axeTest: true,
       expectHelpdeskLink: true,
-    }
+    },
   ) {
     this.checkOnPage()
     this.checkCsfrTokenForFormBasedPages()

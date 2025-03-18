@@ -31,7 +31,7 @@ jest.mock('./RequestOneTimeCodeValidator')
 describe('RequestOneTimeCodeController', () => {
   const requestOneTimeCodeController = new RequestOneTimeCodeController(
     oneTimeCodeService as unknown as OneTimeCodeService,
-    verifyOneTimeCodeController as unknown as VerifyOneTimeCodeController
+    verifyOneTimeCodeController as unknown as VerifyOneTimeCodeController,
   )
 
   afterEach(() => {
@@ -44,7 +44,7 @@ describe('RequestOneTimeCodeController', () => {
 
       await requestOneTimeCodeController.getRequestOneTimeCodeView(
         req as undefined as Request,
-        res as undefined as Response
+        res as undefined as Response,
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/one-time-code-auth/requestOneTimeCode', {
@@ -60,7 +60,7 @@ describe('RequestOneTimeCodeController', () => {
 
       await requestOneTimeCodeController.getRequestOneTimeCodeView(
         req as undefined as Request,
-        res as undefined as Response
+        res as undefined as Response,
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/one-time-code-auth/requestOneTimeCode', {
@@ -82,13 +82,13 @@ describe('RequestOneTimeCodeController', () => {
       await requestOneTimeCodeController.submitOneTimeCodeRequest(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(oneTimeCodeService.requestOneTimeCode).toHaveBeenCalledWith(
         'someone@aarvark.com.cjsm.net',
         '12345678',
-        '127.0.0.1'
+        '127.0.0.1',
       )
       expect(res.redirect).toHaveBeenCalledWith('email-sent')
       expect(req.session.lsjSmokeTestUser).toBeFalsy()
@@ -101,7 +101,7 @@ describe('RequestOneTimeCodeController', () => {
       await requestOneTimeCodeController.submitOneTimeCodeRequest(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(oneTimeCodeService.requestOneTimeCode).not.toHaveBeenCalled()
@@ -117,13 +117,13 @@ describe('RequestOneTimeCodeController', () => {
       await requestOneTimeCodeController.submitOneTimeCodeRequest(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(oneTimeCodeService.requestOneTimeCode).toHaveBeenCalledWith(
         'someone@aarvark.com.cjsm.net',
         '12345678',
-        '127.0.0.1'
+        '127.0.0.1',
       )
       expect(res.redirect).toHaveBeenCalledWith('request-code')
       expect(req.flash).toHaveBeenCalledWith('errors', [

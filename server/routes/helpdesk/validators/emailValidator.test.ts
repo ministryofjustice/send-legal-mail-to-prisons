@@ -30,6 +30,6 @@ describe('emailValidator', () => {
 
         expect(errors).toStrictEqual([`Enter an email address which does not end 'cjsm.net'`])
       })
-    }
+    },
   )
 })

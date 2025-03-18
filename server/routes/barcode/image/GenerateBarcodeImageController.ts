@@ -17,7 +17,7 @@ export default class GenerateBarcodeImageController {
       req.session.recipients = await this.createBarcodeService.addBarcodeValuesToRecipients(
         req.session.recipients,
         req.session.barcodeUser.token,
-        req.ip
+        req.ip,
       )
 
       const barcodeImages = await Promise.all(
@@ -30,7 +30,7 @@ export default class GenerateBarcodeImageController {
             copyButtonHtml: this.copyButtonHtml(recipient.prisonerName, imageName),
             downloadButtonHtml: this.downloadButtonHtml(recipient.prisonerName, imageName),
           }
-        })
+        }),
       )
 
       const view = new GenerateBarcodeImageView(barcodeImages)

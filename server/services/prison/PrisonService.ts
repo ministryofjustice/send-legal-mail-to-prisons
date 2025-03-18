@@ -10,7 +10,7 @@ export type PrisonsBySupported = {
 export default class PrisonService {
   constructor(
     private readonly prisonRegisterService: PrisonRegisterService,
-    private readonly supportedPrisonsService: SupportedPrisonsService
+    private readonly supportedPrisonsService: SupportedPrisonsService,
   ) {}
 
   async getPrisons(): Promise<Array<Prison>> {

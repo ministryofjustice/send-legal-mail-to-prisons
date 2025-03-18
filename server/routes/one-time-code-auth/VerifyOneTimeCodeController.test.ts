@@ -37,7 +37,7 @@ describe('VerifyOneTimeCodeController', () => {
   const mockVerifyJwt = verifyJwt as jest.MockedFunction<typeof verifyJwt>
 
   const verifyOneTimeCodeController = new VerifyOneTimeCodeController(
-    oneTimeCodeService as unknown as OneTimeCodeService
+    oneTimeCodeService as unknown as OneTimeCodeService,
   )
 
   afterEach(() => {
@@ -60,7 +60,7 @@ describe('VerifyOneTimeCodeController', () => {
       await verifyOneTimeCodeController.verifyOneTimeCode(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(req.flash).not.toHaveBeenCalled()
@@ -85,7 +85,7 @@ describe('VerifyOneTimeCodeController', () => {
       await verifyOneTimeCodeController.verifyOneTimeCode(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(req.flash).toHaveBeenCalledWith('errors', [
@@ -101,7 +101,7 @@ describe('VerifyOneTimeCodeController', () => {
       await verifyOneTimeCodeController.verifyOneTimeCode(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#code', text: 'Enter the code from your email.' }])
@@ -120,7 +120,7 @@ describe('VerifyOneTimeCodeController', () => {
       await verifyOneTimeCodeController.verifyOneTimeCode(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(req.flash).toHaveBeenCalledWith('errors', [
@@ -140,7 +140,7 @@ describe('VerifyOneTimeCodeController', () => {
       await verifyOneTimeCodeController.verifyOneTimeCode(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(req.flash).not.toHaveBeenCalled()
@@ -158,7 +158,7 @@ describe('VerifyOneTimeCodeController', () => {
       await verifyOneTimeCodeController.verifyOneTimeCode(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(req.flash).not.toHaveBeenCalled()
@@ -176,7 +176,7 @@ describe('VerifyOneTimeCodeController', () => {
       await verifyOneTimeCodeController.verifyOneTimeCode(
         req as undefined as Request,
         res as undefined as Response,
-        next as undefined as NextFunction
+        next as undefined as NextFunction,
       )
 
       expect(req.flash).not.toHaveBeenCalled()

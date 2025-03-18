@@ -101,7 +101,7 @@ describe('CreateBarcodeService', () => {
 
       expect(barcodeImageDataUrl).toContain('data:image/png;base64,')
       expect(mockBwipjsToBuffer).toHaveBeenCalledWith(
-        expect.objectContaining({ text: '123456789012', alttext: '1234-5678-9012' })
+        expect.objectContaining({ text: '123456789012', alttext: '1234-5678-9012' }),
       )
     })
 
@@ -127,7 +127,7 @@ describe('CreateBarcodeService', () => {
       } catch (error) {
         expect(error).toBe('An error generating the barcode image')
         expect(mockBwipjsToBuffer).toHaveBeenCalledWith(
-          expect.objectContaining({ text: '123456789012', alttext: '1234-5678-9012' })
+          expect.objectContaining({ text: '123456789012', alttext: '1234-5678-9012' }),
         )
       }
     })
@@ -188,7 +188,7 @@ describe('CreateBarcodeService', () => {
       const recipientsWithBarcodes = await createBarcodeService.addBarcodeValuesToRecipients(
         recipients,
         'some-token',
-        '127.0.0.1'
+        '127.0.0.1',
       )
 
       expect(recipientsWithBarcodes).toStrictEqual([

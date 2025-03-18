@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import nock from 'nock'
 import HmppsAuthClient from '../../data/hmppsAuthClient'
 import type TokenStore from '../../data/cache/TokenStore'

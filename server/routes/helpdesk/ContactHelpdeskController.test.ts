@@ -122,7 +122,7 @@ describe('ContactHelpdeskController', () => {
         contactHelpdeskForm,
         true,
         'user@legal-sender.co.uk.cjsm.net',
-        'Legal Senders R Us'
+        'Legal Senders R Us',
       )
       expect(req.flash).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/contact-helpdesk/submitted')
@@ -145,7 +145,7 @@ describe('ContactHelpdeskController', () => {
     it('should render the view given a pageId query string parameter', async () => {
       await contactHelpdeskController.getContactHelpdeskSubmittedView(
         req as unknown as Request,
-        res as unknown as Response
+        res as unknown as Response,
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/helpdesk/submitted', {})

@@ -50,7 +50,7 @@ describe('newContactValidator', () => {
       expect.arrayContaining([
         { href: '#prisonId', text: 'Select a prison name' },
         { href: '#prisonerDob-day', text: 'Enter a date of birth' },
-      ])
+      ]),
     )
   })
 })

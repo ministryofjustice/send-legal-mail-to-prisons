@@ -53,7 +53,7 @@ describe('PdfController', () => {
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/barcode/pdf/select-envelope-size',
-        expect.objectContaining({ errors: [], form: {} })
+        expect.objectContaining({ errors: [], form: {} }),
       )
     })
 
@@ -278,7 +278,7 @@ describe('PdfController', () => {
       ]
       req.session.pdfForm = { envelopeSize: 'dl' }
       createBarcodeService.generateAddressAndBarcodeDataUrlImage.mockImplementation(
-        recipient => `${recipient.prisonerName}-barcode-data-url`
+        recipient => `${recipient.prisonerName}-barcode-data-url`,
       )
 
       await pdfController.downloadPdf(req as unknown as Request, res as unknown as Response)
@@ -286,7 +286,7 @@ describe('PdfController', () => {
       expect(res.renderPDF).toHaveBeenCalledWith(
         'pdf/barcode-cover-sheet',
         expect.objectContaining({ barcodeImages: ['John Smith-barcode-data-url'], envelopeSize: 'dl' }),
-        { contentDisposition: 'attachment', filename: `SendLegalMail-${moment().format('YYYY-MM-DD')}-1-DL.pdf` }
+        { contentDisposition: 'attachment', filename: `SendLegalMail-${moment().format('YYYY-MM-DD')}-1-DL.pdf` },
       )
     })
 

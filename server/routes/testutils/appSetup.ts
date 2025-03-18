@@ -115,11 +115,11 @@ export default function appWithAllRoutes({ production = false }: { production?: 
         new MockSmokeTestStore(smokeTestRedisClient),
         new MockPrisonService(
           new MockPrisonerRegister(new MockPrisonRegisterStore(prisonRegisterRedisClient)),
-          new MockSupportedPrisonsService()
-        )
-      )
+          new MockSupportedPrisonsService(),
+        ),
+      ),
     ),
-    production
+    production,
   )
 }
 

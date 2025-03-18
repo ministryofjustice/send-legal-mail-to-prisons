@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import nock from 'nock'
 import moment from 'moment'
 import type { Contact } from 'sendLegalMailApiClient'

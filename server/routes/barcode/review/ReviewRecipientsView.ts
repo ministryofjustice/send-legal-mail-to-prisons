@@ -5,7 +5,7 @@ export default class ReviewRecipientsView {
   constructor(
     private readonly recipients: Array<Recipient>,
     private readonly form?: ReviewRecipientsForm,
-    private readonly errors?: Array<Record<string, string>>
+    private readonly errors?: Array<Record<string, string>>,
   ) {}
 
   get renderArgs(): {

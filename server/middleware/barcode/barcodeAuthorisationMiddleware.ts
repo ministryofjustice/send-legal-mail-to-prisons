@@ -25,11 +25,11 @@ export default function barcodeAuthorisationMiddleware(): RequestHandler {
           return next(
             createError(401, 'invalid JWT', {
               code: 'EBADJWT',
-            })
+            }),
           )
         }
         return next()
-      }
+      },
     )
   }
 }

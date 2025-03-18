@@ -14,7 +14,7 @@ export default class ContactService {
     prisonerName: string,
     prisonId: string,
     prisonNumber?: string,
-    prisonerDob?: Date
+    prisonerDob?: Date,
   ): Promise<Contact> {
     const createContactRequest: ContactRequest = { prisonerName, prisonId, prisonNumber }
     createContactRequest.dob = prisonerDob ? moment(prisonerDob).format('YYYY-MM-DD') : undefined
@@ -33,7 +33,7 @@ export default class ContactService {
     prisonId: string,
     contactId: number,
     prisonNumber?: string,
-    prisonerDob?: Date
+    prisonerDob?: Date,
   ): Promise<Contact> {
     const updateContactRequest: ContactRequest = { prisonerName, prisonId, prisonNumber }
     updateContactRequest.dob = prisonerDob ? moment(prisonerDob).format('YYYY-MM-DD') : undefined
@@ -57,7 +57,7 @@ export default class ContactService {
   async getContactByPrisonNumber(
     slmToken: string,
     sourceIp: string,
-    prisonNumber: string
+    prisonNumber: string,
   ): Promise<Contact | undefined> {
     return ContactService.restClient(slmToken, sourceIp)
       .get({
