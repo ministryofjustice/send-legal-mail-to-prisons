@@ -16,7 +16,7 @@ export default class OneTimeCodeService {
       OneTimeCodeService.restClient(hmppsToken, sourceIp).post({
         path: `/oneTimeCode/email`,
         data: oneTimeCodeRequest,
-      })
+      }),
     )
   }
 
@@ -31,7 +31,7 @@ export default class OneTimeCodeService {
         .then(apiResponse => {
           const verifyCodeResponse = apiResponse as VerifyCodeResponse
           return verifyCodeResponse.token
-        })
+        }),
     )
   }
 }

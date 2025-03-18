@@ -16,7 +16,7 @@ export default class ScanBarcodeService {
       ScanBarcodeService.restClient(hmppsToken, sourceIp).post({
         path: '/barcode/check',
         data: checkBarcodeRequest,
-      })
+      }),
     )
   }
 
@@ -26,7 +26,7 @@ export default class ScanBarcodeService {
       ScanBarcodeService.restClient(hmppsToken, sourceIp).post({
         path: '/barcode/event/more-checks-requested',
         data: checkBarcodeRequest,
-      })
+      }),
     )
   }
 }

@@ -5,7 +5,7 @@ import VerifyLinkController from '../../routes/link/VerifyLinkController'
 
 export default function setUpRequestLink(
   magicLinkService: MagicLinkService,
-  verifyLinkController: VerifyLinkController
+  verifyLinkController: VerifyLinkController,
 ): Router {
   const router = express.Router()
   const requestLinkController = new RequestLinkController(magicLinkService, verifyLinkController)

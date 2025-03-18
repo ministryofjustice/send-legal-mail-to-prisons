@@ -33,7 +33,7 @@ describe('ChooseBarcodeOptionController', () => {
     it('should return to find recipient if we have no recipients', async () => {
       await chooseBarcodeOptionController.getChooseBarcodeOptionView(
         req as unknown as Request,
-        res as unknown as Response
+        res as unknown as Response,
       )
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/find-recipient')
@@ -44,7 +44,7 @@ describe('ChooseBarcodeOptionController', () => {
 
       await chooseBarcodeOptionController.getChooseBarcodeOptionView(
         req as unknown as Request,
-        res as unknown as Response
+        res as unknown as Response,
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/barcode/choose-barcode-option', { form: {}, errors: [] })
@@ -57,7 +57,7 @@ describe('ChooseBarcodeOptionController', () => {
 
       await chooseBarcodeOptionController.getChooseBarcodeOptionView(
         req as unknown as Request,
-        res as unknown as Response
+        res as unknown as Response,
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/barcode/choose-barcode-option', {
@@ -80,7 +80,7 @@ describe('ChooseBarcodeOptionController', () => {
 
       await chooseBarcodeOptionController.submitChooseBarcodeOption(
         req as unknown as Request,
-        res as unknown as Response
+        res as unknown as Response,
       )
 
       expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#barcodeOption', text: 'Select an option' }])
@@ -93,7 +93,7 @@ describe('ChooseBarcodeOptionController', () => {
 
       await chooseBarcodeOptionController.submitChooseBarcodeOption(
         req as unknown as Request,
-        res as unknown as Response
+        res as unknown as Response,
       )
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/generate-barcode-image')
@@ -105,7 +105,7 @@ describe('ChooseBarcodeOptionController', () => {
 
       await chooseBarcodeOptionController.submitChooseBarcodeOption(
         req as unknown as Request,
-        res as unknown as Response
+        res as unknown as Response,
       )
 
       expect(res.redirect).toHaveBeenCalledWith('/barcode/pdf/select-envelope-size')

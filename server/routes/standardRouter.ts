@@ -10,7 +10,7 @@ import PrisonService from '../services/prison/PrisonService'
 export default function standardRouter(
   userService: UserService,
   smokeTestStore: SmokeTestStore,
-  prisonService: PrisonService
+  prisonService: PrisonService,
 ): Router {
   const router = Router({ mergeParams: true })
 

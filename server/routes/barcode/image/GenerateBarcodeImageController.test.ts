@@ -24,7 +24,7 @@ describe('GenerateBarcodeImageController', () => {
 
   beforeEach(() => {
     generateBarcodeImageController = new GenerateBarcodeImageController(
-      createBarcodeService as unknown as CreateBarcodeService
+      createBarcodeService as unknown as CreateBarcodeService,
     )
   })
 
@@ -71,10 +71,10 @@ describe('GenerateBarcodeImageController', () => {
               barcodeImageName: `SendLegalMail-John-Smith-${moment().format('YYYY-MM-DD')}.png`,
               recipientName: 'John Smith',
               copyButtonHtml: `Copy <span class="govuk-visually-hidden"> barcode image for John Smith (copies PNG file SendLegalMail-John-Smith-${moment().format(
-                'YYYY-MM-DD'
+                'YYYY-MM-DD',
               )}.png of approximate size 0.2 Megabytes to the Clipboard)</span>`,
               downloadButtonHtml: `Download <span class="govuk-visually-hidden"> barcode image for John Smith (downloads PNG file SendLegalMail-John-Smith-${moment().format(
-                'YYYY-MM-DD'
+                'YYYY-MM-DD',
               )}.png of approximate size 0.2 Megabytes)</span>`,
             },
           ],
@@ -169,10 +169,10 @@ describe('GenerateBarcodeImageController', () => {
               barcodeImageName: `SendLegalMail-John-Smith-${moment().format('YYYY-MM-DD')}.png`,
               recipientName: 'John Smith',
               copyButtonHtml: `Copy <span class="govuk-visually-hidden"> barcode image for John Smith (copies PNG file SendLegalMail-John-Smith-${moment().format(
-                'YYYY-MM-DD'
+                'YYYY-MM-DD',
               )}.png of approximate size 0.2 Megabytes to the Clipboard)</span>`,
               downloadButtonHtml: `Download <span class="govuk-visually-hidden"> barcode image for John Smith (downloads PNG file SendLegalMail-John-Smith-${moment().format(
-                'YYYY-MM-DD'
+                'YYYY-MM-DD',
               )}.png of approximate size 0.2 Megabytes)</span>`,
             },
             {
@@ -180,10 +180,10 @@ describe('GenerateBarcodeImageController', () => {
               barcodeImageName: `SendLegalMail-John-Doe-${moment().format('YYYY-MM-DD')}.png`,
               recipientName: 'John Doe',
               copyButtonHtml: `Copy <span class="govuk-visually-hidden"> barcode image for John Doe (copies PNG file SendLegalMail-John-Doe-${moment().format(
-                'YYYY-MM-DD'
+                'YYYY-MM-DD',
               )}.png of approximate size 0.2 Megabytes to the Clipboard)</span>`,
               downloadButtonHtml: `Download <span class="govuk-visually-hidden"> barcode image for John Doe (downloads PNG file SendLegalMail-John-Doe-${moment().format(
-                'YYYY-MM-DD'
+                'YYYY-MM-DD',
               )}.png of approximate size 0.2 Megabytes)</span>`,
             },
           ],

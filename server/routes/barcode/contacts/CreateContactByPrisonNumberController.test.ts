@@ -40,7 +40,7 @@ describe('CreateContactByPrisonNumberController', () => {
     createContactController = new CreateContactByPrisonNumberController(
       prisonService as unknown as PrisonService,
       contactService as unknown as ContactService,
-      recipientFormService as unknown as RecipientFormService
+      recipientFormService as unknown as RecipientFormService,
     )
   })
 
@@ -138,7 +138,7 @@ describe('CreateContactByPrisonNumberController', () => {
         '127.0.0.1',
         'Fred Bloggs',
         'SKI',
-        'A1234BC'
+        'A1234BC',
       )
     })
 
@@ -192,7 +192,7 @@ describe('CreateContactByPrisonNumberController', () => {
         '127.0.0.1',
         'Fred Bloggs',
         'SKI',
-        'A1234BC'
+        'A1234BC',
       )
     })
   })

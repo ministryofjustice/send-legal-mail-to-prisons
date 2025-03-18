@@ -36,7 +36,7 @@ describe('BarcodeEntryFormValidator', () => {
       {
         description: 'Barcode field containing special characters',
         form: { barcode: '1234!@£$5678' },
-      }
+      },
     )
 
     invalidForms.forEach(invalidForm => {
@@ -57,7 +57,7 @@ describe('BarcodeEntryFormValidator', () => {
       {
         description: 'Barcode field empty',
         form: { barcode: '' },
-      }
+      },
     )
 
     invalidForms.forEach(invalidForm => {

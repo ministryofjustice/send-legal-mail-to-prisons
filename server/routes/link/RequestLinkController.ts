@@ -9,7 +9,7 @@ import config from '../../config'
 export default class RequestLinkController {
   constructor(
     private readonly magicLinkService: MagicLinkService,
-    private readonly verifyLinkController: VerifyLinkController
+    private readonly verifyLinkController: VerifyLinkController,
   ) {}
 
   async getRequestLinkView(req: Request, res: Response): Promise<void> {

@@ -18,7 +18,7 @@ export default class ScanBarcodeController {
   constructor(
     private readonly scanBarcodeService: ScanBarcodeService,
     private readonly verifyBarcodeErrorResponseMapper: VerifyBarcodeErrorResponseMapper,
-    private readonly appInsightsClient: AppInsightsService
+    private readonly appInsightsClient: AppInsightsService,
   ) {}
 
   /* Methods relating to the use of a handheld scanner device */
@@ -41,7 +41,7 @@ export default class ScanBarcodeController {
     }
 
     return this.verifyBarcode(req.session.barcodeEntryForm.barcode, req.user.username, req.ip, req).then(() =>
-      res.redirect('/scan-barcode/result')
+      res.redirect('/scan-barcode/result'),
     )
   }
 
@@ -61,7 +61,7 @@ export default class ScanBarcodeController {
     }
 
     return this.verifyBarcode(req.session.barcodeEntryForm.barcode, req.user.username, req.ip, req).then(() =>
-      res.redirect('/scan-barcode/result')
+      res.redirect('/scan-barcode/result'),
     )
   }
 

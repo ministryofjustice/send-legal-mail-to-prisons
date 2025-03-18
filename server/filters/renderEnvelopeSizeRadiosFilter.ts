@@ -2,7 +2,7 @@ import type { RadioButtonOption } from 'forms'
 import { EnvelopeSizeSpec } from '../routes/barcode/pdf/PdfControllerView'
 
 export default function renderEnvelopeSizeRadiosFilter(
-  envelopeSizes: Array<EnvelopeSizeSpec>
+  envelopeSizes: Array<EnvelopeSizeSpec>,
 ): Array<RadioButtonOption> {
   return envelopeSizes.map(envelopeSize => {
     return {

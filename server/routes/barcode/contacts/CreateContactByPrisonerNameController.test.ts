@@ -41,7 +41,7 @@ describe('CreateContactByPrisonerNameController', () => {
     createContactController = new CreateContactByPrisonerNameController(
       prisonService as unknown as PrisonService,
       contactService as unknown as ContactService,
-      recipientFormService as unknown as RecipientFormService
+      recipientFormService as unknown as RecipientFormService,
     )
   })
 
@@ -145,7 +145,7 @@ describe('CreateContactByPrisonerNameController', () => {
         'Fred Bloggs',
         'SKI',
         undefined,
-        moment('1990-01-01').toDate()
+        moment('1990-01-01').toDate(),
       )
     })
 
@@ -209,7 +209,7 @@ describe('CreateContactByPrisonerNameController', () => {
         'Fred Bloggs',
         'SKI',
         undefined,
-        moment('1990-01-01').toDate()
+        moment('1990-01-01').toDate(),
       )
     })
   })

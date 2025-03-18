@@ -12,7 +12,7 @@ context('Cookies', () => {
     it('should remove cookie banner once accepted and acknowledged on the cookie policy page', () => {
       const cookiesPolicyPage: CookiesPolicyPage = FindRecipientByPrisonNumberPage.goToPage().clickCookieAction(
         CookiesPolicyPage,
-        'view'
+        'view',
       )
 
       // Check the cookies-policy page looks ok and defaults to reject
@@ -36,7 +36,7 @@ context('Cookies', () => {
         FindRecipientByPrisonNumberPage.goToPage().clickCookieAction(FindRecipientByPrisonNumberPage, 'accept')
       const cookiesPolicyPage: CookiesPolicyPage = findRecipientByPrisonNumberPage.clickCookieAction(
         CookiesPolicyPage,
-        'view'
+        'view',
       )
 
       // The cookie policy page is now defaulted to accept

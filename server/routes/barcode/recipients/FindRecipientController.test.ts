@@ -43,7 +43,7 @@ const aContact = (): Contact => {
 describe('FindRecipientController', () => {
   const findRecipientController = new FindRecipientController(
     recipientFormService as unknown as RecipientFormService,
-    contactService as unknown as ContactService
+    contactService as unknown as ContactService,
   )
 
   afterEach(() => {
@@ -196,7 +196,7 @@ describe('FindRecipientController', () => {
 
       await findRecipientController.getFindRecipientByPrisonNumberView(
         req as unknown as Request,
-        res as unknown as Response
+        res as unknown as Response,
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/barcode/find-recipient-by-prison-number', {
@@ -213,7 +213,7 @@ describe('FindRecipientController', () => {
 
       await findRecipientController.getFindRecipientByPrisonerNameView(
         req as unknown as Request,
-        res as unknown as Response
+        res as unknown as Response,
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/barcode/find-recipient-by-prisoner-name', {

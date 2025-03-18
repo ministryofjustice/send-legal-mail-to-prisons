@@ -14,7 +14,7 @@ export default function prisonsTableRowsFilter(prisons: Array<Prison>): Array<Ar
         html: `
           <a href='/supported-prisons/remove/${prison.id}' class='govuk-link govuk-link--no-visited-state'>Remove<span class='govuk-visually-hidden'> for ${prison}</span></a>
           `,
-      }
+      },
     )
   })
 }

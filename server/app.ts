@@ -48,7 +48,7 @@ export default function createApp(
   recipientFormService: RecipientFormService,
   zendeskService: ZendeskService,
   cjsmService: CjsmService,
-  prisonService: PrisonService
+  prisonService: PrisonService,
 ): express.Application {
   const app = express()
 
@@ -77,7 +77,7 @@ export default function createApp(
   app.use('/start', setupLegalSenderStartPage())
   app.use('/contact-helpdesk', setupContactHelpdesk(zendeskService))
   app.use('/legal-sender/sign-out', (req, res) =>
-    res.redirect(`${legalSenderJourneyAuthenticationStartPage()}?force=true`)
+    res.redirect(`${legalSenderJourneyAuthenticationStartPage()}?force=true`),
   )
 
   if (config.featureFlags.lsjOneTimeCodeAuthEnabled) {

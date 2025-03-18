@@ -14,7 +14,7 @@ const landingPageTiles = Array.of(
     href: '/supported-prisons',
     roles: ['ROLE_SLM_ADMIN'],
     enabled: true,
-  }
+  },
 )
 
 export default landingPageTiles

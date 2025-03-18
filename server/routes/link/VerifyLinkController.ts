@@ -7,7 +7,7 @@ import AppInsightsService from '../../services/AppInsightsService'
 export default class VerifyLinkController {
   constructor(
     private readonly magicLinkService: MagicLinkService,
-    private readonly appInsightsClient: AppInsightsService
+    private readonly appInsightsClient: AppInsightsService,
   ) {}
 
   async verifyLink(req: Request, res: Response): Promise<void> {

@@ -16,7 +16,7 @@ export default class MagicLinkService {
       MagicLinkService.restClient(hmppsToken, sourceIp).post({
         path: `/link/email`,
         data: magicLinkRequest,
-      })
+      }),
     )
   }
 
@@ -31,7 +31,7 @@ export default class MagicLinkService {
         .then(apiResponse => {
           const verifyLinkResponse = apiResponse as VerifyLinkResponse
           return verifyLinkResponse.token
-        })
+        }),
     )
   }
 }

@@ -18,7 +18,7 @@ export default function recipientTableRowsFilter(recipients: Array<Recipient>): 
         html: `
           <a href="/barcode/edit-contact/${recipient.contactId}" class="govuk-link govuk-link--no-visited-state">Edit details<span class="govuk-visually-hidden"> for ${recipient.prisonerName}</span></a>
           <a href="/barcode/review-recipients/remove/${idx}" class="govuk-link govuk-link--no-visited-state">Remove<span class="govuk-visually-hidden"> ${recipient.prisonerName}</span></a>`,
-      } // Column 4 - Editing options links
+      }, // Column 4 - Editing options links
     )
   })
 }

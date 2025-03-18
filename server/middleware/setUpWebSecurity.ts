@@ -36,7 +36,7 @@ export default function setUpWebSecurity(): Router {
           formAction: ["'self'"],
         },
       },
-    })
+    }),
   )
   return router
 }

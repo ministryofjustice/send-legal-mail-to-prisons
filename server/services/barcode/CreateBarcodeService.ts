@@ -73,7 +73,7 @@ export default class CreateBarcodeService {
   async addBarcodeValuesToRecipients(
     recipients: Array<Recipient>,
     token: string,
-    sourceIp: string
+    sourceIp: string,
   ): Promise<Array<Recipient>> {
     return Promise.all(
       recipients.map(async recipient => {
@@ -82,7 +82,7 @@ export default class CreateBarcodeService {
           return { ...recipient, barcodeValue }
         }
         return recipient
-      })
+      }),
     )
   }
 
@@ -117,7 +117,7 @@ export default class CreateBarcodeService {
         this.scale(this.opts.barcodeX),
         this.scale(this.opts.barcodeY),
         this.scale(this.opts.barcodeWidth),
-        this.scale(this.opts.barcodeHeight)
+        this.scale(this.opts.barcodeHeight),
       )
     }
     barcodeImage.src = `data:image/png;base64,${barcodeImageBuffer.toString('base64')}`
@@ -130,7 +130,7 @@ export default class CreateBarcodeService {
           text,
           this.scale(this.opts.addressX),
           this.scale(this.opts.addressY + index * (this.opts.fontPoints + 2)),
-          this.scale(this.opts.addressWidth)
+          this.scale(this.opts.addressWidth),
         )
       }
     })
@@ -147,7 +147,7 @@ export default class CreateBarcodeService {
         address.addressName,
         address.street,
         address.locality,
-        address.postalCode
+        address.postalCode,
       ).filter(addressLine => addressLine != null)
     }
     // Calculate how to split the name into 2 lines
@@ -167,7 +167,7 @@ export default class CreateBarcodeService {
       recipient.prisonNumber ? recipient.prisonNumber : moment(recipient.prisonerDob).format('DD-MM-YYYY'),
       address.addressName,
       address.locality,
-      address.postalCode
+      address.postalCode,
     ).filter(addressLine => addressLine != null)
   }
 }

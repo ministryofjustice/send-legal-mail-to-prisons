@@ -17,7 +17,7 @@ export default class PdfControllerView {
   constructor(
     private readonly pdfForm: PdfForm,
     private readonly smokeTestBarcode: string,
-    private readonly errors?: Array<Record<string, string>>
+    private readonly errors?: Array<Record<string, string>>,
   ) {}
 
   get renderArgs(): {

@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import nock from 'nock'
 import type { ContactHelpdeskForm } from 'forms'
 import ZendeskService, { ZendeskTicket } from './ZendeskService'

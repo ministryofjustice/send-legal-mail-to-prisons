@@ -61,7 +61,7 @@ describe('EditContactController', () => {
     editContactController = new EditContactController(
       prisonService as unknown as PrisonService,
       contactService as unknown as ContactService,
-      recipientService as unknown as RecipientFormService
+      recipientService as unknown as RecipientFormService,
     )
   })
 
@@ -149,7 +149,7 @@ describe('EditContactController', () => {
             { text: '', value: '' },
             { text: 'Kennet (HMP)', value: 'KTI', selected: false },
           ],
-        })
+        }),
       )
     })
 
@@ -204,7 +204,7 @@ describe('EditContactController', () => {
         anEditContactForm.prisonId,
         anEditContactForm.contactId,
         anEditContactForm.prisonNumber,
-        anEditContactForm.dob
+        anEditContactForm.dob,
       )
       expect(recipientService.updateContact).not.toHaveBeenCalledWith(aContact)
       expect(req.flash).not.toHaveBeenCalled()
@@ -253,7 +253,7 @@ describe('EditContactController', () => {
       expect(recipientService.updateContact).not.toHaveBeenCalled()
       expect(req.flash).toHaveBeenCalledWith(
         'errors',
-        expect.arrayContaining([expect.objectContaining({ href: '#prisonNumber' })])
+        expect.arrayContaining([expect.objectContaining({ href: '#prisonNumber' })]),
       )
       expect(res.redirect).toHaveBeenCalledWith('/barcode/edit-contact/1')
     })

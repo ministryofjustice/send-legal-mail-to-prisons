@@ -23,7 +23,7 @@ export default class CreateNewContactByPrisonerNamePage extends Page {
     prisonerDobDay = '1',
     prisonerDobMonth = '1',
     prisonerDobYear = '1990',
-    prisonName = 'leeds'
+    prisonName = 'leeds',
   ): ReviewRecipientsPage => {
     cy.task('stubCreateContact', contactId)
     this.enterAValidPrisonerDay(prisonerDobDay)

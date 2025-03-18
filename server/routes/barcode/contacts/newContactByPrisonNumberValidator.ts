@@ -4,7 +4,7 @@ import validatePrisonId from '../validators/prisonIdValidator'
 import formatErrors from '../../errorFormatter'
 
 export default function validateNewContact(
-  createNewContactForm: CreateNewContactByPrisonNumberForm
+  createNewContactForm: CreateNewContactByPrisonNumberForm,
 ): Array<Record<string, string>> {
   const errors: Array<Record<string, string>> = []
 

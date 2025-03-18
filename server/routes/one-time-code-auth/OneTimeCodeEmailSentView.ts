@@ -1,7 +1,7 @@
 export default class OneTimeCodeEmailSentView {
   constructor(
     private readonly emailSentTo: string,
-    private readonly errors?: Array<Record<string, string>>
+    private readonly errors?: Array<Record<string, string>>,
   ) {}
 
   get renderArgs(): {

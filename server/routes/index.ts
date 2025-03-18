@@ -9,7 +9,7 @@ export default function routes(router: Router): Router {
   get('/', (req, res, next) => {
     res.render('pages/index', {
       tiles: landingPageTiles.filter(tile =>
-        tile.roles.some(requiredRole => res.locals.user?.roles.includes(requiredRole))
+        tile.roles.some(requiredRole => res.locals.user?.roles.includes(requiredRole)),
       ),
     })
   })

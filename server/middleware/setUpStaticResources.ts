@@ -24,7 +24,7 @@ export default function setUpStaticResources(): Router {
     '/node_modules/jquery/dist',
     '/node_modules/inputmask/dist/bindings',
     '/node_modules/inputmask/dist',
-    '/node_modules/accessible-autocomplete/dist'
+    '/node_modules/accessible-autocomplete/dist',
   ).forEach(dir => {
     router.use('/assets', express.static(path.join(process.cwd(), dir), cacheControl))
   })
@@ -50,13 +50,13 @@ export default function setUpStaticResources(): Router {
   Array.of('/node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js.map').forEach(dir => {
     router.use(
       '/assets/js/accessible-autocomplete.min.js.map',
-      express.static(path.join(process.cwd(), dir), cacheControl)
+      express.static(path.join(process.cwd(), dir), cacheControl),
     )
   })
   Array.of('/node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.css').forEach(dir => {
     router.use(
       '/assets/stylesheets/accessible-autocomplete.min.css',
-      express.static(path.join(process.cwd(), dir), cacheControl)
+      express.static(path.join(process.cwd(), dir), cacheControl),
     )
   })
 

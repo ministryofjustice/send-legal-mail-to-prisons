@@ -1,5 +1,5 @@
 import Page, { PageElement } from '../page'
-// eslint-disable-next-line import/no-cycle
+
 import RequestOneTimeCodePage from './requestOneTimeCode'
 import FindRecipientByPrisonNumberPage from '../barcode/findRecipientByPrisonNumber'
 

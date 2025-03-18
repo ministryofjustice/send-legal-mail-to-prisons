@@ -15,7 +15,7 @@ export default class EditContactController {
   constructor(
     private readonly prisonService: PrisonService,
     private readonly contactService: ContactService,
-    private readonly recipientService: RecipientFormService
+    private readonly recipientService: RecipientFormService,
   ) {}
 
   async getEditContact(req: Request, res: Response): Promise<void> {
@@ -89,7 +89,7 @@ export default class EditContactController {
         prisonId,
         contactId,
         prisonNumber || undefined,
-        dob
+        dob,
       )
       await this.recipientService.updateContact(req, updatedContact)
       req.session.editContactForm = undefined

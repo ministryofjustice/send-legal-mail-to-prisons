@@ -27,7 +27,7 @@ export default class ZendeskService {
     contactHelpdeskForm: ContactHelpdeskForm,
     externalUser: boolean,
     username: string,
-    organisation?: string
+    organisation?: string,
   ): Promise<number> {
     try {
       const messageBody = `

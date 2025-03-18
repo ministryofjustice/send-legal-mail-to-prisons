@@ -128,7 +128,7 @@ describe('CookiesPolicyController', () => {
     it('should redirect to the last page and not set any cookies if no cookie preference submitted on the request', async () => {
       await cookiesPolicyController.submitCookiesPolicyPreferences(
         req as unknown as Request,
-        res as unknown as Response
+        res as unknown as Response,
       )
 
       expect(res.redirect).toHaveBeenCalledWith('/lastPage')
@@ -140,7 +140,7 @@ describe('CookiesPolicyController', () => {
 
       await cookiesPolicyController.submitCookiesPolicyPreferences(
         req as unknown as Request,
-        res as unknown as Response
+        res as unknown as Response,
       )
 
       expect(res.redirect).toHaveBeenCalledWith('/cookies-policy')
@@ -154,13 +154,13 @@ describe('CookiesPolicyController', () => {
 
       await cookiesPolicyController.submitCookiesPolicyPreferences(
         req as unknown as Request,
-        res as unknown as Response
+        res as unknown as Response,
       )
 
       expect(res.cookie).toHaveBeenCalledWith(
         'cookies_policy',
         'accept',
-        expect.objectContaining({ sameSite: 'lax', secure: true, httpOnly: true })
+        expect.objectContaining({ sameSite: 'lax', secure: true, httpOnly: true }),
       )
       expect(req.is).toHaveBeenCalledWith('application/json')
       expect(res.redirect).toHaveBeenCalledWith('/lastPage?showCookieConfirmation=true')
@@ -173,7 +173,7 @@ describe('CookiesPolicyController', () => {
 
       await cookiesPolicyController.submitCookiesPolicyPreferences(
         req as unknown as Request,
-        res as unknown as Response
+        res as unknown as Response,
       )
 
       expect(res.render).toHaveBeenCalledWith(
@@ -181,7 +181,7 @@ describe('CookiesPolicyController', () => {
         {
           cookiesPolicy: { policy: 'accept' },
         },
-        expect.any(Function)
+        expect.any(Function),
       )
       expect(res.redirect).not.toHaveBeenCalled()
       expect(req.is).toHaveBeenCalledWith('application/json')

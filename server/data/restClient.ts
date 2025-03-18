@@ -46,7 +46,7 @@ export default class RestClient {
     private readonly config: ApiConfig,
     private readonly hmppsToken: string = undefined,
     private readonly slmToken: string = undefined,
-    private readonly sourceIp: string = undefined
+    private readonly sourceIp: string = undefined,
   ) {
     this.agent = config.url.startsWith('https') ? new HttpsAgent(config.agent) : new Agent(config.agent)
   }

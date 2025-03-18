@@ -60,7 +60,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     {
       autoescape: true,
       express: app,
-    }
+    },
   )
 
   njkEnv.addFilter('initialiseName', initialiseNameFilter)

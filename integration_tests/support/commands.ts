@@ -32,7 +32,7 @@ Cypress.Commands.add('signInAsLegalSender', () => {
     // Request a one time code - we dont need to know what it is, but we do need to have submitted the form on this page
     const emailSentPage: EmailSentPage = RequestOneTimeCodePage.goToPage().submitFormWithValidEmailAddress(
       EmailSentPage,
-      'valid@email.address.cjsm.net'
+      'valid@email.address.cjsm.net',
     )
     // Submit the one time code
     emailSentPage.submitFormWithValidOneTimeCode()
@@ -46,14 +46,14 @@ Cypress.Commands.add('signInAsSmokeTestLegalSender', () => {
     // Sign in as the smoke test user using a magic link
     cy.visit(`${Cypress.env('LSJ_URL')}/link/request-link`)
     findRecipientPage = Page.verifyOnPage(RequestLinkPage).submitFormWithSmokeTestUser(
-      Cypress.env('APP_SMOKETEST_LSJSECRET')
+      Cypress.env('APP_SMOKETEST_LSJSECRET'),
     )
   } else {
     // Sign in as the smoke test user using a One Time Code
     cy.visit(`${Cypress.env('LSJ_URL')}/oneTimeCode/request-code`)
     Page.verifyOnPage(RequestOneTimeCodePage).submitFormWithValidEmailAddress(
       FindRecipientByPrisonNumberPage,
-      Cypress.env('APP_SMOKETEST_LSJSECRET')
+      Cypress.env('APP_SMOKETEST_LSJSECRET'),
     )
     findRecipientPage = Page.verifyOnPage(FindRecipientByPrisonNumberPage)
   }

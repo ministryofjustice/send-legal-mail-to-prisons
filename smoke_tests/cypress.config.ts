@@ -1,5 +1,7 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { defineConfig } from 'cypress'
 // @ts-expect-error: import path will be correct when this file is moved via run-smoke-test.sh
+// eslint-disable-next-line import/no-unresolved,import/extensions
 import state from './support/state'
 
 export default defineConfig({

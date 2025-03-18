@@ -61,7 +61,7 @@ export default class ReviewRecipientsController {
   // TODO - remove this function and associated tests once we are sure prison register lookups via redis has been successfully rolled out
   async ensureAllRecipientsHaveAPrison(
     recipients: Array<{ prison?: unknown; prisonAddress?: { agencyCode: string } }>,
-    req: Request
+    req: Request,
   ) {
     if (recipients.find(recipient => !recipient.prison && recipient.prisonAddress)) {
       // At least one recipient has no populated prison but still has a prisonAddress property
@@ -78,7 +78,7 @@ export default class ReviewRecipientsController {
           }
           delete newRecipient.prisonAddress
           return newRecipient
-        })
+        }),
       )
     }
   }

@@ -44,7 +44,7 @@ describe('VerifyLinkController', () => {
   beforeEach(() => {
     verifyLinkController = new VerifyLinkController(
       magicLinkService as unknown as MagicLinkService,
-      appInsightsClient as unknown as AppInsightsService
+      appInsightsClient as unknown as AppInsightsService,
     )
     mockVerify = verify as jest.MockedFunction<typeof verify>
   })
@@ -73,7 +73,7 @@ describe('VerifyLinkController', () => {
 
       expect(req.flash).toHaveBeenCalledWith(
         'errors',
-        expect.arrayContaining([expect.objectContaining({ href: '#email' })])
+        expect.arrayContaining([expect.objectContaining({ href: '#email' })]),
       )
       expect(res.redirect).toHaveBeenCalledWith('request-link')
     })
@@ -89,7 +89,7 @@ describe('VerifyLinkController', () => {
 
       expect(req.flash).toHaveBeenCalledWith(
         'errors',
-        expect.arrayContaining([expect.objectContaining({ href: '#email' })])
+        expect.arrayContaining([expect.objectContaining({ href: '#email' })]),
       )
       expect(res.redirect).toHaveBeenCalledWith('/link/request-link')
     })
