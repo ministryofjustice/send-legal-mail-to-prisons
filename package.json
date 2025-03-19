@@ -30,7 +30,7 @@
     "clean": "rm -rf dist build node_modules stylesheets"
   },
   "engines": {
-    "node": "^20",
+    "node": "^22",
     "npm": "^10"
   },
   "jest": {
@@ -103,7 +103,7 @@
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
     "bwip-js": "^4.5.2",
-    "canvas": "^2.11.2",
+    "canvas": "^3.1.0",
     "compression": "^1.8.0",
     "connect-flash": "^0.1.1",
     "connect-redis": "^8.0.2",
@@ -131,6 +131,7 @@
   "devDependencies": {
     "@cypress/skip-test": "^2.6.1",
     "@ministryofjustice/eslint-config-hmpps": "^0.0.1-beta.2",
+    "@tsconfig/node22": "^22.0.0",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
     "@types/bwip-js": "3.2.3",
@@ -172,5 +173,10 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.6",
     "typescript": "^5.8.2"
+  },
+  "overrides": {
+    "jest-environment-jsdom": {
+      "canvas": "$canvas"
+    }
   }
 }

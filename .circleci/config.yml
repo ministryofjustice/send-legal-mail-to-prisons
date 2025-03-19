@@ -24,12 +24,12 @@ parameters:
 
   node-version:
     type: string
-    default: 20.18-browsers
+    default: 22.14-browsers
 
 executors:
   smoke-test:
     docker:
-      - image: cypress/included:13.7.0
+      - image: cypress/included:14.2.0
     working_directory: ~/tests
 
 jobs:
