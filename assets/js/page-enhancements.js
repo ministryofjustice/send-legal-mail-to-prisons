@@ -105,8 +105,10 @@ window.pageEnhancements = (($, document) => {
       event.preventDefault()
       const form = $(this).closest('form')
       const csrfQueryString = extractCsrfFieldAsKeyValuePairFromForm(form)
-      const formAction = `${form.attr('action')}?${csrfQueryString}`
+      const formAction = `${form.attr('action')}`
       const data = {}
+      console.log(csrfQueryString)
+      data['_csrf'] = csrfQueryString[0].split('=')[1]
       data[this.name] = this.value
 
       $.ajax(formAction, { contentType: 'application/json', method: 'POST', data: JSON.stringify(data) }).done(
