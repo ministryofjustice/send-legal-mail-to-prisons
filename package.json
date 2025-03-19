@@ -30,7 +30,7 @@
     "clean": "rm -rf dist build node_modules stylesheets"
   },
   "engines": {
-    "node": "^20",
+    "node": "^22",
     "npm": "^10"
   },
   "jest": {
@@ -131,6 +131,7 @@
   "devDependencies": {
     "@cypress/skip-test": "^2.6.1",
     "@ministryofjustice/eslint-config-hmpps": "^0.0.1-beta.2",
+    "@tsconfig/node22": "^22.0.0",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
     "@types/bwip-js": "3.2.3",
