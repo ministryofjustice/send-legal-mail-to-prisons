@@ -107,7 +107,6 @@ window.pageEnhancements = (($, document) => {
       const csrfQueryString = extractCsrfFieldAsKeyValuePairFromForm(form)
       const formAction = `${form.attr('action')}`
       const data = {}
-      console.log(csrfQueryString)
       data['_csrf'] = csrfQueryString[0].split('=')[1]
       data[this.name] = this.value
 
