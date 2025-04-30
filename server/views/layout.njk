@@ -160,8 +160,6 @@
 {% block bodyEnd %}
   {# Run JavaScript at end of the
   <body>, to avoid blocking the initial render. #}
-  <script type="module" src="/assets/govukFrontendInit.js"  nonce="{{ cspNonce }}"></script>
-  <script src="/assets/moj/all.js" nonce="{{ cspNonce }}"></script>
-  <script src="/assets/mojFrontendInit.js" nonce="{{ cspNonce }}"></script>
+  <script type="module" src="/assets/frontendInit.js"  nonce="{{ cspNonce }}"></script>
   {% block pageScripts %}{% endblock %}
 {% endblock %}
