@@ -4,12 +4,12 @@
 
 {% set pageTitle = 'Send legal mail to prisons' %}
 {% set pageId = 'legal-sender-start' %}
+{% set govukRebrand = true %}
 
 {% block header %}
   {% include "partials/cookies/cookie-banner.njk" %}
   {{ govukHeader({
-    homepageUrl: "https://www.gov.uk",
-    useTudorCrown: true
+    homepageUrl: "https://www.gov.uk"
   }) }}
 {% endblock %}
 

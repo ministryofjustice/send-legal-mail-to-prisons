@@ -1,4 +1,5 @@
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
+{% set govukRebrand = true %}
 
 {% set acceptHtml %}
   <p class="govuk-body">You’ve {{ cookiesPolicy.policy }}ed additional cookies. You can <a class="govuk-link" href="/cookies-policy" data-qa="view">change your cookie settings</a> at any time.</p>

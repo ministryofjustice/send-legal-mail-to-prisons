@@ -2,6 +2,7 @@
   {% block cookieBanner %}
     {% if not cookiesPolicy.policy %}
       {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
+      {% set govukRebrand = true %}
 
       {% set html %}
         <p class="govuk-body">We use some essential cookies to make this service work.</p>
