@@ -1,7 +1,6 @@
 {% extends "layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/header/macro.njk" import govukHeader %}
-{% set govukRebrand = true %}
 
 {% set pageTitle = 'Send legal mail to prisons' %}
 {% set pageId = 'legal-sender-start' %}
@@ -9,8 +8,8 @@
 {% block header %}
   {% include "partials/cookies/cookie-banner.njk" %}
   {{ govukHeader({
-    homepageUrl: "https://www.gov.uk",
-    useTudorCrown: true
+    rebrand: true,
+    homepageUrl: "https://www.gov.uk"
   }) }}
 {% endblock %}
 
