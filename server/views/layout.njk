@@ -1,5 +1,6 @@
 {% extends "govuk/template.njk" %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% set govukRebrand = true %}
 
 {% block head %}
   <script nonce="{{ cspNonce }}" data-qa="gtm-init">
@@ -151,6 +152,7 @@
   {% endif %}
 
   {{ govukFooter({
+    rebrand: true,
     meta: {
       items: footerItems
     }
