@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/header/macro.njk" import govukHeader %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 
 {% set pageTitle = 'Send legal mail to prisons' %}
 {% set pageId = 'legal-sender-start' %}
@@ -10,6 +11,26 @@
   {{ govukHeader({
     rebrand: true,
     homepageUrl: "https://www.gov.uk"
+  }) }}
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    collapseOnMobile: true,
+    items: [
+      {
+        text: "Home",
+        href: "https://www.gov.uk/"
+      },
+      {
+        text: "Crime, justice and law",
+        href: "https://www.gov.uk/crime-justice-and-law"
+      },
+      {
+        text: "Prisons and probation",
+        href: "https://www.gov.uk/crime-justice-and-law/prisons-probation"
+      }
+    ]
   }) }}
 {% endblock %}
 
@@ -45,15 +66,24 @@
               <li>a printer, A4 paper and envelopes with windows</li>
             </ul>
 
+            <h2 class="govuk-heading-m" data-qa="prisons">Prisons you can send mail to</h2>
+            <p>You can use this service to send legal or confidential mail to any <a href="https://www.gov.uk/government/collections/prisons-in-england-and-wales" class="govuk-link">prison in England and Wales,</a> including the private prison estate.</p>
+
             {{ govukButton({
               text: "Start now",
               href: "/oneTimeCode/request-code",
               isStartButton: true
             }) }}
-
-            <h2 class="govuk-heading-m" data-qa="prisons">Prisons you can send mail to</h2>
-            <p>You can use this service to send legal or confidential mail to any <a href="https://www.gov.uk/government/collections/prisons-in-england-and-wales" class="govuk-link">prison in England and Wales,</a> including the private prison estate.</p>
-
+          </div>
+          <div class="govuk-grid-column-one-third">
+            <h2 class="govuk-heading-m">Related content</h2>
+            <ul class="govuk-list govuk-!-font-size-16">
+              <li>
+                <a href="https://www.gov.uk/find-prisoner">
+                    Apply to find a prisoner’s location
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </section>
