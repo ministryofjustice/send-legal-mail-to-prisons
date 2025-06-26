@@ -17,8 +17,8 @@ describe('redirect signed in users to the app if they request /link/request-link
 
     await middleware(req, res, next)
 
-    expect(res.redirect).not.toBeCalled()
-    expect(next).toBeCalledTimes(1)
+    expect(res.redirect).not.toHaveBeenCalled()
+    expect(next).toHaveBeenCalledTimes(1)
   })
 
   it('should redirect if already signed in', async () => {
@@ -27,8 +27,8 @@ describe('redirect signed in users to the app if they request /link/request-link
 
     await middleware(req, res, next)
 
-    expect(res.redirect).toBeCalledTimes(1)
-    expect(next).not.toBeCalled()
+    expect(res.redirect).toHaveBeenCalledTimes(1)
+    expect(next).not.toHaveBeenCalled()
   })
 
   it('should not redirect if not signed in', async () => {
@@ -37,8 +37,8 @@ describe('redirect signed in users to the app if they request /link/request-link
 
     await middleware(req, res, next)
 
-    expect(res.redirect).not.toBeCalled()
-    expect(next).toBeCalledTimes(1)
+    expect(res.redirect).not.toHaveBeenCalled()
+    expect(next).toHaveBeenCalledTimes(1)
   })
 
   it('should not redirect if forcing a sign out', async () => {
@@ -47,7 +47,7 @@ describe('redirect signed in users to the app if they request /link/request-link
 
     await middleware(req, res, next)
 
-    expect(res.redirect).not.toBeCalled()
-    expect(next).toBeCalledTimes(1)
+    expect(res.redirect).not.toHaveBeenCalled()
+    expect(next).toHaveBeenCalledTimes(1)
   })
 })
