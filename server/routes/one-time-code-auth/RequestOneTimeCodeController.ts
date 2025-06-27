@@ -20,7 +20,7 @@ export default class RequestOneTimeCodeController {
 
   async submitOneTimeCodeRequest(req: Request, res: Response, next: NextFunction): Promise<void> {
     req.session.lsjSmokeTestUser = false
-    if (config.smoketest.lsjSecret && req.body.email === config.smoketest.lsjSecret) {
+    if (config.smoketest.lsjSecret && req.body?.email === config.smoketest.lsjSecret) {
       req.body = { code: config.smoketest.lsjSecret }
       req.session.lsjSmokeTestUser = true
       return this.verifyOneTimeCodeController.verifyOneTimeCode(req, res, next)

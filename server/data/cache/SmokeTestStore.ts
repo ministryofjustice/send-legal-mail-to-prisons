@@ -50,7 +50,7 @@ export default class SmokeTestStore {
       return ''
     }
 
-    const secret = req.body.msjSecret
+    const secret = req.body?.msjSecret
 
     if (secret !== config.smoketest.msjSecret) {
       return ''

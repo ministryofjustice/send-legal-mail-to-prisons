@@ -23,14 +23,14 @@ export default class SupportedPrisonsController {
   }
 
   async addSupportedPrison(req: Request, res: Response): Promise<void> {
-    const errors = formatErrors('prisonId', validatePrisonId(req.body.prisonId))
+    const errors = formatErrors('prisonId', validatePrisonId(req.body?.prisonId))
     if (errors.length > 0) {
       req.flash('errors', errors)
       return res.redirect('/supported-prisons')
     }
 
     try {
-      await this.prisonService.addSupportedPrison(req.user.token, req.body.prisonId)
+      await this.prisonService.addSupportedPrison(req.user.token, req.body?.prisonId)
     } catch (error) {
       req.flash('errors', [{ href: '#prisonId', text: error.data.errorCode.userMessage }])
     }

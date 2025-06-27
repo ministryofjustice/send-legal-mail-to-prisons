@@ -61,6 +61,12 @@ export default function createApp(
   app.use(setUpWebSecurity())
   app.use(setUpWebSession())
   app.use(setUpWebRequestParsing())
+
+  app.use((req, res, next) => {
+    req.body = req.body ?? {}
+    next()
+  })
+
   app.use(setUpStaticResources())
   app.use(setupPdfRenderer(new GotenbergClient()))
   nunjucksSetup(app)

@@ -17,7 +17,7 @@ export default class ChooseBarcodeOptionController {
 
   async submitChooseBarcodeOption(req: Request, res: Response): Promise<void> {
     req.session.chooseBarcodeOptionForm = { ...req.body }
-    const errors = validateBarcodeOption(req.body.barcodeOption)
+    const errors = validateBarcodeOption(req.body?.barcodeOption)
     if (errors.length > 0) {
       req.flash('errors', formatErrors('barcodeOption', errors))
       return res.redirect('/barcode/choose-barcode-option')
