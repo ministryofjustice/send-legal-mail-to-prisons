@@ -25,7 +25,8 @@ export default class FindRecipientController {
   }
 
   async submitFindByPrisonNumber(req: Request, res: Response): Promise<void> {
-    req.body.prisonNumber = req.body.prisonNumber.trim().toUpperCase()
+    const prisonNumber = req.body?.prisonNumber ?? ''
+    req.body.prisonNumber = prisonNumber.trim().toUpperCase()
     req.session.findRecipientByPrisonNumberForm = { ...req.body }
     const errors = validatePrisonNumber(req.body.prisonNumber)
     if (errors.length > 0) {
@@ -65,7 +66,8 @@ export default class FindRecipientController {
   }
 
   async submitFindByPrisonerName(req: Request, res: Response): Promise<void> {
-    req.body.prisonerName = req.body.prisonerName.trim()
+    const prisonerName = req.body?.prisonerName ?? ''
+    req.body.prisonerName = prisonerName.trim()
     req.session.findRecipientByPrisonerNameForm = { ...req.body }
     const errors = validatePrisonerName(req.body.prisonerName)
     if (errors.length > 0) {
