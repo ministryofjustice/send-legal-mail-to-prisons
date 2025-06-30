@@ -26,7 +26,7 @@ export default class PdfController {
     }
 
     req.session.pdfForm = { ...req.body }
-    const errors = validateEnvelopeSizeOption(req.body.envelopeSize)
+    const errors = validateEnvelopeSizeOption(req.body?.envelopeSize)
     if (errors.length > 0) {
       req.flash('errors', formatErrors('envelopeSize', errors))
       return res.redirect('/barcode/pdf/select-envelope-size')

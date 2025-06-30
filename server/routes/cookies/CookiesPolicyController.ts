@@ -30,7 +30,7 @@ export default class CookiesPolicyController {
   async submitCookiesPolicyPreferences(req: Request, res: Response): Promise<void> {
     let redirectUrl = req.originalUrl === '/cookies-policy' ? req.originalUrl : req.session.cookiesPolicy.lastPage
 
-    if (req.body.cookies) {
+    if (req.body?.cookies) {
       res.cookie('cookies_policy', req.body.cookies, {
         maxAge: 365 * 24 * 60 * 60 * 1000,
         sameSite: 'lax',

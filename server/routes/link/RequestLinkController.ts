@@ -20,7 +20,7 @@ export default class RequestLinkController {
 
   async submitLinkRequest(req: Request, res: Response): Promise<void> {
     req.session.lsjSmokeTestUser = false
-    if (config.smoketest.lsjSecret && req.body.email === config.smoketest.lsjSecret) {
+    if (config.smoketest.lsjSecret && req.body?.email === config.smoketest.lsjSecret) {
       req.query.secret = config.smoketest.lsjSecret
       req.session.lsjSmokeTestUser = true
       return this.verifyLinkController.verifyLink(req, res)
