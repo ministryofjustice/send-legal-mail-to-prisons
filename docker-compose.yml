@@ -24,7 +24,7 @@ services:
       - GOTENBERG_API_URL=http://gotenberg:3000
 
   redis:
-    image: 'redis:7.4'
+    image: 'redis:8.2'
     networks:
       - hmpps
     container_name: redis 
