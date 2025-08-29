@@ -130,11 +130,7 @@
     {% if pageId not in contactHelpdeskBannerExcludedOnPages %}
       <section class="contact-helpdesk" role="complementary">
         {% set contactHelpdeskUrl %}
-          {% if externalUser %}
-            /contact-helpdesk?pageId={{ pageId }}
-          {% else %}
-            /scan-barcode/contact-helpdesk?pageId={{ pageId }}
-          {% endif %}
+          /contact-helpdesk?pageId={{ pageId }}
         {% endset %}
         <a href="{{ contactHelpdeskUrl }}" target="_blank" class="govuk-link govuk-link--inverse" data-qa="contact-helpdesk">Contact helpdesk (opens in new tab)</a>
       </section>
