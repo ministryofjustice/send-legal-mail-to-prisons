@@ -28,8 +28,8 @@ export default defineConfig({
       on('task', {
         reset: resetStubs,
 
-        stubAuthToken: auth.stubToken,
         stubAuthPing: auth.stubPing,
+        stubAuthToken: auth.stubToken,
 
         stubRequestLink: link.stubRequestLink,
         stubRequestLinkFailure: link.stubRequestLinkFailure,

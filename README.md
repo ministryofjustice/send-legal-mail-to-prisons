@@ -4,7 +4,7 @@
 A Typescript application to allow creating barcodes for legal mail (aka rule39 mail).
 
 ### Team
-This application is live, it is currently managed by the Visits (#ask-visits) team.
+This application is live, it is currently managed by the Visits [#ask-visits](https://moj.enterprise.slack.com/archives/C01DU5U4NMU) team.
 
 ### Health
 The application has a health endpoint found at `/health` which indicates if the app is running and is healthy.
