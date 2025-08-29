@@ -21,10 +21,6 @@ export default function nunjucksSetup(app: express.Express): void {
 
   app.locals.asset_path = '/assets/'
   app.use((req, res, next) => {
-    const externalUser = true
-    res.locals.externalUser = externalUser
-    app.locals.externalUser = externalUser
-
     app.locals.applicationName = 'Send legal mail to prisons'
     app.locals.gtmContainerId = config.slmContainerId
 

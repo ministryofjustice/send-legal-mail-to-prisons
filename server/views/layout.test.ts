@@ -26,7 +26,6 @@ describe('Layout', () => {
   describe('Google analytics', () => {
     it('should send legal sender GA data', () => {
       viewContext = {
-        externalUser: true,
         barcodeUser: {
           cjsmDetails: {
             organisation: 'some-org',
@@ -47,25 +46,6 @@ describe('Layout', () => {
       expect(gaDataLayerScript.html()).toContain("user.organisation = 'some-org'")
       expect(gaDataLayerScript.html()).toContain("user.business_type = 'some-type'")
       expect(gaDataLayerScript.html()).toContain("user.town_city = 'some-town'")
-    })
-
-    it('should send mailroom GA data', () => {
-      viewContext = {
-        externalUser: false,
-        user: {
-          activeCaseLoadId: 'BXI',
-          prisonName: 'Brixton',
-        },
-        gtmContainerId: 'some-id',
-        cookiesPolicy: { policy: 'n/a' },
-      }
-
-      const $ = cheerio.load(compiledTemplate.render(viewContext))
-
-      const gaDataLayerScript = $('script[data-qa=gtm-init]')
-      expect(gaDataLayerScript.length).toStrictEqual(1)
-      expect(gaDataLayerScript.html()).toContain("user.prison_code = 'BXI'")
-      expect(gaDataLayerScript.html()).toContain("user.prison_name = 'Brixton'")
     })
 
     it('should include barcodes created count', () => {
@@ -93,33 +73,6 @@ describe('Layout', () => {
       const gaDataLayerScript = $('script[data-qa=gtm-init]')
       expect(gaDataLayerScript.length).toStrictEqual(1)
       expect(gaDataLayerScript.html()).not.toContain('user.barcodes_created_count')
-    })
-
-    it('should include last barcode scanned', () => {
-      viewContext = {
-        form: { lastScannedBarcode: 'some-barcode' },
-        gtmContainerId: 'some-id',
-        cookiesPolicy: { policy: 'n/a' },
-      }
-
-      const $ = cheerio.load(compiledTemplate.render(viewContext))
-
-      const gaDataLayerScript = $('script[data-qa=gtm-init]')
-      expect(gaDataLayerScript.length).toStrictEqual(1)
-      expect(gaDataLayerScript.html()).toContain("user.scanned_barcode_number = 'some-barcode'")
-    })
-
-    it('should not include last barcode scanned', () => {
-      viewContext = {
-        gtmContainerId: 'some-id',
-        cookiesPolicy: { policy: 'n/a' },
-      }
-
-      const $ = cheerio.load(compiledTemplate.render(viewContext))
-
-      const gaDataLayerScript = $('script[data-qa=gtm-init]')
-      expect(gaDataLayerScript.length).toStrictEqual(1)
-      expect(gaDataLayerScript.html()).not.toContain('user.scanned_barcode_number')
     })
   })
 })

@@ -10,16 +10,9 @@
 
     let user = {};
 
-    {% if externalUser %}
-      user.organisation = '{{ barcodeUser.cjsmDetails.organisation }}';
-      user.business_type = '{{ barcodeUser.cjsmDetails.organisationType }}';
-      user.town_city = '{{ barcodeUser.cjsmDetails.townOrCity }}';
-    {% endif %}
-
-    {% if not externalUser %}
-      user.prison_code = '{{ user.activeCaseLoadId }}';
-      user.prison_name = '{{ user.prisonName }}';
-    {% endif %}
+    user.organisation = '{{ barcodeUser.cjsmDetails.organisation }}';
+    user.business_type = '{{ barcodeUser.cjsmDetails.organisationType }}';
+    user.town_city = '{{ barcodeUser.cjsmDetails.townOrCity }}';
 
     {% if barcodeImages | length %}
       user.barcodes_created_count = '{{ barcodeImages | length }}';
@@ -142,10 +135,8 @@
 {% block footer %}
   {%- from "govuk/components/footer/macro.njk" import govukFooter -%}
   {% set footerItems = [{ href: "/cookies-policy", text: "Cookies" }] %}
-  {% if externalUser %}
-    {% set footerItems = (footerItems.unshift({ href: "/privacy-policy", text: "Privacy policy" }), footerItems) %}
-    {% set footerItems = (footerItems.push({ href: "/accessibility-statement", text: "Accessibility statement" }), footerItems) %}
-  {% endif %}
+  {% set footerItems = (footerItems.unshift({ href: "/privacy-policy", text: "Privacy policy" }), footerItems) %}
+  {% set footerItems = (footerItems.push({ href: "/accessibility-statement", text: "Accessibility statement" }), footerItems) %}
 
   {{ govukFooter({
     rebrand: true,

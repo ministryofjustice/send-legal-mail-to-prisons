@@ -32,7 +32,7 @@ describe('ContactHelpdeskController', () => {
     zendeskService.createSupportTicket.mockReset()
     res.render.mockReset()
     res.redirect.mockReset()
-    res.locals = { externalUser: true, user: undefined }
+    res.locals = { user: undefined }
     req.session = {} as SessionData
     req.flash.mockReset()
     req.query = {}
@@ -87,7 +87,6 @@ describe('ContactHelpdeskController', () => {
       }
       req.body = contactHelpdeskForm
       mockContactHelpdeskFormValidator.mockReturnValue([])
-      res.locals = { externalUser: true }
       req.session.barcodeUser = {
         email: 'user@legal-sender.co.uk.cjsm.net',
         tokenValid: false,
@@ -99,7 +98,6 @@ describe('ContactHelpdeskController', () => {
       expect(req.session.contactHelpdeskForm).toBeUndefined()
       expect(zendeskService.createSupportTicket).toHaveBeenCalledWith(
         contactHelpdeskForm,
-        true,
         'user@legal-sender.co.uk.cjsm.net',
         'Legal Senders R Us',
       )
