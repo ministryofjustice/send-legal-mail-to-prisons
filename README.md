@@ -1,10 +1,10 @@
 # Send legal mail to prisons
 
 ## About
-A Typescript application to allow creating and scanning barcodes for legal mail (aka rule39 mail).
+A Typescript application to allow creating barcodes for legal mail (aka rule39 mail).
 
 ### Team
-This application is currently being rolled out in a Public Beta. The project is currently looking for a new owner.
+This application is live, it is currently managed by the Visits [#ask-visits](https://moj.enterprise.slack.com/archives/C01DU5U4NMU) team.
 
 ### Health
 The application has a health endpoint found at `/health` which indicates if the app is running and is healthy.
@@ -16,7 +16,7 @@ The application has a ping endpoint found at `/ping` which indicates that the ap
 If the application needs planned (or unplanned!) downtime we have a method for displaying maintenance pages for both Send legal mail and Check Rule39 mail. See the guide at `maintenance_pages/README.md`.
 
 ### Build
-<em>Requires membership of Github team `book-a-prison-visit`</em>
+<em>Requires membership of Github team `hmpps-send-legal-mail-devs`</em>
 
 The application is built on [CircleCI](https://app.circleci.com/pipelines/github/ministryofjustice/send-legal-mail-to-prisons).
 
@@ -27,7 +27,7 @@ The application version currently running can be found on the `/health` endpoint
 
 * <em>Requires CLI tools `kubectl` and `helm`</em>
 * <em>Requires access to Cloud Platform Kubernetes `live` cluster</em>
-* <em>Requires membership of Github team `book-a-prison-visit`</em>
+* <em>Requires membership of Github team `hmpps-send-legal-mail-devs`</em>
 
 For example in the dev environment:
 1. Set the Kube context with command `kubectl config use-context live.cloud-platform.service.justice.gov.uk`
@@ -78,13 +78,11 @@ To start the main services excluding the example typescript template app:
 
 `docker-compose up redis hmpps-auth nomis-user-roles-api gotenberg`
 
-Install dependencies using `npm install`, ensuring you are using >= `Node v16.x`. If you have an M1 MacBook you may need to run the following `brew` command before `canvas` will install: `brew install pkg-config cairo pango libpng jpeg giflib librsvg`
+Install dependencies using `npm install`, ensuring you are using >= `Node v22.x`. If you have an M1 MacBook you may need to run the following `brew` command before `canvas` will install: `brew install pkg-config cairo pango libpng jpeg giflib librsvg`
 
 Create a `.env` which should override environment variables required to run locally:
 ```properties
 HMPPS_AUTH_URL=http://localhost:9090/auth
-TOKEN_VERIFICATION_API_URL=https://token-verification-api-dev.prison.service.justice.gov.uk
-TOKEN_VERIFICATION_ENABLED=false
 NODE_ENV=development
 SESSION_SECRET=anything
 PORT=3000
@@ -108,14 +106,6 @@ See the [API Readme](https://github.com/ministryofjustice/send-legal-mail-to-pri
 Visit URL `http://localhost:3000/barcode/find-recipient` which should redirect to the `Request a code to sign in` page. Enter any email address that ends with `cjsm.net`.
 
 Open mailcatcher at `http://localhost:1080`. Open the first email which should contain a link - click on the link and you will be signed in.
-
-#### How do I sign in as a mailroom staff user?
-
-Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth sign in page. Enter credentials `SLM_MAILROOM_USER_LOCAL` / `password123456`.
-
-#### How do I sign in as an admin user?
-
-Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth sign in page. Enter credentials `SLM_ADMIN_LOCAL` / `password123456`.
 
 ## Run linter
 
@@ -179,7 +169,7 @@ To find any dependencies with vulnerabilities run command:
 
 #### Automated vulnerability checks
 
-Various security checks are run in a nightly job on CircleCI. See jobs `hmpps/npm_security_audit`, `hmpps/trivy_latest_scan` and `hmpps/veracode_pipeline_scan` in `.circleci/config.yml`.
+Various security checks are run in a nightly job in GitHub actions, see the `./github/workflows/` folder.
 
 ### Update dependencies
 To update all dependencies to their latest stable versions run command:

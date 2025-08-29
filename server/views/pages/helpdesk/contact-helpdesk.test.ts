@@ -23,20 +23,12 @@ describe('Contact Helpdesk View', () => {
     expect($('#contact-helpdesk').length).toStrictEqual(1)
   })
 
-  it('should instruct Legal Sender user not to user their CJSM email address', () => {
-    viewContext = { errors: [], externalUser: true }
+  it('should instruct user not to user their CJSM email address', () => {
+    viewContext = { errors: [] }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('#email-hint').length).toStrictEqual(1)
     expect($('#email-hint').text()).toContain('CJSM email address')
-  })
-
-  it('should not have email hint text for Mail Room user', () => {
-    viewContext = { errors: [], externalUser: false }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
-
-    expect($('#email-hint').length).toStrictEqual(0)
   })
 })

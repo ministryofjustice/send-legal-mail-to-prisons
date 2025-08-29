@@ -25,15 +25,13 @@ export default class ContactHelpdeskController {
       return res.redirect(req.originalUrl)
     }
 
-    const { externalUser } = res.locals
-    const username = externalUser ? req.session.barcodeUser?.email : res.locals.user.username
-    const organisation = externalUser ? req.session.barcodeUser?.cjsmDetails.organisation : null
+    const username = req.session.barcodeUser?.email
+    const organisation = req.session.barcodeUser?.cjsmDetails.organisation
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const zendeskTicketId = await this.zendeskService.createSupportTicket(
         req.session.contactHelpdeskForm,
-        externalUser,
         username,
         organisation,
       )

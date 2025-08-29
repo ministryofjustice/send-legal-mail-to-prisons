@@ -10,7 +10,7 @@ export type ZendeskTicket = {
     comment: {
       body: string
     }
-    tags: ['SendLegalMail', 'slm_legal_sender' | 'slm_mailroom']
+    tags: ['SendLegalMail', 'slm_legal_sender']
     requester: {
       email: string
       name: string
@@ -25,7 +25,6 @@ export default class ZendeskService {
 
   async createSupportTicket(
     contactHelpdeskForm: ContactHelpdeskForm,
-    externalUser: boolean,
     username: string,
     organisation?: string,
   ): Promise<number> {
@@ -35,7 +34,7 @@ Page ID: ${contactHelpdeskForm.pageId}
 
 Description of issue: ${contactHelpdeskForm.problemDetail}
 
-${externalUser ? `CJSM email: ${username}\nCJSM organisation: ${organisation ?? 'N/A'}` : `User ID: ${username}`}
+${`CJSM email: ${username}\nCJSM organisation: ${organisation ?? 'N/A'}`}
 
 Name: ${contactHelpdeskForm.name}
 Email: ${contactHelpdeskForm.email}
@@ -46,7 +45,7 @@ Email: ${contactHelpdeskForm.email}
           comment: {
             body: messageBody,
           },
-          tags: ['SendLegalMail', externalUser ? 'slm_legal_sender' : 'slm_mailroom'],
+          tags: ['SendLegalMail', 'slm_legal_sender'],
           requester: {
             email: `${contactHelpdeskForm.email}`,
             name: `${contactHelpdeskForm.name}`,

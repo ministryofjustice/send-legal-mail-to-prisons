@@ -10,16 +10,9 @@
 
     let user = {};
 
-    {% if externalUser %}
-      user.organisation = '{{ barcodeUser.cjsmDetails.organisation }}';
-      user.business_type = '{{ barcodeUser.cjsmDetails.organisationType }}';
-      user.town_city = '{{ barcodeUser.cjsmDetails.townOrCity }}';
-    {% endif %}
-
-    {% if not externalUser %}
-      user.prison_code = '{{ user.activeCaseLoadId }}';
-      user.prison_name = '{{ user.prisonName }}';
-    {% endif %}
+    user.organisation = '{{ barcodeUser.cjsmDetails.organisation }}';
+    user.business_type = '{{ barcodeUser.cjsmDetails.organisationType }}';
+    user.town_city = '{{ barcodeUser.cjsmDetails.townOrCity }}';
 
     {% if barcodeImages | length %}
       user.barcodes_created_count = '{{ barcodeImages | length }}';
@@ -130,11 +123,7 @@
     {% if pageId not in contactHelpdeskBannerExcludedOnPages %}
       <section class="contact-helpdesk" role="complementary">
         {% set contactHelpdeskUrl %}
-          {% if externalUser %}
-            /contact-helpdesk?pageId={{ pageId }}
-          {% else %}
-            /scan-barcode/contact-helpdesk?pageId={{ pageId }}
-          {% endif %}
+          /contact-helpdesk?pageId={{ pageId }}
         {% endset %}
         <a href="{{ contactHelpdeskUrl }}" target="_blank" class="govuk-link govuk-link--inverse" data-qa="contact-helpdesk">Contact helpdesk (opens in new tab)</a>
       </section>
@@ -146,10 +135,8 @@
 {% block footer %}
   {%- from "govuk/components/footer/macro.njk" import govukFooter -%}
   {% set footerItems = [{ href: "/cookies-policy", text: "Cookies" }] %}
-  {% if externalUser %}
-    {% set footerItems = (footerItems.unshift({ href: "/privacy-policy", text: "Privacy policy" }), footerItems) %}
-    {% set footerItems = (footerItems.push({ href: "/accessibility-statement", text: "Accessibility statement" }), footerItems) %}
-  {% endif %}
+  {% set footerItems = (footerItems.unshift({ href: "/privacy-policy", text: "Privacy policy" }), footerItems) %}
+  {% set footerItems = (footerItems.push({ href: "/accessibility-statement", text: "Accessibility statement" }), footerItems) %}
 
   {{ govukFooter({
     rebrand: true,

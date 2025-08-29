@@ -77,15 +77,6 @@ export default {
       systemClientId: get('SYSTEM_CLIENT_ID', 'send-legal-mail-to-prisons-client', requiredInProduction),
       systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
-    tokenVerification: {
-      url: get('TOKEN_VERIFICATION_API_URL', 'http://localhost:8100', requiredInProduction),
-      timeout: {
-        response: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000)),
-        deadline: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)),
-      },
-      agent: new AgentConfig(),
-      enabled: toBoolean(get('TOKEN_VERIFICATION_ENABLED', 'false')),
-    },
     sendLegalMail: {
       url: get('SEND_LEGAL_MAIL_API_URL', 'http://localhost:8101', requiredInProduction),
       timeout: {

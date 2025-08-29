@@ -6,14 +6,10 @@ export default class CookiesPolicyController {
       req.session.cookiesPolicy = { policy: undefined, showConfirmation: false, lastPage: req.originalUrl }
     }
 
-    if (res.locals.externalUser) {
-      req.session.cookiesPolicy.policy = req.cookies && req.cookies.cookies_policy
-      req.session.cookiesPolicy.showConfirmation = req.query.showCookieConfirmation === 'true'
-      if (!req.originalUrl.includes('cookies-policy')) {
-        req.session.cookiesPolicy.lastPage = req.originalUrl.replace('?showCookieConfirmation=true', '')
-      }
-    } else {
-      req.session.cookiesPolicy = { policy: 'n/a', showConfirmation: false, lastPage: req.originalUrl }
+    req.session.cookiesPolicy.policy = req.cookies && req.cookies.cookies_policy
+    req.session.cookiesPolicy.showConfirmation = req.query.showCookieConfirmation === 'true'
+    if (!req.originalUrl.includes('cookies-policy')) {
+      req.session.cookiesPolicy.lastPage = req.originalUrl.replace('?showCookieConfirmation=true', '')
     }
 
     res.locals.cookiesPolicy = req.session.cookiesPolicy

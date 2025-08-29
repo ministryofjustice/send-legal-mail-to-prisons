@@ -2,7 +2,6 @@ import { defineConfig } from 'cypress'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 
 import auth from './integration_tests/mockApis/auth'
-import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import prisonRegister from './integration_tests/mockApis/prisonRegister'
 import zendesk from './integration_tests/mockApis/zendesk'
 import state from './integration_tests/support/state'
@@ -29,16 +28,8 @@ export default defineConfig({
       on('task', {
         reset: resetStubs,
 
-        getSignInUrl: auth.getSignInUrl,
-        stubSignIn: () => auth.stubSignIn([]),
-        stubSignInWithRole_SLM_SCAN_BARCODE: () => auth.stubSignIn(['ROLE_SLM_SCAN_BARCODE']),
-        stubSignInWithRole_SLM_ADMIN: () => auth.stubSignIn(['ROLE_SLM_ADMIN']),
-
-        stubAuthUser: auth.stubUser,
         stubAuthPing: auth.stubPing,
         stubAuthToken: auth.stubToken,
-
-        stubTokenVerificationPing: tokenVerification.stubPing,
 
         stubRequestLink: link.stubRequestLink,
         stubRequestLinkFailure: link.stubRequestLinkFailure,

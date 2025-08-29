@@ -22,7 +22,6 @@ const res = {
   redirect: jest.fn(),
   locals: {
     url: undefined as string,
-    externalUser: true,
   },
   sendStatus: jest.fn(),
 }
@@ -49,7 +48,6 @@ describe('CookiesPolicyController', () => {
       req.originalUrl = ''
       res.locals = {
         url: undefined as string,
-        externalUser: true,
       }
       res.render.mockReset()
       res.redirect.mockReset()
@@ -100,16 +98,6 @@ describe('CookiesPolicyController', () => {
       await cookiesPolicyController.initialiseCookieSession(req as unknown as Request, res as unknown as Response, next)
 
       expect(req.session.cookiesPolicy.lastPage).toEqual('/lastPage')
-      expect(next).toHaveBeenCalled()
-    })
-
-    it('should set n/a policy for internal users', async () => {
-      res.locals.externalUser = false
-
-      await cookiesPolicyController.initialiseCookieSession(req as unknown as Request, res as unknown as Response, next)
-
-      expect(req.session.cookiesPolicy.policy).toEqual('n/a')
-      expect(req.session.cookiesPolicy.showConfirmation).toBeFalsy()
       expect(next).toHaveBeenCalled()
     })
   })

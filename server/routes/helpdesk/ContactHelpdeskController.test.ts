@@ -32,7 +32,7 @@ describe('ContactHelpdeskController', () => {
     zendeskService.createSupportTicket.mockReset()
     res.render.mockReset()
     res.redirect.mockReset()
-    res.locals = { externalUser: true, user: undefined }
+    res.locals = { user: undefined }
     req.session = {} as SessionData
     req.flash.mockReset()
     req.query = {}
@@ -76,28 +76,7 @@ describe('ContactHelpdeskController', () => {
       mockContactHelpdeskFormValidator = validate as jest.MockedFunction<typeof validate>
     })
 
-    it('should redirect to contact-helpdesk/submitted given DPS authenticated user and no validation errors', async () => {
-      req.baseUrl = '/scan-barcode/contact-helpdesk'
-      req.originalUrl = '/scan-barcode/contact-helpdesk?pageId=scan-barcode'
-      const contactHelpdeskForm: ContactHelpdeskForm = {
-        pageId: 'scan-barcode',
-        problemDetail: 'It doesnt scan',
-        name: 'Mr Mail Room User',
-        email: 'mailroom@brixton.prison.gov.uk',
-      }
-      req.body = contactHelpdeskForm
-      mockContactHelpdeskFormValidator.mockReturnValue([])
-      res.locals = { externalUser: false, user: { username: 'DPS_USER' } }
-
-      await contactHelpdeskController.submitContactHelpdesk(req as unknown as Request, res as unknown as Response)
-
-      expect(req.session.contactHelpdeskForm).toBeUndefined()
-      expect(zendeskService.createSupportTicket).toHaveBeenCalledWith(contactHelpdeskForm, false, 'DPS_USER', null)
-      expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/scan-barcode/contact-helpdesk/submitted')
-    })
-
-    it('should redirect to contact-helpdesk/submitted given external user and no validation errors', async () => {
+    it('should redirect to contact-helpdesk/submitted and no validation errors', async () => {
       req.baseUrl = '/contact-helpdesk'
       req.originalUrl = '/contact-helpdesk?pageId=review-recipients'
       const contactHelpdeskForm: ContactHelpdeskForm = {
@@ -108,7 +87,6 @@ describe('ContactHelpdeskController', () => {
       }
       req.body = contactHelpdeskForm
       mockContactHelpdeskFormValidator.mockReturnValue([])
-      res.locals = { externalUser: true }
       req.session.barcodeUser = {
         email: 'user@legal-sender.co.uk.cjsm.net',
         tokenValid: false,
@@ -120,24 +98,11 @@ describe('ContactHelpdeskController', () => {
       expect(req.session.contactHelpdeskForm).toBeUndefined()
       expect(zendeskService.createSupportTicket).toHaveBeenCalledWith(
         contactHelpdeskForm,
-        true,
         'user@legal-sender.co.uk.cjsm.net',
         'Legal Senders R Us',
       )
       expect(req.flash).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/contact-helpdesk/submitted')
-    })
-
-    it('should redirect to contact-helpdesk given validation errors', async () => {
-      req.baseUrl = '/scan-barcode/contact-helpdesk'
-      req.originalUrl = '/scan-barcode/contact-helpdesk?pageId=scan-barcode'
-      mockContactHelpdeskFormValidator.mockReturnValue([{ href: '#name', text: 'Enter a name' }])
-
-      await contactHelpdeskController.submitContactHelpdesk(req as unknown as Request, res as unknown as Response)
-
-      expect(zendeskService.createSupportTicket).not.toHaveBeenCalled()
-      expect(req.flash).toHaveBeenCalledWith('errors', [{ href: '#name', text: 'Enter a name' }])
-      expect(res.redirect).toHaveBeenCalledWith('/scan-barcode/contact-helpdesk?pageId=scan-barcode')
     })
   })
 

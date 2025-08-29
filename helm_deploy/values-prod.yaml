@@ -10,7 +10,6 @@ generic-service:
   env:
     INGRESS_URL: "https://send-legal-mail.prison.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in.hmpps.service.justice.gov.uk/auth"
-    TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
     SEND_LEGAL_MAIL_API_URL: "https://send-legal-mail-api.prison.service.justice.gov.uk"
     PRISON_REGISTER_API_URL: "https://prison-register.hmpps.service.justice.gov.uk"
     ONE_TIME_CODE_AUTH_ENABLED: "true"
