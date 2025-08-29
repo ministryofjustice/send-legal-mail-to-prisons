@@ -29,6 +29,7 @@ export default defineConfig({
         reset: resetStubs,
 
         stubAuthToken: auth.stubToken,
+        stubAuthPing: auth.stubPing,
 
         stubRequestLink: link.stubRequestLink,
         stubRequestLinkFailure: link.stubRequestLinkFailure,

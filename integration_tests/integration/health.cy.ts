@@ -1,6 +1,7 @@
 context('Healthcheck', () => {
   beforeEach(() => {
     cy.task('reset')
+    cy.task('stubAuthPing')
   })
 
   it('Health check page is visible', () => {

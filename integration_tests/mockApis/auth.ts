@@ -16,6 +16,17 @@ const createToken = (authorities: string[]) => {
   return jwt.sign(payload, 'secret', { expiresIn: '1h' })
 }
 
+const ping = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/auth/health/ping',
+    },
+    response: {
+      status: 200,
+    },
+  })
+
 const token = (authorities: string[]) =>
   stubFor({
     request: {
@@ -40,5 +51,6 @@ const token = (authorities: string[]) =>
   })
 
 export default {
+  stubPing: (): Promise<Response> => ping(),
   stubToken: (): Promise<Response> => token([]),
 }
