@@ -1,82 +1,11 @@
-// eslint-disable-next-line max-classes-per-file
-import express, { Express, Request, Router } from 'express'
+import express, { Express, Router } from 'express'
 import cookieSession from 'cookie-session'
 import createError from 'http-errors'
-import jwt from 'jsonwebtoken'
 
 import allRoutes from '../index'
-import { RedisClient } from '../../data/redisClient'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import standardRouter from '../standardRouter'
-import UserService from '../../services/userService'
-import * as auth from '../../authentication/auth'
-import SmokeTestStore from '../../data/cache/SmokeTestStore'
-import PrisonRegisterStore from '../../data/cache/PrisonRegisterStore'
-import PrisonService from '../../services/prison/PrisonService'
-import PrisonRegisterService from '../../services/prison/PrisonRegisterService'
-import SupportedPrisonsService from '../../services/prison/SupportedPrisonsService'
-
-const user = {
-  name: 'john smith',
-  firstName: 'john',
-  lastName: 'smith',
-  username: 'user1',
-  displayName: 'John Smith',
-  activeCaseLoadId: 'BXI',
-}
-
-class MockUserService extends UserService {
-  constructor() {
-    super(undefined)
-  }
-
-  async getUser(token: string) {
-    return {
-      token,
-      ...user,
-    }
-  }
-}
-
-const smokeTestRedisClient = {
-  get: jest.fn(),
-  set: jest.fn(),
-  on: jest.fn(),
-  connect: jest.fn(),
-  isOpen: true,
-} as unknown as jest.Mocked<RedisClient>
-
-const prisonRegisterRedisClient = {
-  get: jest.fn(),
-  set: jest.fn(),
-  on: jest.fn(),
-  connect: jest.fn(),
-  isOpen: true,
-} as unknown as jest.Mocked<RedisClient>
-
-class MockSmokeTestStore extends SmokeTestStore {
-  async getSmokeTestSecret(): Promise<string> {
-    return ''
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async startSmokeTest(req: Request): Promise<string> {
-    return ''
-  }
-}
-
-class MockPrisonerRegister extends PrisonRegisterService {
-  async getPrisonNameOrId(prisonId: string): Promise<string> {
-    return prisonId
-  }
-}
-
-class MockPrisonRegisterStore extends PrisonRegisterStore {}
-
-class MockSupportedPrisonsService extends SupportedPrisonsService {}
-
-class MockPrisonService extends PrisonService {}
 
 function appSetup(route: Router, production: boolean): Express {
   const app = express()
@@ -102,36 +31,5 @@ function appSetup(route: Router, production: boolean): Express {
 }
 
 export default function appWithAllRoutes({ production = false }: { production?: boolean }): Express {
-  auth.default.authenticationMiddleware = () => (req, res, next) => {
-    res.locals.user = {
-      token: createToken(),
-    }
-    next()
-  }
-  return appSetup(
-    allRoutes(
-      standardRouter(
-        new MockUserService(),
-        new MockSmokeTestStore(smokeTestRedisClient),
-        new MockPrisonService(
-          new MockPrisonerRegister(new MockPrisonRegisterStore(prisonRegisterRedisClient)),
-          new MockSupportedPrisonsService(),
-        ),
-      ),
-    ),
-    production,
-  )
-}
-
-const createToken = () => {
-  const payload = {
-    user_name: 'user1',
-    scope: ['read'],
-    auth_source: 'nomis',
-    authorities: ['ROLE_SLM_SCAN_BARCODE'],
-    jti: '83b50a10-cca6-41db-985f-e87efb303ddb',
-    client_id: 'clientid',
-  }
-
-  return jwt.sign(payload, 'secret', { expiresIn: '1h' })
+  return appSetup(allRoutes(standardRouter()), production)
 }

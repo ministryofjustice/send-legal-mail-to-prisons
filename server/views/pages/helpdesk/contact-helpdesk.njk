@@ -64,9 +64,7 @@
               errorMessage: errors | findError('name')
             }) }}
 
-            {% if externalUser %}
-              {% set hint = { text: 'Do not use your CJSM email address' } %}
-            {% endif %}
+            {% set hint = { text: 'Do not use your CJSM email address' } %}
             {{ govukInput({
               label: {
                 text: 'Email'

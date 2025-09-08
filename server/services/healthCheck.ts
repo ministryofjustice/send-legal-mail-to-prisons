@@ -49,18 +49,7 @@ function gatherCheckInfo(aggregateStatus: Record<string, unknown>, currentStatus
   return { ...aggregateStatus, [currentStatus.name]: currentStatus.message }
 }
 
-const apiChecks = [
-  service('hmppsAuth', `${config.apis.hmppsAuth.url}/health/ping`, config.apis.hmppsAuth.agent),
-  ...(config.apis.tokenVerification.enabled
-    ? [
-        service(
-          'tokenVerification',
-          `${config.apis.tokenVerification.url}/health/ping`,
-          config.apis.tokenVerification.agent,
-        ),
-      ]
-    : []),
-]
+const apiChecks = [service('hmppsAuth', `${config.apis.hmppsAuth.url}/health/ping`, config.apis.hmppsAuth.agent)]
 
 export default function healthCheck(callback: HealthCheckCallback, checks = apiChecks): void {
   Promise.all(checks.map(fn => fn())).then(checkResults => {
