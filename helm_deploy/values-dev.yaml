@@ -14,6 +14,7 @@ generic-service:
     COVERSHEET_PRINT_DEBUG: "true"
     LSJ_SESSION_DURATION_IN_DAYS: 1
     ONE_TIME_CODE_AUTH_ENABLED: "true"
+    ENVIRONMENT_NAME: dev
 
   namespace_secrets:
     smoke-test:
