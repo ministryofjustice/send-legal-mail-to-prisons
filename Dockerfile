@@ -35,8 +35,7 @@ COPY . .
 RUN npm run build
 
 RUN export BUILD_NUMBER=${BUILD_NUMBER} && \
-    export GIT_REF=${GIT_REF} && \
-    npm run record-build-info
+    export GIT_REF=${GIT_REF}
 
 RUN npm prune --no-audit --omit=dev
 
