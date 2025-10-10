@@ -109,7 +109,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
-    "govuk-frontend": "^5.12.0",
+    "govuk-frontend": "^5.13.0",
     "helmet": "^8.1.0",
     "http-errors": "^2.0.0",
     "inputmask": "^5.0.9",
