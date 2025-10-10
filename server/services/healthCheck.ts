@@ -36,9 +36,13 @@ function addAppInfo(result: HealthCheckResult): HealthCheckResult {
 }
 
 function getBuild() {
+  const { buildNumber, gitRef } = config
+
   try {
-    // eslint-disable-next-line global-require,@typescript-eslint/no-require-imports
-    return require('../../build-info.json')
+    return {
+      buildNumber,
+      gitRef,
+    }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (ex) {
     return null
