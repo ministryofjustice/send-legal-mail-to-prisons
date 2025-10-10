@@ -43,6 +43,7 @@ function getBuild() {
       buildNumber,
       gitRef,
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (ex) {
     return null
   }
