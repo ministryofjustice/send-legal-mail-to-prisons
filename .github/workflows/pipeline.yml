@@ -36,6 +36,11 @@ jobs:
     uses: ./.github/workflows/node_integration_tests_redis.yml # LOCAL_VERSION
     needs: [node_build]
     secrets: inherit
+  smoke_test:
+    name: smoke tests
+    uses: ./.github/workflows/smoke_tests.yml # LOCAL_VERSION
+    needs: [node_build]
+    secrets: inherit
   helm_lint:
     strategy:
       matrix:
@@ -51,6 +56,7 @@ jobs:
     needs:
       - node_integration_tests
       - node_unit_tests
+      - smoke_test
     with:
       docker_registry: 'ghcr.io'
       registry_org: 'ministryofjustice'
