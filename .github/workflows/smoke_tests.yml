@@ -13,7 +13,8 @@ on:
         type: string
         default: ".nvmrc"
 permissions:
-  contents: write
+  contents: read
+  packages: write
 jobs:
   smoke_test:
     name: Run the node build 
