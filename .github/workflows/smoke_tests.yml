@@ -12,10 +12,6 @@ on:
         required: false
         type: string
         default: ".nvmrc"
-      api:
-        description: The KUBE_ENV_API
-        type: string
-        required: true
 permissions:
   contents: read
 jobs:
