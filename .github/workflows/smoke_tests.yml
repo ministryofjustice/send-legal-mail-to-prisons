@@ -5,7 +5,7 @@ on:
       environment:
         description: Environment
         type: string
-        required: true
+        required: false
         default: 'dev'
       node_version_file:
         description: "Passed to setup-node action to specify where to source the version of node from"
