@@ -4,11 +4,8 @@ on:
     inputs:
       environment:
         description: Environment
-        type: choice
+        type: string
         required: true
-        options:
-          - dev
-          - preprod
         default: 'dev'
       node_version_file:
         description: "Passed to setup-node action to specify where to source the version of node from"
