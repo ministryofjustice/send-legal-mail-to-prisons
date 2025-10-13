@@ -1,5 +1,7 @@
 # Send legal mail to prisons
 
+[![pipeline](https://github.com/ministryofjustice/send-legal-mail-to-prisons/actions/workflows/pipeline.yml/badge.svg)](https://github.com/ministryofjustice/send-legal-mail-to-prisons) [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+
 ## About
 A Typescript application to allow creating barcodes for legal mail (aka rule39 mail).
 
@@ -16,9 +18,7 @@ The application has a ping endpoint found at `/ping` which indicates that the ap
 If the application needs planned (or unplanned!) downtime we have a method for displaying maintenance pages for both Send legal mail and Check Rule39 mail. See the guide at `maintenance_pages/README.md`.
 
 ### Build
-<em>Requires membership of Github team `hmpps-send-legal-mail-devs`</em>
-
-The application is built on [CircleCI](https://app.circleci.com/pipelines/github/ministryofjustice/send-legal-mail-to-prisons).
+<em>Requires membership of Github team `hmpps-send-legal-mail-live`</em>
 
 ### Versions
 The application version currently running can be found on the `/health` endpoint at node `build.buildNumber`. The format of the version number is `YYY-MM-DD.ccc.gggggg` where `ccc` is the Circle job number and `gggggg` is the git commit reference. 
@@ -27,7 +27,7 @@ The application version currently running can be found on the `/health` endpoint
 
 * <em>Requires CLI tools `kubectl` and `helm`</em>
 * <em>Requires access to Cloud Platform Kubernetes `live` cluster</em>
-* <em>Requires membership of Github team `hmpps-send-legal-mail-devs`</em>
+* <em>Requires membership of Github team `hmpps-send-legal-mail-live`</em>
 
 For example in the dev environment:
 1. Set the Kube context with command `kubectl config use-context live.cloud-platform.service.justice.gov.uk`
