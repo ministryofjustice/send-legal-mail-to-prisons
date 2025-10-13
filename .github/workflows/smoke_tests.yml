@@ -51,7 +51,10 @@ jobs:
         run: | 
           npm run lint
       - name: Update credentials
+        shell: bash
         run: wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | tee /etc/apt/trusted.gpg.d/google.asc >/dev/null
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Install curl
         run: apt-get update && apt-get install -y curl
       - name: Authenticate
