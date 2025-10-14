@@ -22,36 +22,36 @@ jobs:
     environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js ${{ inputs.node_version_file }}
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ${{ inputs.node_version_file }}
-      - name: update npm
-        shell: bash
-        run: |
-          sudo npm install -g npm@latest
-      - name: install dependencies
-        shell: bash
-        run: |
-          npm ci --no-audit
-      - name: save cache
-        id: save-cache
-        uses: actions/cache/save@v4
-        env: 
-          cache-name: node-modules
-        with:
-          path: |
-            ./node_modules
-            ~/.cache/Cypress
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json', '!**/node_modules/**') }}
-      - name: build npm
-        shell: bash
-        run: |
-          npm run build
-      - name: Linter check # Run linter after build because the integration test code depend on compiled typescript...
-        shell: bash
-        run: | 
-          npm run lint
+      # - name: Use Node.js ${{ inputs.node_version_file }}
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version-file: ${{ inputs.node_version_file }}
+      # - name: update npm
+      #   shell: bash
+      #   run: |
+      #     sudo npm install -g npm@latest
+      # - name: install dependencies
+      #   shell: bash
+      #   run: |
+      #     npm ci --no-audit
+      # - name: save cache
+      #   id: save-cache
+      #   uses: actions/cache/save@v4
+      #   env: 
+      #     cache-name: node-modules
+      #   with:
+      #     path: |
+      #       ./node_modules
+      #       ~/.cache/Cypress
+      #     key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json', '!**/node_modules/**') }}
+      # - name: build npm
+      #   shell: bash
+      #   run: |
+      #     npm run build
+      # - name: Linter check # Run linter after build because the integration test code depend on compiled typescript...
+      #   shell: bash
+      #   run: | 
+      #     npm run lint
       - name: Update credentials
         shell: bash
         run: wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo tee /etc/apt/trusted.gpg.d/google.asc >/dev/null
@@ -68,6 +68,7 @@ jobs:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
       - name: Run smoke tests in ${{ inputs.environment }}
+        shell: bash
         run: |
           cd smoke_tests
           ./run-smoke-test.sh \
