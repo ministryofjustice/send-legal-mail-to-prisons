@@ -59,10 +59,10 @@ jobs:
         uses: ministryofjustice/hmpps-github-actions/.github/actions/build-test-and-deploy/cloud-platform-auth@v2 # WORKFLOW_VERSION
         with:
           api: https://${{ secrets.KUBE_CLUSTER }}
-          cert: ${{ secrets.cert }}
-          cluster: ${{ secrets.cluster }}
-          namespace: ${{ secrets.namespace }}
-          token: ${{ secrets.token }}
+          cert: ${{ secrets.KUBE_CERT }}
+          cluster: ${{ secrets.KUBE_CLUSTER }}
+          namespace: ${{ secrets.KUBE_NAMESPACE }}
+          token: ${{ secrets.KUBE_TOKEN }}
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
       - name: Run smoke tests in ${{ inputs.environment }}
