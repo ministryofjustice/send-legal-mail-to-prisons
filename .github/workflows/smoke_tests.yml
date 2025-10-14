@@ -13,7 +13,7 @@ permissions:
 jobs:
   smoke_test:
     name: Run the smoke test
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, hmpps-github-actions-runner]
     environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
