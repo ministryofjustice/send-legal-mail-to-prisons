@@ -52,7 +52,7 @@ jobs:
           npm run lint
       - name: Update credentials
         shell: bash
-        run: wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | tee /etc/apt/trusted.gpg.d/google.asc >/dev/null
+        run: wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo tee /etc/apt/trusted.gpg.d/google.asc >/dev/null
       - name: Install curl
         run: apt-get update && apt-get install -y curl
       - name: Authenticate
@@ -64,7 +64,7 @@ jobs:
           namespace: ${{ secrets.namespace }}
           token: ${{ secrets.token }}
       - name: Install jq
-        run: apt-get update && apt-get install -y jq
+        run: sudo apt-get update && sudo apt-get install -y jq
       - name: Run smoke tests in ${{ inputs.environment }}
         run: |
           cd smoke_tests
