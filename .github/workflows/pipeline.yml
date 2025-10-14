@@ -36,8 +36,8 @@ jobs:
     uses: ./.github/workflows/node_integration_tests_redis.yml # LOCAL_VERSION
     needs: [node_build]
     secrets: inherit
-  smoke_test:
-    name: smoke tests
+  smoke_test_dev:
+    name: smoke tests (dev)
     uses: ./.github/workflows/smoke_tests.yml # LOCAL_VERSION
     needs: [node_build]
     secrets: inherit
@@ -58,7 +58,7 @@ jobs:
     needs:
       - node_integration_tests
       - node_unit_tests
-      - smoke_test
+      - smoke_test_dev
     with:
       docker_registry: 'ghcr.io'
       registry_org: 'ministryofjustice'
@@ -75,12 +75,20 @@ jobs:
     with:
       environment: 'dev'
       app_version: '${{ needs.build.outputs.app_version }}'
+  smoke_test_preprod:
+    name: smoke tests (preprod)
+    uses: ./.github/workflows/smoke_tests.yml # LOCAL_VERSION
+    needs: deploy_dev
+    secrets: inherit
+    with:
+      environment: preprod
   deploy_preprod:
     name: Deploy to the preprod environment
     needs:
       - build
       - helm_lint
       - deploy_dev
+      - smoke_test_preprod
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
     with:
