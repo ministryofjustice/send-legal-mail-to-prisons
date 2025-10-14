@@ -12,6 +12,20 @@ on:
         required: false
         type: string
         default: ".nvmrc"
+    secrets:
+      KUBE_CERT:
+        required: true
+      KUBE_CLUSTER:
+        required: true
+      KUBE_NAMESPACE:
+        required: true
+      KUBE_TOKEN:
+        required: true
+      APP_SMOKETEST_LSJSECRET:
+        required: true
+      APP_SMOKETEST_MSJSECRET:
+        required: true
+
 permissions:
   contents: read
 jobs:
