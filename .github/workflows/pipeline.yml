@@ -41,7 +41,7 @@ jobs:
     # needs: [node_build]
     secrets: inherit
     with:
-      environment: preprod
+      environment: dev
   # helm_lint:
   #   strategy:
   #     matrix:
