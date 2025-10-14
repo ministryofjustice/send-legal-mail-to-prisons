@@ -19,6 +19,7 @@ jobs:
   smoke_test:
     name: Run the node build 
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ inputs.node_version_file }}
@@ -76,3 +77,11 @@ jobs:
             --lsj-url https://send-legal-mail-${{ inputs.environment }}.prison.service.justice.gov.uk \
             --msj-url https://check-rule39-mail-${{ inputs.environment }}.prison.service.justice.gov.uk \
             --cypress-exe cypress
+      # - store_test_results:
+      #     path: /tmp/slm-smoke-test-<< parameters.env >>/test_results
+      # - store_artifacts:
+      #     path: /tmp/slm-smoke-test-<< parameters.env >>/videos
+      # - store_artifacts:
+      #     path: /tmp/slm-smoke-test-<< parameters.env >>/screenshots
+      # - store_artifacts:
+      #     path: /tmp/slm-smoke-test-<< parameters.env >>/downloads
