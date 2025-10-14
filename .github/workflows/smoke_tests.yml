@@ -72,8 +72,8 @@ jobs:
           cd smoke_tests
           ./run-smoke-test.sh \
             --env ${{ inputs.environment }} \
-            --lsj-secret $(kubectl -n send-legal-mail-to-prisons${{ inputs.environment }} get secret smoke-test --template=${{ secrets.APP_SMOKETEST_LSJSECRET }} | base64 -d) \
-            --msj-secret $(kubectl -n send-legal-mail-to-prisons${{ inputs.environment }} get secret smoke-test --template=${{ secrets.APP_SMOKETEST_MSJSECRET }} | base64 -d) \
+            --lsj-secret $(kubectl -n send-legal-mail-to-prisons-${{ inputs.environment }} get secret smoke-test --template=${{ secrets.APP_SMOKETEST_LSJSECRET }} | base64 -d) \
+            --msj-secret $(kubectl -n send-legal-mail-to-prisons-${{ inputs.environment }} get secret smoke-test --template=${{ secrets.APP_SMOKETEST_MSJSECRET }} | base64 -d) \
             --lsj-url https://send-legal-mail-${{ inputs.environment }}.prison.service.justice.gov.uk \
             --msj-url https://check-rule39-mail-${{ inputs.environment }}.prison.service.justice.gov.uk \
             --cypress-exe cypress
