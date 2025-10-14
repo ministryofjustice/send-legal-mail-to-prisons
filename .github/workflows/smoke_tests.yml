@@ -54,7 +54,7 @@ jobs:
         shell: bash
         run: wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo tee /etc/apt/trusted.gpg.d/google.asc >/dev/null
       - name: Install curl
-        run: apt-get update && apt-get install -y curl
+        run: sudo apt-get update && sudo apt-get install -y curl
       - name: Authenticate
         uses: ministryofjustice/hmpps-github-actions/.github/actions/build-test-and-deploy/cloud-platform-auth@v2 # WORKFLOW_VERSION
         with:
