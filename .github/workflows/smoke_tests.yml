@@ -17,11 +17,6 @@ jobs:
     environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
-      # - name: Update credentials
-      #   shell: bash
-      #   run: wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo tee /etc/apt/trusted.gpg.d/google.asc >/dev/null
-      # - name: Install curl
-      #   run: sudo apt-get update && sudo apt-get install -y curl && sudo apt-get install -y jq
       - name: Run smoke tests in ${{ inputs.environment }}
         shell: bash
         run: |
@@ -32,11 +27,14 @@ jobs:
             --msj-secret ${{ secrets.APP_SMOKETEST_MSJSECRET }} \
             --lsj-url https://send-legal-mail-${{ inputs.environment }}.prison.service.justice.gov.uk \
             --msj-url https://check-rule39-mail-${{ inputs.environment }}.prison.service.justice.gov.uk
+      - name: Upload the artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: upload smoke test results
+          path: |
+            /tmp/slm-smoke-test-${{ inputs.environment }}/videos
+            /tmp/slm-smoke-test-${{ inputs.environment }}/screenshots
+            /tmp/slm-smoke-test-${{ inputs.environment }}/downloads
       # - store_test_results:
       #     path: /tmp/slm-smoke-test-<< parameters.env >>/test_results
-      # - store_artifacts:
-      #     path: /tmp/slm-smoke-test-<< parameters.env >>/videos
-      # - store_artifacts:
-      #     path: /tmp/slm-smoke-test-<< parameters.env >>/screenshots
-      # - store_artifacts:
-      #     path: /tmp/slm-smoke-test-<< parameters.env >>/downloads
