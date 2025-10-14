@@ -56,7 +56,7 @@ jobs:
         shell: bash
         run: wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo tee /etc/apt/trusted.gpg.d/google.asc >/dev/null
       - name: Install curl
-        run: sudo apt-get update && sudo apt-get install -y curl
+        run: sudo apt-get update && sudo apt-get install -y curl && sudo apt-get install -y jq
       - name: Authenticate
         uses: ministryofjustice/hmpps-github-actions/.github/actions/build-test-and-deploy/cloud-platform-auth@v2 # WORKFLOW_VERSION
         with:
@@ -65,8 +65,8 @@ jobs:
           cluster: ${{ secrets.KUBE_CLUSTER }}
           namespace: ${{ secrets.KUBE_NAMESPACE }}
           token: ${{ secrets.KUBE_TOKEN }}
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
+      # - name: Install jq
+      #   run: sudo apt-get update && sudo apt-get install -y jq
       - name: Run smoke tests in ${{ inputs.environment }}
         shell: bash
         run: |
@@ -76,8 +76,8 @@ jobs:
             --lsj-secret $(kubectl -n send-legal-mail-to-prisons-${{ inputs.environment }} get secret smoke-test --template=${{ secrets.APP_SMOKETEST_LSJSECRET }} | base64 -d) \
             --msj-secret $(kubectl -n send-legal-mail-to-prisons-${{ inputs.environment }} get secret smoke-test --template=${{ secrets.APP_SMOKETEST_MSJSECRET }} | base64 -d) \
             --lsj-url https://send-legal-mail-${{ inputs.environment }}.prison.service.justice.gov.uk \
-            --msj-url https://check-rule39-mail-${{ inputs.environment }}.prison.service.justice.gov.uk \
-            --cypress-exe cypress
+            --msj-url https://check-rule39-mail-${{ inputs.environment }}.prison.service.justice.gov.uk
+            # --cypress-exe cypress
       # - store_test_results:
       #     path: /tmp/slm-smoke-test-<< parameters.env >>/test_results
       # - store_artifacts:
