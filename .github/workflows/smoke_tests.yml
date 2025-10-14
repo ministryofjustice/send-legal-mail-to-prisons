@@ -36,5 +36,4 @@ jobs:
             /tmp/slm-smoke-test-${{ inputs.environment }}/videos
             /tmp/slm-smoke-test-${{ inputs.environment }}/screenshots
             /tmp/slm-smoke-test-${{ inputs.environment }}/downloads
-      # - store_test_results:
-      #     path: /tmp/slm-smoke-test-<< parameters.env >>/test_results
+            /tmp/slm-smoke-test-${{ inputs.environment }}/test_results
