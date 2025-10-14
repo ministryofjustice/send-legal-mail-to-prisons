@@ -40,6 +40,8 @@ jobs:
     uses: ./.github/workflows/smoke_tests.yml # LOCAL_VERSION
     # needs: [node_build]
     secrets: inherit
+    with:
+      environment: preprod
   # helm_lint:
   #   strategy:
   #     matrix:
