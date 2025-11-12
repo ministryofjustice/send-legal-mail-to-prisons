@@ -126,7 +126,7 @@
   },
   "devDependencies": {
     "@cypress/skip-test": "^2.6.1",
-    "@ministryofjustice/eslint-config-hmpps": "^1.0.0",
+    "@ministryofjustice/eslint-config-hmpps": "^1.0.1",
     "@tsconfig/node24": "^24.0.1",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
@@ -150,7 +150,7 @@
     "axe-core": "^4.11.0",
     "cheerio": "^1.1.2",
     "concurrently": "^9.2.1",
-    "cypress": "^15.5.0",
+    "cypress": "^15.6.0",
     "cypress-axe": "^1.7.0",
     "cypress-multi-reporters": "^2.0.5",
     "husky": "^9.1.7",
