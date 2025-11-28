@@ -130,11 +130,11 @@ export default {
   phaseBannerLink: {
     legalSenderJourney: get(
       'LEGAL_SENDER_PHASE_BANNER_LINK',
-      'https://send-legal-mail-to-prisons.form.service.justice.gov.uk/',
+      'https://submit.forms.service.gov.uk/form/263708/send-legal-mail-to-prisons/',
     ),
     mailRoomJourney: get(
       'MAIL_ROOM_PHASE_BANNER_LINK',
-      'https://send-legal-mail-to-prisons.form.service.justice.gov.uk/',
+      'https://submit.forms.service.gov.uk/form/263708/send-legal-mail-to-prisons/',
     ),
   },
   smoketest: {
