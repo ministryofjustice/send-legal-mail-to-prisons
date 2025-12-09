@@ -46,7 +46,7 @@ DIR=/tmp/slm-smoke-test-$ENV
 rm -rfv $DIR 2>/dev/null
 mkdir -p $DIR
 cp -r ../integration_tests/* $DIR
-cp cypress.config.ts package.json package-lock.json .npmrc reporter-config.json run-smoke-test.sh $DIR
+cp cypress.config.ts package.json package-lock.json .npmrc .nvmrc reporter-config.json run-smoke-test.sh $DIR
 cd $DIR
 npm run setup
 

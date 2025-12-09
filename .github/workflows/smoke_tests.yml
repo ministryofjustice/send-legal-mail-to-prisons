@@ -5,8 +5,8 @@ on:
       node_version_file:
         description: Location of node version file
         type: string
-        required: true
-        default: .nvmrc
+        required: false
+        default: '.nvmrc'
       environment:
         description: Environment
         type: string
