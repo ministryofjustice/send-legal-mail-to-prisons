@@ -2,6 +2,11 @@ name: Smoke tests
 on:
   workflow_call:
     inputs:
+      node_version_file:
+        description: Location of node version file
+        type: string
+        required: false
+        default: '.nvmrc'
       environment:
         description: Environment
         type: string
@@ -17,6 +22,9 @@ jobs:
     environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: ${{ inputs.node_version_file }}
       - name: Run smoke tests in ${{ inputs.environment }}
         shell: bash
         run: |

@@ -46,9 +46,9 @@ DIR=/tmp/slm-smoke-test-$ENV
 rm -rfv $DIR 2>/dev/null
 mkdir -p $DIR
 cp -r ../integration_tests/* $DIR
-cp cypress.config.ts package.json reporter-config.json run-smoke-test.sh $DIR
+cp cypress.config.ts package.json package-lock.json .npmrc .nvmrc .allowed-scripts.mjs reporter-config.json run-smoke-test.sh $DIR
 cd $DIR
-npm install
+npm run setup
 
 export ENV=$ENV
 export CYPRESS_APP_SMOKETEST_LSJSECRET=$LSJ_SECRET
