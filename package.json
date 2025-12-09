@@ -26,7 +26,8 @@
     "security_audit": "npx audit-ci --config audit-ci.json",
     "int-test": "cypress run --config video=false --env $(grep ONE_TIME_CODE_AUTH_ENABLED feature.env)",
     "int-test-ui": "cypress open --env $(grep ONE_TIME_CODE_AUTH_ENABLED feature.env)",
-    "clean": "rm -rf dist build node_modules stylesheets"
+    "clean": "rm -rf dist build node_modules stylesheets",
+    "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
     "node": "^24",
@@ -127,6 +128,7 @@
   "devDependencies": {
     "@cypress/skip-test": "^2.6.1",
     "@ministryofjustice/eslint-config-hmpps": "^1.0.1",
+    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.3",
     "@tsconfig/node24": "^24.0.3",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",

@@ -78,7 +78,7 @@ To start the main services excluding the example typescript template app:
 
 `docker-compose up redis hmpps-auth nomis-user-roles-api gotenberg`
 
-Install dependencies using `npm install`, ensuring you are using >= `Node v22.x`. If you have an M1 MacBook you may need to run the following `brew` command before `canvas` will install: `brew install pkg-config cairo pango libpng jpeg giflib librsvg`
+Install dependencies using `npm run setup`, ensuring you are using >= `Node v24.x`. If you have an M1 MacBook you may need to run the following `brew` command before `canvas` will install: `brew install pkg-config cairo pango libpng jpeg giflib librsvg`
 
 Create a `.env` which should override environment variables required to run locally:
 ```properties
@@ -170,11 +170,6 @@ To find any dependencies with vulnerabilities run command:
 #### Automated vulnerability checks
 
 Various security checks are run in a nightly job in GitHub actions, see the `./github/workflows/` folder.
-
-### Update dependencies
-To update all dependencies to their latest stable versions run command:
-
-`npm update`
 
 ## Test Coverage Reports
 We use jest code coverage to report on test coverage and produce reports for the unit tests.
