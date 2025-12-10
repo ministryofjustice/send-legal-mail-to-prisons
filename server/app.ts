@@ -23,11 +23,9 @@ import GotenbergClient from './data/gotenbergClient'
 import setupPdfRenderer from './middleware/setupPdfRenderer'
 import ContactService from './services/contacts/ContactService'
 import RecipientFormService from './routes/barcode/recipients/RecipientFormService'
-import setupContactHelpdesk from './middleware/helpdesk/setupContactHelpdesk'
 import setupCookiesPolicy from './middleware/cookies/setupCookiesPolicy'
 import setupCsrf from './middleware/setupCsrf'
 import setupLegalSenderStartPage from './middleware/start/setupLegalSenderStartPage'
-import ZendeskService from './services/helpdesk/ZendeskService'
 import setUpLink from './middleware/link/setUpLink'
 import SmokeTestStore from './data/cache/SmokeTestStore'
 import setupSmokeTest from './middleware/smoketest/SmokeTestMiddleware'
@@ -81,7 +79,6 @@ export default function createApp(
   app.get('/privacy-policy', (req, res) => res.render('pages/privacy-policy/privacy-policy'))
   app.get('/accessibility-statement', (req, res) => res.render('pages/accessibility-statement/accessibility-statement'))
   app.use('/start', setupLegalSenderStartPage())
-  app.use('/contact-helpdesk', setupContactHelpdesk(zendeskService))
   app.use('/legal-sender/sign-out', (req, res) =>
     res.redirect(`${legalSenderJourneyAuthenticationStartPage()}?force=true`),
   )
