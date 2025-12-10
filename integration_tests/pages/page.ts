@@ -7,16 +7,12 @@ export default abstract class Page {
 
   protected constructor(
     readonly pageId: string,
-    private readonly options: { axeTest?: boolean; expectHelpdeskLink?: boolean } = {
+    private readonly options: { axeTest?: boolean } = {
       axeTest: true,
-      expectHelpdeskLink: true,
     },
   ) {
     this.checkOnPage()
     this.checkCsfrTokenForFormBasedPages()
-    if (options.expectHelpdeskLink) {
-      this.checkContactHelpdeskLink()
-    }
     if (options.axeTest) {
       this.runAxe()
     }
@@ -39,22 +35,11 @@ export default abstract class Page {
     cy.checkA11y()
   }
 
-  checkContactHelpdeskLink = (): void => {
-    this.contactHelpdeskLink().should('exist').and('be.visible')
-  }
-
-  contactHelpdesk<T>(T): T {
-    this.contactHelpdeskLink().invoke('removeAttr', 'target').click()
-    return Page.verifyOnPage(T)
-  }
-
   signOut = (): PageElement => cy.get('[data-qa=signOut]')
 
   manageDetails = (): PageElement => cy.get('[data-qa=manageDetails]')
 
   userName = (): PageElement => cy.get('[data-qa=header-user-name]')
-
-  contactHelpdeskLink = (): PageElement => cy.get('[data-qa=contact-helpdesk]')
 
   cookieAction = (type: string): PageElement | undefined => {
     const linkType = type === 'view' ? 'a' : 'button'
