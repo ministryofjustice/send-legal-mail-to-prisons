@@ -44,7 +44,6 @@ export default function createApp(
   appInsightsClient: AppInsightsService,
   contactService: ContactService,
   recipientFormService: RecipientFormService,
-  zendeskService: ZendeskService,
   cjsmService: CjsmService,
   prisonService: PrisonService,
 ): express.Application {
