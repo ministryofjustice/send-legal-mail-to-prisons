@@ -70,11 +70,5 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('pageTitleInErrorFilter', pageTitleInErrorFilter)
   njkEnv.addFilter('prisonTableRowsFilter', prisonsTableRowsFilter)
 
-  njkEnv.addGlobal('contactHelpdeskBannerExcludedOnPages', [
-    'auth-error',
-    'contact-helpdesk',
-    'contact-helpdesk-submitted',
-  ])
-
   return njkEnv
 }
