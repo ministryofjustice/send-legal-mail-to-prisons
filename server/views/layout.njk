@@ -98,7 +98,7 @@
   {% endif %}
 {% endblock %}
 
-{# Override the `main` block from the govuk template so that we can add the Contact The Helpdesk banner #}
+{# Override the `main` block from the govuk template so that we can add the phase banner #}
 {% block main %}
   <div class="govuk-width-container {{ containerClasses }}">
 
@@ -119,15 +119,6 @@
     <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main"{% if mainLang %} lang="{{ mainLang }}"{% endif %}>
       {% block content %}{% endblock %}
     </main>
-
-    {% if pageId not in contactHelpdeskBannerExcludedOnPages %}
-      <section class="contact-helpdesk" role="complementary">
-        {% set contactHelpdeskUrl %}
-          /contact-helpdesk?pageId={{ pageId }}
-        {% endset %}
-        <a href="{{ contactHelpdeskUrl }}" target="_blank" class="govuk-link govuk-link--inverse" data-qa="contact-helpdesk">Contact helpdesk (opens in new tab)</a>
-      </section>
-    {% endif %}
 
   </div>
 {% endblock %}

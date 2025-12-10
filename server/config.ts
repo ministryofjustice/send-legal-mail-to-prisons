@@ -98,18 +98,6 @@ export default {
     gotenberg: {
       url: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
     },
-    zendesk: {
-      url: get('ZENDESK_API_URL', 'http://localhost:8101', requiredInProduction),
-      basicAuth: {
-        user: get('ZENDESK_USER', requiredInProduction),
-        pass: get('ZENDESK_TOKEN', requiredInProduction),
-      },
-      timeout: {
-        response: Number(get('ZENDESK_API_TIMEOUT_RESPONSE', 30000)),
-        deadline: Number(get('ZENDESK_API_TIMEOUT_DEADLINE', 30000)),
-      },
-      agent: new AgentConfig(),
-    },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   slmContainerId: get('SLM_TAG_MANAGER_CONTAINER_ID', null),

@@ -3,7 +3,6 @@ import { resetStubs } from './integration_tests/mockApis/wiremock'
 
 import auth from './integration_tests/mockApis/auth'
 import prisonRegister from './integration_tests/mockApis/prisonRegister'
-import zendesk from './integration_tests/mockApis/zendesk'
 import state from './integration_tests/support/state'
 import oneTimeCode from './integration_tests/mockApis/sendLegalMail/oneTimeCode'
 import link from './integration_tests/mockApis/sendLegalMail/link'
@@ -71,9 +70,6 @@ export default defineConfig({
 
         stubGetPrisonRegister: prisonRegister.stubGetPrisonRegister,
         stubGetSupportedPrisons: supportedPrisons.stubGetSupportedPrisons,
-
-        stubCreateZendeskTicket: zendesk.stubCreateZendeskTicket,
-        stubCreateZendeskTicketFailure: zendesk.stubCreateZendeskTicketFailure,
 
         setSmokeTestBarcode: state.setSmokeTestBarcode,
         getSmokeTestBarcode: state.getSmokeTestBarcode,
