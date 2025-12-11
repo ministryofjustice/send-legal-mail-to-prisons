@@ -125,9 +125,9 @@
 
 {% block footer %}
   {%- from "govuk/components/footer/macro.njk" import govukFooter -%}
+  {% set footerItems = (footerItems.push({ href: "/accessibility-statement", text: "Accessibility" }), footerItems) %}
   {% set footerItems = [{ href: "/cookies-policy", text: "Cookies" }] %}
-  {% set footerItems = (footerItems.unshift({ href: "/privacy-policy", text: "Privacy policy" }), footerItems) %}
-  {% set footerItems = (footerItems.push({ href: "/accessibility-statement", text: "Accessibility statement" }), footerItems) %}
+  {% set footerItems = (footerItems.unshift({ href: "/privacy-policy", text: "Privacy" }), footerItems) %}
 
   {{ govukFooter({
     rebrand: true,
