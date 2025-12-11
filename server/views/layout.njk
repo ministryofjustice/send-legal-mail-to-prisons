@@ -1,5 +1,6 @@
 {% extends "govuk/template.njk" %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{%- from "govuk/components/footer/macro.njk" import govukFooter -%}
 {% set govukRebrand = true %}
 
 {% block head %}
@@ -124,16 +125,24 @@
 {% endblock %}
 
 {% block footer %}
-  {%- from "govuk/components/footer/macro.njk" import govukFooter -%}
-  {% set footerItems = [{ href: "/cookies-policy", text: "Cookies" }] %}
-  {% set footerItems = (footerItems.unshift({ href: "/privacy-policy", text: "Privacy policy" }), footerItems) %}
-  {% set footerItems = (footerItems.push({ href: "/accessibility-statement", text: "Accessibility statement" }), footerItems) %}
-
   {{ govukFooter({
     rebrand: true,
     meta: {
-      items: footerItems
-    }
+        items: [
+          {
+            href: "/accessibility-statement",
+            text: "Accessibility"
+          },
+          {
+            href: "/cookies-policy",
+            text: "Cookies"
+          },
+          {
+            href: "/privacy-policy",
+            text: "Privacy"
+          }
+        ]
+      }
   }) }}
 {% endblock %}
 
