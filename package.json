@@ -123,7 +123,7 @@
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
     "redis": "^4.7.1",
-    "superagent": "^10.2.3"
+    "superagent": "10.3.0"
   },
   "devDependencies": {
     "@cypress/skip-test": "^2.6.1",
@@ -166,8 +166,8 @@
     "nodemon": "^3.1.11",
     "prettier": "^3.7.4",
     "redis-mock": "^0.56.3",
-    "sass": "^1.97.0",
-    "supertest": "^7.1.4",
+    "sass": "1.97.2",
+    "supertest": "7.1.4",
     "ts-jest": "^29.4.6",
     "typescript": "^5.9.3"
   },
