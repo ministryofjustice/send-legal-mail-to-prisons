@@ -5,9 +5,11 @@
  */
 import { TelemetryClient } from 'applicationinsights'
 import { initialiseAppInsights, buildAppInsightsClient } from './server/utils/azureAppInsights'
+import applicationInfoSupplier from './server/applicationInfo'
 
+const applicationInfo = applicationInfoSupplier()
 initialiseAppInsights()
-const appInsightsTelemetryClient: TelemetryClient = buildAppInsightsClient()
+const appInsightsTelemetryClient: TelemetryClient = buildAppInsightsClient(applicationInfo)
 
 import app from './server/index'
 import logger from './logger'

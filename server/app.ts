@@ -36,6 +36,7 @@ import setUpOneTimeCode from './middleware/one-time-code-auth/setUpOneTimeCode'
 import OneTimeCodeService from './services/one-time-code-auth/OneTimeCodeService'
 import legalSenderJourneyAuthenticationStartPage from './middleware/legalSenderJourneyAuthenticationStartPage'
 import PrisonService from './services/prison/PrisonService'
+import { ApplicationInfo } from './applicationInfo'
 
 export default function createApp(
   magicLinkService: MagicLinkService,
@@ -46,6 +47,7 @@ export default function createApp(
   recipientFormService: RecipientFormService,
   cjsmService: CjsmService,
   prisonService: PrisonService,
+  applicationInfo: ApplicationInfo,
 ): express.Application {
   const app = express()
 
@@ -54,7 +56,7 @@ export default function createApp(
   app.set('port', process.env.PORT || 3000)
 
   app.use(cookieParser())
-  app.use(setUpHealthChecks())
+  app.use(setUpHealthChecks(applicationInfo))
   app.use(setUpWebSecurity())
   app.use(setUpWebSession())
   app.use(setUpWebRequestParsing())
