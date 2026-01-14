@@ -3,6 +3,7 @@ generic-service:
   nameOverride: send-legal-mail-to-prisons
 
   replicaCount: 4
+  productId: "DPS068"
 
   image:
     repository: ghcr.io/ministryofjustice/send-legal-mail-to-prisons
