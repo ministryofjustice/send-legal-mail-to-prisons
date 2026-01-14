@@ -144,7 +144,7 @@ const ping = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/auth/health/ping',
+      urlPattern: '/prison-register/health/ping',
     },
     response: {
       status: 200,
