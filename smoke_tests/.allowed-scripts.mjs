@@ -2,6 +2,6 @@ import { configureAllowedScripts } from '@ministryofjustice/hmpps-npm-script-all
 
 export default configureAllowedScripts({
   allowlist: {
-    'node_modules/cypress@15.7.1': 'ALLOW',
+    'node_modules/cypress@15.9.0': 'ALLOW',
   },
 })
