@@ -100,10 +100,9 @@ export default {
       healthPath: '/health/ping',
       agent: new AgentConfig(),
     },
-    gotenberg: {
-      url: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
-      healthPath: '/health/ping',
-    },
+  },
+  gotenberg: {
+    url: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   slmContainerId: get('SLM_TAG_MANAGER_CONTAINER_ID', null),

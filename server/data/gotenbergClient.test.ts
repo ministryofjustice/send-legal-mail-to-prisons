@@ -14,10 +14,10 @@ const DEFAULT_PDF_OPTIONS: PdfOptions = {
 
 describe('Gotenberg client tests', () => {
   let fakeApi: nock.Scope
-  config.apis.gotenberg.url = 'http://localhost:8200'
+  config.gotenberg.url = 'http://localhost:8200'
 
   beforeEach(() => {
-    fakeApi = nock(config.apis.gotenberg.url)
+    fakeApi = nock(config.gotenberg.url)
   })
 
   afterEach(() => {
