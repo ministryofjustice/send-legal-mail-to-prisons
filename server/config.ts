@@ -45,6 +45,8 @@ export interface ApiConfig {
 export default {
   buildNumber: get('BUILD_NUMBER', '1_0_0', requiredInProduction),
   gitRef: get('GIT_REF', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
+  productId: get('PRODUCT_ID', 'UNASSIGNED', requiredInProduction),
+  branchName: get('GIT_BRANCH', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
   https: production,
   production,
   staticResourceCacheDuration: 20,
@@ -73,6 +75,7 @@ export default {
         response: Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)),
       },
+      healthPath: '/health/ping',
       agent: new AgentConfig(),
       apiClientId: get('API_CLIENT_ID', 'send-legal-mail-to-prisons', requiredInProduction),
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction),
@@ -85,6 +88,7 @@ export default {
         response: Number(get('SEND_LEGAL_MAIL_API_TIMEOUT_RESPONSE', 30000)),
         deadline: Number(get('SEND_LEGAL_MAIL_API_TIMEOUT_DEADLINE', 30000)),
       },
+      healthPath: '/health/ping',
       agent: new AgentConfig(),
     },
     prisonRegister: {
@@ -93,11 +97,12 @@ export default {
         response: Number(get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 30000)),
         deadline: Number(get('PRISON_REGISTER_API_TIMEOUT_DEADLINE', 30000)),
       },
+      healthPath: '/health/ping',
       agent: new AgentConfig(),
     },
-    gotenberg: {
-      url: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
-    },
+  },
+  gotenberg: {
+    url: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   slmContainerId: get('SLM_TAG_MANAGER_CONTAINER_ID', null),

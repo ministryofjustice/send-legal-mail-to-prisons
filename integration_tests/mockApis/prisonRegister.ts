@@ -1,4 +1,4 @@
-import { SuperAgentRequest } from 'superagent'
+import { SuperAgentRequest, Response } from 'superagent'
 import { stubFor } from './wiremock'
 
 const stubGetPrisonRegister = (): SuperAgentRequest =>
@@ -140,4 +140,18 @@ const stubGetPrisonRegister = (): SuperAgentRequest =>
     },
   })
 
-export default { stubGetPrisonRegister }
+const ping = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/prison-register/health/ping',
+    },
+    response: {
+      status: 200,
+    },
+  })
+
+export default {
+  stubPing: (): Promise<Response> => ping(),
+  stubGetPrisonRegister,
+}

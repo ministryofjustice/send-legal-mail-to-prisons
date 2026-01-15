@@ -8,6 +8,7 @@ import oneTimeCode from './integration_tests/mockApis/sendLegalMail/oneTimeCode'
 import link from './integration_tests/mockApis/sendLegalMail/link'
 import barcode from './integration_tests/mockApis/sendLegalMail/barcode'
 import contact from './integration_tests/mockApis/sendLegalMail/contact'
+import slmPing from './integration_tests/mockApis/sendLegalMail/healthPing'
 import cjsm from './integration_tests/mockApis/sendLegalMail/cjsm'
 import supportedPrisons from './integration_tests/mockApis/sendLegalMail/supportedPrisons'
 
@@ -68,7 +69,10 @@ export default defineConfig({
         stubVerifyOneTimeCodeNotFoundFailure: oneTimeCode.stubVerifyOneTimeCodeNotFoundFailure,
         stubVerifyOneTimeCodeInvalidSignatureFailure: oneTimeCode.stubVerifyOneTimeCodeInvalidSignatureFailure,
 
+        stubPrisonRegisterPing: prisonRegister.stubPing,
+
         stubGetPrisonRegister: prisonRegister.stubGetPrisonRegister,
+        stubSlmPing: slmPing.stubPing,
         stubGetSupportedPrisons: supportedPrisons.stubGetSupportedPrisons,
 
         setSmokeTestBarcode: state.setSmokeTestBarcode,
