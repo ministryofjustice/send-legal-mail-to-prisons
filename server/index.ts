@@ -14,6 +14,7 @@ import CjsmService from './services/cjsm/CjsmService'
 import OneTimeCodeService from './services/one-time-code-auth/OneTimeCodeService'
 import SupportedPrisonsService from './services/prison/SupportedPrisonsService'
 import PrisonService from './services/prison/PrisonService'
+import applicationInfoSupplier from './applicationInfo'
 import { createRedisClient } from './data/redisClient'
 
 const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application => {
@@ -29,6 +30,7 @@ const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application 
   const contactService = new ContactService()
   const recipientFormService = new RecipientFormService(prisonService)
   const cjsmService = new CjsmService()
+  const applicationInfo = applicationInfoSupplier()
 
   return createApp(
     magicLinkService,
@@ -39,6 +41,7 @@ const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application 
     recipientFormService,
     cjsmService,
     prisonService,
+    applicationInfo,
   )
 }
 
