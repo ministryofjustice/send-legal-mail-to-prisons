@@ -28,10 +28,19 @@ export default class PrisonRegisterStore {
     })
   }
 
+  public async getToken(key: string): Promise<string> {
+    await this.ensureConnected()
+    const token = await this.client.get(`${this.prefix}${key}`)
+
+    if (typeof token === 'string') return token
+
+    return token.toString('base64')
+  }
+
   public async getActivePrisons(): Promise<Array<Prison>> {
     await this.ensureConnected()
 
-    const activePrisons = await this.client.get(`${this.prefix}${this.ACTIVE_PRISONS}`)
+    const activePrisons = await this.getToken(this.ACTIVE_PRISONS)
 
     return JSON.parse(activePrisons) as Array<Prison>
   }

@@ -25,6 +25,8 @@ export default class TokenStore {
 
   public async getToken(key: string): Promise<string> {
     await this.ensureConnected()
-    return this.client.get(`${this.prefix}${key}`)
+    const token = this.client.get(`${this.prefix}${key}`)
+
+    return typeof token === 'string' ? token : (await token).toString('base64')
   }
 }
