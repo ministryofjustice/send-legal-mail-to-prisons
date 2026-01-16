@@ -35,7 +35,6 @@ export default class VerifyOneTimeCodeController {
         }
       }
     }
-    console.log('verifyOneTimeCode')
 
     try {
       const payload = await this.verifyToken(token)
