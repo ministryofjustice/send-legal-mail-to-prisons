@@ -32,9 +32,9 @@ export default class SmokeTestStore {
     await this.ensureConnected()
     const token = await this.client.get(`${this.prefix}${key}`)
 
-    if (typeof token === 'string') return token
+    if (token === undefined || token === null) return ''
 
-    return token.toString('base64')
+    return typeof token === 'string' ? token : (await token).toString('base64')
   }
 
   async setSmokeTestSecret(oneTimeSecret: string): Promise<void> {

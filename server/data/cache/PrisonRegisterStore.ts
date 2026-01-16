@@ -32,9 +32,9 @@ export default class PrisonRegisterStore {
     await this.ensureConnected()
     const token = await this.client.get(`${this.prefix}${key}`)
 
-    if (typeof token === 'string') return token
+    if (token === undefined || token === null) return ''
 
-    return token.toString('base64')
+    return typeof token === 'string' ? token : (await token).toString('base64')
   }
 
   public async getActivePrisons(): Promise<Array<Prison>> {
@@ -42,6 +42,6 @@ export default class PrisonRegisterStore {
 
     const activePrisons = await this.getToken(this.ACTIVE_PRISONS)
 
-    return JSON.parse(activePrisons) as Array<Prison>
+    return activePrisons.length > 0 ? (JSON.parse(activePrisons) as Array<Prison>) : null
   }
 }

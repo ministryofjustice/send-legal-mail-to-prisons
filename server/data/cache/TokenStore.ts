@@ -27,6 +27,8 @@ export default class TokenStore {
     await this.ensureConnected()
     const token = this.client.get(`${this.prefix}${key}`)
 
+    if (token === undefined || token === null) return ''
+
     return typeof token === 'string' ? token : (await token).toString('base64')
   }
 }
