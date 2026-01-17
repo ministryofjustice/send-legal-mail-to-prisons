@@ -29,6 +29,6 @@ export default class TokenStore {
 
     if (token === undefined || token === null) return ''
 
-    return typeof token === 'string' ? token : (await token).toString('base64')
+    return typeof token === 'string' ? token : (await token).toString()
   }
 }
