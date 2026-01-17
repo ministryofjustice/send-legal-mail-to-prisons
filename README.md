@@ -150,17 +150,9 @@ If these tests pass we have a high level of confidence that the most valuable us
 
 Further details are available in the [smoke tests README](https://github.com/ministryofjustice/send-legal-mail-to-prisons/tree/main/smoke_tests).
 
-### :warning: Failing Smoke Tests - Circle CI IPs?
-
-For the smoke tests to work on dev and preprod we added [Circle IP ranges](https://circleci.com/docs/2.0/ip-ranges) to our ingress allow lists.
-
-If the smoke tests fail with a 403 then this is possibly because the list of allowed IPs has changed.
-
-Check the `allowlist` config in `helm_deploy/values-dev.yaml` and `helm_deploy/values-preprod.yaml` and compare them to the [Circle CI IP ranges](https://circleci.com/docs/2.0/ip-ranges#list-of-ip-address-ranges).
-
 ## Dependency Checks
 
-Dependency checks are run in a nightly job on CircleCI. See job `check_outdated` in `.circleci/config.yml`
+Dependency checks are run in a nightly job in GitHub Actions. See the `security_*.yml` files in `.github/workflows/`
 
 ### Vulnerable dependencies
 To find any dependencies with vulnerabilities run command:
@@ -174,12 +166,10 @@ Various security checks are run in a nightly job in GitHub actions, see the `./g
 ## Test Coverage Reports
 We use jest code coverage to report on test coverage and produce reports for the unit tests.
 
-Code coverage verification is not included in any GitHub or CircleCI checks. The reports are there for developers to monitor and look for gaps in test coverage or areas where we could improve tests. It will not be used as a stick to beat developers with due to the many failings of this approach.
+Code coverage verification is not included in any GitHub or GitHub actions checks. The reports are there for developers to monitor and look for gaps in test coverage or areas where we could improve tests. It will not be used as a stick to beat developers with due to the many failings of this approach.
 
 ### Where are the code coverage reports?
-In the [CircleCI builds](https://app.circleci.com/pipelines/github/ministryofjustice/send-legal-mail-to-prisons?filter=all) find a `unit_test` job and click on the `ARTIFACTS` tab.
-
-The unit test coverage report can be found at `test_results/jest/coverage/lcov-report/index.html`.
+In the [GitHub Actions builds](https://github.com/ministryofjustice/send-legal-mail-to-prisons/actions) find a `unit_test` job and click on the `ARTIFACTS` tab.
 
 ## Alerting and monitoring
 
