@@ -7,7 +7,7 @@ import GenerateBarcodeImagePage from '../../pages/barcode/generateBarcodeImage'
 context('Legal Sender Journey E2E', () => {
   beforeEach(() => {
     cy.task('reset')
-    // cy.task('stubAuthToken')
+    cy.task('stubAuthToken')
     cy.task('stubCreateBarcode')
 
     // Sign in as a legal sender and land on the Find Recipient By Prison Number page

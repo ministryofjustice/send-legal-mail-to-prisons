@@ -57,9 +57,9 @@ The types are inherited for use in `server/@types/sendLegalMailApiClientTypes/in
 ## Running the app
 The easiest way to run the app is to use docker compose to create the service and all dependencies. 
 
-`docker-compose pull`
+`docker compose pull`
 
-`docker-compose up`
+`docker compose up`
 
 Note that this will require running up the API first. See the [API Readme](https://github.com/ministryofjustice/send-legal-mail-to-prisons-api#running-the-app).
 
@@ -76,7 +76,7 @@ The app requires:
 
 To start the main services excluding the example typescript template app: 
 
-`docker-compose up redis hmpps-auth nomis-user-roles-api gotenberg`
+`docker compose up redis hmpps-auth nomis-user-roles-api gotenberg`
 
 Install dependencies using `npm run setup`, ensuring you are using >= `Node v24.x`. If you have an M1 MacBook you may need to run the following `brew` command before `canvas` will install: `brew install pkg-config cairo pango libpng jpeg giflib librsvg`
 
@@ -119,7 +119,7 @@ Open mailcatcher at `http://localhost:1080`. Open the first email which should c
 
 For local running, start a test db, redis, and wiremock instance by:
 
-`docker-compose -f docker-compose-test.yml up`
+`docker compose -f docker-compose-test.yml up`
 
 Then run the server in test mode by:
 
