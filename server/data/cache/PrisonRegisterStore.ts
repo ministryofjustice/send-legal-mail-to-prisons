@@ -9,9 +9,8 @@ export default class PrisonRegisterStore {
   private readonly ACTIVE_PRISONS = 'activePrisons'
 
   constructor(private readonly client: RedisClient) {
-    logger.info(`${this.prefix}Create RedisStore`)
     client.on('error', error => {
-      logger.error(error, `${this.prefix}Redis error`)
+      logger.error(error, `Redis error (${this.prefix})`)
     })
   }
 

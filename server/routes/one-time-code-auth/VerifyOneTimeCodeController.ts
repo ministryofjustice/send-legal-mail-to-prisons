@@ -19,7 +19,7 @@ export default class VerifyOneTimeCodeController {
     try {
       token = await this.oneTimeCodeService.verifyOneTimeCode(form.code, req.sessionID, req.ip)
     } catch (error) {
-      switch (error.data?.errorCode?.code) {
+      switch (error.data.errorCode.code) {
         case 'OTC_NOT_FOUND': {
           req.flash('errors', [{ href: '#code', text: 'Enter the code we emailed you. This is 4 letters, like DNLC' }])
           return res.redirect('/oneTimeCode/email-sent')
