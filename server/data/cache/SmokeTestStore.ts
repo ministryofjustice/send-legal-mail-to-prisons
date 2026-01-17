@@ -34,7 +34,7 @@ export default class SmokeTestStore {
 
     if (token === undefined || token === null) return ''
 
-    return typeof token === 'string' ? token : (await token).toString()
+    return typeof token === 'string' ? token : token.toString()
   }
 
   async setSmokeTestSecret(oneTimeSecret: string): Promise<void> {
