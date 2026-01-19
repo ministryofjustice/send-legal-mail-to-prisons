@@ -33,64 +33,6 @@
     "node": "^24",
     "npm": "^11"
   },
-  "jest": {
-    "preset": "ts-jest",
-    "transform": {
-      "^.+\\.tsx?$": [
-        "ts-jest"
-      ]
-    },
-    "collectCoverageFrom": [
-      "server/**/*.{ts,js,jsx,mjs}"
-    ],
-    "coverageDirectory": "test_results/jest/coverage",
-    "testMatch": [
-      "<rootDir>/(server|job)/**/?(*.)(spec|test).{ts,js,jsx,mjs}"
-    ],
-    "testEnvironment": "node",
-    "reporters": [
-      "default",
-      [
-        "jest-junit",
-        {
-          "outputDirectory": "test_results/jest/"
-        }
-      ],
-      [
-        "./node_modules/jest-html-reporter",
-        {
-          "outputPath": "test_results/unit-test-reports.html"
-        }
-      ]
-    ],
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "json",
-      "node",
-      "ts"
-    ]
-  },
-  "nodemonConfig": {
-    "ignore": [
-      ".circleci/*",
-      "migrations/*",
-      "node_modules/*",
-      "test/*",
-      "integration_tests/*"
-    ],
-    "delay": 2500,
-    "ext": "js,json,html,njk"
-  },
-  "lint-staged": {
-    "*.{ts,js,css}": [
-      "prettier --write",
-      "eslint --fix"
-    ],
-    "*.json": [
-      "prettier --write"
-    ]
-  },
   "dependencies": {
     "@ministryofjustice/frontend": "^8.0.0",
     "@ministryofjustice/hmpps-monitoring": "1.0.0",
@@ -104,7 +46,7 @@
     "canvas": "^3.2.1",
     "compression": "^1.8.1",
     "connect-flash": "^0.1.1",
-    "connect-redis": "^8.1.0",
+    "connect-redis": "^9.0.0",
     "cookie-parser": "^1.4.7",
     "cookie-session": "^2.1.1",
     "csrf-sync": "^4.2.1",
@@ -123,7 +65,7 @@
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
-    "redis": "^4.7.1",
+    "redis": "^5.10.0",
     "superagent": "10.3.0"
   },
   "devDependencies": {

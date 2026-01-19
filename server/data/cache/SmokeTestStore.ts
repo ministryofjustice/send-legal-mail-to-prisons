@@ -11,9 +11,8 @@ export default class SmokeTestStore {
   private readonly SMOKE_TEST = 'smokeTest'
 
   constructor(private readonly client: RedisClient) {
-    logger.info(`${this.prefix}Create RedisStore`)
     client.on('error', error => {
-      logger.error(error, `${this.prefix}Redis error`)
+      logger.error(error, `Redis error (${this.prefix})`)
     })
   }
 
@@ -30,15 +29,19 @@ export default class SmokeTestStore {
 
   public async getToken(key: string): Promise<string> {
     await this.ensureConnected()
-    return this.client.get(`${this.prefix}${key}`)
+    const token = await this.client.get(`${this.prefix}${key}`)
+
+    if (token === undefined || token === null) return ''
+
+    return typeof token === 'string' ? token : token.toString()
   }
 
-  async setSmokeTestSecret(oneTimeSecret: string): Promise<string> {
-    return this.client.set(`${this.prefix}${this.SMOKE_TEST}`, oneTimeSecret, { EX: 60 })
+  async setSmokeTestSecret(oneTimeSecret: string): Promise<void> {
+    await this.client.set(`${this.prefix}${this.SMOKE_TEST}`, oneTimeSecret, { EX: 60 })
   }
 
   public async getSmokeTestSecret(): Promise<string> {
-    const secret = this.client.get(`${this.prefix}${this.SMOKE_TEST}`)
+    const secret = this.getToken(this.SMOKE_TEST)
 
     this.client.del(`${this.prefix}${this.SMOKE_TEST}`)
 

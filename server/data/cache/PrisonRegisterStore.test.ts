@@ -76,7 +76,7 @@ describe('PrisonRegisterStore', () => {
     try {
       await prisonRegisterStore.getActivePrisons()
     } catch (error) {
-      expect(error).toStrictEqual(new SyntaxError('"undefined" is not valid JSON'))
+      expect(error).toStrictEqual(new SyntaxError('Unexpected end of JSON input'))
       expect(redisClient.get).toHaveBeenCalledWith('prisonRegister:activePrisons')
     }
   })

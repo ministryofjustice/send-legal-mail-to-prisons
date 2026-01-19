@@ -3,6 +3,8 @@ import mockHmppsAuth from '../../fixtures/mock-hmpps-auth'
 import assertThat from '../../fixtures/supertest-assertions'
 import mockPrisonRegister from '../../fixtures/mock-prison-register'
 
+jest.mock('../../../data/cache/TokenStore')
+
 describe('Find recipient by prisoner name', () => {
   const superTest = new SuperTestWrapper()
 
