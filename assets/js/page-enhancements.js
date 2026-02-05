@@ -25,7 +25,7 @@ window.pageEnhancements = (($, document) => {
       )
       // Reduce to a map of matching prison names and their counts
       const prisonNameCounts = queryWordsMatches.reduce((counts, prisonName) => {
-        return (counts[prisonName] = (counts[prisonName] || 0) + 1), counts
+        return ((counts[prisonName] = (counts[prisonName] || 0) + 1), counts)
       }, {})
       // sort the matching options by highest count first
       const sortedMatchingPrisonNames = Object.keys(prisonNameCounts).sort((a, b) => {
@@ -41,7 +41,7 @@ window.pageEnhancements = (($, document) => {
     })
     $('#prisonId')
       .closest('form')
-      .submit(event => {
+      .on('submit', event => {
         // Before submitting the form set the prisonId select option to the value matching the autocomplete, or the null option if there is no match
         // This is because the autocomplete currently only sets the select option when there is a valid match, which causes incorrect
         // behaviour when the user performs a valid autocomplete, then changes it to blank or non-matching text. In this case the underlying
@@ -50,7 +50,7 @@ window.pageEnhancements = (($, document) => {
         const underlyingSelectField = $('#prisonId-select')
         const autoCompleteField = $('#prisonId')
         // In all cases start off by setting the underlying select option to the null/empty option
-        underlyingSelectField.children(`option[value='']`).prop('selected', true)
+        underlyingSelectField.children('option[value=""]').prop('selected', true)
         // Now find the option whose text matches the autocomplete field, and select it. If there is no match nothing will be selected
         underlyingSelectField
           .children('option')
@@ -67,7 +67,7 @@ window.pageEnhancements = (($, document) => {
     }
     $('.barcode-address-copy-button')
       .css('display', 'inline-flex')
-      .click(event => {
+      .on('click', event => {
         const container = $(event.target).closest('div.barcode-address-container')
         const image = container.find('img.barcode-address-image')[0]
         const canvas = document.createElement('canvas')
@@ -95,9 +95,7 @@ window.pageEnhancements = (($, document) => {
     return form
       .serializeArray()
       .filter(formField => formField.name === '_csrf')
-      .map(formField => {
-        return `${formField.name}=${formField.value}`
-      })
+      .map(formField => `${formField.name}=${formField.value}`)
   }
 
   const submitCookiePreferencesFormViaAjax = () => {
