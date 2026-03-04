@@ -115,6 +115,10 @@
   "overrides": {
     "jest-environment-jsdom": {
       "canvas": "$canvas"
+    },
+    "mocha": {
+      "diff": "^8.0.3",
+      "serialize-javascript": "^7.0.4"
     }
   }
 }
