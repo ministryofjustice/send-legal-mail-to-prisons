@@ -39,7 +39,6 @@
     "accessible-autocomplete": "^3.0.1",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.8",
-    "body-parser": "^2.2.2",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
     "bwip-js": "^4.8.0",
@@ -113,8 +112,9 @@
     "typescript": "^5.9.3"
   },
   "overrides": {
-    "jest-environment-jsdom": {
-      "canvas": "$canvas"
+    "mocha": {
+      "diff": "^8.0.3",
+      "serialize-javascript": "^7.0.4"
     }
   }
 }

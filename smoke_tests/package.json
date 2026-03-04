@@ -12,6 +12,12 @@
     "mocha-junit-reporter": "^2.2.1",
     "superagent": "^10.3.0"
   },
+  "overrides": {
+    "mocha": {
+      "diff": "^8.0.3",
+      "serialize-javascript": "^7.0.4"
+    }
+  },
   "scripts": {
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
   }
