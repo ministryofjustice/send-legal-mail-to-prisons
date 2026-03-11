@@ -1,5 +1,7 @@
 # Send legal mail to prisons
 
+[![Ministry of Justice Repository Compliance Badge](https://github-community.service.justice.gov.uk/repository-standards/api/send-legal-mail-to-prisons/badge)](https://github-community.service.justice.gov.uk/repository-standards/send-legal-mail-to-prisons)
+Baseline Checks
 [![pipeline](https://github.com/ministryofjustice/send-legal-mail-to-prisons/actions/workflows/pipeline.yml/badge.svg)](https://github.com/ministryofjustice/send-legal-mail-to-prisons) [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
 ## About
