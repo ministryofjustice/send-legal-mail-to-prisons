@@ -6,14 +6,10 @@ export default class CookiesPolicyController {
       req.session.cookiesPolicy = { policy: undefined, showConfirmation: false, lastPage: req.originalUrl }
     }
 
-    if (res.locals.externalUser) {
-      req.session.cookiesPolicy.policy = req.cookies && req.cookies.cookies_policy
-      req.session.cookiesPolicy.showConfirmation = req.query.showCookieConfirmation === 'true'
-      if (!req.originalUrl.includes('cookies-policy')) {
-        req.session.cookiesPolicy.lastPage = req.originalUrl.replace('?showCookieConfirmation=true', '')
-      }
-    } else {
-      req.session.cookiesPolicy = { policy: 'n/a', showConfirmation: false, lastPage: req.originalUrl }
+    req.session.cookiesPolicy.policy = req.cookies && req.cookies.cookies_policy
+    req.session.cookiesPolicy.showConfirmation = req.query.showCookieConfirmation === 'true'
+    if (!req.originalUrl.includes('cookies-policy')) {
+      req.session.cookiesPolicy.lastPage = req.originalUrl.replace('?showCookieConfirmation=true', '')
     }
 
     res.locals.cookiesPolicy = req.session.cookiesPolicy
@@ -30,7 +26,7 @@ export default class CookiesPolicyController {
   async submitCookiesPolicyPreferences(req: Request, res: Response): Promise<void> {
     let redirectUrl = req.originalUrl === '/cookies-policy' ? req.originalUrl : req.session.cookiesPolicy.lastPage
 
-    if (req.body.cookies) {
+    if (req.body?.cookies) {
       res.cookie('cookies_policy', req.body.cookies, {
         maxAge: 365 * 24 * 60 * 60 * 1000,
         sameSite: 'lax',

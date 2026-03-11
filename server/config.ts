@@ -43,6 +43,10 @@ export interface ApiConfig {
 }
 
 export default {
+  buildNumber: get('BUILD_NUMBER', '1_0_0', requiredInProduction),
+  gitRef: get('GIT_REF', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
+  productId: get('PRODUCT_ID', 'UNASSIGNED', requiredInProduction),
+  branchName: get('GIT_BRANCH', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
   https: production,
   production,
   staticResourceCacheDuration: 20,
@@ -71,20 +75,12 @@ export default {
         response: Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)),
       },
+      healthPath: '/health/ping',
       agent: new AgentConfig(),
       apiClientId: get('API_CLIENT_ID', 'send-legal-mail-to-prisons', requiredInProduction),
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction),
       systemClientId: get('SYSTEM_CLIENT_ID', 'send-legal-mail-to-prisons-client', requiredInProduction),
       systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret', requiredInProduction),
-    },
-    tokenVerification: {
-      url: get('TOKEN_VERIFICATION_API_URL', 'http://localhost:8100', requiredInProduction),
-      timeout: {
-        response: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000)),
-        deadline: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)),
-      },
-      agent: new AgentConfig(),
-      enabled: toBoolean(get('TOKEN_VERIFICATION_ENABLED', 'false')),
     },
     sendLegalMail: {
       url: get('SEND_LEGAL_MAIL_API_URL', 'http://localhost:8101', requiredInProduction),
@@ -92,6 +88,7 @@ export default {
         response: Number(get('SEND_LEGAL_MAIL_API_TIMEOUT_RESPONSE', 30000)),
         deadline: Number(get('SEND_LEGAL_MAIL_API_TIMEOUT_DEADLINE', 30000)),
       },
+      healthPath: '/health/ping',
       agent: new AgentConfig(),
     },
     prisonRegister: {
@@ -100,23 +97,12 @@ export default {
         response: Number(get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 30000)),
         deadline: Number(get('PRISON_REGISTER_API_TIMEOUT_DEADLINE', 30000)),
       },
+      healthPath: '/health/ping',
       agent: new AgentConfig(),
     },
-    gotenberg: {
-      url: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
-    },
-    zendesk: {
-      url: get('ZENDESK_API_URL', 'http://localhost:8101', requiredInProduction),
-      basicAuth: {
-        user: get('ZENDESK_USER', requiredInProduction),
-        pass: get('ZENDESK_TOKEN', requiredInProduction),
-      },
-      timeout: {
-        response: Number(get('ZENDESK_API_TIMEOUT_RESPONSE', 30000)),
-        deadline: Number(get('ZENDESK_API_TIMEOUT_DEADLINE', 30000)),
-      },
-      agent: new AgentConfig(),
-    },
+  },
+  gotenberg: {
+    url: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   slmContainerId: get('SLM_TAG_MANAGER_CONTAINER_ID', null),
@@ -137,11 +123,11 @@ export default {
   phaseBannerLink: {
     legalSenderJourney: get(
       'LEGAL_SENDER_PHASE_BANNER_LINK',
-      'https://send-legal-mail-to-prisons.form.service.justice.gov.uk/',
+      'https://submit.forms.service.gov.uk/form/263708/send-legal-mail-to-prisons/',
     ),
     mailRoomJourney: get(
       'MAIL_ROOM_PHASE_BANNER_LINK',
-      'https://send-legal-mail-to-prisons.form.service.justice.gov.uk/',
+      'https://submit.forms.service.gov.uk/form/263708/send-legal-mail-to-prisons/',
     ),
   },
   smoketest: {

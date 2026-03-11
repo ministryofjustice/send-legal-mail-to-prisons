@@ -12,7 +12,6 @@ export default defineConfig({
   reporterOptions: {
     configFile: 'reporter-config.json',
   },
-  videoUploadOnPasses: false,
   taskTimeout: 10000,
   downloadsFolder: 'downloads',
   e2e: {

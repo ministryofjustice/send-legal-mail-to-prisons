@@ -2,14 +2,13 @@ import { defineConfig } from 'cypress'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 
 import auth from './integration_tests/mockApis/auth'
-import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import prisonRegister from './integration_tests/mockApis/prisonRegister'
-import zendesk from './integration_tests/mockApis/zendesk'
 import state from './integration_tests/support/state'
 import oneTimeCode from './integration_tests/mockApis/sendLegalMail/oneTimeCode'
 import link from './integration_tests/mockApis/sendLegalMail/link'
 import barcode from './integration_tests/mockApis/sendLegalMail/barcode'
 import contact from './integration_tests/mockApis/sendLegalMail/contact'
+import slmPing from './integration_tests/mockApis/sendLegalMail/healthPing'
 import cjsm from './integration_tests/mockApis/sendLegalMail/cjsm'
 import supportedPrisons from './integration_tests/mockApis/sendLegalMail/supportedPrisons'
 
@@ -29,16 +28,8 @@ export default defineConfig({
       on('task', {
         reset: resetStubs,
 
-        getSignInUrl: auth.getSignInUrl,
-        stubSignIn: () => auth.stubSignIn([]),
-        stubSignInWithRole_SLM_SCAN_BARCODE: () => auth.stubSignIn(['ROLE_SLM_SCAN_BARCODE']),
-        stubSignInWithRole_SLM_ADMIN: () => auth.stubSignIn(['ROLE_SLM_ADMIN']),
-
-        stubAuthUser: auth.stubUser,
         stubAuthPing: auth.stubPing,
         stubAuthToken: auth.stubToken,
-
-        stubTokenVerificationPing: tokenVerification.stubPing,
 
         stubRequestLink: link.stubRequestLink,
         stubRequestLinkFailure: link.stubRequestLinkFailure,
@@ -78,11 +69,11 @@ export default defineConfig({
         stubVerifyOneTimeCodeNotFoundFailure: oneTimeCode.stubVerifyOneTimeCodeNotFoundFailure,
         stubVerifyOneTimeCodeInvalidSignatureFailure: oneTimeCode.stubVerifyOneTimeCodeInvalidSignatureFailure,
 
-        stubGetPrisonRegister: prisonRegister.stubGetPrisonRegister,
-        stubGetSupportedPrisons: supportedPrisons.stubGetSupportedPrisons,
+        stubPrisonRegisterPing: prisonRegister.stubPing,
 
-        stubCreateZendeskTicket: zendesk.stubCreateZendeskTicket,
-        stubCreateZendeskTicketFailure: zendesk.stubCreateZendeskTicketFailure,
+        stubGetPrisonRegister: prisonRegister.stubGetPrisonRegister,
+        stubSlmPing: slmPing.stubPing,
+        stubGetSupportedPrisons: supportedPrisons.stubGetSupportedPrisons,
 
         setSmokeTestBarcode: state.setSmokeTestBarcode,
         getSmokeTestBarcode: state.getSmokeTestBarcode,

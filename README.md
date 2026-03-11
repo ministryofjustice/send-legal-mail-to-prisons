@@ -1,10 +1,12 @@
 # Send legal mail to prisons
 
+[![pipeline](https://github.com/ministryofjustice/send-legal-mail-to-prisons/actions/workflows/pipeline.yml/badge.svg)](https://github.com/ministryofjustice/send-legal-mail-to-prisons) [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+
 ## About
-A Typescript application to allow creating and scanning barcodes for legal mail (aka rule39 mail).
+A Typescript application to allow creating barcodes for legal mail (aka rule39 mail).
 
 ### Team
-This application is currently being rolled out in a Public Beta. The project is currently looking for a new owner.
+This application is live, it is currently managed by the Visits [#ask-visits](https://moj.enterprise.slack.com/archives/C01DU5U4NMU) team.
 
 ### Health
 The application has a health endpoint found at `/health` which indicates if the app is running and is healthy.
@@ -16,9 +18,7 @@ The application has a ping endpoint found at `/ping` which indicates that the ap
 If the application needs planned (or unplanned!) downtime we have a method for displaying maintenance pages for both Send legal mail and Check Rule39 mail. See the guide at `maintenance_pages/README.md`.
 
 ### Build
-<em>Requires membership of Github team `book-a-prison-visit`</em>
-
-The application is built on [CircleCI](https://app.circleci.com/pipelines/github/ministryofjustice/send-legal-mail-to-prisons).
+<em>Requires membership of Github team `hmpps-send-legal-mail-live`</em>
 
 ### Versions
 The application version currently running can be found on the `/health` endpoint at node `build.buildNumber`. The format of the version number is `YYY-MM-DD.ccc.gggggg` where `ccc` is the Circle job number and `gggggg` is the git commit reference. 
@@ -27,7 +27,7 @@ The application version currently running can be found on the `/health` endpoint
 
 * <em>Requires CLI tools `kubectl` and `helm`</em>
 * <em>Requires access to Cloud Platform Kubernetes `live` cluster</em>
-* <em>Requires membership of Github team `book-a-prison-visit`</em>
+* <em>Requires membership of Github team `hmpps-send-legal-mail-live`</em>
 
 For example in the dev environment:
 1. Set the Kube context with command `kubectl config use-context live.cloud-platform.service.justice.gov.uk`
@@ -57,9 +57,9 @@ The types are inherited for use in `server/@types/sendLegalMailApiClientTypes/in
 ## Running the app
 The easiest way to run the app is to use docker compose to create the service and all dependencies. 
 
-`docker-compose pull`
+`docker compose pull`
 
-`docker-compose up`
+`docker compose up`
 
 Note that this will require running up the API first. See the [API Readme](https://github.com/ministryofjustice/send-legal-mail-to-prisons-api#running-the-app).
 
@@ -76,15 +76,13 @@ The app requires:
 
 To start the main services excluding the example typescript template app: 
 
-`docker-compose up redis hmpps-auth nomis-user-roles-api gotenberg`
+`docker compose up redis hmpps-auth nomis-user-roles-api gotenberg`
 
-Install dependencies using `npm install`, ensuring you are using >= `Node v16.x`. If you have an M1 MacBook you may need to run the following `brew` command before `canvas` will install: `brew install pkg-config cairo pango libpng jpeg giflib librsvg`
+Install dependencies using `npm run setup`, ensuring you are using >= `Node v24.x`. If you have an M1 MacBook you may need to run the following `brew` command before `canvas` will install: `brew install pkg-config cairo pango libpng jpeg giflib librsvg`
 
 Create a `.env` which should override environment variables required to run locally:
 ```properties
 HMPPS_AUTH_URL=http://localhost:9090/auth
-TOKEN_VERIFICATION_API_URL=https://token-verification-api-dev.prison.service.justice.gov.uk
-TOKEN_VERIFICATION_ENABLED=false
 NODE_ENV=development
 SESSION_SECRET=anything
 PORT=3000
@@ -109,14 +107,6 @@ Visit URL `http://localhost:3000/barcode/find-recipient` which should redirect t
 
 Open mailcatcher at `http://localhost:1080`. Open the first email which should contain a link - click on the link and you will be signed in.
 
-#### How do I sign in as a mailroom staff user?
-
-Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth sign in page. Enter credentials `SLM_MAILROOM_USER_LOCAL` / `password123456`.
-
-#### How do I sign in as an admin user?
-
-Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth sign in page. Enter credentials `SLM_ADMIN_LOCAL` / `password123456`.
-
 ## Run linter
 
 `npm run lint`
@@ -129,7 +119,7 @@ Visit URL `http://localhost:3000` which should redirect you to the HMPPS Auth si
 
 For local running, start a test db, redis, and wiremock instance by:
 
-`docker-compose -f docker-compose-test.yml up`
+`docker compose -f docker-compose-test.yml up`
 
 Then run the server in test mode by:
 
@@ -160,17 +150,9 @@ If these tests pass we have a high level of confidence that the most valuable us
 
 Further details are available in the [smoke tests README](https://github.com/ministryofjustice/send-legal-mail-to-prisons/tree/main/smoke_tests).
 
-### :warning: Failing Smoke Tests - Circle CI IPs?
-
-For the smoke tests to work on dev and preprod we added [Circle IP ranges](https://circleci.com/docs/2.0/ip-ranges) to our ingress allow lists.
-
-If the smoke tests fail with a 403 then this is possibly because the list of allowed IPs has changed.
-
-Check the `allowlist` config in `helm_deploy/values-dev.yaml` and `helm_deploy/values-preprod.yaml` and compare them to the [Circle CI IP ranges](https://circleci.com/docs/2.0/ip-ranges#list-of-ip-address-ranges).
-
 ## Dependency Checks
 
-Dependency checks are run in a nightly job on CircleCI. See job `check_outdated` in `.circleci/config.yml`
+Dependency checks are run in a nightly job in GitHub Actions. See the `security_*.yml` files in `.github/workflows/`
 
 ### Vulnerable dependencies
 To find any dependencies with vulnerabilities run command:
@@ -179,22 +161,15 @@ To find any dependencies with vulnerabilities run command:
 
 #### Automated vulnerability checks
 
-Various security checks are run in a nightly job on CircleCI. See jobs `hmpps/npm_security_audit`, `hmpps/trivy_latest_scan` and `hmpps/veracode_pipeline_scan` in `.circleci/config.yml`.
-
-### Update dependencies
-To update all dependencies to their latest stable versions run command:
-
-`npm update`
+Various security checks are run in a nightly job in GitHub actions, see the `./github/workflows/` folder.
 
 ## Test Coverage Reports
 We use jest code coverage to report on test coverage and produce reports for the unit tests.
 
-Code coverage verification is not included in any GitHub or CircleCI checks. The reports are there for developers to monitor and look for gaps in test coverage or areas where we could improve tests. It will not be used as a stick to beat developers with due to the many failings of this approach.
+Code coverage verification is not included in any GitHub or GitHub actions checks. The reports are there for developers to monitor and look for gaps in test coverage or areas where we could improve tests. It will not be used as a stick to beat developers with due to the many failings of this approach.
 
 ### Where are the code coverage reports?
-In the [CircleCI builds](https://app.circleci.com/pipelines/github/ministryofjustice/send-legal-mail-to-prisons?filter=all) find a `unit_test` job and click on the `ARTIFACTS` tab.
-
-The unit test coverage report can be found at `test_results/jest/coverage/lcov-report/index.html`.
+In the [GitHub Actions builds](https://github.com/ministryofjustice/send-legal-mail-to-prisons/actions) find a `unit_test` job and click on the `ARTIFACTS` tab.
 
 ## Alerting and monitoring
 

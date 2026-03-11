@@ -4,7 +4,6 @@ import {
   BarcodeEntryForm,
   ChooseBarcodeOptionForm,
   ChooseContactForm,
-  ContactHelpdeskForm,
   CreateNewContactByPrisonNumberForm,
   FindRecipientByPrisonNumberForm,
   PdfForm,
@@ -35,7 +34,6 @@ declare module 'express-session' {
     recipientForm: RecipientForm
     reviewRecipientsForm: ReviewRecipientsForm
     cookiesPolicy: CookiesPolicy
-    contactHelpdeskForm: ContactHelpdeskForm
     editContactForm: EditContactForm
     msjSmokeTestUser: boolean
     lsjSmokeTestUser: boolean

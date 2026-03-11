@@ -10,11 +10,11 @@ import PrisonRegisterService from './services/prison/PrisonRegisterService'
 import PrisonRegisterStore from './data/cache/PrisonRegisterStore'
 import ContactService from './services/contacts/ContactService'
 import RecipientFormService from './routes/barcode/recipients/RecipientFormService'
-import ZendeskService from './services/helpdesk/ZendeskService'
 import CjsmService from './services/cjsm/CjsmService'
 import OneTimeCodeService from './services/one-time-code-auth/OneTimeCodeService'
 import SupportedPrisonsService from './services/prison/SupportedPrisonsService'
 import PrisonService from './services/prison/PrisonService'
+import applicationInfoSupplier from './applicationInfo'
 import { createRedisClient } from './data/redisClient'
 
 const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application => {
@@ -29,8 +29,8 @@ const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application 
   const appInsightsService = new AppInsightsService(appInsightsTelemetryClient)
   const contactService = new ContactService()
   const recipientFormService = new RecipientFormService(prisonService)
-  const zendeskService = new ZendeskService()
   const cjsmService = new CjsmService()
+  const applicationInfo = applicationInfoSupplier()
 
   return createApp(
     magicLinkService,
@@ -39,9 +39,9 @@ const app = (appInsightsTelemetryClient?: TelemetryClient): express.Application 
     appInsightsService,
     contactService,
     recipientFormService,
-    zendeskService,
     cjsmService,
     prisonService,
+    applicationInfo,
   )
 }
 

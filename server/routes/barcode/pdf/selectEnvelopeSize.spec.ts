@@ -1,6 +1,8 @@
 import SuperTestWrapper from '../../fixtures/SuperTestWrapper'
 import assertThat from '../../fixtures/supertest-assertions'
 
+jest.mock('../../../data/cache/TokenStore')
+
 describe('Select envelope size', () => {
   const superTest = new SuperTestWrapper()
 

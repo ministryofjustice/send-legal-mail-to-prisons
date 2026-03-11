@@ -23,11 +23,9 @@ import GotenbergClient from './data/gotenbergClient'
 import setupPdfRenderer from './middleware/setupPdfRenderer'
 import ContactService from './services/contacts/ContactService'
 import RecipientFormService from './routes/barcode/recipients/RecipientFormService'
-import setupContactHelpdesk from './middleware/helpdesk/setupContactHelpdesk'
 import setupCookiesPolicy from './middleware/cookies/setupCookiesPolicy'
 import setupCsrf from './middleware/setupCsrf'
 import setupLegalSenderStartPage from './middleware/start/setupLegalSenderStartPage'
-import ZendeskService from './services/helpdesk/ZendeskService'
 import setUpLink from './middleware/link/setUpLink'
 import SmokeTestStore from './data/cache/SmokeTestStore'
 import setupSmokeTest from './middleware/smoketest/SmokeTestMiddleware'
@@ -38,6 +36,7 @@ import setUpOneTimeCode from './middleware/one-time-code-auth/setUpOneTimeCode'
 import OneTimeCodeService from './services/one-time-code-auth/OneTimeCodeService'
 import legalSenderJourneyAuthenticationStartPage from './middleware/legalSenderJourneyAuthenticationStartPage'
 import PrisonService from './services/prison/PrisonService'
+import { ApplicationInfo } from './applicationInfo'
 
 export default function createApp(
   magicLinkService: MagicLinkService,
@@ -46,9 +45,9 @@ export default function createApp(
   appInsightsClient: AppInsightsService,
   contactService: ContactService,
   recipientFormService: RecipientFormService,
-  zendeskService: ZendeskService,
   cjsmService: CjsmService,
   prisonService: PrisonService,
+  applicationInfo: ApplicationInfo,
 ): express.Application {
   const app = express()
 
@@ -57,10 +56,16 @@ export default function createApp(
   app.set('port', process.env.PORT || 3000)
 
   app.use(cookieParser())
-  app.use(setUpHealthChecks())
+  app.use(setUpHealthChecks(applicationInfo))
   app.use(setUpWebSecurity())
   app.use(setUpWebSession())
   app.use(setUpWebRequestParsing())
+
+  app.use((req, res, next) => {
+    req.body = req.body ?? {}
+    next()
+  })
+
   app.use(setUpStaticResources())
   app.use(setupPdfRenderer(new GotenbergClient()))
   nunjucksSetup(app)
@@ -75,7 +80,6 @@ export default function createApp(
   app.get('/privacy-policy', (req, res) => res.render('pages/privacy-policy/privacy-policy'))
   app.get('/accessibility-statement', (req, res) => res.render('pages/accessibility-statement/accessibility-statement'))
   app.use('/start', setupLegalSenderStartPage())
-  app.use('/contact-helpdesk', setupContactHelpdesk(zendeskService))
   app.use('/legal-sender/sign-out', (req, res) =>
     res.redirect(`${legalSenderJourneyAuthenticationStartPage()}?force=true`),
   )

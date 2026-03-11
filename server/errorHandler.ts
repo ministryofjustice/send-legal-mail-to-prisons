@@ -9,10 +9,7 @@ export default function createErrorHandler(production: boolean) {
 
     if (error.status === 401 || error.status === 403) {
       logger.info('Logging user out')
-      if (res.locals.externalUser) {
-        return res.redirect(legalSenderJourneyAuthenticationStartPage())
-      }
-      return res.redirect('/sign-out')
+      return res.redirect(legalSenderJourneyAuthenticationStartPage())
     }
 
     res.locals.message = production

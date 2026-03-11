@@ -77,13 +77,6 @@ declare module 'forms' {
     contactId?: string
   }
 
-  export interface ContactHelpdeskForm {
-    pageId: string
-    problemDetail?: string
-    name?: string
-    email?: string
-  }
-
   export interface EditContactForm {
     contactId: number
     prisonerName?: string

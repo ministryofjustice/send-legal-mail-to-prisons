@@ -5,6 +5,8 @@ import mockHmppsAuth from '../fixtures/mock-hmpps-auth'
 import assertThat from '../fixtures/supertest-assertions'
 import SuperTestWrapper from '../fixtures/SuperTestWrapper'
 
+jest.mock('../../data/cache/TokenStore')
+
 describe('Verify One Time Code Integration Tests', () => {
   const superTest = new SuperTestWrapper()
   let mockedSendLegalMailApi: nock.Scope

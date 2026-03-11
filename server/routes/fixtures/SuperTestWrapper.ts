@@ -1,3 +1,19 @@
+/* eslint-disable import/first */
+// eslint-disable-next-line import/order
+import type { ApplicationInfo } from '../../applicationInfo'
+
+const testAppInfo: ApplicationInfo = {
+  applicationName: 'test',
+  buildNumber: '1',
+  gitRef: 'long ref',
+  gitShortHash: 'short ref',
+  productId: 'UNASSIGNED',
+  branchName: 'main',
+}
+
+jest.mock('../../applicationInfo', () => {
+  return jest.fn(() => testAppInfo)
+})
 /* eslint-disable import/no-extraneous-dependencies */
 import request, { Test } from 'supertest'
 import TestAgent from 'supertest/lib/agent'

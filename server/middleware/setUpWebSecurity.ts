@@ -29,7 +29,7 @@ export default function setUpWebSecurity(): Router {
           styleSrc: ["'self'", "'unsafe-inline'"],
           frameSrc: ['*.googletagmanager.com'],
           fontSrc: ["'self'"],
-          imgSrc: ["'self'", 'data:'],
+          imgSrc: ["'self'", 'data:', '*.googletagmanager.com'],
           objectSrc: ["'none'"],
           mediaSrc: ["'none'"],
           baseUri: ["'none'"],
