@@ -21,8 +21,6 @@ RUN apk upgrade --no-cache && \
     apk add --no-cache python3 && \
     ln -sf /usr/bin/python3 /usr/bin/python
 
-USER 2000
-
 # Stage: build assets
 FROM base AS build
 
@@ -33,6 +31,8 @@ ARG GIT_BRANCH
 COPY package*.json .allowed-scripts.mjs ./
 RUN CYPRESS_INSTALL_BINARY=0 NPM_CONFIG_AUDIT=false NPM_CONFIG_FUND=false npm run setup
 ENV NODE_ENV='production'
+
+USER 2000
 
 COPY . .
 RUN npm run build
