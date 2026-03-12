@@ -1,78 +1,66 @@
-# Stage: base image
-FROM node:24-bookworm-slim AS base
-
-ARG BUILD_NUMBER
-ARG GIT_REF
-ARG GIT_BRANCH
-
-LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
-
-ENV TZ=Europe/London
-RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
-
-RUN addgroup --gid 2000 --system appgroup && \
-    adduser --uid 2000 --system appuser --gid 2000
-
-WORKDIR /app
-
-# Cache breaking and ensure required build / git args defined
-RUN test -n "$BUILD_NUMBER" || (echo "BUILD_NUMBER not set" && false)
-RUN test -n "$GIT_REF" || (echo "GIT_REF not set" && false)
-RUN test -n "$GIT_BRANCH" || (echo "GIT_BRANCH not set" && false)
-
-# Define env variables for runtime health / info
-ENV BUILD_NUMBER=${BUILD_NUMBER}
-ENV GIT_REF=${GIT_REF}
-ENV GIT_BRANCH=${GIT_BRANCH}
-
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
-
 # Stage: build assets
-FROM base AS build
+FROM ghcr.io/ministryofjustice/hmpps-node:24-alpine AS build
 
-ARG BUILD_NUMBER
-ARG GIT_REF
-ARG GIT_BRANCH
+# Install build dependencies for native modules (canvas)
+RUN apk add --no-cache \
+    python3 \
+    build-base \
+    cairo-dev \
+    pango-dev \
+    giflib-dev \
+    pixman-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    pkgconf
 
-COPY package*.json ./
-RUN CYPRESS_INSTALL_BINARY=0 npm run setup
+COPY package*.json .allowed-scripts.mjs ./
+RUN CYPRESS_INSTALL_BINARY=0 NPM_CONFIG_AUDIT=false NPM_CONFIG_FUND=false npm run setup
 
 COPY . .
-RUN npm run build
+RUN npm run build && \
+    npm prune --no-audit --no-fund --omit=dev
 
-RUN npm prune --no-audit --omit=dev
+# Stage: production image
+FROM ghcr.io/ministryofjustice/hmpps-node:24-alpine
 
-# Stage: copy production assets and dependencies
-FROM base
+ARG BUILD_NUMBER
+ARG GIT_REF
+ARG GIT_BRANCH
 
+# Validate required build args and set as env variables for runtime health/info
+RUN test -n "$BUILD_NUMBER" || (echo "BUILD_NUMBER not set" && false) && \
+    test -n "$GIT_REF" || (echo "GIT_REF not set" && false) && \
+    test -n "$GIT_BRANCH" || (echo "GIT_BRANCH not set" && false)
+
+ENV BUILD_NUMBER=${BUILD_NUMBER} \
+    GIT_REF=${GIT_REF} \
+    GIT_BRANCH=${GIT_BRANCH} \
+    NODE_ENV='production'
+
+# Install runtime dependencies for canvas
+RUN apk add --no-cache \
+    cairo \
+    pango \
+    giflib \
+    libjpeg-turbo \
+    freetype
+
+# Copy application files
 COPY --from=build --chown=appuser:appgroup \
-        /app/package.json \
-        /app/package-lock.json \
-        ./
+    /app/package.json \
+    /app/package-lock.json \
+    /app/liberation_sans.ttf \
+    /app/liberation_sans_bold.ttf \
+    ./
 
-COPY --from=build --chown=appuser:appgroup \
-        /app/assets ./assets
-
-COPY --from=build --chown=appuser:appgroup \
-        /app/dist ./dist
-
-COPY --from=build --chown=appuser:appgroup \
-        /app/node_modules ./node_modules
-
-COPY --from=build --chown=appuser:appgroup \
-        /app/liberation_sans.ttf ./liberation_sans.ttf
-
-COPY --from=build --chown=appuser:appgroup \
-        /app/liberation_sans_bold.ttf ./liberation_sans_bold.ttf
+COPY --from=build --chown=appuser:appgroup /app/assets ./assets
+COPY --from=build --chown=appuser:appgroup /app/dist ./dist
+COPY --from=build --chown=appuser:appgroup /app/node_modules ./node_modules
 
 # Create a directory to be used for temporary file uploads (ephemeral)
 RUN mkdir uploads && chown appuser:appgroup uploads && chmod 775 uploads
 
 EXPOSE 3000
-ENV NODE_ENV='production'
 USER 2000
 
 CMD [ "npm", "start" ]
