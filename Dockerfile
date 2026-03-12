@@ -15,6 +15,14 @@ ENV BUILD_NUMBER=${BUILD_NUMBER}
 ENV GIT_REF=${GIT_REF}
 ENV GIT_BRANCH=${GIT_BRANCH}
 
+USER root
+
+RUN apk upgrade --no-cache && \
+    apk add --no-cache python3 && \
+    ln -sf /usr/bin/python3 /usr/bin/python
+
+USER 2000
+
 # Stage: build assets
 FROM base AS build
 
