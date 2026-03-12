@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import nock from 'nock'
 import type { PrisonDto } from 'prisonRegisterApiClient'
 import type { Prison } from 'prisonTypes'
