@@ -8,6 +8,7 @@ README.md
 .*
 !.allowed-scripts.mjs
 **/*.test.js
+**/*.spec.js
 scss-report.txt
 eslint-report.html
 test-report.html
