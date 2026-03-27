@@ -23,7 +23,7 @@ describe('Generate barcode image view', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#generate-barcode-image').length).toStrictEqual(1)
+    expect($('#pageId').attr('data-qa')).toStrictEqual('generate-barcode-image')
   })
 
   it('should display a single barcode image and buttons', () => {

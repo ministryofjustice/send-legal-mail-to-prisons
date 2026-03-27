@@ -20,7 +20,7 @@ describe('Email sent view', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#one-time-code-email-sent').length).toStrictEqual(1)
+    expect($('#pageId').attr('data-qa')).toStrictEqual('one-time-code-email-sent')
   })
 
   it('should display email sent details', () => {

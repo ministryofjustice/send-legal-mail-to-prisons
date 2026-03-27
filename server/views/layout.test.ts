@@ -15,14 +15,6 @@ describe('Layout', () => {
     compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
   })
 
-  it('should render view', () => {
-    viewContext = { pageId: 'some-page' }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
-
-    expect($('#some-page').length).toStrictEqual(1)
-  })
-
   describe('Google analytics', () => {
     it('should send legal sender GA data', () => {
       viewContext = {

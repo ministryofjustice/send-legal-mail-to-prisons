@@ -22,7 +22,7 @@ describe('Choose Contact View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#choose-contact').length).toStrictEqual(1)
+    expect($('#pageId').attr('data-qa')).toStrictEqual('choose-contact')
   })
 
   it('should show available radio options', () => {
