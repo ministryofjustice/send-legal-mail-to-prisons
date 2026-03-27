@@ -17,7 +17,7 @@ describe('Legal Sender Start Page View', () => {
   it('should render view', () => {
     const $ = cheerio.load(compiledTemplate.render({}))
 
-    expect($('#legal-sender-start').length).toStrictEqual(1)
+    expect($('#pageId').attr('data-qa')).toStrictEqual('legal-sender-start')
   })
 
   it('should display CJSM link', () => {

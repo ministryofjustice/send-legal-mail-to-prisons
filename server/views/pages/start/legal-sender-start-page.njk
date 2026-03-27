@@ -35,8 +35,7 @@
 {% endblock %}
 
 {% block main %}
-  <div class="govuk-width-container {{ containerClasses }}">
-    <span class="govuk-visually-hidden" id="{{ pageId }}"></span>
+  <div class="govuk-width-container {{ containerClasses }}" id="pageId" data-qa="{{ pageId }}">
     <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main"{% if mainLang %} lang="{{ mainLang }}"{% endif %}>
 
       <section class="app-container govuk-body">
