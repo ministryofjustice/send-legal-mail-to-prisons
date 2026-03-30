@@ -20,7 +20,7 @@ describe('Create New Contact By Prisoner Name View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#create-new-contact-by-prisoner-name').length).toStrictEqual(1)
+    expect($('#pageId').attr('data-qa')).toStrictEqual('create-new-contact-by-prisoner-name')
   })
 
   describe('prisoner DOB', () => {

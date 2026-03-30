@@ -20,7 +20,7 @@ describe('Request one time code view', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#request-one-time-code').length).toStrictEqual(1)
+    expect($('#pageId').attr('data-qa')).toStrictEqual('request-one-time-code')
   })
 
   it('should display session duration', () => {

@@ -20,7 +20,7 @@ describe('Choose Barcode Option View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#choose-barcode-option').length).toStrictEqual(1)
+    expect($('#pageId').attr('data-qa')).toStrictEqual('choose-barcode-option')
   })
 
   it('should show available radio options', () => {

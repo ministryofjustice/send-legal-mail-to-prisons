@@ -20,7 +20,7 @@ describe('Find Recipient By Prison Number View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#find-recipient-by-prison-number').length).toStrictEqual(1)
+    expect($('#pageId').attr('data-qa')).toStrictEqual('find-recipient-by-prison-number')
   })
 
   it('should display prison number input', () => {

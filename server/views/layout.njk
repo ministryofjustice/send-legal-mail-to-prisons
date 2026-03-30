@@ -1,7 +1,5 @@
 {% extends "govuk/template.njk" %}
-{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 {%- from "govuk/components/footer/macro.njk" import govukFooter -%}
-{% set govukRebrand = true %}
 
 {% block head %}
   <script nonce="{{ cspNonce }}" data-qa="gtm-init">
@@ -69,13 +67,7 @@
   {% endif %}
 
   <link href="/assets/stylesheets/application.css?{{ version }}" rel="stylesheet"/>
-
-  <script src="/assets/js/jquery.min.js" nonce="{{ cspNonce }}"></script>
-
-  <script src="/assets/js/accessible-autocomplete.min.js" nonce="{{ cspNonce }}"></script>
   <link href="/assets/stylesheets/accessible-autocomplete.min.css" rel="stylesheet"/>
-
-  <script src="/assets/js/page-enhancements.js" nonce="{{ cspNonce }}"></script>
 
 {% endblock %}
 
@@ -96,32 +88,8 @@
   {% endif %}
 {% endblock %}
 
-{# Override the `main` block from the govuk template so that we can add the phase banner #}
-{% block main %}
-  <div class="govuk-width-container {{ containerClasses }}">
-
-    {{ govukPhaseBanner({
-      attributes: {
-        role: "complementary"
-      },
-      tag: {
-        text: "Beta"
-      },
-      html: 'This is a new service - your <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="'+ phaseBannerLink +'">feedback<span class="govuk-visually-hidden"> (opens in new tab)</span></a> will help us to improve it.'
-    }) }}
-
-    {# The following pageId element is deprecated. Tests should target the new element with id `pageId` to assert the value via the `data-qa` attribute instead #}
-    <span class="govuk-visually-hidden" id="{{ pageId }}"></span>
-    <span class="govuk-visually-hidden" id="pageId" data-qa="{{ pageId }}"></span>
-
-    <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main"{% if mainLang %} lang="{{ mainLang }}"{% endif %}>
-      {% block content %}{% endblock %}
-    </main>
-
-  </div>
-{% endblock %}
-
 {% block footer %}
+<footer>
   {{ govukFooter({
     rebrand: true,
     meta: {
@@ -141,11 +109,15 @@
         ]
       }
   }) }}
+</footer>
 {% endblock %}
 
 {% block bodyEnd %}
   {# Run JavaScript at end of the
   <body>, to avoid blocking the initial render. #}
+  <script src="/assets/js/jquery.min.js" nonce="{{ cspNonce }}"></script>
+  <script src="/assets/js/accessible-autocomplete.min.js" nonce="{{ cspNonce }}"></script>
+  <script src="/assets/js/page-enhancements.js" nonce="{{ cspNonce }}"></script>
   <script type="module" src="/assets/frontendInit.js"  nonce="{{ cspNonce }}"></script>
   {% block pageScripts %}{% endblock %}
 {% endblock %}

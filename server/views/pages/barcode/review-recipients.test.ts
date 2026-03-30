@@ -41,7 +41,7 @@ describe('Review Recipients View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#review-recipients').length).toStrictEqual(1)
+    expect($('#pageId').attr('data-qa')).toStrictEqual('review-recipients')
   })
 
   it('should show recipients table', () => {

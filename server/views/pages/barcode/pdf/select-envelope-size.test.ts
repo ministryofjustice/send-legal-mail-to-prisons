@@ -21,7 +21,7 @@ describe('Select Envelope Size View', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#select-envelope-size').length).toStrictEqual(1)
+    expect($('#pageId').attr('data-qa')).toStrictEqual('select-envelope-size')
   })
 
   it('should render envelope sizes', () => {

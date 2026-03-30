@@ -51,7 +51,6 @@ jobs:
     name: Build docker image from hmpps-github-actions
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2 # WORKFLOW_VERSION
     needs:
-      - node_integration_tests
       - node_unit_tests
     with:
       docker_registry: 'ghcr.io'
@@ -83,6 +82,7 @@ jobs:
       - helm_lint
       - deploy_dev
       - smoke_test_dev
+      - node_integration_tests
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
     with:
@@ -103,6 +103,7 @@ jobs:
       - helm_lint
       - deploy_preprod
       - smoke_test_preprod
+      - node_integration_tests
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
     with:
