@@ -19,7 +19,7 @@ jobs:
           - 6379:6379
         options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=5
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
       - name: Use Node.js ${{ inputs.node_version_file }}
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
