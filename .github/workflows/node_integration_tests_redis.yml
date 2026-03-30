@@ -65,7 +65,7 @@ jobs:
             ctrf/
       - name: publish test report
         if: ${{ !cancelled() && github.event.repository.visibility == 'public' }}
-        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2
+        uses: dorny/test-reporter@ab50174d2cce6a041bb0a86aa99d11858f914df9
         with:
           artifact: npm_integration_test_artifacts
           name: Test Report
