@@ -21,8 +21,8 @@ jobs:
     runs-on: [self-hosted, hmpps-github-actions-runner]
     environment: ${{ inputs.environment }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version-file: ${{ inputs.node_version_file }}
       - name: Run smoke tests in ${{ inputs.environment }}
@@ -37,7 +37,7 @@ jobs:
             --msj-url https://check-rule39-mail-${{ inputs.environment }}.prison.service.justice.gov.uk
       - name: Upload the artifacts
         if: always()
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        uses: actions/upload-artifact@v7
         with:
           name: smoke-test-results-${{ inputs.environment }}
           path: |
