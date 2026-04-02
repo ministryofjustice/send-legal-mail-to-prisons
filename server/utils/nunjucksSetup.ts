@@ -25,7 +25,7 @@ export default function nunjucksSetup(app: express.Express): void {
     app.locals.gtmContainerId = config.slmContainerId
 
     // Set the values for the phase banner links from config
-    app.locals.phaseBannerLink = config.phaseBannerLink.legalSenderJourney
+    app.locals.feedbackLink = config.feedbackLink.legalSenderJourney
     next()
   })
 

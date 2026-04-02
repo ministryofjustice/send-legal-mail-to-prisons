@@ -120,7 +120,7 @@ export default {
     xOffsetC4: get('COVERSHEET_C4_OFFSET_X', '24mm'),
     yOffsetC4: get('COVERSHEET_C4_OFFSET_Y', '67mm'),
   },
-  phaseBannerLink: {
+  feedbackLink: {
     legalSenderJourney: get(
       'LEGAL_SENDER_PHASE_BANNER_LINK',
       'https://submit.forms.service.gov.uk/form/263708/send-legal-mail-to-prisons/',
