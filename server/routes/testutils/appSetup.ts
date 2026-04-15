@@ -16,7 +16,6 @@ function appSetup(route: Router, production: boolean): Express {
 
   app.use((req, res, next) => {
     res.locals = {}
-    res.locals.user = req.user
     next()
   })
 

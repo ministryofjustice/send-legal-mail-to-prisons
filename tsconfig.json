@@ -1,11 +1,8 @@
 {
   "extends": "@tsconfig/node24/tsconfig.json",
   "compileOnSave": true,
+  "isolatedModules": true,
   "compilerOptions": {
-    "isolatedModules": true,
-    "target": "es2018",
-    "module": "commonjs",
-    "moduleResolution": "node",
     "outDir": "./dist",
     "sourceMap": true,
     "skipLibCheck": true,
@@ -17,7 +14,9 @@
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "experimentalDecorators": true,
-    "typeRoots": ["./server/@types", "./node_modules/@types"]
+    "typeRoots": ["./server/@types", "./node_modules/@types"],
+    "types": ["node", "jest"],
+    "rootDir": "."
   },
   "exclude": [
     "node_modules",
