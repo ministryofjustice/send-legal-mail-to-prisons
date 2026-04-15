@@ -20,7 +20,7 @@
     "start-feature:dev": "npm run build && concurrently -k -p \"[{name}]\" -n \"Views,TypeScript,Node,Sass\" -c \"yellow.bold,cyan.bold,green.bold,blue.bold\" \"npm run watch-views\" \"npm run watch-ts\" \"npm run watch-node-feature\" \"npm run watch-sass\"",
     "lint": "eslint . --cache --no-warn-ignored --max-warnings 0",
     "lint-fix": "eslint . --no-warn-ignored --fix",
-    "typecheck": "tsc && tsc -p integration_tests",
+    "typecheck": "tsc && tsc -p integration_tests && tsc -p smoke_tests",
     "test": "jest",
     "test:ci": "jest --runInBand",
     "security_audit": "npx audit-ci --config audit-ci.json",

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["cypress", "cypress-axe"],
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "ignoreDeprecations": "6.0",
+    "rootDirs": [".", "../"]
+  },
+  "include": ["**/*.ts"]
+}
