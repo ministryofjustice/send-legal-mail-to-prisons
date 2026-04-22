@@ -13,7 +13,7 @@ RUN apk add --no-cache \
     freetype-dev \
     pkgconf
 
-COPY package*.json .allowed-scripts.mjs ./
+COPY package*.json .allowed-scripts.mjs .npmrc ./
 RUN CYPRESS_INSTALL_BINARY=0 NPM_CONFIG_AUDIT=false NPM_CONFIG_FUND=false npm run setup
 
 COPY . .
