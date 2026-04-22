@@ -1,4 +1,4 @@
-FROM nginx:1.29
+FROM nginx:1.30
 
 LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
