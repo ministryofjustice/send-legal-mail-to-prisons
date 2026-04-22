@@ -78,7 +78,7 @@
     "@types/connect-flash": "0.0.40",
     "@types/cookie-parser": "^1.4.10",
     "@types/cookie-session": "^2.0.49",
-    "@types/express-session": "^1.18.2",
+    "@types/express-session": "^1.19.0",
     "@types/http-errors": "^2.0.5",
     "@types/jest": "^30.0.0",
     "@types/jsdom": "^28.0.1",
@@ -93,7 +93,7 @@
     "axe-core": "^4.11.3",
     "cheerio": "^1.2.0",
     "concurrently": "^9.2.1",
-    "cypress": "^15.13.1",
+    "cypress": "^15.14.0",
     "cypress-axe": "^1.7.0",
     "cypress-multi-reporters": "^2.0.5",
     "husky": "^9.1.7",
@@ -110,7 +110,7 @@
     "sass": "1.99.0",
     "supertest": "7.2.2",
     "ts-jest": "^29.4.9",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.3"
   },
   "overrides": {
     "mocha": {
