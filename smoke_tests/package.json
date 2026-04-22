@@ -1,11 +1,11 @@
 {
   "dependencies": {
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.3"
   },
   "devDependencies": {
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.4",
     "axe-core": "^4.11.3",
-    "cypress": "^15.13.1",
+    "cypress": "^15.14.0",
     "cypress-axe": "^1.7.0",
     "cypress-multi-reporters": "^2.0.5",
     "jsonwebtoken": "^9.0.3",
