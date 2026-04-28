@@ -6,7 +6,7 @@ We have a smoke test for both the Legal Sender Journey and the Mailroom Staff Jo
 
 The smoke tests work by taking a copy of the `integration_tests` directory to re-use the existing Cypress config, overriding some configuration found in the `smoke_tests` and running the script `smoke_tests/run-smoke-test.sh` to perform the test.
 
-In CircleCI the test script runs on a cypress Docker image. It copies the smoke test project into a temp directory, installs the necessary npm modules needed for Cypress and typescript and runs the Cypress tests.
+In GitHub Actions, the test script runs on a cypress Docker image. It copies the smoke test project into a temp directory, installs the necessary npm modules needed for Cypress and typescript and runs the Cypress tests.
 
 ## Running locally
 
@@ -20,9 +20,9 @@ The smoke tests should run against local apps using the default parameters found
 
 If the tests fail you can check the video produced in directory `/tmp/slm-smoke-test-local/videos`.
 
-## Running in CircleCI
+## Running in GitHub Actions
 
-Smoke tests have been configured for dev and preprod and these can be found in `.circleci/config.yml` under job `run_smoke_test` which are run as part of the `build_test_deploy` pipeline.
+Smoke tests have been configured for dev and preprod and these can be found in `.github/workflows/smoke_tests.yml` under job `smoke_test_dev` and `smoke_test_preprod` which are run as part of the build pipeline.
 
 ### Running locally against dev or preprod
 
@@ -30,7 +30,7 @@ Follow the instructions for [running locally](#running-locally) but when calling
 
 The tests will be run in directory `/tmp/slm-smoke-test-<env>` where <env> is passed as a parameter.
 
-See the Circle job `run_smoke_test` in `.circleci/config.yml` for inspiration.
+See the Circle job `smoke_test_dev` in `.github/workflows/smoke_tests.yml` for inspiration.
 
 ## Automated Test Users
 
