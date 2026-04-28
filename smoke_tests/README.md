@@ -30,7 +30,7 @@ Follow the instructions for [running locally](#running-locally) but when calling
 
 The tests will be run in directory `/tmp/slm-smoke-test-<env>` where <env> is passed as a parameter.
 
-See the Circle job `smoke_test_dev` in `.github/workflows/smoke_tests.yml` for inspiration.
+See the job `smoke_test_dev` in `.github/workflows/smoke_tests.yml` for inspiration.
 
 ## Automated Test Users
 
