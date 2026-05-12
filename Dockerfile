@@ -1,5 +1,19 @@
+# Build args available to all stages
+ARG BUILD_NUMBER
+ARG GIT_REF
+ARG GIT_BRANCH
+
 # Stage: build assets
 FROM ghcr.io/ministryofjustice/hmpps-node:24-alpine AS build
+
+ARG BUILD_NUMBER
+ARG GIT_REF
+ARG GIT_BRANCH
+
+# Cache breaking and ensure required build / git args defined
+RUN test -n "$BUILD_NUMBER" || (echo "BUILD_NUMBER not set" && false)
+RUN test -n "$GIT_REF" || (echo "GIT_REF not set" && false)
+RUN test -n "$GIT_BRANCH" || (echo "GIT_BRANCH not set" && false)
 
 # Install build dependencies for native modules (canvas)
 RUN apk add --no-cache \
@@ -13,29 +27,23 @@ RUN apk add --no-cache \
     freetype-dev \
     pkgconf
 
+WORKDIR /app
+
 COPY package*.json .allowed-scripts.mjs .npmrc ./
 RUN CYPRESS_INSTALL_BINARY=0 NPM_CONFIG_AUDIT=false NPM_CONFIG_FUND=false npm run setup
+ENV NODE_ENV='production'
 
 COPY . .
-RUN npm run build && \
-    npm prune --no-audit --no-fund --omit=dev
+RUN --mount=type=secret,id=sentry SENTRY_AUTH_TOKEN=$(cat /run/secrets/sentry) npm run build
 
-# Stage: production image
-FROM ghcr.io/ministryofjustice/hmpps-node:24-alpine
+RUN npm prune --no-audit --no-fund --omit=dev
+
+# Stage: copy production assets and dependencies
+FROM ghcr.io/ministryofjustice/hmpps-node:24-alpine-runtime
 
 ARG BUILD_NUMBER
 ARG GIT_REF
 ARG GIT_BRANCH
-
-# Validate required build args and set as env variables for runtime health/info
-RUN test -n "$BUILD_NUMBER" || (echo "BUILD_NUMBER not set" && false) && \
-    test -n "$GIT_REF" || (echo "GIT_REF not set" && false) && \
-    test -n "$GIT_BRANCH" || (echo "GIT_BRANCH not set" && false)
-
-ENV BUILD_NUMBER=${BUILD_NUMBER} \
-    GIT_REF=${GIT_REF} \
-    GIT_BRANCH=${GIT_BRANCH} \
-    NODE_ENV='production'
 
 # Install runtime dependencies for canvas
 RUN apk add --no-cache \
@@ -61,6 +69,10 @@ COPY --from=build --chown=appuser:appgroup /app/node_modules ./node_modules
 RUN mkdir uploads && chown appuser:appgroup uploads && chmod 775 uploads
 
 EXPOSE 3000
+ENV BUILD_NUMBER=${BUILD_NUMBER}
+ENV GIT_REF=${GIT_REF}
+ENV GIT_BRANCH=${GIT_BRANCH}
+ENV NODE_ENV='production'
 USER 2000
 
-CMD [ "npm", "start" ]
+CMD [ "node", "dist/server.js" ]
