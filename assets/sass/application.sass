@@ -10,3 +10,19 @@ $path: "/assets/images/"
 @import './components/generate-barcode-image'
 @import './components/link-email-sent'
 @import './components/review-recipients'
+
+.env--localhost .govuk-service-navigation__service-name::after {
+  content: "LOCALHOST";
+  @extend .govuk-tag--yellow;
+}
+.env--dev .govuk-service-navigation__service-name::after {
+  content: "DEV";
+}
+.env--preprod .govuk-service-navigation__service-name::after {
+  content: "PRE-PRODUCTION";
+  @extend .govuk-tag--green;
+}
+.govuk-service-navigation__service-name::after {
+  margin-left: govuk-spacing(1);
+  @extend .govuk-tag;
+}
