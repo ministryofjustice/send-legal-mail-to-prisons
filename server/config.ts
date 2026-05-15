@@ -47,6 +47,7 @@ export default {
   gitRef: get('GIT_REF', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
   productId: get('PRODUCT_ID', 'UNASSIGNED', requiredInProduction),
   branchName: get('GIT_BRANCH', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
+  environmentName: get('ENVIRONMENT_NAME', ''),
   https: production,
   production,
   staticResourceCacheDuration: 20,

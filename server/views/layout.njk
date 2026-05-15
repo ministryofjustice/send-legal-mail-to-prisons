@@ -1,5 +1,6 @@
 {% extends "govuk/template.njk" %}
 {%- from "govuk/components/footer/macro.njk" import govukFooter -%}
+{% set bodyClasses = ("env--" + environmentName) if environmentName %}
 
 {% block head %}
   <script nonce="{{ cspNonce }}" data-qa="gtm-init">

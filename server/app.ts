@@ -62,6 +62,11 @@ export default function createApp(
   app.use(setUpWebRequestParsing())
 
   app.use((req, res, next) => {
+    res.locals.environmentName = config.environmentName
+    next()
+  })
+
+  app.use((req, res, next) => {
     req.body = req.body ?? {}
     next()
   })
