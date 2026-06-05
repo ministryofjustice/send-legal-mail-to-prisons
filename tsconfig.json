@@ -1,8 +1,8 @@
 {
   "extends": "@tsconfig/node24/tsconfig.json",
   "compileOnSave": true,
-  "isolatedModules": true,
   "compilerOptions": {
+    "isolatedModules": true,
     "outDir": "./dist",
     "sourceMap": true,
     "skipLibCheck": true,
