@@ -105,9 +105,7 @@ export interface components {
       code?: 'DUPLICATE' | 'EXPIRED' | 'RANDOM_CHECK'
       userMessage?: string
     } & (
-        | components['schemas']['Duplicate']
-        | components['schemas']['Expired']
-        | components['schemas']['RandomCheck']
+        components['schemas']['Duplicate'] | components['schemas']['Expired'] | components['schemas']['RandomCheck']
       ) & {
         code: unknown
         userMessage: unknown
