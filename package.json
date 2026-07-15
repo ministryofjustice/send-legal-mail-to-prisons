@@ -42,7 +42,7 @@
     "applicationinsights": "^2.9.8",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
-    "bwip-js": "^4.11.1",
+    "bwip-js": "^4.11.2",
     "canvas": "3.2.3",
     "compression": "^1.8.1",
     "connect-flash": "^0.1.1",
@@ -53,8 +53,8 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
-    "govuk-frontend": "^6.1.0",
-    "helmet": "^8.2.0",
+    "govuk-frontend": "^6.3.0",
+    "helmet": "^8.3.0",
     "http-errors": "^2.0.1",
     "jquery": "^4.0.0",
     "jsonwebtoken": "^9.0.3",
@@ -64,7 +64,7 @@
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
-    "redis": "^6.0.0",
+    "redis": "^6.1.0",
     "superagent": "10.3.0"
   },
   "devDependencies": {
@@ -83,17 +83,17 @@
     "@types/jest": "^30.0.0",
     "@types/jsdom": "^28.0.3",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^24.13.2",
+    "@types/node": "^24.13.3",
     "@types/nunjucks": "^3.2.6",
     "@types/passport": "^1.0.17",
     "@types/passport-oauth2": "^1.8.0",
-    "@types/superagent": "^8.1.10",
+    "@types/superagent": "^8.1.11",
     "@types/supertest": "^7.2.0",
     "audit-ci": "^7.1.0",
     "axe-core": "^4.12.1",
     "cheerio": "^1.2.0",
     "concurrently": "^10.0.3",
-    "cypress": "^15.17.0",
+    "cypress": "^15.18.1",
     "cypress-axe": "^1.7.0",
     "cypress-multi-reporters": "^2.0.5",
     "husky": "^9.1.7",
@@ -101,11 +101,11 @@
     "jest-environment-jsdom": "^30.4.1",
     "jest-html-reporter": "^4.4.0",
     "jest-junit": "^17.0.0",
-    "lint-staged": "^17.0.6",
+    "lint-staged": "^17.0.8",
     "mocha-junit-reporter": "^2.2.1",
-    "nock": "^14.0.15",
+    "nock": "^14.0.16",
     "nodemon": "^3.1.14",
-    "prettier": "^3.8.4",
+    "prettier": "^3.9.5",
     "redis-mock": "^0.56.3",
     "sass": "1.101.0",
     "supertest": "7.2.2",
@@ -113,10 +113,11 @@
     "typescript": "^6.0.3"
   },
   "overrides": {
-    "@opentelemetry/core": "2.8.0",
+    "@opentelemetry/core": "2.9.0",
+    "brace-expansion": "5.0.7",
     "mocha": {
       "diff": "^8.0.4",
-      "serialize-javascript": "^7.0.6"
+      "serialize-javascript": "^7.0.7"
     }
   }
 }
