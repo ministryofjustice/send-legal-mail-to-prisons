@@ -5,7 +5,7 @@
   "devDependencies": {
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.6",
     "axe-core": "^4.12.1",
-    "cypress": "^15.17.0",
+    "cypress": "^15.18.1",
     "cypress-axe": "^1.7.0",
     "cypress-multi-reporters": "^2.0.5",
     "jsonwebtoken": "^9.0.3",
@@ -13,9 +13,10 @@
     "superagent": "^10.3.0"
   },
   "overrides": {
+    "brace-expansion": "5.0.7",
     "mocha": {
       "diff": "^8.0.4",
-      "serialize-javascript": "^7.0.6"
+      "serialize-javascript": "^7.0.7"
     }
   },
   "scripts": {
