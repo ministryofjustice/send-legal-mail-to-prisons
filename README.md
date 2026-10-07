@@ -18,6 +18,7 @@ The application has a ping endpoint found at `/ping` which indicates that the ap
 ### Maintenance pages
 If the application needs planned (or unplanned!) downtime we have a method for displaying maintenance pages for both Send legal mail and Check Rule39 mail. See the guide at `maintenance_pages/README.md`.
 
+
 ### Build
 <em>Requires membership of Github team `hmpps-send-legal-mail-live`</em>
 
