@@ -28,6 +28,3 @@ generic-service:
 
 gotenberg:
   replicaCount: 2
-
-generic-prometheus-alerts:
-  alertSeverity: hmpps-visits-send-legal-email-dev

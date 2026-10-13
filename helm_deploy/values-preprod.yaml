@@ -23,6 +23,3 @@ generic-service:
     moj-official-tgw-prod: 51.149.250.0/24
     groups:
       - internal
-
-generic-prometheus-alerts:
-  alertSeverity: hmpps-visits-send-legal-email-preprod
