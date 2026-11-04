@@ -48,7 +48,7 @@ mkdir -p $DIR
 cp -r ../integration_tests/* $DIR
 cp cypress.config.ts package.json package-lock.json .npmrc .nvmrc .allowed-scripts.mjs reporter-config.json run-smoke-test.sh $DIR
 cd $DIR
-npm run setup
+npm ci
 
 export ENV=$ENV
 export CYPRESS_APP_SMOKETEST_LSJSECRET=$LSJ_SECRET
