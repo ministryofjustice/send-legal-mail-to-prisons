@@ -63,7 +63,7 @@ services:
       - API_BASE_URL_OAUTH=http://hmpps-auth:8080/auth
 
   gotenberg:
-    image: gotenberg/gotenberg:8
+    image: gotenberg/gotenberg:9
     networks:
       - hmpps
     container_name: gotenberg
