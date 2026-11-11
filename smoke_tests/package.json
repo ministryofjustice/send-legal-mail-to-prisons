@@ -4,7 +4,7 @@
   },
   "devDependencies": {
     "axe-core": "^4.13.0",
-    "cypress": "^15.21.1",
+    "cypress": "^16.2.1",
     "cypress-axe": "^1.7.0",
     "cypress-multi-reporters": "^2.0.5",
     "jsonwebtoken": "^9.0.3",
