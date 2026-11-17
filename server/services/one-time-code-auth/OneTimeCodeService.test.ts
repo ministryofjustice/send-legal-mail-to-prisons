@@ -23,6 +23,10 @@ describe('One Time Code Service', () => {
     nock.cleanAll()
   })
 
+  afterAll(() => {
+    nock.restore()
+  })
+
   describe('requestOneTimeCode', () => {
     it('should request a one time code', done => {
       mockedSendLegalMailApi.post('/oneTimeCode/email', { email: 'a.b@c.com', sessionID: '12345678' }).reply(201)

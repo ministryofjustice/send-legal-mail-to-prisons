@@ -25,6 +25,10 @@ describe('CreateBarcodeService', () => {
     nock.cleanAll()
   })
 
+  afterAll(() => {
+    nock.restore()
+  })
+
   describe('generateBarcodeValue', () => {
     it('should generate a new barcode value', async () => {
       const recipient: Recipient = {

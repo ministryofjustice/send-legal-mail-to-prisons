@@ -24,6 +24,10 @@ describe('Gotenberg client tests', () => {
     nock.cleanAll()
   })
 
+  afterAll(() => {
+    nock.restore()
+  })
+
   const client = new GotenbergClient()
 
   const pdfStream = Buffer.from('some PDF encoded data')

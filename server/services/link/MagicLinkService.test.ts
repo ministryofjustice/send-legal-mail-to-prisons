@@ -23,6 +23,10 @@ describe('Magic Link Service', () => {
     nock.cleanAll()
   })
 
+  afterAll(() => {
+    nock.restore()
+  })
+
   describe('requestLink', () => {
     it('should request a link', done => {
       mockedSendLegalMailApi.post('/link/email', { email: 'a.b@c.com' }).reply(201)

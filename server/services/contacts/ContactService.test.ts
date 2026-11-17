@@ -27,6 +27,10 @@ describe('Contact Service', () => {
     nock.cleanAll()
   })
 
+  afterAll(() => {
+    nock.restore()
+  })
+
   describe('createContact', () => {
     it('should include prison number in request', done => {
       const contactResponse: Contact = {
