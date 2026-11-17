@@ -15,6 +15,10 @@ describe('CjsmService', () => {
     nock.cleanAll()
   })
 
+  afterAll(() => {
+    nock.restore()
+  })
+
   describe('getUserDetails', () => {
     it('should return user details', async () => {
       const expectedResponse: CjsmUserDetails = {

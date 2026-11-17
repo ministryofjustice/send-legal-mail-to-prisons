@@ -122,6 +122,10 @@ describe('Prison Register Service', () => {
     prisonRegisterStore.setActivePrisons.mockReset()
   })
 
+  afterAll(() => {
+    nock.restore()
+  })
+
   describe('getActivePrisonsFromPrisonRegister', () => {
     it('should make the request to the prison register without an authorization header', async () => {
       prisonRegisterStore.getActivePrisons.mockResolvedValue(null)

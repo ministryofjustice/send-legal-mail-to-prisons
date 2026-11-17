@@ -15,6 +15,10 @@ describe('SupportedPrisonService', () => {
     nock.cleanAll()
   })
 
+  afterAll(() => {
+    nock.restore()
+  })
+
   describe('getSupportedPrisons', () => {
     it('should return supported prisons', async () => {
       mockedSendLegalMailApi //
