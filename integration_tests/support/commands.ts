@@ -40,25 +40,27 @@ Cypress.Commands.add('signInAsLegalSender', () => {
 })
 
 Cypress.Commands.add('signInAsSmokeTestLegalSender', () => {
-  let findRecipientPage: FindRecipientByPrisonNumberPage
+  const lsjUrl = Cypress.expose('LSJ_URL')
 
-  if (!featureFlags.isLsjOneTimeCodeAuthEnabled()) {
-    // Sign in as the smoke test user using a magic link
-    cy.visit(`${Cypress.env('LSJ_URL')}/link/request-link`)
-    findRecipientPage = Page.verifyOnPage(RequestLinkPage).submitFormWithSmokeTestUser(
-      Cypress.env('APP_SMOKETEST_LSJSECRET'),
-    )
-  } else {
-    // Sign in as the smoke test user using a One Time Code
-    cy.visit(`${Cypress.env('LSJ_URL')}/oneTimeCode/request-code`)
-    Page.verifyOnPage(RequestOneTimeCodePage).submitFormWithValidEmailAddress(
-      FindRecipientByPrisonNumberPage,
-      Cypress.env('APP_SMOKETEST_LSJSECRET'),
-    )
-    findRecipientPage = Page.verifyOnPage(FindRecipientByPrisonNumberPage)
-  }
+  cy.env<{ APP_SMOKETEST_LSJSECRET: string }>(['APP_SMOKETEST_LSJSECRET']).then(({ APP_SMOKETEST_LSJSECRET }) => {
+    let findRecipientPage: FindRecipientByPrisonNumberPage
 
-  // Regardless of how we signed in, reject cookies and hide the banner
-  findRecipientPage.clickCookieAction(FindRecipientByPrisonNumberPage, 'reject')
-  findRecipientPage.clickCookieAction(FindRecipientByPrisonNumberPage, 'hide')
+    if (!featureFlags.isLsjOneTimeCodeAuthEnabled()) {
+      // Sign in as the smoke test user using a magic link
+      cy.visit(`${lsjUrl}/link/request-link`)
+      findRecipientPage = Page.verifyOnPage(RequestLinkPage).submitFormWithSmokeTestUser(APP_SMOKETEST_LSJSECRET)
+    } else {
+      // Sign in as the smoke test user using a One Time Code
+      cy.visit(`${lsjUrl}/oneTimeCode/request-code`)
+      Page.verifyOnPage(RequestOneTimeCodePage).submitFormWithValidEmailAddress(
+        FindRecipientByPrisonNumberPage,
+        APP_SMOKETEST_LSJSECRET,
+      )
+      findRecipientPage = Page.verifyOnPage(FindRecipientByPrisonNumberPage)
+    }
+
+    // Regardless of how we signed in, reject cookies and hide the banner
+    findRecipientPage.clickCookieAction(FindRecipientByPrisonNumberPage, 'reject')
+    findRecipientPage.clickCookieAction(FindRecipientByPrisonNumberPage, 'hide')
+  })
 })
