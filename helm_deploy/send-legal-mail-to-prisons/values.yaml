@@ -43,6 +43,7 @@ generic-service:
   # Environment variables to load into the deployment
   env:
     NODE_ENV: "production"
+    LOG_LEVEL: "info"
     REDIS_TLS_ENABLED: "true"
     GOTENBERG_API_URL: "http://send-legal-mail-to-prisons-gotenberg"
     APPLICATIONINSIGHTS_CONNECTION_STRING: "InstrumentationKey=$(APPINSIGHTS_INSTRUMENTATIONKEY);IngestionEndpoint=https://northeurope-0.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"

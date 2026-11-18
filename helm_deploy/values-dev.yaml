@@ -15,6 +15,7 @@ generic-service:
     LSJ_SESSION_DURATION_IN_DAYS: 1
     ONE_TIME_CODE_AUTH_ENABLED: "true"
     ENVIRONMENT_NAME: dev
+    LOG_LEVEL: "debug"
 
   namespace_secrets:
     smoke-test:
